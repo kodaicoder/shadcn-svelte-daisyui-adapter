@@ -1,0 +1,11 @@
+{
+	"name": "daisyui-adapter-probe-07",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "shadcn-svelte registry build -o r"
+	},
+	"devDependencies": {
+		"tailwindcss": "^4.3.0"
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry.json",
+	"name": "daisyui-adapter-probe-07",
+	"homepage": "https://example.invalid/daisyui-adapter-probe-07",
+	"items": [
+		{
+			"name": "theme-probe",
+			"type": "registry:file",
+			"title": "Install contract probe",
+			"description": "Throwaway item observing the missing-theme-file build error surface.",
+			"dependencies": ["tailwindcss"],
+			"devDependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"path": ".scratch/daisyui-adapter/registry-07/probe-plugin.js",
+					"type": "registry:file",
+					"target": "src/theme-probe.js"
+				}
+			],
+			"css": {
+				"@plugin \"./theme-probe.js\"": {}
+			}
+		}
+	]
+}

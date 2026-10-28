@@ -1,0 +1,20 @@
+$ vite dev --port 5209 --strictPort --host 127.0.0.1
+Internal server error: [daisyui-adapter] Cannot read the daisyUI theme file at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T04-14-34-526Z\app\src\daisyui-theme.css: ENOENT. Put one light and one dark theme block from https://daisyui.com/theme-generator/ in that file, then re-run the build.
+  Plugin: [35m@tailwindcss/vite:generate:serve[39m
+  File: [36mC:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/src/app.css[39m
+      at probe (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/src/theme-probe.js?id=1793167561531:13:9)
+      at on (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/tailwindcss@4.3.3/node_modules/tailwindcss/dist/lib.mjs:27:2347)
+      at sn (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/tailwindcss@4.3.3/node_modules/tailwindcss/dist/lib.mjs:27:1178)
+      at async pn (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/tailwindcss@4.3.3/node_modules/tailwindcss/dist/lib.mjs:36:184)
+      at async Ea (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/tailwindcss@4.3.3/node_modules/tailwindcss/dist/lib.mjs:38:631)
+      at async zf (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/tailwindcss@4.3.3/node_modules/tailwindcss/dist/lib.mjs:38:1406)
+      at async fu (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/@tailwindcss+node@4.3.3/node_modules/@tailwindcss/node/dist/index.mjs:10:3458)
+      at async z.generate (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/@tailwindcss+vite@4.3.3_vite@8.3.5_jiti@2.7.0_/node_modules/@tailwindcss/vite/dist/index.mjs:1:6013)
+      at async TransformPluginContext.handler (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/@tailwindcss+vite@4.3.3_vite@8.3.5_jiti@2.7.0_/node_modules/@tailwindcss/vite/dist/index.mjs:1:3133)
+      at async EnvironmentPluginContainer.transform (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T04-14-34-526Z/app/node_modules/.pnpm/vite@8.3.5_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:8582:14)
+Error: [daisyui-adapter] Cannot read the daisyUI theme file at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T04-14-34-526Z\app\src\daisyui-theme.css: ENOENT. Put one light and one dark theme block from https://daisyui.com/theme-generator/ in that file, then re-run the build.
+
+Error: [daisyui-adapter] Cannot read the daisyUI theme file at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T04-14-34-526Z\app\src\daisyui-theme.css: ENOENT. Put one light and one dark theme block from https://daisyui.com/theme-generator/ in that file, then re-run the build.
+
+
+500 GET /
