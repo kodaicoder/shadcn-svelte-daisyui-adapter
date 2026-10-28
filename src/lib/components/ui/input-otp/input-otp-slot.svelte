@@ -1,0 +1,35 @@
+<script lang="ts">
+	import { PinInput as InputOTPPrimitive } from "bits-ui";
+	import { cn } from "#lib/utils.js";
+
+	let {
+		ref = $bindable(null),
+		cell,
+		class: className,
+		...restProps
+	}: InputOTPPrimitive.CellProps = $props();
+</script>
+
+<InputOTPPrimitive.Cell
+	{cell}
+	bind:ref
+	data-slot="input-otp-slot"
+	class={cn(
+		"border-transparent border-b-input bg-transparent data-[active=true]:border-b-ring aria-invalid:border-b-destructive dark:aria-invalid:border-b-destructive/50 size-10 border text-sm transition-[color,border-color] outline-none first:rounded-none last:rounded-none relative flex items-center justify-center data-[active=true]:z-10",
+		className
+	)}
+	{...restProps}
+>
+	{#snippet child({ props })}
+		<div {...props} data-active={cell.isActive}>
+			{cell.char}
+			{#if cell.hasFakeCaret}
+				<div
+					class="pointer-events-none absolute inset-0 flex items-center justify-center"
+				>
+					<div class="animate-caret-blink bg-foreground h-4 w-px duration-1000"></div>
+				</div>
+			{/if}
+		</div>
+	{/snippet}
+</InputOTPPrimitive.Cell>
