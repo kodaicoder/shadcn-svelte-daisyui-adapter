@@ -1,0 +1,42 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry.json",
+	"name": "daisyui-adapter-spike",
+	"homepage": "https://example.invalid/daisyui-adapter-spike",
+	"items": [
+		{
+			"name": "spike",
+			"type": "registry:file",
+			"title": "Mechanism spike fixture",
+			"description": "Throwaway item proving @plugin injection and cssVars overwrite mechanics.",
+			"dependencies": ["tailwindcss"],
+			"devDependencies": [],
+			"registryDependencies": [],
+			"files": [
+				{
+					"path": ".scratch/daisyui-adapter/registry/spike-plugin.js",
+					"type": "registry:file",
+					"target": "src/spike-plugin.js"
+				}
+			],
+			"css": {
+				"@plugin \"./spike-plugin.js\"": {}
+			},
+			"cssVars": {
+				"light": {
+					"primary": "oklch(0.55 0.21 250)",
+					"spike-light": "spike-light",
+					"color-popover": "var(--popover)",
+					"color-popover-foreground": "var(--popover-foreground)",
+					"color-border": "var(--border)"
+				},
+				"dark": {
+					"primary": "oklch(0.72 0.19 250)",
+					"spike-dark": "spike-dark",
+					"color-popover": "var(--popover)",
+					"color-popover-foreground": "var(--popover-foreground)",
+					"color-border": "var(--border)"
+				}
+			}
+		}
+	]
+}

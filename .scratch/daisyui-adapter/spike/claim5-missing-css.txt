@@ -1,0 +1,14 @@
+﻿┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mhttp://127.0.0.1:5199/r/spike.json[39m
+[?25l│
+◇  [1m[36mspike[39m[22m installed at [90mspike[39m
+[?25h│
+└  Error: ENOENT: no such file or directory, open 'C:\Users\LENOVO\AppData\Local\Temp\opencode\claim5\src\app.css'
+    at async open (node:internal/fs/promises:1345:25)
+    at async Object.readFile (node:internal/fs/promises:2003:14)
+    at async ks (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/8d8256f8116ca469fb5f2b96e226b05b/mvril6fy-fok/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:126:2973)
+    at async rc (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/8d8256f8116ca469fb5f2b96e226b05b/mvril6fy-fok/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:130:2886)
+    at async Command.<anonymous> (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/8d8256f8116ca469fb5f2b96e226b05b/mvril6fy-fok/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:130:1910)
+
