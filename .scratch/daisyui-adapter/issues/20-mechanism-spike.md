@@ -115,3 +115,6 @@ Harness fixes made to run this, because ticket 15's harness could not install a 
   response (`HeadersTimeoutError`). The add now goes through a promisified `execFile`.
 - The add passes `-o`, and the server is closed in `finally` so the harness exits instead of hanging.
 
+Lesson: A harness proven on one happy path hides the defects in every option path a later ticket depends on.
+Check: none - only running that flag end to end surfaces it, no unit test reaches event-loop ordering or an unanswered prompt, so the rule is in CODING_STANDARDS.md section 4.
+
