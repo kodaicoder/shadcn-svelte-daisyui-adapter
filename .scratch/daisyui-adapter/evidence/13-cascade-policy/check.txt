@@ -3,7 +3,7 @@ PASS  A compiled base layer carries the colliding --primary
 PASS  A runtime --primary keeps the step-4 value :: "oklch(0.508 0.118 165.612)"
 PASS  A plugin base output was live
 PASS  B add and build pass :: ok=true build=true
-PASS  B cssVars leaves the tokens bound
+PASS  B cssVars binds all 32 keys in both blocks
 PASS  B cssVars adds a self-referential @theme entry per colour key :: 31
 PASS  B the stock block has no self-reference
 PASS  B cssVars changes the @theme inline block
@@ -13,6 +13,7 @@ PASS  C re-add is byte-identical
 PASS  C one :root and one .dark
 PASS  C one @plugin and one shadcn import
 PASS  C @theme inline is untouched
+PASS  C all 32 keys bind in each block
 PASS  C css map replaces --primary in place
 PASS  C runtime --primary follows the plugin namespace
 PASS  C plugin values live in @layer base

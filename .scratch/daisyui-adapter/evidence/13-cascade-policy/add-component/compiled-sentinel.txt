@@ -1,2 +1,2 @@
-_app/immutable/assets/0.BpwDdDa_.css: --cascade-raw:base-light
-_app/immutable/assets/0.BpwDdDa_.css: --cascade-raw:base-dark
+_app/immutable/assets/0.DgjxJ-47.css: --cascade-raw:base-light
+_app/immutable/assets/0.DgjxJ-47.css: --cascade-raw:base-dark

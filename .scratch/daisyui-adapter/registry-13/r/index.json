@@ -15,7 +15,7 @@
 		"name": "cssvars-namespaced",
 		"title": "cssvars-namespaced",
 		"type": "registry:lib",
-		"description": "cssVars arm using var(--daisy-color-<token>) values.",
+		"description": "cssVars arm carrying the same expressions as the chosen css carrier.",
 		"dependencies": [],
 		"devDependencies": [
 			"daisyui-adapter-13-probe@file:./daisyui-adapter-13-probe-0.0.0.tgz"

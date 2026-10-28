@@ -1,6 +1,6 @@
 [36mvite v8.3.5 [32mbuilding ssr environment for production...[36m[39m
 transforming...
-[probe-13] cwd=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T10-32-58-916Z\app module=file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T10-32-58-916Z/app/node_modules/.pnpm/daisyui-adapter-13-probe@fi_b45e6a39a30a4826e2b5ce4d35c36c58/node_modules/daisyui-adapter-13-probe/dist/index.js theme=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T10-32-58-916Z\app\src\daisyui-theme.css bytes=2240
+[probe-13] cwd=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T11-19-47-017Z\app module=file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T11-19-47-017Z/app/node_modules/.pnpm/daisyui-adapter-13-probe@fi_b45e6a39a30a4826e2b5ce4d35c36c58/node_modules/daisyui-adapter-13-probe/dist/index.js theme=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T11-19-47-017Z\app\src\daisyui-theme.css bytes=2240
 ✓ 172 modules transformed.
 rendering chunks...
 computing gzip size...
@@ -13,7 +13,7 @@ computing gzip size...
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-vietnamese-wght-normal.DLTJy58D.woff2          14.45 kB
 .svelte-kit/output/server/_app/immutable/assets/manrope-cyrillic-wght-normal.Dvxsihut.woff2              14.50 kB
 .svelte-kit/output/server/_app/immutable/assets/manrope-latin-ext-wght-normal.Ch3YOpNY.woff2             15.12 kB
-.svelte-kit/output/server/.vite/manifest.json                                                            16.45 kB │ gzip:  1.45 kB
+.svelte-kit/output/server/.vite/manifest.json                                                            16.45 kB │ gzip:  1.44 kB
 .svelte-kit/output/server/_app/immutable/assets/inter-cyrillic-wght-normal.DqGufNeO.woff2                18.74 kB
 .svelte-kit/output/server/_app/immutable/assets/inter-greek-wght-normal.CkhJZR-_.woff2                   18.99 kB
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-cyrillic-wght-normal.B2hlT84T.woff2            20.08 kB
@@ -29,7 +29,7 @@ computing gzip size...
 .svelte-kit/output/server/_app/immutable/assets/inter-latin-ext-wght-normal.DO1Apj_S.woff2               85.06 kB
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-devanagari-wght-normal.Cv-Vwajv.woff2          99.23 kB
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-latin-ext-wght-normal.W1qJv59z.woff2          167.96 kB
-.svelte-kit/output/server/_app/immutable/assets/_layout.KbFbEzAO.css                                     35.00 kB │ gzip:  8.58 kB
+.svelte-kit/output/server/_app/immutable/assets/_layout.zjpiQ27I.css                                     35.37 kB │ gzip:  8.55 kB
 .svelte-kit/output/server/handler.js                                                                      0.05 kB │ gzip:  0.07 kB
 .svelte-kit/output/server/adapter-env.js                                                                  0.06 kB │ gzip:  0.08 kB
 .svelte-kit/output/server/env.js                                                                          0.13 kB │ gzip:  0.12 kB
@@ -50,12 +50,12 @@ computing gzip size...
 .svelte-kit/output/server/chunks/instance.js                                                            128.83 kB │ gzip: 34.67 kB │ map: 258.62 kB
 .svelte-kit/output/server/entries/pages/_page.svelte.js                                                 169.92 kB │ gzip: 36.70 kB │ map: 286.84 kB
 
-[32m✓ built in 430ms[39m
+[32m✓ built in 296ms[39m
 Analysing routes
 Building app
 [36mvite v8.3.5 [32mbuilding client environment for production...[36m[39m
 transforming...
-[probe-13] cwd=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T10-32-58-916Z\app module=file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T10-32-58-916Z/app/node_modules/.pnpm/daisyui-adapter-13-probe@fi_b45e6a39a30a4826e2b5ce4d35c36c58/node_modules/daisyui-adapter-13-probe/dist/index.js theme=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T10-32-58-916Z\app\src\daisyui-theme.css bytes=2240
+[probe-13] cwd=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T11-19-47-017Z\app module=file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-28T11-19-47-017Z/app/node_modules/.pnpm/daisyui-adapter-13-probe@fi_b45e6a39a30a4826e2b5ce4d35c36c58/node_modules/daisyui-adapter-13-probe/dist/index.js theme=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T11-19-47-017Z\app\src\daisyui-theme.css bytes=2240
 ✓ 183 modules transformed.
 rendering chunks...
 computing gzip size...
@@ -85,20 +85,20 @@ computing gzip size...
 .svelte-kit/output/client/_app/immutable/assets/inter-latin-ext-wght-normal.DO1Apj_S.woff2               85.06 kB
 .svelte-kit/output/client/_app/immutable/assets/noto-sans-devanagari-wght-normal.Cv-Vwajv.woff2          99.23 kB
 .svelte-kit/output/client/_app/immutable/assets/noto-sans-latin-ext-wght-normal.W1qJv59z.woff2          167.96 kB
-.svelte-kit/output/client/_app/immutable/assets/0.KbFbEzAO.css                                           35.00 kB │ gzip:  8.58 kB
+.svelte-kit/output/client/_app/immutable/assets/0.zjpiQ27I.css                                           35.37 kB │ gzip:  8.55 kB
 .svelte-kit/output/client/_app/immutable/entry/payload.DSmR2FwN.js                                        0.06 kB │ gzip:  0.07 kB
 .svelte-kit/output/client/_app/immutable/nodes/1.B9igUA6N.js                                              0.32 kB │ gzip:  0.24 kB
 .svelte-kit/output/client/_app/immutable/entry/start.D1XIYq8g.js                                          0.52 kB │ gzip:  0.31 kB
-.svelte-kit/output/client/_app/immutable/entry/app.DyOO4fCb.js                                            1.09 kB │ gzip:  0.55 kB
+.svelte-kit/output/client/_app/immutable/entry/app.BLokbYzy.js                                            1.09 kB │ gzip:  0.56 kB
 .svelte-kit/output/client/_app/immutable/chunks/Bjy-W4x2.js                                               1.36 kB │ gzip:  0.65 kB
 .svelte-kit/output/client/_app/immutable/chunks/CRzLMJPS.js                                               1.53 kB │ gzip:  0.80 kB
-.svelte-kit/output/client/_app/immutable/nodes/0.DwNElnH2.js                                              2.38 kB │ gzip:  0.98 kB
+.svelte-kit/output/client/_app/immutable/nodes/0.C6FwiaEW.js                                              2.38 kB │ gzip:  0.98 kB
 .svelte-kit/output/client/_app/immutable/chunks/DViqdQWE.js                                               4.29 kB │ gzip:  1.93 kB
 .svelte-kit/output/client/_app/immutable/chunks/C7Qq4KgT.js                                              39.72 kB │ gzip: 14.65 kB
 .svelte-kit/output/client/_app/immutable/chunks/CzNfCbJ3.js                                              41.91 kB │ gzip: 16.22 kB
 .svelte-kit/output/client/_app/immutable/nodes/2.BStzameP.js                                             69.93 kB │ gzip: 24.36 kB
 
-[32m✓ built in 298ms[39m
+[32m✓ built in 248ms[39m
 
 Run npm run preview to preview your production build locally.
 

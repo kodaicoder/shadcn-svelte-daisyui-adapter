@@ -4,40 +4,28 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const TOKENS = {
-	background: 'base-100',
-	foreground: 'base-content',
-	card: 'base-100',
-	'card-foreground': 'base-content',
-	popover: 'base-100',
-	'popover-foreground': 'base-content',
-	primary: 'primary',
-	'primary-foreground': 'primary-content',
-	secondary: 'base-200',
-	'secondary-foreground': 'base-content',
-	muted: 'base-200',
-	'muted-foreground': 'base-content',
-	accent: 'base-200',
-	'accent-foreground': 'base-content',
-	destructive: 'error',
-	border: 'base-300',
-	input: 'base-300',
-	ring: 'primary',
-	'chart-1': 'primary',
-	'chart-2': 'accent',
-	'chart-3': 'secondary',
-	'chart-4': 'info',
-	'chart-5': 'success',
-	sidebar: 'base-100',
-	'sidebar-foreground': 'base-content',
-	'sidebar-primary': 'primary',
-	'sidebar-primary-foreground': 'primary-content',
-	'sidebar-accent': 'base-200',
-	'sidebar-accent-foreground': 'base-content',
-	'sidebar-border': 'base-300',
-	'sidebar-ring': 'primary',
-	radius: 'radius-box'
-};
+const SOURCES = [
+	'base-100',
+	'base-200',
+	'base-300',
+	'base-content',
+	'primary',
+	'primary-content',
+	'secondary',
+	'secondary-content',
+	'accent',
+	'accent-content',
+	'neutral',
+	'neutral-content',
+	'info',
+	'info-content',
+	'success',
+	'success-content',
+	'warning',
+	'warning-content',
+	'error',
+	'error-content'
+];
 
 function readThemes(text) {
 	const themes = {};
@@ -58,11 +46,11 @@ function readThemes(text) {
 
 function bindings(vars) {
 	const out = {};
-	for (const [token, source] of Object.entries(TOKENS)) {
-		const value = vars[`--color-${source}`] ?? vars[`--${source}`];
-		// daisyUI has no --color-radius; its source token is --radius-box.
-		if (value) out[token === 'radius' ? '--daisy-radius' : `--daisy-color-${token}`] = value;
+	for (const source of SOURCES) {
+		const value = vars[`--color-${source}`];
+		if (value) out[`--daisy-color-${source}`] = value;
 	}
+	out['--daisy-radius'] = vars['--radius-box'];
 	return out;
 }
 

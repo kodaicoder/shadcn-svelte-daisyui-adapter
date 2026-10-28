@@ -28,16 +28,16 @@ Ticket step, in the ticket's own words: resolve five decisions by grilling. No a
       built `r/`
 - [x] `harness/run.mjs`: `--then` (repeatable post-add pnpm command with a stylesheet snapshot) and
       `--props` (runtime custom properties); `harness/shot.mjs` reads the requested properties
-- [x] `cascade-raw` (`2026-10-28T09-51-18-660Z`): compiled base layer has `--primary:red` / `#0f0`,
+- [x] `cascade-raw` (`2026-10-28T11-18-21-988Z`): compiled base layer has `--primary:red` / `#0f0`,
       computed `--primary` stays step-4
-- [x] `cssvars` (`2026-10-28T09-51-35-478Z`): binds at runtime, adds 31 dead `@theme inline` entries
-- [x] `re-add` (`2026-10-28T09-51-52-731Z`): byte-identical second add, `@theme` untouched,
+- [x] `cssvars` (`2026-10-28T11-18-49-400Z`): binds at runtime, adds 31 dead `@theme inline` entries
+- [x] `re-add` (`2026-10-28T11-19-16-940Z`): byte-identical second add, `@theme` untouched,
       unlayered binding resolves the layered value, selector beats a utility
-- [x] `init` (`2026-10-28T10-32-58-916Z`): values wiped, `@plugin` line and probe rule survive; the
+- [x] `init` (`2026-10-28T11-19-47-017Z`): values wiped, `@plugin` line and probe rule survive; the
       second `--then` re-adds the item and restores all 64 bindings
-- [x] `add-all` (`2026-10-28T09-52-37-136Z`) and `add-component` (`2026-10-28T09-53-13-385Z`):
+- [x] `add-all` (`2026-10-28T11-20-32-980Z`) and `add-component` (`2026-10-28T11-21-11-678Z`):
       byte-identical stylesheet, build passes
-- [x] Artefacts copied to `evidence/13-cascade-policy/`; `registry-13/check.mjs` runs 34 checks green
+- [x] Artefacts copied to `evidence/13-cascade-policy/`; `registry-13/check.mjs` runs 35 checks green
 
 ## Closing
 
@@ -130,3 +130,7 @@ Confirmation pass:
 - `check.txt` was written UTF-16LE by PowerShell. Rewritten as UTF-8 without BOM.
 - The init-alias note no longer claims an unlogged hang; it states the five flags a non-interactive
   `init` needs.
+- Post-review correction: the probe emitted one name per shadcn key (`--daisy-color-background`),
+  while the Answer and the chosen namespace are daisyUI source names (`--daisy-color-base-100`).
+  The probe now emits the 20 `--color-*` sources plus `--daisy-radius`; the css maps carry 09's
+  expressions with the prefix, and all six runs were redone. The check count is 35.

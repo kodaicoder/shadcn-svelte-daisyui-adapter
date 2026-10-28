@@ -1,7 +1,7 @@
 {
-  "stamp": "2026-10-28T09-51-18-660Z",
-  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T09-51-18-660Z\\app",
-  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T09-51-18-660Z",
+  "stamp": "2026-10-28T11-18-21-988Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T11-18-21-988Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T11-18-21-988Z",
   "steps": [
     "scaffold",
     "dependencies",
@@ -23,8 +23,8 @@
   "cssChanged": true,
   "build": true,
   "pluginSentinel": [
-    "_app/immutable/assets/0.COxW2kb1.css: --cascade-raw:base-light",
-    "_app/immutable/assets/0.COxW2kb1.css: --cascade-raw:base-dark"
+    "_app/immutable/assets/0.BMqSdJI9.css: --cascade-raw:base-light",
+    "_app/immutable/assets/0.BMqSdJI9.css: --cascade-raw:base-dark"
   ],
   "render": {
     "url": "http://127.0.0.1:5209/",

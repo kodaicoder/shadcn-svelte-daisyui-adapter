@@ -9,7 +9,6 @@ const varsItem = JSON.parse(
 	readFileSync(resolve(import.meta.dirname, 'r/cssvars-namespaced.json'), 'utf8')
 );
 const TOKEN_KEYS = Object.keys(varsItem.cssVars.light).length;
-const BINDINGS = TOKEN_KEYS * 2;
 const COLOR_KEYS = TOKEN_KEYS - 1;
 let failures = 0;
 
@@ -39,6 +38,10 @@ function block(css, selector) {
 function decl(body, prop) {
 	const match = new RegExp(`(?:^|\\n)\\s*${prop}\\s*:\\s*([^;]+);`).exec(body);
 	return match ? match[1].trim() : null;
+}
+
+function boundKeys(css, selector) {
+	return [...block(css, selector).matchAll(/^\s*--[\w-]+:\s*[^;]*var\(--daisy-/gm)].length;
 }
 
 function topLevelBlock(css, header) {
@@ -81,7 +84,7 @@ const vars = report('cssvars');
 const varsAfter = text('cssvars', 'css-after.css');
 const varsTheme = topLevelBlock(varsAfter, '@theme inline');
 check('B add and build pass', vars.ok && vars.build, `ok=${vars.ok} build=${vars.build}`);
-check('B cssVars leaves the tokens bound', occurrences(varsAfter, /var\(--daisy-/g) === BINDINGS);
+check('B cssVars binds all 32 keys in both blocks', boundKeys(varsAfter, ':root') === TOKEN_KEYS && boundKeys(varsAfter, '.dark') === TOKEN_KEYS);
 check('B cssVars adds a self-referential @theme entry per colour key', selfRefs(varsAfter) === COLOR_KEYS, String(selfRefs(varsAfter)));
 check('B the stock block has no self-reference', selfRefs(text('cssvars', 'css-before.css')) === 0);
 check(
@@ -110,6 +113,7 @@ check(
 	'C @theme inline is untouched',
 	afterTheme !== '' && afterTheme === beforeTheme
 );
+check('C all 32 keys bind in each block', boundKeys(after, ':root') === TOKEN_KEYS && boundKeys(after, '.dark') === TOKEN_KEYS);
 check('C css map replaces --primary in place', decl(block(after, ':root'), '--primary') === 'var(--daisy-color-primary)');
 check(
 	'C runtime --primary follows the plugin namespace',
@@ -143,7 +147,7 @@ const initRecovered = text('init', 'css-after-then-2.css');
 check(
 	'D re-add after init restores the bindings',
 	decl(block(initRecovered, ':root'), '--primary') === 'var(--daisy-color-primary)' &&
-		occurrences(initRecovered, /var\(--daisy-/g) === BINDINGS
+		boundKeys(initRecovered, ':root') === TOKEN_KEYS && boundKeys(initRecovered, '.dark') === TOKEN_KEYS
 );
 check(
 	'D recovery keeps one @plugin and one block each',

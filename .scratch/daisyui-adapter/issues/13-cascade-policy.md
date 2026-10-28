@@ -26,14 +26,15 @@ Resolved 2026-10-28. Five decisions. Behaviour that mattered was run, not read: 
 runs, because `harness/runs/` is gitignored. Every run installs into a project holding a real
 two-block theme (`registry-13/probe-theme.css` placed at `src/daisyui-theme.css`) on `--layout app`,
 and every check below is re-run by `registry-13/check.mjs` against the committed copies
-(`check.txt`, 34 checks, all pass).
+(`check.txt`, 35 checks, all pass).
 
 ### 1. Carrier: `css` maps for `:root` and `.dark`, not `cssVars`
 
 The item's `css` carries two declaration maps, `":root"` and `".dark"`, each holding the 32 shadcn
-keys with `var(--daisy-color-<token>)` values (`var(--daisy-radius)` for radius). One command
-rewrites the stock blocks in place: 63 declarations are replaced, and `--radius` is inserted into
-`.dark` because step 4 declares it only in `:root`.
+keys with the mapping's expressions (09's core table; chart and sidebar are placeholders until 12
+and 10), where every `--daisy-<source>` is written as `--daisy-color-<source>` (`--daisy-radius` for
+radius). One command rewrites the stock blocks in place: 63 declarations are replaced, and
+`--radius` is inserted into `.dark` because step 4 declares it only in `:root`.
 
 Reasons:
 
@@ -89,10 +90,15 @@ does not answer that prompt (20's hang).
 
 ### 4. Namespace: `--daisy-` in front of daisyUI's own name
 
-The plugin emits `--daisy-color-<daisyui-name>` and `--daisy-radius`; the `css` maps reference
-exactly those. In `re-add` the literal values sit in `@layer base`, and the unlayered
-`--primary: var(--daisy-color-primary)` resolves them in both schemes. Layering is irrelevant for
-the referenced name, so uniqueness is the only requirement.
+The plugin emits `--daisy-color-<daisyUI source>` for the 20 colour variables and `--daisy-radius`;
+the `css` maps reference exactly those. In `re-add` the literal values sit in `@layer base`, and the
+unlayered `--primary: var(--daisy-color-primary)` resolves them in both schemes. Layering is
+irrelevant for the referenced name, so uniqueness is the only requirement.
+
+The 20 sources are the theme block's `--color-*` names, for example `base-100`, `base-content`,
+`primary` and `primary-content`; the probe emits them all, with no shadcn key list inside the
+plugin. The mapping from shadcn key to source lives in the item's `css`, so 09-12's table is reused
+verbatim with the prefix swap.
 
 Why this name: it reads as daisyUI's `--color-primary` with a vendor prefix. It avoids every shadcn
 token name, the `--color-*` theme namespace, daisyUI's own `--color-*` / `--size-*` / `--radius-*`,
@@ -124,7 +130,7 @@ design, because their declaration is unlayered; 18 documents that as the escape 
 - `…/init/`: `css-after.css` (adapter), `css-after-then-1.css` (after init) and
   `css-after-then-2.css` (after the recovery add), with `then-1.log` and `then-2.log`.
 - `…/add-all/` and `…/add-component/`: byte-identical after-then snapshots.
-- `…/check.txt`: `registry-13/check.mjs` against the committed copies, 34 checks.
+- `…/check.txt`: `registry-13/check.mjs` against the committed copies, 35 checks.
 - `registry-13/`: registry.json, probe-theme.css, the probe package, the built `r/` payload and
   `registry-build.log`.
 
@@ -137,9 +143,8 @@ split, each run snapshotting the stylesheet) and `--props` (runtime custom prope
 - The append fallback for a stylesheet whose `:root` / `.dark` selectors are not exact: read from
   `update-css.ts`, not run.
 - A published package name: the probe installs a `file:` tarball; 17 publishes.
-- The adapter's real mapping values: 09-12 own them. The probe is surface-first like 09 but uses
-  plain daisyUI tokens instead of the `color-mix()` derivations, so its values are not the shipped
-  ones.
+- The adapter's real mapping values: 09-12 own them. The fixture's core values are 09's expressions
+  with the prefix; its chart and sidebar values are placeholders because 12 and 10 own those.
 - That the four overlay slots render, or that a scrim rule wins on them: the selector-versus-utility
   measurement uses `[data-slot="button"]`, and the overlay slots are read from the component source.
 

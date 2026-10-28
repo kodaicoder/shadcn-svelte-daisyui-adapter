@@ -25,4 +25,4 @@ exit 0
 
 [33mWarning: [1m--overwrite[22m is deprecated. Use [1m--reinstall[22m instead.
 [39m
-Done in 13.8s using pnpm v12.9.1
+Done in 18.3s using pnpm v12.9.1
