@@ -72,14 +72,15 @@ pnpm dlx shadcn-svelte@latest init
 # into src/daisyui-theme.css
 
 pnpm dlx shadcn-svelte@1.7.1 add \
-  https://raw.githubusercontent.com/<owner>/<repo>/v0.1.0/registry/r/daisyui-adapter.json \
+  https://raw.githubusercontent.com/<owner>/<repo>/<tag-or-sha>/registry/r/daisyui-adapter.json \
   -y -o
 
 pnpm build
 ```
 
 URL form: the full URL to the built item JSON, at a tag or commit SHA on `raw.githubusercontent.com`. The
-concrete path and `v0.1.0` in the example are placeholders; 17 owns the tag policy and the file layout.
+concrete path and `<tag-or-sha>` in the example are placeholders; 17 owns the tag policy and the file
+layout, and the existing `v0.1.0` milestone tag is not an adapter release.
 Reasons: 1.7 has no `@scope/name` lookup, and a bare name only resolves against the `registry` field in
 `components.json`, which must stay on shadcn-svelte.com or `add button` breaks. A repository or `blob/` URL
 returns HTML, which `response.json()` cannot parse; raw serves the JSON as `text/plain`, which parses
