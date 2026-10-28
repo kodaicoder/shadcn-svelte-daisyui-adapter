@@ -1,0 +1,25 @@
+PASS  one @plugin line installed :: ["@plugin \"./spike-plugin.js\""]
+PASS  @plugin is top level and after the last @import :: plugin index 6, last import index 5
+PASS  one :root block, not a new one appended :: 1
+PASS  one .dark block, not a new one appended :: 1
+PASS  light sentinel written inside :root
+PASS  dark sentinel written inside .dark
+PASS  cssVars.light replaced --primary in place
+PASS  cssVars.dark replaced --primary in place
+PASS  cssVars wrote --color-popover into :root
+PASS  cssVars wrote --color-popover into .dark
+PASS  cssVars wrote --color-popover-foreground into :root
+PASS  cssVars wrote --color-popover-foreground into .dark
+PASS  cssVars wrote --color-border into :root
+PASS  cssVars wrote --color-border into .dark
+PASS  one shadcn tailwind import (spike/app-after-run2.css)
+PASS  one @plugin marker (spike/app-after-run2.css)
+PASS  one shadcn tailwind import (spike/claim6-after-run1.css)
+PASS  one @plugin marker (spike/claim6-after-run1.css)
+PASS  one shadcn tailwind import (spike/claim6-after-run2.css)
+PASS  one @plugin marker (spike/claim6-after-run2.css)
+PASS  compiled CSS carries the plugin base rule (spike/compiled-global.css)
+INFO  @layer theme emits --color-popover (spike/compiled-global.css): true
+PASS  compiled CSS carries the plugin base rule (control-no-plain-decls/compiled-global.css)
+INFO  @layer theme emits --color-popover (control-no-plain-decls/compiled-global.css): true
+ALL CHECKS PASSED

@@ -1,0 +1,14 @@
+[
+	{
+		"name": "spike",
+		"title": "Mechanism spike fixture",
+		"type": "registry:file",
+		"description": "Throwaway item proving @plugin injection and cssVars overwrite mechanics.",
+		"dependencies": [
+			"tailwindcss"
+		],
+		"devDependencies": [],
+		"registryDependencies": [],
+		"relativeUrl": "spike.json"
+	}
+]

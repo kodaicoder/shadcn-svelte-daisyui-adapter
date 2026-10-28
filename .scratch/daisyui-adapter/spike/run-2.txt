@@ -1,0 +1,53 @@
+[harness] scaffolding SvelteKit 3 project
+[harness] pnpm.cmd dlx sv@1.1.1 create C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T03-11-55-082Z\app --template minimal --types ts --no-add-ons --no-install --no-dir-check
+[harness] installing dependencies
+[harness] pnpm.cmd install
+[harness] pnpm.cmd add -D tailwindcss @tailwindcss/vite @sveltejs/adapter-node tw-animate-css shadcn-svelte cn @fontsource-variable/noto-sans @fontsource-variable/playfair-display @fontsource-variable/manrope
+[harness] pnpm.cmd dlx shadcn-svelte@latest add button -y
+node : (node:43124) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to 
+security vulnerabilities, as the arguments are not escaped, only concatenated.
+At line:1 char:43
++ ... ew_Project; node .scratch/daisyui-adapter/harness/run.mjs --keep --re ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:43124) [D...y concatenated.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[harness] registry on http://127.0.0.1:5199
+[harness] pnpm.cmd dlx shadcn-svelte@latest add http://127.0.0.1:5199/r/spike.json -y -o
+[harness] building
+[harness] pnpm.cmd build
+[harness] C:\Program Files\nodejs\node.exe D:\Workspace\DesignSystem\New_Project\.scratch\daisyui-adapter\harness\shot.mjs http://127.0.0.1:5209/ D:\Workspace\DesignSystem\New_Project\.scratch\daisyui-adapter\harness\runs\2026-10-28T03-11-55-082Z
+{
+  "stamp": "2026-10-28T03-11-55-082Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T03-11-55-082Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T03-11-55-082Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "registry-server",
+    "adapter-add",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/spike.json",
+  "cssChanged": true,
+  "build": true,
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "oklch(0.55 0.21 250)",
+      "buttonCount": 3
+    },
+    "dark": {
+      "background": "oklch(0.153 0.006 107.1)",
+      "buttonBg": "oklch(0.72 0.19 250)"
+    }
+  },
+  "ok": true
+}

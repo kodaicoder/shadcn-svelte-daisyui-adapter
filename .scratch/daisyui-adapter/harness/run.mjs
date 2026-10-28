@@ -10,11 +10,14 @@
 // --registry <d>  directory to serve on the harness port at /r/<name>.json
 // --port <n>      dev server port (default 5209) and registry port (default 5199)
 
-import { execFileSync, spawn } from 'node:child_process';
+import { execFile, execFileSync, spawn } from 'node:child_process';
+import { promisify } from 'node:util';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
-import { createServer } from 'node:http';
-import { join, resolve, extname } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
+import { startRegistry, stopRegistry, REGISTRY_PORT } from './registry.mjs';
+
+const execFileAsync = promisify(execFile);
 
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
@@ -27,7 +30,6 @@ const KEEP = flag('--keep');
 const ADD_URL = option('--add', null);
 const REGISTRY_DIR = option('--registry', null);
 const DEV_PORT = Number(option('--port', '5209'));
-const REGISTRY_PORT = 5199;
 
 const HARNESS = import.meta.dirname;
 const REPO = resolve(HARNESS, '..', '..', '..');
@@ -40,6 +42,7 @@ const NODE = process.execPath;
 
 const log = (msg) => console.log(`[harness] ${msg}`);
 const run = (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
+	if (server) throw new Error('run() would block the registry server, use runAsync');
 	log(`${cmd} ${cmdArgs.join(' ')}`);
 	try {
 		return execFileSync(cmd, cmdArgs, {
@@ -56,6 +59,23 @@ const run = (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
 	}
 };
 
+const runAsync = async (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
+	log(`${cmd} ${cmdArgs.join(' ')}`);
+	try {
+		const { stdout } = await execFileAsync(cmd, cmdArgs, {
+			cwd,
+			encoding: 'utf8',
+			timeout: 600_000,
+			shell: cmd === PNPM && process.platform === 'win32'
+		});
+		return stdout;
+	} catch (error) {
+		const out = `${error.stdout ?? ''}\n${error.stderr ?? ''}`.trim();
+		if (allowFail) return out;
+		throw new Error(`${cmd} ${cmdArgs.join(' ')} failed:\n${out.slice(-4000)}`);
+	}
+};
+
 const write = (path, text) =>
 	writeFileSync(path, text, { encoding: 'utf8' }); // Node writes no BOM
 
@@ -63,6 +83,8 @@ mkdirSync(EVIDENCE, { recursive: true });
 mkdirSync(WORK, { recursive: true });
 
 const report = { stamp: STAMP, app: APP, evidence: EVIDENCE, steps: [], addUrl: ADD_URL };
+
+let server = null;
 
 try {
 	// 1. scaffold
@@ -151,30 +173,25 @@ export default defineConfig({
 	report.steps.push('baseline-add');
 
 	// 6. optional registry server + adapter install
-	let server = null;
 	if (REGISTRY_DIR) {
-		server = createServer((req, res) => {
-			const file = join(REGISTRY_DIR, decodeURIComponent(req.url ?? '').replace(/^\//, ''));
-			if (!existsSync(file) || extname(file) !== '.json') {
-				res.writeHead(404).end('not found');
-				return;
-			}
-			res.writeHead(200, { 'content-type': 'application/json' }).end(readFileSync(file));
-		});
-		await new Promise((r) => server.listen(REGISTRY_PORT, '127.0.0.1', r));
+		server = await startRegistry(REGISTRY_DIR);
 		log(`registry on http://127.0.0.1:${REGISTRY_PORT}`);
 		report.steps.push('registry-server');
 	}
 
 	if (ADD_URL) {
 		const cssBefore = readFileSync(join(APP, 'src', 'app.css'), 'utf8');
-		run(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', ADD_URL, '-y'], APP);
+		// -o is required: an item carrying css/cssVars prompts to overwrite the
+		// stylesheet, and -y alone leaves that prompt waiting with piped stdio.
+		await runAsync(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', ADD_URL, '-y', '-o'], APP);
 		const cssAfter = readFileSync(join(APP, 'src', 'app.css'), 'utf8');
 		write(join(EVIDENCE, 'app-before.css'), cssBefore);
 		write(join(EVIDENCE, 'app-after.css'), cssAfter);
 		report.cssChanged = cssBefore !== cssAfter;
 		report.steps.push('adapter-add');
 	}
+
+	server = stopRegistry(server);
 
 	// 7. build
 	log('building');
@@ -220,6 +237,7 @@ export default defineConfig({
 	report.error = String(error.message ?? error);
 } finally {
 	write(join(EVIDENCE, 'run.json'), JSON.stringify(report, null, 2));
+	stopRegistry(server);
 	if (!KEEP) rmSync(WORK, { recursive: true, force: true });
 }
 

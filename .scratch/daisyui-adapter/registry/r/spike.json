@@ -1,0 +1,36 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "spike",
+	"title": "Mechanism spike fixture",
+	"type": "registry:file",
+	"description": "Throwaway item proving @plugin injection and cssVars overwrite mechanics.",
+	"dependencies": [
+		"tailwindcss"
+	],
+	"css": {
+		"@plugin \"./spike-plugin.js\"": {}
+	},
+	"cssVars": {
+		"light": {
+			"primary": "oklch(0.55 0.21 250)",
+			"spike-light": "spike-light",
+			"color-popover": "var(--popover)",
+			"color-popover-foreground": "var(--popover-foreground)",
+			"color-border": "var(--border)"
+		},
+		"dark": {
+			"primary": "oklch(0.72 0.19 250)",
+			"spike-dark": "spike-dark",
+			"color-popover": "var(--popover)",
+			"color-popover-foreground": "var(--popover-foreground)",
+			"color-border": "var(--border)"
+		}
+	},
+	"files": [
+		{
+			"content": "import plugin from 'tailwindcss/plugin';\n\nconsole.log('[spike-plugin] loaded');\n\nexport default plugin(function spike({ addBase }) {\n\taddBase({\n\t\t':root': {\n\t\t\t'--spike-loaded': '1'\n\t\t}\n\t});\n});\n",
+			"type": "registry:file",
+			"target": "src/spike-plugin.js"
+		}
+	]
+}

@@ -1,0 +1,3 @@
+/r/spike.json -> 200 (expected 200)
+/r/nope.json -> 404 (expected 404)
+/r/../../package.json -> 400 (expected 400)

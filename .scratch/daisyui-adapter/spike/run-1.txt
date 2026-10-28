@@ -1,0 +1,32 @@
+[harness] scaffolding SvelteKit 3 project
+[harness] pnpm.cmd dlx sv@1.1.1 create C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-28T02-50-17-943Z\app --template minimal --types ts --no-add-ons --no-install --no-dir-check
+[harness] installing dependencies
+[harness] pnpm.cmd install
+[harness] pnpm.cmd add -D tailwindcss @tailwindcss/vite @sveltejs/adapter-node tw-animate-css shadcn-svelte cn @fontsource-variable/noto-sans @fontsource-variable/playfair-display @fontsource-variable/manrope
+[harness] pnpm.cmd dlx shadcn-svelte@latest add button -y
+node : (node:61092) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to 
+security vulnerabilities, as the arguments are not escaped, only concatenated.
+At line:1 char:122
++ ... | Out-Null; node .scratch/daisyui-adapter/harness/run.mjs --keep --re ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:61092) [D...y concatenated.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[harness] registry on http://127.0.0.1:5199
+[harness] pnpm.cmd dlx shadcn-svelte@latest add http://127.0.0.1:5199/r/spike.json -y
+{
+  "stamp": "2026-10-28T02-50-17-943Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T02-50-17-943Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T02-50-17-943Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "registry-server"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/spike.json",
+  "ok": false,
+  "error": "pnpm.cmd dlx shadcn-svelte@latest add http://127.0.0.1:5199/r/spike.json -y failed:\n┌  \u001b[48;2;255;85;0m\u001b[30m shadcn-svelte \u001b[39m\u001b[49m\u001b[90m v1.7.1 \u001b[39m\n│\n◇  Components to install:\n│  \u001b[90mhttp://127.0.0.1:5199/r/spike.json\u001b[39m\n│\n└  CLI Error: Failed to fetch registry.\n    at i (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvqraju3-zg4/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.2/node_modules/shadcn-svelte/dist/transform-icons-DoSMlnBd.mjs:1:194)\n    at ns (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvqraju3-zg4/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.2/node_modules/shadcn-svelte/dist/index.mjs:111:2579)\n    at async es (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvqraju3-zg4/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.2/node_modules/shadcn-svelte/dist/index.mjs:111:1364)\n    at async ks (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvqraju3-zg4/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.2/node_modules/shadcn-svelte/dist/index.mjs:126:309)\n    at async rc (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvqraju3-zg4/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.2/node_modules/shadcn-svelte/dist/index.mjs:130:2886)\n    at async Command.<anonymous> (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvqraju3-zg4/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.2/node_modules/shadcn-svelte/dist/index.mjs:130:1910)\n   [cause]: TypeError: fetch failed\n   [cause]: HeadersTimeoutError: Headers Timeout Error\n    at FastTimer.onParserTimeout [as _onTimeout] (node:internal/deps/undici/undici:7763:32)\n    at Timeout.onTick [as _onTimeout] (node:internal/deps/undici/undici:732:17)\n    at listOnTimeout (node:internal/timers:685:17)\n    at process.processTimers (node:internal/timers:618:7)"
+}

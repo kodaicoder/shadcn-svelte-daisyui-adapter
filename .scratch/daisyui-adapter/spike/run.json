@@ -1,0 +1,33 @@
+{
+  "stamp": "2026-10-28T03-11-55-082Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T03-11-55-082Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T03-11-55-082Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "registry-server",
+    "adapter-add",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/spike.json",
+  "cssChanged": true,
+  "build": true,
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "oklch(0.55 0.21 250)",
+      "buttonCount": 3
+    },
+    "dark": {
+      "background": "oklch(0.153 0.006 107.1)",
+      "buttonBg": "oklch(0.72 0.19 250)"
+    }
+  },
+  "ok": true
+}

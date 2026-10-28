@@ -1,0 +1,40 @@
+{
+  "url": "http://127.0.0.1:5209/toast",
+  "consoleErrors": [],
+  "beforeToast": {
+    "spikeLoaded": "1",
+    "colorPopover": "oklch(100% 0 0)",
+    "popover": "oklch(100% 0 0)",
+    "probeColorBg": "oklch(1 0 0)",
+    "probePopoverBg": "oklch(1 0 0)",
+    "toastBg": null,
+    "toastNormalBg": null
+  },
+  "light": {
+    "spikeLoaded": "1",
+    "colorPopover": "oklch(100% 0 0)",
+    "popover": "oklch(100% 0 0)",
+    "probeColorBg": "oklch(1 0 0)",
+    "probePopoverBg": "oklch(1 0 0)",
+    "toastBg": "oklch(1 0 0)",
+    "toastNormalBg": "oklch(100% 0 0)"
+  },
+  "overridden": {
+    "spikeLoaded": "1",
+    "colorPopover": "rgb(255, 0, 0)",
+    "popover": "oklch(100% 0 0)",
+    "probeColorBg": "rgb(255, 0, 0)",
+    "probePopoverBg": "oklch(1 0 0)",
+    "toastBg": "rgb(255, 0, 0)",
+    "toastNormalBg": "rgb(255, 0, 0)"
+  },
+  "dark": {
+    "spikeLoaded": "1",
+    "colorPopover": "oklch(22.8% .013 107.4)",
+    "popover": "oklch(22.8% .013 107.4)",
+    "probeColorBg": "oklch(0.228 0.013 107.4)",
+    "probePopoverBg": "oklch(0.228 0.013 107.4)",
+    "toastBg": "oklch(0.228 0.013 107.4)",
+    "toastCount": 2
+  }
+}

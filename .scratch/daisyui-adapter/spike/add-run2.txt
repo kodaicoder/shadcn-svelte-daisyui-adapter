@@ -1,0 +1,20 @@
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mhttp://127.0.0.1:5199/r/spike.json[39m
+[?25l│
+◇  [1m[36mspike[39m[22m installed at [90mspike[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+node.exe : Done in 1.1s using pnpm v12.9.1
+At C:\Users\LENOVO\AppData\Roaming\npm\pnpm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/pnpm/pnpm" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Done in 1.1s using pnpm v12.9.1:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
