@@ -1,4 +1,4 @@
-﻿┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
 │
 ◇  Components to install:
 │  [90mhttp://127.0.0.1:5199/r/spike.json[39m
