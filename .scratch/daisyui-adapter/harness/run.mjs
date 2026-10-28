@@ -16,6 +16,7 @@ import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } fr
 import { createServer } from 'node:http';
 import { join, resolve, extname } from 'node:path';
 import { tmpdir } from 'node:os';
+import { registryFile } from './registry-path.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -43,6 +44,7 @@ const NODE = process.execPath;
 
 const log = (msg) => console.log(`[harness] ${msg}`);
 const run = (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
+	if (server) throw new Error('run() would block the registry server, use runAsync');
 	log(`${cmd} ${cmdArgs.join(' ')}`);
 	try {
 		return execFileSync(cmd, cmdArgs, {
@@ -59,8 +61,6 @@ const run = (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
 	}
 };
 
-// The registry server lives in this process, so any command that fetches from it
-// must not block the event loop the way execFileSync does.
 const runAsync = async (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
 	log(`${cmd} ${cmdArgs.join(' ')}`);
 	try {
@@ -177,10 +177,7 @@ export default defineConfig({
 	// 6. optional registry server + adapter install
 	if (REGISTRY_DIR) {
 		server = createServer((req, res) => {
-			const file = join(
-				REGISTRY_DIR,
-				decodeURIComponent(req.url ?? '').replace(/^\/r\//, '')
-			);
+			const file = registryFile(REGISTRY_DIR, req.url);
 			if (!existsSync(file) || extname(file) !== '.json') {
 				res.writeHead(404).end('not found');
 				return;
@@ -202,6 +199,12 @@ export default defineConfig({
 		write(join(EVIDENCE, 'app-after.css'), cssAfter);
 		report.cssChanged = cssBefore !== cssAfter;
 		report.steps.push('adapter-add');
+	}
+
+	if (server) {
+		server.closeAllConnections();
+		server.close();
+		server = null;
 	}
 
 	// 7. build

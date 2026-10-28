@@ -1,14 +1,13 @@
-// Serves a built shadcn-svelte registry directory at /r/<name>.json on 5199.
-// Same mapping as harness/run.mjs, kept separate so it can outlive a single add.
 import { createServer } from 'node:http';
 import { existsSync, readFileSync } from 'node:fs';
-import { join, extname, resolve } from 'node:path';
+import { extname, resolve } from 'node:path';
+import { registryFile } from '../harness/registry-path.mjs';
 
 const dir = resolve(process.argv[2] ?? '.scratch/daisyui-adapter/registry/r');
 const port = 5199;
 
 createServer((req, res) => {
-	const file = join(dir, decodeURIComponent(req.url ?? '').replace(/^\/r\//, ''));
+	const file = registryFile(dir, req.url);
 	console.log(`${req.method} ${req.url} -> ${file}`);
 	if (!existsSync(file) || extname(file) !== '.json') {
 		res.writeHead(404).end('not found');

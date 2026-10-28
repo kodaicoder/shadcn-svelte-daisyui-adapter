@@ -1,4 +1,3 @@
-// Proves what sonner actually resolves for --color-popover at runtime.
 // Usage: node probe-toast.mjs http://127.0.0.1:5209/toast <outDir>
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';

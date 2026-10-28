@@ -1,5 +1,3 @@
-// Re-runnable checks for claims 1 to 3 against the installed stylesheet and the
-// compiled build CSS. Nodes are found textually, so it needs no CSS dependency.
 // Usage: node check-css.mjs <app-after.css> <compiled.css> [<compiled2.css> ...]
 import { readFileSync } from 'node:fs';
 
@@ -10,7 +8,6 @@ function check(label, ok, detail = '') {
 	if (!ok) failures++;
 }
 
-// Top-level nodes only: statements end in `;`, rules open a block.
 function parseTopLevel(css) {
 	const nodes = [];
 	let depth = 0;
