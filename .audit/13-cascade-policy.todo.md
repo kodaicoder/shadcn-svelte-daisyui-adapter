@@ -45,7 +45,7 @@ Ticket step, in the ticket's own words: resolve five decisions by grilling. No a
 - [x] One line in the map's `## Decisions so far`
 - [x] `no-comments`
 - [x] `code-review` on the Spec axis against base `57e7284`
-- [ ] Commit on `feat/daisyui-adapter`, pushed
+- [x] Commit on `feat/daisyui-adapter` (`6376692`), pushed
 
 ## Review gates
 
