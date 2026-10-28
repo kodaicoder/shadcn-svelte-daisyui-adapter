@@ -28,6 +28,9 @@ test-results
 # Verification evidence and run state (see .opencode/skills/verify)
 .verify/
 
+# Harness run artefacts (screenshots and logs stay local)
+.scratch/daisyui-adapter/harness/runs/
+
 # Vitest browser-mode artifacts
 .vitest-attachments/
 __screenshots__/
