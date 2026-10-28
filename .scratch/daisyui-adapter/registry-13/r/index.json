@@ -1,0 +1,38 @@
+[
+	{
+		"name": "cascade-raw",
+		"title": "cascade-raw",
+		"type": "registry:lib",
+		"description": "Plugin-only arm: addBase output with no cssVars.",
+		"dependencies": [],
+		"devDependencies": [
+			"daisyui-adapter-13-probe@file:./daisyui-adapter-13-probe-0.0.0.tgz"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "cascade-raw.json"
+	},
+	{
+		"name": "cssvars-namespaced",
+		"title": "cssvars-namespaced",
+		"type": "registry:lib",
+		"description": "cssVars arm using var(--daisy-color-<token>) values.",
+		"dependencies": [],
+		"devDependencies": [
+			"daisyui-adapter-13-probe@file:./daisyui-adapter-13-probe-0.0.0.tgz"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "cssvars-namespaced.json"
+	},
+	{
+		"name": "daisyui-adapter",
+		"title": "daisyui-adapter",
+		"type": "registry:lib",
+		"description": "Chosen shape: css with :root and .dark maps, plus one unlayered selector probe.",
+		"dependencies": [],
+		"devDependencies": [
+			"daisyui-adapter-13-probe@file:./daisyui-adapter-13-probe-0.0.0.tgz"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "daisyui-adapter.json"
+	}
+]

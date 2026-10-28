@@ -16,6 +16,10 @@
 // --theme <f>     copy this file to src/daisyui-theme.css before the add, so a plugin
 //                 that reads the theme has something to read
 // --sentinel <p>  custom property prefix to look for in the built client CSS
+// --then "<args>" pnpm arguments to run in the app after the add (repeatable). Split on
+//                 whitespace, so one argument cannot contain a space. Each run snapshots
+//                 the stylesheet, so a later init or add -a is measured.
+// --props <list>  comma-separated custom properties to read at runtime, light and dark
 
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -40,6 +44,16 @@ const option = (name, fallback) => {
 	const i = args.indexOf(name);
 	return i === -1 ? fallback : args[i + 1];
 };
+const options = (name) => {
+	const found = [];
+	for (let i = 0; i < args.length; i++) {
+		if (args[i] !== name) continue;
+		const value = args[i + 1];
+		if (!value || value.startsWith('--')) throw new Error(`${name} needs a value`);
+		found.push(value);
+	}
+	return found;
+};
 
 const KEEP = flag('--keep');
 const ADD_URL = option('--add', null);
@@ -49,9 +63,14 @@ const LAYOUT = option('--layout', 'app');
 const PKG_DIR = option('--package', null);
 const THEME_FILE = option('--theme', null);
 const SENTINEL = option('--sentinel', null);
+const PROPS = option('--props', '');
+const THEN = options('--then');
 
 if (LAYOUT !== 'app' && LAYOUT !== 'routes') {
 	throw new Error(`--layout must be app or routes, got ${LAYOUT}`);
+}
+if (THEN.length > 0 && !ADD_URL) {
+	throw new Error('--then only makes sense after --add');
 }
 
 const HARNESS = import.meta.dirname;
@@ -82,8 +101,8 @@ const run = (cmd, cmdArgs, cwd, { allowFail = false } = {}) => {
 	}
 };
 
-// Async and non-throwing: the add's transcript is evidence, so its exit code is
-// reported to the caller instead of ending the run here.
+// The exit code is the result: the add transcript is evidence, so the caller writes it
+// before failing on a non-zero code.
 const runCapture = async (cmd, cmdArgs, cwd) => {
 	log(`${cmd} ${cmdArgs.join(' ')}`);
 	try {
@@ -249,6 +268,24 @@ export default defineConfig({
 		report.steps.push('adapter-add');
 	}
 
+	// 6b. commands that re-apply CSS after the adapter, snapshotting what each left behind
+	for (const [index, command] of THEN.entries()) {
+		const n = index + 1;
+		const result = await runCapture(PNPM, command.split(/\s+/), APP);
+		write(
+			join(EVIDENCE, `then-${n}.log`),
+			`$ pnpm ${command}\nexit ${result.code}\n${result.output}\n`
+		);
+		write(
+			join(EVIDENCE, `css-after-then-${n}.css`),
+			readFileSync(join(APP, cssFile), 'utf8')
+		);
+		report.then ??= [];
+		report.then.push({ command, code: result.code });
+		if (result.code !== 0) throw new Error(`--then ${n} failed, see then-${n}.log`);
+	}
+	if (THEN.length > 0) report.steps.push('then');
+
 	server = stopRegistry(server);
 
 	// 7. build
@@ -293,7 +330,7 @@ export default defineConfig({
 		} catch {}
 	}
 	if (!ready) throw new Error('dev server never answered');
-	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE], REPO);
+	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE, PROPS], REPO);
 	write(join(EVIDENCE, 'render.json'), shot);
 	report.render = JSON.parse(shot);
 	report.steps.push('render');

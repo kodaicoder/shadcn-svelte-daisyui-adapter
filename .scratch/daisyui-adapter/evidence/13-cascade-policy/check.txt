@@ -1,0 +1,35 @@
+PASS  A add and build pass :: ok=true build=true
+PASS  A compiled base layer carries the colliding --primary
+PASS  A runtime --primary keeps the step-4 value :: "oklch(0.508 0.118 165.612)"
+PASS  A plugin base output was live
+PASS  B add and build pass :: ok=true build=true
+PASS  B cssVars leaves the tokens bound
+PASS  B cssVars adds a self-referential @theme entry per colour key :: 31
+PASS  B the stock block has no self-reference
+PASS  B cssVars changes the @theme inline block
+PASS  B runtime --primary follows the plugin namespace
+PASS  C add and build pass :: ok=true build=true
+PASS  C re-add is byte-identical
+PASS  C one :root and one .dark
+PASS  C one @plugin and one shadcn import
+PASS  C @theme inline is untouched
+PASS  C css map replaces --primary in place
+PASS  C runtime --primary follows the plugin namespace
+PASS  C plugin values live in @layer base
+PASS  C unlayered css binds the layered value
+PASS  C unlayered selector beats a Tailwind utility
+PASS  C namespace is only --daisy-color-* and --daisy-radius
+PASS  D init exits 0 and the build passes
+PASS  D one @plugin, after the last import
+PASS  D one :root and one .dark
+PASS  D init wipes the bindings :: oklch(0.205 0 0)
+PASS  D only the dark radius survives
+PASS  D unlayered selector survives init
+PASS  D re-add after init restores the bindings
+PASS  D recovery keeps one @plugin and one block each
+PASS  D runtime follows the theme again
+PASS  E add -a passes
+PASS  E add -a leaves the stylesheet byte-identical
+PASS  F add card passes
+PASS  F add card leaves the stylesheet byte-identical
+ALL CHECKS PASSED

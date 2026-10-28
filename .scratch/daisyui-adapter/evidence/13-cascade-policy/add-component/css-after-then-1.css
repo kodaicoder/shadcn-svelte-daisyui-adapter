@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+@import "tw-animate-css";
+@import "shadcn-svelte/tailwind.css";
+@import "@fontsource-variable/noto-sans";
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/manrope";
+
+@plugin "daisyui-adapter-13-probe";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	--background: var(--daisy-color-background);
+	--foreground: var(--daisy-color-foreground);
+	--card: var(--daisy-color-card);
+	--card-foreground: var(--daisy-color-card-foreground);
+	--popover: var(--daisy-color-popover);
+	--popover-foreground: var(--daisy-color-popover-foreground);
+	--primary: var(--daisy-color-primary);
+	--primary-foreground: var(--daisy-color-primary-foreground);
+	--secondary: var(--daisy-color-secondary);
+	--secondary-foreground: var(--daisy-color-secondary-foreground);
+	--muted: var(--daisy-color-muted);
+	--muted-foreground: var(--daisy-color-muted-foreground);
+	--accent: var(--daisy-color-accent);
+	--accent-foreground: var(--daisy-color-accent-foreground);
+	--destructive: var(--daisy-color-destructive);
+	--border: var(--daisy-color-border);
+	--input: var(--daisy-color-input);
+	--ring: var(--daisy-color-ring);
+	--chart-1: var(--daisy-color-chart-1);
+	--chart-2: var(--daisy-color-chart-2);
+	--chart-3: var(--daisy-color-chart-3);
+	--chart-4: var(--daisy-color-chart-4);
+	--chart-5: var(--daisy-color-chart-5);
+	--radius: var(--daisy-radius);
+	--sidebar: var(--daisy-color-sidebar);
+	--sidebar-foreground: var(--daisy-color-sidebar-foreground);
+	--sidebar-primary: var(--daisy-color-sidebar-primary);
+	--sidebar-primary-foreground: var(--daisy-color-sidebar-primary-foreground);
+	--sidebar-accent: var(--daisy-color-sidebar-accent);
+	--sidebar-accent-foreground: var(--daisy-color-sidebar-accent-foreground);
+	--sidebar-border: var(--daisy-color-sidebar-border);
+	--sidebar-ring: var(--daisy-color-sidebar-ring);
+}
+
+.dark {
+	--background: var(--daisy-color-background);
+	--foreground: var(--daisy-color-foreground);
+	--card: var(--daisy-color-card);
+	--card-foreground: var(--daisy-color-card-foreground);
+	--popover: var(--daisy-color-popover);
+	--popover-foreground: var(--daisy-color-popover-foreground);
+	--primary: var(--daisy-color-primary);
+	--primary-foreground: var(--daisy-color-primary-foreground);
+	--secondary: var(--daisy-color-secondary);
+	--secondary-foreground: var(--daisy-color-secondary-foreground);
+	--muted: var(--daisy-color-muted);
+	--muted-foreground: var(--daisy-color-muted-foreground);
+	--accent: var(--daisy-color-accent);
+	--accent-foreground: var(--daisy-color-accent-foreground);
+	--destructive: var(--daisy-color-destructive);
+	--border: var(--daisy-color-border);
+	--input: var(--daisy-color-input);
+	--ring: var(--daisy-color-ring);
+	--chart-1: var(--daisy-color-chart-1);
+	--chart-2: var(--daisy-color-chart-2);
+	--chart-3: var(--daisy-color-chart-3);
+	--chart-4: var(--daisy-color-chart-4);
+	--chart-5: var(--daisy-color-chart-5);
+	--sidebar: var(--daisy-color-sidebar);
+	--sidebar-foreground: var(--daisy-color-sidebar-foreground);
+	--sidebar-primary: var(--daisy-color-sidebar-primary);
+	--sidebar-primary-foreground: var(--daisy-color-sidebar-primary-foreground);
+	--sidebar-accent: var(--daisy-color-sidebar-accent);
+	--sidebar-accent-foreground: var(--daisy-color-sidebar-accent-foreground);
+	--sidebar-border: var(--daisy-color-sidebar-border);
+	--sidebar-ring: var(--daisy-color-sidebar-ring);
+	--radius: var(--daisy-radius);
+}
+
+@theme inline {
+	--font-sans: 'Manrope Variable', sans-serif;
+	--font-heading: 'Playfair Display Variable', serif;
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
+	}
+}
+	[data-slot="button"] {
+		background-color: rgb(255 0 0);
+}
