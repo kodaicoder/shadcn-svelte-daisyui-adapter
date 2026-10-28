@@ -6,15 +6,20 @@ PASS  light sentinel written inside :root
 PASS  dark sentinel written inside .dark
 PASS  cssVars.light replaced --primary in place
 PASS  cssVars.dark replaced --primary in place
-PASS  --color-popover declared in :root
-PASS  --color-popover declared in .dark
-PASS  --color-popover-foreground declared in :root
-PASS  --color-popover-foreground declared in .dark
-PASS  --color-border declared in :root
-PASS  --color-border declared in .dark
-PASS  compiled CSS carries the plugin base rule (compiled-global.css) :: hits 1
-PASS  plugin base rule is a plain :root declaration (compiled-global.css)
-PASS  plain --color-popover emitted (compiled-global.css)
-PASS  plain --color-border emitted (compiled-global.css)
-PASS  inline theme vars stay pruned, no --color-primary (compiled-global.css)
+PASS  cssVars wrote --color-popover into :root
+PASS  cssVars wrote --color-popover into .dark
+PASS  cssVars wrote --color-popover-foreground into :root
+PASS  cssVars wrote --color-popover-foreground into .dark
+PASS  cssVars wrote --color-border into :root
+PASS  cssVars wrote --color-border into .dark
+PASS  one shadcn tailwind import (spike/app-after-run2.css)
+PASS  one @plugin marker (spike/app-after-run2.css)
+PASS  one shadcn tailwind import (spike/claim6-after-run1.css)
+PASS  one @plugin marker (spike/claim6-after-run1.css)
+PASS  one shadcn tailwind import (spike/claim6-after-run2.css)
+PASS  one @plugin marker (spike/claim6-after-run2.css)
+PASS  compiled CSS carries the plugin base rule (spike/compiled-global.css)
+INFO  @layer theme emits --color-popover (spike/compiled-global.css): true
+PASS  compiled CSS carries the plugin base rule (control-no-plain-decls/compiled-global.css)
+INFO  @layer theme emits --color-popover (control-no-plain-decls/compiled-global.css): true
 ALL CHECKS PASSED

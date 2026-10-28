@@ -18,7 +18,8 @@ page.on('pageerror', (e) => consoleErrors.push(String(e)));
 const read = () =>
 	page.evaluate(() => {
 		const root = getComputedStyle(document.documentElement);
-		const toast = document.querySelector('[data-sonner-toast]');
+		const toasts = [...document.querySelectorAll('[data-sonner-toast]')];
+		const toast = toasts.at(-1);
 		return {
 			spikeLoaded: root.getPropertyValue('--spike-loaded').trim(),
 			colorPopover: root.getPropertyValue('--color-popover').trim(),
@@ -26,7 +27,8 @@ const read = () =>
 			probeColorBg: getComputedStyle(document.querySelector('#probe-color')).backgroundColor,
 			probePopoverBg: getComputedStyle(document.querySelector('#probe-popover')).backgroundColor,
 			toastBg: toast ? getComputedStyle(toast).backgroundColor : null,
-			toastNormalBg: toast ? getComputedStyle(toast).getPropertyValue('--normal-bg').trim() : null
+			toastNormalBg: toast ? getComputedStyle(toast).getPropertyValue('--normal-bg').trim() : null,
+			toastCount: toasts.length
 		};
 	});
 
@@ -52,20 +54,7 @@ await page.evaluate(() => {
 await page.waitForTimeout(300);
 await page.click('#fire');
 await page.waitForTimeout(900);
-const dark = await page.evaluate(() => {
-	const root = getComputedStyle(document.documentElement);
-	const toasts = [...document.querySelectorAll('[data-sonner-toast]')];
-	const toast = toasts.at(-1);
-	return {
-		spikeLoaded: root.getPropertyValue('--spike-loaded').trim(),
-		colorPopover: root.getPropertyValue('--color-popover').trim(),
-		popover: root.getPropertyValue('--popover').trim(),
-		probeColorBg: getComputedStyle(document.querySelector('#probe-color')).backgroundColor,
-		probePopoverBg: getComputedStyle(document.querySelector('#probe-popover')).backgroundColor,
-		toastBg: toast ? getComputedStyle(toast).backgroundColor : null,
-		toastCount: toasts.length
-	};
-});
+const dark = await read();
 await page.screenshot({ path: join(out, 'toast-dark.png') });
 
 await browser.close();

@@ -1,0 +1,18 @@
+# The @theme inline map is load-bearing on its own
+
+Claim 3's conclusion says to keep the project's `@theme inline` map rather than add plain `--color-*` keys.
+That rests on the map being needed for more than sonner.
+
+Test in the kept project (`...\run-2026-10-28T03-11-55-082Z\app`): remove the three
+`--color-border: var(--border);` lines, one from `@theme inline` (the map) and the two plain declarations that
+`cssVars` had added to `:root` and `.dark`, then `pnpm build`.
+
+```
+error during build:
+Build failed with 1 error:
+Error: Cannot apply unknown utility class `border-border`
+```
+
+The map entry is what `@layer base { * { @apply border-border } }` in the same stylesheet resolves through. A
+project that dropped the map would not build at all, before sonner is considered. The plain declarations are
+not needed for this and were restored afterwards (`pnpm build` clean).

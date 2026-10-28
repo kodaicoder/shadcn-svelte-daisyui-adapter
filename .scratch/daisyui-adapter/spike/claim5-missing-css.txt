@@ -12,3 +12,8 @@
     at async rc (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/8d8256f8116ca469fb5f2b96e226b05b/mvril6fy-fok/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:130:2886)
     at async Command.<anonymous> (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/8d8256f8116ca469fb5f2b96e226b05b/mvril6fy-fok/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:130:1910)
 
+
+--- after the failed add, src/ holds: ---
+\src\app.css.claim6
+\src\spike-plugin.js
+\src\lib\utils.ts

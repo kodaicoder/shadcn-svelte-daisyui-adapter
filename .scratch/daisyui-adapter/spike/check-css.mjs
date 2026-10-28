@@ -1,4 +1,4 @@
-// Usage: node check-css.mjs <app-after.css> <compiled.css> [<compiled2.css> ...]
+// Usage: node check-css.mjs <app-after.css> <other.css> [<compiled.css> ...]
 import { readFileSync } from 'node:fs';
 
 let failures = 0;
@@ -44,8 +44,11 @@ function parseTopLevel(css) {
 	return nodes.filter((n) => n.header);
 }
 
-const [afterPath, ...compiledPaths] = process.argv.slice(2);
-const nodes = parseTopLevel(readFileSync(afterPath, 'utf8'));
+const count = (text, needle) => text.split(needle).length - 1;
+
+const [afterPath, ...rest] = process.argv.slice(2);
+const after = readFileSync(afterPath, 'utf8');
+const nodes = parseTopLevel(after);
 
 const imports = nodes.filter((n) => n.header.startsWith('@import'));
 const plugins = nodes.filter((n) => n.header.startsWith('@plugin'));
@@ -72,32 +75,38 @@ for (const [name, value] of [
 	['color-popover-foreground', 'var(--popover-foreground)'],
 	['color-border', 'var(--border)']
 ]) {
-	check(`--${name} declared in :root`, root.includes(`--${name}: ${value};`));
-	check(`--${name} declared in .dark`, dark.includes(`--${name}: ${value};`));
+	check(`cssVars wrote --${name} into :root`, root.includes(`--${name}: ${value};`));
+	check(`cssVars wrote --${name} into .dark`, dark.includes(`--${name}: ${value};`));
 }
 
-for (const path of compiledPaths) {
-	const compiled = readFileSync(path, 'utf8');
-	const spikeHits = compiled.split('--spike-loaded').length - 1;
-	if (compiled.includes('--spike-loaded')) {
-		check(`compiled CSS carries the plugin base rule (${path.split(/[\\/]/).pop()})`, spikeHits === 1, `hits ${spikeHits}`);
-		check(
-			`plugin base rule is a plain :root declaration (${path.split(/[\\/]/).pop()})`,
-			compiled.includes(':root{--spike-loaded:1}')
-		);
-		check(
-			`plain --color-popover emitted (${path.split(/[\\/]/).pop()})`,
-			compiled.includes('--color-popover:var(--popover)')
-		);
-		check(
-			`plain --color-border emitted (${path.split(/[\\/]/).pop()})`,
-			compiled.includes('--color-border:var(--border)')
-		);
-		check(
-			`inline theme vars stay pruned, no --color-primary (${path.split(/[\\/]/).pop()})`,
-			!compiled.includes('--color-primary:')
-		);
+for (const path of rest) {
+	const css = readFileSync(path, 'utf8');
+	const label = path.split(/[\\/]/).slice(-2).join('/');
+	const compiled = css.includes('@layer theme{');
+
+	if (!compiled) {
+		check(`one shadcn tailwind import (${label})`, count(css, 'shadcn-svelte/tailwind.css') === 1);
+		check(`one @plugin marker (${label})`, count(css, '@plugin') === 1);
+		continue;
 	}
+
+	check(`compiled CSS carries the plugin base rule (${label})`, css.includes(':root{--spike-loaded:1}'));
+	const start = css.indexOf('@layer theme{');
+	const open = css.indexOf('{', start);
+	let depth = 0;
+	let end = -1;
+	for (let i = open; i < css.length; i++) {
+		if (css[i] === '{') depth++;
+		if (css[i] === '}') {
+			depth--;
+			if (depth === 0) {
+				end = i;
+				break;
+			}
+		}
+	}
+	const theme = css.slice(start, end + 1);
+	console.log(`INFO  @layer theme emits --color-popover (${label}): ${theme.includes('--color-popover:')}`);
 }
 
 console.log(failures === 0 ? 'ALL CHECKS PASSED' : `${failures} CHECK(S) FAILED`);

@@ -8,7 +8,8 @@
     "probeColorBg": "oklch(1 0 0)",
     "probePopoverBg": "oklch(1 0 0)",
     "toastBg": null,
-    "toastNormalBg": null
+    "toastNormalBg": null,
+    "toastCount": 0
   },
   "light": {
     "spikeLoaded": "1",
@@ -17,7 +18,8 @@
     "probeColorBg": "oklch(1 0 0)",
     "probePopoverBg": "oklch(1 0 0)",
     "toastBg": "oklch(1 0 0)",
-    "toastNormalBg": "oklch(100% 0 0)"
+    "toastNormalBg": "oklch(100% 0 0)",
+    "toastCount": 1
   },
   "overridden": {
     "spikeLoaded": "1",
@@ -26,7 +28,8 @@
     "probeColorBg": "rgb(255, 0, 0)",
     "probePopoverBg": "oklch(1 0 0)",
     "toastBg": "rgb(255, 0, 0)",
-    "toastNormalBg": "rgb(255, 0, 0)"
+    "toastNormalBg": "rgb(255, 0, 0)",
+    "toastCount": 1
   },
   "dark": {
     "spikeLoaded": "1",
@@ -35,6 +38,7 @@
     "probeColorBg": "oklch(0.228 0.013 107.4)",
     "probePopoverBg": "oklch(0.228 0.013 107.4)",
     "toastBg": "oklch(0.228 0.013 107.4)",
+    "toastNormalBg": "oklch(22.8% .013 107.4)",
     "toastCount": 2
   }
 }
