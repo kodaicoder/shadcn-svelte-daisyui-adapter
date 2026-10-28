@@ -1,0 +1,27 @@
+runs: app 2026-10-28T08-02-40-125Z, routes 2026-10-28T08-03-01-867Z
+{
+  "cssFile": ".scratch/daisyui-adapter/evidence/08-item-shape/app/css-after.css",
+  "plugins": [
+    "daisyui-adapter-08-probe"
+  ],
+  "imports": 6,
+  "pluginAfterLastImport": true,
+  "shadcnImports": 1,
+  "pluginLoaded": true,
+  "readTheme": true,
+  "expectedBytes": "2240",
+  "ok": true
+}
+{
+  "cssFile": ".scratch/daisyui-adapter/evidence/08-item-shape/routes/css-after.css",
+  "plugins": [
+    "daisyui-adapter-08-probe"
+  ],
+  "imports": 6,
+  "pluginAfterLastImport": true,
+  "shadcnImports": 1,
+  "pluginLoaded": true,
+  "readTheme": true,
+  "expectedBytes": "2240",
+  "ok": true
+}

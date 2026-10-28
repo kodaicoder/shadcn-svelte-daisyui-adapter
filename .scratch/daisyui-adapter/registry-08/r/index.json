@@ -1,0 +1,14 @@
+[
+	{
+		"name": "daisyui-adapter",
+		"title": "daisyUI theme adapter",
+		"type": "registry:lib",
+		"description": "Zero-file probe: a css @plugin line and a build-time devDependency only.",
+		"dependencies": [],
+		"devDependencies": [
+			"daisyui-adapter-08-probe@file:./daisyui-adapter-08-probe-0.0.0.tgz"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "daisyui-adapter.json"
+	}
+]
