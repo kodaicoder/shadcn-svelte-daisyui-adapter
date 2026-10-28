@@ -13,10 +13,9 @@
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
-import { createServer } from 'node:http';
-import { join, resolve, extname } from 'node:path';
+import { join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
-import { registryFile } from './registry-path.mjs';
+import { startRegistry, stopRegistry, REGISTRY_PORT } from './registry.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -31,7 +30,6 @@ const KEEP = flag('--keep');
 const ADD_URL = option('--add', null);
 const REGISTRY_DIR = option('--registry', null);
 const DEV_PORT = Number(option('--port', '5209'));
-const REGISTRY_PORT = 5199;
 
 const HARNESS = import.meta.dirname;
 const REPO = resolve(HARNESS, '..', '..', '..');
@@ -176,15 +174,7 @@ export default defineConfig({
 
 	// 6. optional registry server + adapter install
 	if (REGISTRY_DIR) {
-		server = createServer((req, res) => {
-			const file = registryFile(REGISTRY_DIR, req.url);
-			if (!existsSync(file) || extname(file) !== '.json') {
-				res.writeHead(404).end('not found');
-				return;
-			}
-			res.writeHead(200, { 'content-type': 'application/json' }).end(readFileSync(file));
-		});
-		await new Promise((r) => server.listen(REGISTRY_PORT, '127.0.0.1', r));
+		server = await startRegistry(REGISTRY_DIR);
 		log(`registry on http://127.0.0.1:${REGISTRY_PORT}`);
 		report.steps.push('registry-server');
 	}
@@ -201,11 +191,7 @@ export default defineConfig({
 		report.steps.push('adapter-add');
 	}
 
-	if (server) {
-		server.closeAllConnections();
-		server.close();
-		server = null;
-	}
+	server = stopRegistry(server);
 
 	// 7. build
 	log('building');
@@ -251,10 +237,7 @@ export default defineConfig({
 	report.error = String(error.message ?? error);
 } finally {
 	write(join(EVIDENCE, 'run.json'), JSON.stringify(report, null, 2));
-	if (server) {
-		server.closeAllConnections();
-		server.close();
-	}
+	stopRegistry(server);
 	if (!KEEP) rmSync(WORK, { recursive: true, force: true });
 }
 
