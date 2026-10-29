@@ -21,10 +21,10 @@ Playbook: `skip: no bundled poteto playbook matches a decision-only ticket; the 
 - [x] Copy cited artefacts to `evidence/11-non-colour-tokens/`, re-run `check.mjs` against the copies (74 pass)
 - [x] Write `## Answer`, `Status: resolved`, `Lesson:` and `Check:` in the ticket
 - [x] Append one line to `## Decisions so far` in `map.md`
-- [ ] `no-comments` (the diff carries code: `shot.mjs`, `check.mjs`, `apply.mjs`, the probe plugin)
-- [ ] `code-review` on the Spec axis against `349c212`, fix every finding
-- [ ] `deslop`
-- [ ] Conventional commit on `feat/daisyui-adapter`, tag `t11-non-colour-tokens`, push, no merge to main
+- [x] `no-comments`: `comment-sicko` is not installed on this runtime, so one labelled comments-only pass with `subagents/code/reviewer`. Two findings accepted and deleted, eleven kept.
+- [x] `code-review` on the Spec axis against `349c212`: nine findings, all accepted and fixed (the 28 variables vs 32 keys wording, 02's `color-scheme` tolerance, the failed-log citation, the ignored-token scan now covering the compiled CSS, four number and wording corrections, the map's registry `css` map phrasing)
+- [x] `deslop`: no casts, no defensive branches; one magic `16` named as `ROOT_PX`
+- [x] Conventional commit `eeed928` on `feat/daisyui-adapter`, tag `t11-non-colour-tokens`, both pushed, no merge to main
 
 ## Settled input (do not re-litigate)
 
