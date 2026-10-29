@@ -1,0 +1,11 @@
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mhttp://127.0.0.1:5199/r/noop.json[39m
+[?25l│
+◇  [1m[36mnoop[39m[22m installed at [90msrc\lib\noop[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+
+Done in 859ms using pnpm v12.9.1

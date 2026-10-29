@@ -1,0 +1,3 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/probe-cli/no-theme.mjs
+exit 0
+[cli-14] removed C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T03-53-56-924Z\app\src\daisyui-theme.css

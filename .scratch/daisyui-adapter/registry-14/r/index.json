@@ -1,0 +1,36 @@
+[
+	{
+		"name": "daisyui-adapter",
+		"title": "daisyui-adapter",
+		"type": "registry:lib",
+		"description": "Ticket 14 fixture: the chosen css carrier, no selector rule.",
+		"dependencies": [],
+		"devDependencies": [
+			"daisyui-adapter-14-probe@file:./daisyui-adapter-14-probe-0.0.0.tgz"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "daisyui-adapter.json"
+	},
+	{
+		"name": "daisyui-adapter-raw",
+		"title": "daisyui-adapter-raw",
+		"type": "registry:lib",
+		"description": "Ticket 14 fixture: the same css carrier, with a plugin that also emits raw --color-* names.",
+		"dependencies": [],
+		"devDependencies": [
+			"daisyui-adapter-14-raw-probe@file:./daisyui-adapter-14-raw-probe-0.0.0.tgz"
+		],
+		"registryDependencies": [],
+		"relativeUrl": "daisyui-adapter-raw.json"
+	},
+	{
+		"name": "noop",
+		"title": "noop",
+		"type": "registry:lib",
+		"description": "Satisfies the harness `--then` precondition without writing anything, so a pure CLI run has no add.",
+		"dependencies": [],
+		"devDependencies": [],
+		"registryDependencies": [],
+		"relativeUrl": "noop.json"
+	}
+]

@@ -1,0 +1,60 @@
+{
+  "stamp": "2026-10-29T02-40-48-508Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-29T02-40-48-508Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-29T02-40-48-508Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "then",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/daisyui-adapter.json",
+  "layout": "app",
+  "cssPath": "src/app.css",
+  "theme": ".scratch/daisyui-adapter/registry-14/probe-theme.css",
+  "tarball": "daisyui-adapter-14-probe-0.0.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": true,
+  "then": [
+    {
+      "command": "exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/apply.mjs theme-rule",
+      "code": 0
+    }
+  ],
+  "build": true,
+  "pluginSentinel": [
+    "_app/immutable/assets/0.CrXny1zD.css: --probe-14-loaded:1",
+    "_app/immutable/assets/0.CrXny1zD.css: --probe-14-loaded:1"
+  ],
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "oklch(0.49 0.118 165)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(49% 0.118 165)",
+        "--daisy-color-primary": "oklch(49% 0.118 165)"
+      }
+    },
+    "dark": {
+      "background": "oklch(0.15 0.006 107)",
+      "buttonBg": "oklch(0.6 0.13 166)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(60% 0.13 166)",
+        "--daisy-color-primary": "oklch(60% 0.13 166)"
+      }
+    }
+  },
+  "ok": true
+}

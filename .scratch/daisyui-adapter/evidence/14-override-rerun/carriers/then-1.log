@@ -1,0 +1,4 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/apply.mjs carriers
+exit 0
+[apply-14] arm=carriers stylesheet=src/app.css
+[apply-14] override=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T01-54-45-917Z\app\src\daisyui-adapter.overrides.css sha256=0055b17c6f4a3e738abc21d1d04ecb61bbe16b93733ef7b408aa67d9994eaf2c

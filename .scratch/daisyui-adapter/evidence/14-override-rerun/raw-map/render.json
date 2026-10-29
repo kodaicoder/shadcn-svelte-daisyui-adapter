@@ -1,0 +1,25 @@
+{
+  "url": "http://127.0.0.1:5209/",
+  "status": 200,
+  "consoleErrors": [],
+  "light": {
+    "background": "oklch(1 0 0)",
+    "buttonBg": "rgb(3, 3, 3)",
+    "buttonCount": 3,
+    "props": {
+      "--primary": "rgb(3 3 3)",
+      "--color-primary": "rgb(3 3 3)",
+      "--color-base-100": "rgb(210 210 210)"
+    }
+  },
+  "dark": {
+    "background": "oklch(0.15 0.006 107)",
+    "buttonBg": "oklch(0.6 0.13 166)",
+    "buttonCount": 3,
+    "props": {
+      "--primary": "oklch(60% 0.13 166)",
+      "--color-primary": "rgb(201 0 0)",
+      "--color-base-100": "rgb(211 211 211)"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+html:root { --primary: rgb(3 3 3); --border: rgb(3 3 3); }
+html.dark { --primary: rgb(4 4 4); --border: rgb(4 4 4); }

@@ -1,0 +1,23 @@
+/* 1. imported, plain selectors: source order loses, because an @import sits first */
+:root { --primary: rgb(1 1 1); }
+.dark { --primary: rgb(2 2 2); }
+
+/* 2. imported, html:root specificity 0,1,1 */
+html:root { --border: rgb(3 3 3); }
+html.dark { --border: rgb(4 4 4); }
+
+/* 3. imported, :root:root specificity 0,2,0 */
+:root:root { --input: rgb(5 5 5); }
+:root.dark { --input: rgb(6 6 6); }
+
+/* 4. imported, inside a cascade layer */
+@layer overrides {
+	:root { --accent: rgb(7 7 7); }
+	.dark { --accent: rgb(8 8 8); }
+}
+
+/* 7. imported, light only with plain html:root: no dark block, so it leaks into dark */
+html:root { --chart-1: rgb(13 13 13); }
+
+/* 8. imported, light only with html:not(.dark): no dark block, and no leak */
+html:not(.dark) { --ring: rgb(12 12 12); }

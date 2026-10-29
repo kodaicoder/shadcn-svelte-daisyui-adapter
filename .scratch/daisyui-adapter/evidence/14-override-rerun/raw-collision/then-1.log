@@ -1,0 +1,4 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/apply.mjs raw-collision
+exit 0
+[apply-14] arm=raw-collision stylesheet=src/app.css
+[apply-14] override=C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-50-50-160Z\app\src\daisyui-adapter.overrides.css sha256=3939b0342e623675fc507718deee03af34ededc4f77cb284242daf348050e7d6

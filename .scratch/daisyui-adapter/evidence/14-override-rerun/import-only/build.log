@@ -1,0 +1,32 @@
+[36mvite v8.3.5 [32mbuilding ssr environment for production...[36m[39m
+transforming...
+✓ 171 modules transformed.
+
+$ vite build
+[31m✗[39m Build failed in 91ms
+[31merror during build:
+[31mBuild failed with 1 error:
+
+[plugin @tailwindcss/vite:generate:build] C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/src/app.css
+Error: Can't resolve './daisyui-adapter.overrides.css' in 'C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\src'
+    at finishWithoutResolve (C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\Resolver.js:959:18)
+    at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\Resolver.js:1055:13
+    at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\Resolver.js:1139:5
+    at eval (eval at create (C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\tapable@2.3.3\node_modules\tapable\lib\HookCodeFactory.js:31:10), <anonymous>:15:1)
+    at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\Resolver.js:1139:5
+    at eval (eval at create (C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\tapable@2.3.3\node_modules\tapable\lib\HookCodeFactory.js:31:10), <anonymous>:27:1)
+    at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\DescriptionFilePlugin.js:94:43
+    at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\Resolver.js:1139:5
+    at eval (eval at create (C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\tapable@2.3.3\node_modules\tapable\lib\HookCodeFactory.js:31:10), <anonymous>:15:1)
+    at C:\Users\LENOVO\AppData\Local\Temp\adapter-harness\run-2026-10-29T02-36-13-991Z\app\node_modules\.pnpm\enhanced-resolve@5.26.0\node_modules\enhanced-resolve\lib\Resolver.js:1139:5[31m
+    at aggregateBindingErrorsIntoJsError (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/rolldown@1.2.15/node_modules/rolldown/dist/shared/error-D0SD8_tL.mjs:49:18)
+    at unwrapBindingResult (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/rolldown@1.2.15/node_modules/rolldown/dist/shared/error-D0SD8_tL.mjs:19:128)
+    at #build (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/rolldown@1.2.15/node_modules/rolldown/dist/shared/rolldown-CMhwwZPA.mjs:145:34)
+    at async buildEnvironment (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/vite@8.3.5_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:34849:66)
+    at async Object.build (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/vite@8.3.5_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:35270:19)
+    at async BasicMinimalPluginContext.buildApp (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/@sveltejs+kit@3.1.0_@svelte_209bc34579abc63dd80abbd57e47efa4/node_modules/@sveltejs/kit/src/exports/vite/build/index.js:449:20)
+    at async Object.buildApp (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/vite@8.3.5_jiti@2.7.0/node_modules/vite/dist/node/chunks/node.js:35264:5)
+    at async CAC.<anonymous> (file:///C:/Users/LENOVO/AppData/Local/Temp/adapter-harness/run-2026-10-29T02-36-13-991Z/app/node_modules/.pnpm/vite@8.3.5_jiti@2.7.0/node_modules/vite/dist/node/cli.js:790:3) {
+  errors: [Getter/Setter]
+}[39m
+[ELIFECYCLE] Command failed with exit code 1.

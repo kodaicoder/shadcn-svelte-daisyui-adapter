@@ -161,3 +161,31 @@ split, each run snapshotting the stylesheet) and `--props` (runtime custom prope
 
 Lesson: A mechanism chosen for its headline effect hides its side effects; two carriers can share the cascade outcome and differ in what else they rewrite.
 Check: code - registry-13/check.mjs keeps both carriers side by side, asserting cssVars leaves 31 self-referential @theme entries and css leaves @theme inline byte-identical while both bind at runtime.
+
+## Amendment (ticket 14, 2026-10-29): the writer is the CLI
+
+All five decisions stand. What changes is who performs the write: the adapter CLI (07 and 08, rewritten
+the same day) replaces `add`, because the CLI can read the stylesheet and the item cannot. Nothing in
+the cascade policy moves.
+
+- The carrier is still the `css` maps keyed `:root` and `.dark`, rewritten in place: 63 stock
+  declarations replaced and `--radius` inserted into `.dark`, with `@theme inline` untouched.
+- The namespace is unchanged: `--daisy-color-<daisyUI source>` plus `--daisy-radius`. Ticket 14
+  measured why the raw `--color-*` names cannot carry the fallback: `@theme inline` emits
+  `--color-primary: var(--primary)`, so a binding written as `--primary: var(--color-primary, …)` is a
+  cycle, computes to `""`, and ignores the fallback (`evidence/14-override-rerun/cli-missing-theme/`).
+- `add -a` and `add <component>` still leave the stylesheet byte-identical after the CLI wrote it
+  (13 measured; 14 re-measured `add button` after `shadcn-svelte init` in `cli-lifecycle/`).
+- A later `shadcn-svelte init` still wipes the values and keeps the `@plugin` line; the recovery is now
+  `daisyui-adapter init` again, which re-binds with the post-init values as fallbacks
+  (`evidence/14-override-rerun/cli-after-init/`).
+- Decision 3's "the original `add` command restores them" becomes "the original CLI command restores
+  them". The measured facts from 2026-10-28 are unchanged for a project that also runs `add`.
+- Read three sentences in the 2026-10-28 Answer as history: "One `add <url> -y -o` … does the whole
+  job", "`-o` stays mandatory", and "no … second file". The first two describe the retired writer. The
+  third meant no second file for the install; 14's override file is the deliberate second step and is
+  empty until the user edits it, so the base install still needs no user edit.
+- The constraint to 18 reads "`--daisy-color-*` as the override hook". 18 documents the file as the
+  hook; `--daisy-color-*` is the source-level variable a user may set inside it, alongside the
+  shadcn token itself (`--primary`) when the derived expression is what they want to change.
+

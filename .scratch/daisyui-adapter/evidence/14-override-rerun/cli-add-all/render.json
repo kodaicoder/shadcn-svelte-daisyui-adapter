@@ -1,0 +1,23 @@
+{
+  "url": "http://127.0.0.1:5209/",
+  "status": 200,
+  "consoleErrors": [],
+  "light": {
+    "background": "oklch(1 0 0)",
+    "buttonBg": "oklch(0.49 0.118 165)",
+    "buttonCount": 3,
+    "props": {
+      "--primary": "oklch(49% 0.118 165)",
+      "--radius": "0.5rem"
+    }
+  },
+  "dark": {
+    "background": "oklch(0.15 0.006 107)",
+    "buttonBg": "oklch(0.6 0.13 166)",
+    "buttonCount": 3,
+    "props": {
+      "--primary": "oklch(60% 0.13 166)",
+      "--radius": "0.5rem"
+    }
+  }
+}

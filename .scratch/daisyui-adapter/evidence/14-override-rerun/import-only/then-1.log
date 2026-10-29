@@ -1,0 +1,4 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/apply.mjs import-only
+exit 0
+[apply-14] arm=import-only stylesheet=src/app.css
+[apply-14] import line present, override file deliberately absent

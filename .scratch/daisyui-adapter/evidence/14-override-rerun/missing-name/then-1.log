@@ -1,0 +1,3 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/apply.mjs missing-name
+exit 0
+[apply-14] arm=missing-name light --primary points at a name the plugin never emits

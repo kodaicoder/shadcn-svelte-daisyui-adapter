@@ -1,0 +1,17 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/probe-cli/init.mjs
+exit 0
+[cli-14] theme ok: light + dark
+✓ Lockfile passes supply-chain policies (verified 1s ago)
+Packages: +1
++
+Progress: resolved 1, reused 3, downloaded 0, added 1, done
+
+devDependencies:
++ daisyui-adapter-14-raw-real 0.0.0
+
+Done in 119ms using pnpm v12.9.1
+[cli-14] installed daisyui-adapter-14-raw-real-0.0.0.tgz
+[cli-14] wrote src/app.css: 32 light, 32 dark, plugin line true
+
+(node:48668) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

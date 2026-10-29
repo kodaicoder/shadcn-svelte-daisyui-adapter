@@ -6,17 +6,17 @@ Blocked by: 08, 16
 
 ## Question
 
-Where does the public registry live, and how does it stay published?
+Where does the package live, and how does it stay published?
 
 Required:
-1. Pick the home: a new public repo with the registry project, or a folder inside an existing one. This repo has no remote today.
-2. Scaffold `registry.json` plus the item files and the `registry:build` script.
-3. Choose the host and confirm it serves static JSON at a stable path (`/r/<name>.json`).
-4. Deploy, then verify from a clean machine that `add <public-url>` works.
-5. Record the licence, the versioning policy, and how a change to the mapping is announced.
+1. Pick the npm identity: package name, scope, and the bin name behind `pnpm dlx <pkg> init`. The name in 07 and 14 is a placeholder.
+2. Version policy: the CLI writes its version into the stylesheet's header comment, so an exact version is what a project records. Decide when the number moves and how a mapping change is announced.
+3. Publish path: which public repo the source lives in (this repo has no remote today), and the `prepare: tsc` build that produces `dist/` during `npm publish`.
+4. Verify from a clean machine: a fresh SvelteKit project, `pnpm dlx shadcn-svelte@latest init`, then `pnpm dlx <pkg>@<exact> init`, then `pnpm build` with a real two-block theme under `src/`.
+5. Record the licence, the changelog policy, and what happens to a project whose header comment names an older version.
 
-DoD: a stranger can install from the public URL, and the URL is written into the map's Decisions so far.
+DoD: a stranger can install with the two commands in 07 on a clean machine, and the package name and version are written into the map's Decisions so far.
 
 ## Answer
 
-<!-- fill on resolution: repo, host, URL, build command, version policy -->
+<!-- fill on resolution: package name, repo, version policy, clean-machine transcript -->
