@@ -61,7 +61,19 @@ const snapshot = () =>
 					color: computed.color,
 					colorRgb: resolve(computed.color),
 					boxShadow: computed.boxShadow,
-					boxShadowRgbs: shadowColours.map(resolve)
+					boxShadowRgbs: shadowColours.map(resolve),
+					// Geometry is a used value, so a radius or border width that comes from a
+					// calc() chain or a Tailwind theme key arrives in px, not as a token string.
+					borderRadius: computed.borderRadius,
+					borderTopLeftRadius: computed.borderTopLeftRadius,
+					borderWidth: {
+						top: computed.borderTopWidth,
+						right: computed.borderRightWidth,
+						bottom: computed.borderBottomWidth,
+						left: computed.borderLeftWidth
+					},
+					height: computed.height,
+					backgroundImage: computed.backgroundImage
 				};
 			};
 
