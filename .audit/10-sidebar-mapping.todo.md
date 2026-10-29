@@ -53,7 +53,8 @@ what the harness reads back at runtime in both schemes.
 - [x] One line appended to the map's `## Decisions so far`
 - [x] `no-comments` because the diff carries code (fixture, check, harness)
 - [x] `code-review` on the Spec axis; findings fixed before close
-- [ ] Conventional commit on `feat/daisyui-adapter`, pushed; no merge, no tag
+- [x] Conventional commit on `feat/daisyui-adapter`, pushed and tagged `t10-sidebar-mapping`; no merge
+      because the base is `main`
 
 skip: critical-path review loop, no auth, payments, discount, migrations, concurrency, shared state, public API or DB schema. The Spec-axis `code-review` found five precision gaps and one weak assertion; all six are fixed and `check.mjs` is green at 61.
 
