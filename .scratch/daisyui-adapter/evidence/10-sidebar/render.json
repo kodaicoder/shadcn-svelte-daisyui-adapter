@@ -1,0 +1,235 @@
+{
+  "url": "http://127.0.0.1:5209/",
+  "status": 200,
+  "consoleErrors": [],
+  "light": {
+    "background": "oklch(1 0 0)",
+    "backgroundRgb": "rgb(255, 255, 255)",
+    "buttonBg": "oklch(1 0 0)",
+    "buttonCount": 0,
+    "props": {
+      "--sidebar": "oklch(98% 0 0)",
+      "--sidebar-foreground": "oklch(21% 0.006 285.885)",
+      "--sidebar-accent": "oklch(95% 0 0)",
+      "--sidebar-accent-foreground": "oklch(21% 0.006 285.885)",
+      "--sidebar-border": "color-mix(in oklch, oklch(21% 0.006 285.885) 10%, oklch(100% 0 0))",
+      "--sidebar-ring": "oklch(45% 0.24 277.023)",
+      "--sidebar-primary": "oklch(45% 0.24 277.023)",
+      "--sidebar-primary-foreground": "oklch(93% 0.034 272.788)",
+      "--background": "oklch(100% 0 0)",
+      "--daisy-color-base-100": "oklch(100% 0 0)",
+      "--daisy-color-base-200": "oklch(98% 0 0)",
+      "--daisy-color-base-300": "oklch(95% 0 0)",
+      "--daisy-color-base-content": "oklch(21% 0.006 285.885)",
+      "--daisy-color-primary": "oklch(45% 0.24 277.023)",
+      "--daisy-color-primary-content": "oklch(93% 0.034 272.788)"
+    },
+    "propsRgb": {
+      "--sidebar": "rgb(248, 248, 248)",
+      "--sidebar-foreground": "rgb(24, 24, 27)",
+      "--sidebar-accent": "rgb(238, 238, 238)",
+      "--sidebar-accent-foreground": "rgb(24, 24, 27)",
+      "--sidebar-border": "rgb(229, 229, 229)",
+      "--sidebar-ring": "rgb(66, 42, 213)",
+      "--sidebar-primary": "rgb(66, 42, 213)",
+      "--sidebar-primary-foreground": "rgb(224, 231, 255)",
+      "--background": "rgb(255, 255, 255)",
+      "--daisy-color-base-100": "rgb(255, 255, 255)",
+      "--daisy-color-base-200": "rgb(248, 248, 248)",
+      "--daisy-color-base-300": "rgb(238, 238, 238)",
+      "--daisy-color-base-content": "rgb(24, 24, 27)",
+      "--daisy-color-primary": "rgb(66, 42, 213)",
+      "--daisy-color-primary-content": "rgb(224, 231, 255)"
+    },
+    "elements": [
+      {
+        "selector": "[data-slot=sidebar-inner]",
+        "found": true,
+        "background": "oklch(0.98 0 0)",
+        "backgroundRgb": "rgb(248, 248, 248)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      },
+      {
+        "selector": "[data-slot=sidebar-menu-button][data-active=true]",
+        "found": true,
+        "background": "oklch(0.95 0 0)",
+        "backgroundRgb": "rgb(238, 238, 238)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      },
+      {
+        "selector": "#outline-row",
+        "found": true,
+        "background": "oklch(1 0 0)",
+        "backgroundRgb": "rgb(255, 255, 255)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.921 0.0006 352.589) 0px 0px 0px 1px",
+        "boxShadowRgbs": [
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgb(229, 229, 229)"
+        ]
+      },
+      {
+        "selector": "[data-slot=sidebar-separator]",
+        "found": true,
+        "background": "oklch(0.921 0.0006 352.589)",
+        "backgroundRgb": "rgb(229, 229, 229)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      },
+      {
+        "selector": "[data-slot=sidebar-inset]",
+        "found": true,
+        "background": "oklch(1 0 0)",
+        "backgroundRgb": "rgb(255, 255, 255)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+        "boxShadowRgbs": [
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.102)",
+          "rgba(0, 0, 0, 0.102)"
+        ]
+      },
+      {
+        "selector": "#primary-pair",
+        "found": true,
+        "background": "oklch(0.45 0.24 277.023)",
+        "backgroundRgb": "rgb(66, 42, 213)",
+        "color": "oklch(0.93 0.034 272.788)",
+        "colorRgb": "rgb(224, 231, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      }
+    ]
+  },
+  "dark": {
+    "background": "oklch(0.2533 0.016 252.42)",
+    "backgroundRgb": "rgb(29, 35, 42)",
+    "buttonBg": "oklch(0.2533 0.016 252.42)",
+    "buttonCount": 0,
+    "props": {
+      "--sidebar": "oklch(23.26% 0.014 253.1)",
+      "--sidebar-foreground": "oklch(97.807% 0.029 256.847)",
+      "--sidebar-accent": "oklch(21.15% 0.012 254.09)",
+      "--sidebar-accent-foreground": "oklch(97.807% 0.029 256.847)",
+      "--sidebar-border": "color-mix(in oklch, oklch(97.807% 0.029 256.847) 10%, oklch(25.33% 0.016 252.42))",
+      "--sidebar-ring": "oklch(58% 0.233 277.117)",
+      "--sidebar-primary": "oklch(58% 0.233 277.117)",
+      "--sidebar-primary-foreground": "oklch(96% 0.018 272.314)",
+      "--background": "oklch(25.33% 0.016 252.42)",
+      "--daisy-color-base-100": "oklch(25.33% 0.016 252.42)",
+      "--daisy-color-base-200": "oklch(23.26% 0.014 253.1)",
+      "--daisy-color-base-300": "oklch(21.15% 0.012 254.09)",
+      "--daisy-color-base-content": "oklch(97.807% 0.029 256.847)",
+      "--daisy-color-primary": "oklch(58% 0.233 277.117)",
+      "--daisy-color-primary-content": "oklch(96% 0.018 272.314)"
+    },
+    "propsRgb": {
+      "--sidebar": "rgb(25, 30, 36)",
+      "--sidebar-foreground": "rgb(236, 249, 255)",
+      "--sidebar-accent": "rgb(21, 25, 30)",
+      "--sidebar-accent-foreground": "rgb(236, 249, 255)",
+      "--sidebar-border": "rgb(46, 53, 61)",
+      "--sidebar-ring": "rgb(96, 93, 255)",
+      "--sidebar-primary": "rgb(96, 93, 255)",
+      "--sidebar-primary-foreground": "rgb(237, 241, 254)",
+      "--background": "rgb(29, 35, 42)",
+      "--daisy-color-base-100": "rgb(29, 35, 42)",
+      "--daisy-color-base-200": "rgb(25, 30, 36)",
+      "--daisy-color-base-300": "rgb(21, 25, 30)",
+      "--daisy-color-base-content": "rgb(236, 249, 255)",
+      "--daisy-color-primary": "rgb(96, 93, 255)",
+      "--daisy-color-primary-content": "rgb(237, 241, 254)"
+    },
+    "elements": [
+      {
+        "selector": "[data-slot=sidebar-inner]",
+        "found": true,
+        "background": "oklch(0.2326 0.014 253.1)",
+        "backgroundRgb": "rgb(25, 30, 36)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      },
+      {
+        "selector": "[data-slot=sidebar-menu-button][data-active=true]",
+        "found": true,
+        "background": "oklch(0.2115 0.012 254.09)",
+        "backgroundRgb": "rgb(21, 25, 30)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      },
+      {
+        "selector": "#outline-row",
+        "found": true,
+        "background": "oklch(0.2533 0.016 252.42)",
+        "backgroundRgb": "rgb(29, 35, 42)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.325777 0.0173 252.863) 0px 0px 0px 1px",
+        "boxShadowRgbs": [
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgb(46, 53, 61)"
+        ]
+      },
+      {
+        "selector": "[data-slot=sidebar-separator]",
+        "found": true,
+        "background": "oklch(0.325777 0.0173 252.863)",
+        "backgroundRgb": "rgb(46, 53, 61)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      },
+      {
+        "selector": "[data-slot=sidebar-inset]",
+        "found": true,
+        "background": "oklch(0.2533 0.016 252.42)",
+        "backgroundRgb": "rgb(29, 35, 42)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px",
+        "boxShadowRgbs": [
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.102)",
+          "rgba(0, 0, 0, 0.102)"
+        ]
+      },
+      {
+        "selector": "#primary-pair",
+        "found": true,
+        "background": "oklch(0.58 0.233 277.117)",
+        "backgroundRgb": "rgb(96, 93, 255)",
+        "color": "oklch(0.96 0.018 272.314)",
+        "colorRgb": "rgb(237, 241, 254)",
+        "boxShadow": "none",
+        "boxShadowRgbs": []
+      }
+    ]
+  }
+}

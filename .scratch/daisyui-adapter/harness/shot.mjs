@@ -5,6 +5,7 @@ import { join } from 'node:path';
 const url = process.argv[2] ?? 'http://127.0.0.1:5209/';
 const out = process.argv[3] ?? './evidence';
 const props = (process.argv[4] ?? '').split(',').filter(Boolean);
+const selectors = (process.argv[5] ?? '').split(',').filter(Boolean);
 mkdirSync(out, { recursive: true });
 
 const browser = await chromium.launch();
@@ -19,19 +20,64 @@ const response = await page.goto(url, { waitUntil: 'networkidle' });
 await page.screenshot({ path: join(out, 'light.png'), fullPage: true });
 
 const snapshot = () =>
-	page.evaluate((names) => {
-		const style = getComputedStyle(document.documentElement);
-		const readProps = Object.fromEntries(
-			names.map((name) => [name, style.getPropertyValue(name).trim()])
-		);
-		return {
-			background: getComputedStyle(document.body).backgroundColor,
-			buttonBg: getComputedStyle(document.querySelector('[data-slot="button"]') ?? document.body)
-				.backgroundColor,
-			buttonCount: document.querySelectorAll('[data-slot="button"]').length,
-			props: readProps
-		};
-	}, props);
+	page.evaluate(
+		({ names, selectors }) => {
+			const style = getComputedStyle(document.documentElement);
+			const readProps = Object.fromEntries(
+				names.map((name) => [name, style.getPropertyValue(name).trim()])
+			);
+
+			// A 1x1 canvas resolves any CSS colour, color-mix() and var() chains included, to the
+			// sRGB bytes the browser would paint, which is the form the checks compare.
+			const canvas = document.createElement('canvas');
+			canvas.width = 1;
+			canvas.height = 1;
+			const context = canvas.getContext('2d', { willReadFrequently: true });
+			const resolve = (value) => {
+				if (!value) return '';
+				context.clearRect(0, 0, 1, 1);
+				context.fillStyle = '#000000';
+				context.fillStyle = value;
+				context.fillRect(0, 0, 1, 1);
+				const [r, g, b, a] = context.getImageData(0, 0, 1, 1).data;
+				return a === 255
+					? `rgb(${r}, ${g}, ${b})`
+					: `rgba(${r}, ${g}, ${b}, ${(a / 255).toFixed(3)})`;
+			};
+
+			const readElement = (selector) => {
+				const element = document.querySelector(selector);
+				if (!element) return { selector, found: false };
+				const computed = getComputedStyle(element);
+				const shadowColours =
+					computed.boxShadow.match(
+						/(?:rgba?|oklch|oklab|color|hsla?)\([^)]*\)|#[0-9a-f]{3,8}/gi
+					) ?? [];
+				return {
+					selector,
+					found: true,
+					background: computed.backgroundColor,
+					backgroundRgb: resolve(computed.backgroundColor),
+					color: computed.color,
+					colorRgb: resolve(computed.color),
+					boxShadow: computed.boxShadow,
+					boxShadowRgbs: shadowColours.map(resolve)
+				};
+			};
+
+			return {
+				background: getComputedStyle(document.body).backgroundColor,
+				backgroundRgb: resolve(getComputedStyle(document.body).backgroundColor),
+				buttonBg: getComputedStyle(document.querySelector('[data-slot="button"]') ?? document.body)
+					.backgroundColor,
+				buttonCount: document.querySelectorAll('[data-slot="button"]').length,
+				props: readProps,
+				propsRgb: Object.fromEntries(names.map((name) => [name, resolve(readProps[name])])),
+				elements: selectors.map(readElement)
+			};
+		},
+		{ names: props, selectors }
+	);
 
 const light = await snapshot();
 

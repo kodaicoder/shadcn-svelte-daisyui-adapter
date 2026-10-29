@@ -20,6 +20,10 @@
 //                 whitespace, so one argument cannot contain a space. Each run snapshots
 //                 the stylesheet, so a later init or add -a is measured.
 // --props <list>  comma-separated custom properties to read at runtime, light and dark
+// --page <f>      copy this file over src/routes/+page.svelte, so a component other than the
+//                 baseline buttons is what gets rendered
+// --selectors <l> element selectors to sample, because a component's painted fill is a utility result
+//                 (bg-sidebar, bg-background) that no root custom property names
 
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -64,6 +68,8 @@ const PKG_DIR = option('--package', null);
 const THEME_FILE = option('--theme', null);
 const SENTINEL = option('--sentinel', null);
 const PROPS = option('--props', '');
+const PAGE_FILE = option('--page', null);
+const SELECTORS = option('--selectors', '');
 const THEN = options('--then');
 
 if (LAYOUT !== 'app' && LAYOUT !== 'routes') {
@@ -225,6 +231,12 @@ export default defineConfig({
 	);
 	report.steps.push('baseline-add');
 
+	if (PAGE_FILE) {
+		cpSync(resolve(PAGE_FILE), join(APP, 'src', 'routes', '+page.svelte'));
+		report.page = PAGE_FILE;
+		report.steps.push('page');
+	}
+
 	if (THEME_FILE) {
 		cpSync(resolve(THEME_FILE), join(APP, 'src', 'daisyui-theme.css'));
 		report.theme = THEME_FILE;
@@ -330,7 +342,7 @@ export default defineConfig({
 		} catch {}
 	}
 	if (!ready) throw new Error('dev server never answered');
-	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE, PROPS], REPO);
+	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE, PROPS, SELECTORS], REPO);
 	write(join(EVIDENCE, 'render.json'), shot);
 	report.render = JSON.parse(shot);
 	report.steps.push('render');
