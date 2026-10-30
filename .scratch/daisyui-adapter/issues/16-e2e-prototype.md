@@ -62,8 +62,14 @@ pre-install stylesheet is this repo's.
 
 `pnpm add -D ./daisyui-adapter-0.1.0.tgz` then `daisyui-adapter init` wrote the stylesheet and the
 empty override file, and the second `init` after six `shadcn-svelte add` calls produced a
-byte-identical hash. Ten of the twelve colour bindings resolve to the theme's own values from
-`registry-12`, so the mapping transfers to a purple themed project, not only this repo's green one.
+byte-identical hash. All 26 colour-binding keys resolve to a token in `registry-12`'s theme, so the
+mapping transfers to a purple themed project, not only this repo's green one. Of the theme's 20
+tokens, 7 are actually read: `base-100`, `base-200`, `base-300`, `base-content`, `primary`,
+`primary-content` and `error`. The other 13 (`secondary`, `accent`, `neutral`, `info`, `success`,
+`warning` and their `-content` pairs) are never read, which is ticket 09's surface-first decision
+working as designed rather than a gap: shadcn's `secondary` and `accent` are surfaces, so
+`secondary` takes `base-200` and `accent` is a `color-mix` of `base-200` and `base-300`, and
+daisyUI's brand meanings for those names go unused.
 Radius and border width arrive as used values: buttons render `6.4px`, cards `8px`, inputs and
 buttons carry a real `1px` border.
 
@@ -139,8 +145,8 @@ fallbacks would be shadcn's neutral values rather than this repo's olive grey.
 Stated plainly so the ticket is not read as covering more than it does:
 
 - **No malformed-theme arm ran.** Constraint 3's E2 and E3 throws are unexercised here. `install.mjs`
-  carries a `no-theme` arm whose comment describes a one-block pair but whose code adds a button,
-  so it is dead; it needs rewriting or deleting before it is cited.
+  used to carry a dead `no-theme` arm whose comment described a one-block pair while its code added
+  a button; it was deleted during review rather than left to be misread as coverage.
 - **Constraint 5 is not exercised.** The override import is written
   (`css-after-then-1.css` line 8) and the file is created empty, but no override is authored, so the
   `html:not(.dark)` / `html.dark` specificity win is untested.
