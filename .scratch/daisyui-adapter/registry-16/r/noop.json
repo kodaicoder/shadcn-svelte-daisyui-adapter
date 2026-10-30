@@ -1,0 +1,8 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "noop",
+	"title": "noop",
+	"type": "registry:lib",
+	"description": "Satisfies the harness `--then` precondition without writing any file, so a pure CLI run has no registry add.",
+	"files": []
+}

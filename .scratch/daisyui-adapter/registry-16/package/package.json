@@ -1,0 +1,20 @@
+{
+	"name": "daisyui-adapter",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"bin": {
+		"daisyui-adapter": "./cli/init.mjs"
+	},
+	"exports": {
+		".": {
+			"default": "./dist/index.mjs"
+		},
+		"./map": "./dist/map.mjs",
+		"./ramp": "./dist/ramp.mjs"
+	},
+	"files": [
+		"dist",
+		"cli"
+	]
+}

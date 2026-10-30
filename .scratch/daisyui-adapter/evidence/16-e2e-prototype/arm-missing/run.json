@@ -1,0 +1,272 @@
+{
+  "stamp": "2026-10-30T07-51-46-859Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-30T07-51-46-859Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-30T07-51-46-859Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "page",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "then",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/noop.json",
+  "layout": "routes",
+  "cssPath": "src/routes/layout.css",
+  "page": ".scratch/daisyui-adapter/registry-16/page/+page.svelte",
+  "theme": ".scratch/daisyui-adapter/registry-12/probe-theme.css",
+  "tarball": "daisyui-adapter-0.1.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": false,
+  "then": [
+    {
+      "command": "exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-16/install.mjs missing",
+      "code": 0
+    }
+  ],
+  "build": true,
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "backgroundRgb": "rgb(255, 255, 255)",
+      "buttonBg": "oklch(0.508 0.118 165.612)",
+      "buttonCount": 6,
+      "props": {},
+      "propsRgb": {},
+      "elements": [
+        {
+          "selector": "[data-testid=sidebar]",
+          "found": true,
+          "background": "oklch(0.988 0.003 106.5)",
+          "backgroundRgb": "rgb(251, 251, 249)",
+          "color": "oklch(0.153 0.006 107.1)",
+          "colorRgb": "rgb(12, 12, 9)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "0px",
+          "borderTopLeftRadius": "0px",
+          "borderWidth": {
+            "top": "0px",
+            "right": "1px",
+            "bottom": "0px",
+            "left": "0px"
+          },
+          "height": "1125.5px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=sidebar-active]",
+          "found": true,
+          "background": "oklch(0.966 0.005 106.5)",
+          "backgroundRgb": "rgb(244, 244, 240)",
+          "color": "oklch(0.228 0.013 107.4)",
+          "colorRgb": "rgb(29, 29, 22)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "8px",
+          "borderTopLeftRadius": "8px",
+          "borderWidth": {
+            "top": "0px",
+            "right": "0px",
+            "bottom": "0px",
+            "left": "0px"
+          },
+          "height": "32px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=card-plain]",
+          "found": true,
+          "background": "oklch(1 0 0)",
+          "backgroundRgb": "rgb(255, 255, 255)",
+          "color": "oklch(0.153 0.006 107.1)",
+          "colorRgb": "rgb(12, 12, 9)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.153 -0.00176424 0.00573476 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "boxShadowRgbs": [
+            "rgba(0, 0, 0, 0.000)",
+            "rgba(0, 0, 0, 0.000)",
+            "rgba(0, 0, 0, 0.000)",
+            "rgba(10, 10, 10, 0.102)",
+            "rgba(0, 0, 0, 0.000)"
+          ],
+          "borderRadius": "10px",
+          "borderTopLeftRadius": "10px",
+          "borderWidth": {
+            "top": "0px",
+            "right": "0px",
+            "bottom": "0px",
+            "left": "0px"
+          },
+          "height": "171.5px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=input-plain]",
+          "found": true,
+          "background": "oklab(0.93 -0.00198811 0.00671174 / 0.2)",
+          "backgroundRgb": "rgba(230, 230, 225, 0.200)",
+          "color": "oklch(0.153 0.006 107.1)",
+          "colorRgb": "rgb(12, 12, 9)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "8px",
+          "borderTopLeftRadius": "8px",
+          "borderWidth": {
+            "top": "1px",
+            "right": "1px",
+            "bottom": "1px",
+            "left": "1px"
+          },
+          "height": "28px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=btn-default]",
+          "found": true,
+          "background": "oklch(0.508 0.118 165.612)",
+          "backgroundRgb": "rgb(0, 122, 85)",
+          "color": "oklch(0.979 0.021 166.113)",
+          "colorRgb": "rgb(236, 253, 245)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "8px",
+          "borderTopLeftRadius": "8px",
+          "borderWidth": {
+            "top": "1px",
+            "right": "1px",
+            "bottom": "1px",
+            "left": "1px"
+          },
+          "height": "28px",
+          "backgroundImage": "none"
+        }
+      ]
+    },
+    "dark": {
+      "background": "oklch(0.153 0.006 107.1)",
+      "backgroundRgb": "rgb(12, 12, 9)",
+      "buttonBg": "oklch(0.432 0.095 166.913)",
+      "buttonCount": 6,
+      "props": {},
+      "propsRgb": {},
+      "elements": [
+        {
+          "selector": "[data-testid=sidebar]",
+          "found": true,
+          "background": "oklch(0.228 0.013 107.4)",
+          "backgroundRgb": "rgb(29, 29, 22)",
+          "color": "oklch(0.988 0.003 106.5)",
+          "colorRgb": "rgb(251, 251, 249)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "0px",
+          "borderTopLeftRadius": "0px",
+          "borderWidth": {
+            "top": "0px",
+            "right": "1px",
+            "bottom": "0px",
+            "left": "0px"
+          },
+          "height": "1125.5px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=sidebar-active]",
+          "found": true,
+          "background": "oklch(0.286 0.016 107.4)",
+          "backgroundRgb": "rgb(43, 43, 34)",
+          "color": "oklch(0.988 0.003 106.5)",
+          "colorRgb": "rgb(251, 251, 249)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "8px",
+          "borderTopLeftRadius": "8px",
+          "borderWidth": {
+            "top": "0px",
+            "right": "0px",
+            "bottom": "0px",
+            "left": "0px"
+          },
+          "height": "32px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=card-plain]",
+          "found": true,
+          "background": "oklch(0.228 0.013 107.4)",
+          "backgroundRgb": "rgb(29, 29, 22)",
+          "color": "oklch(0.988 0.003 106.5)",
+          "colorRgb": "rgb(251, 251, 249)",
+          "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.988 -0.000852046 0.00287646 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+          "boxShadowRgbs": [
+            "rgba(0, 0, 0, 0.000)",
+            "rgba(0, 0, 0, 0.000)",
+            "rgba(0, 0, 0, 0.000)",
+            "rgba(255, 255, 245, 0.102)",
+            "rgba(0, 0, 0, 0.000)"
+          ],
+          "borderRadius": "10px",
+          "borderTopLeftRadius": "10px",
+          "borderWidth": {
+            "top": "0px",
+            "right": "0px",
+            "bottom": "0px",
+            "left": "0px"
+          },
+          "height": "171.5px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=input-plain]",
+          "found": true,
+          "background": "oklab(1 0 0 / 0.045)",
+          "backgroundRgb": "rgba(255, 255, 255, 0.043)",
+          "color": "oklch(0.988 0.003 106.5)",
+          "colorRgb": "rgb(251, 251, 249)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "8px",
+          "borderTopLeftRadius": "8px",
+          "borderWidth": {
+            "top": "1px",
+            "right": "1px",
+            "bottom": "1px",
+            "left": "1px"
+          },
+          "height": "28px",
+          "backgroundImage": "none"
+        },
+        {
+          "selector": "[data-testid=btn-default]",
+          "found": true,
+          "background": "oklch(0.432 0.095 166.913)",
+          "backgroundRgb": "rgb(0, 96, 69)",
+          "color": "oklch(0.979 0.021 166.113)",
+          "colorRgb": "rgb(236, 253, 245)",
+          "boxShadow": "none",
+          "boxShadowRgbs": [],
+          "borderRadius": "8px",
+          "borderTopLeftRadius": "8px",
+          "borderWidth": {
+            "top": "1px",
+            "right": "1px",
+            "bottom": "1px",
+            "left": "1px"
+          },
+          "height": "28px",
+          "backgroundImage": "none"
+        }
+      ]
+    }
+  },
+  "ok": true
+}

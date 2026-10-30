@@ -1,0 +1,237 @@
+{
+  "url": "http://127.0.0.1:5209/",
+  "status": 200,
+  "consoleErrors": [],
+  "light": {
+    "background": "oklch(1 0 0)",
+    "backgroundRgb": "rgb(255, 255, 255)",
+    "buttonBg": "oklch(0.45 0.24 277.023)",
+    "buttonCount": 6,
+    "props": {},
+    "propsRgb": {},
+    "elements": [
+      {
+        "selector": "[data-testid=sidebar]",
+        "found": true,
+        "background": "oklch(0.98 0 0)",
+        "backgroundRgb": "rgb(248, 248, 248)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "0px",
+        "borderTopLeftRadius": "0px",
+        "borderWidth": {
+          "top": "0px",
+          "right": "1px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "height": "1125.5px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=sidebar-active]",
+        "found": true,
+        "background": "oklch(0.95 0 0)",
+        "backgroundRgb": "rgb(238, 238, 238)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "6.4px",
+        "borderTopLeftRadius": "6.4px",
+        "borderWidth": {
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "height": "32px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=card-plain]",
+        "found": true,
+        "background": "oklch(1 0 0)",
+        "backgroundRgb": "rgb(255, 255, 255)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.21 0.00164224 -0.00577088 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "boxShadowRgbs": [
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(20, 20, 29, 0.102)",
+          "rgba(0, 0, 0, 0.000)"
+        ],
+        "borderRadius": "8px",
+        "borderTopLeftRadius": "8px",
+        "borderWidth": {
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "height": "171.5px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=input-plain]",
+        "found": true,
+        "background": "oklab(0.8815 0.000883111 -0.000173536 / 0.2)",
+        "backgroundRgb": "rgba(215, 215, 215, 0.200)",
+        "color": "oklch(0.21 0.006 285.885)",
+        "colorRgb": "rgb(24, 24, 27)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "6.4px",
+        "borderTopLeftRadius": "6.4px",
+        "borderWidth": {
+          "top": "1px",
+          "right": "1px",
+          "bottom": "1px",
+          "left": "1px"
+        },
+        "height": "28px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=btn-default]",
+        "found": true,
+        "background": "oklch(0.45 0.24 277.023)",
+        "backgroundRgb": "rgb(66, 42, 213)",
+        "color": "oklch(0.93 0.034 272.788)",
+        "colorRgb": "rgb(224, 231, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "6.4px",
+        "borderTopLeftRadius": "6.4px",
+        "borderWidth": {
+          "top": "1px",
+          "right": "1px",
+          "bottom": "1px",
+          "left": "1px"
+        },
+        "height": "28px",
+        "backgroundImage": "none"
+      }
+    ]
+  },
+  "dark": {
+    "background": "oklch(0.2533 0.016 252.42)",
+    "backgroundRgb": "rgb(29, 35, 42)",
+    "buttonBg": "oklch(0.58 0.233 277.117)",
+    "buttonCount": 6,
+    "props": {},
+    "propsRgb": {},
+    "elements": [
+      {
+        "selector": "[data-testid=sidebar]",
+        "found": true,
+        "background": "oklch(0.2326 0.014 253.1)",
+        "backgroundRgb": "rgb(25, 30, 36)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "0px",
+        "borderTopLeftRadius": "0px",
+        "borderWidth": {
+          "top": "0px",
+          "right": "1px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "height": "1125.5px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=sidebar-active]",
+        "found": true,
+        "background": "oklch(0.2115 0.012 254.09)",
+        "backgroundRgb": "rgb(21, 25, 30)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "6.4px",
+        "borderTopLeftRadius": "6.4px",
+        "borderWidth": {
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "height": "32px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=card-plain]",
+        "found": true,
+        "background": "oklch(0.2533 0.016 252.42)",
+        "backgroundRgb": "rgb(29, 35, 42)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.97807 -0.00659902 -0.0282392 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "boxShadowRgbs": [
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(0, 0, 0, 0.000)",
+          "rgba(235, 245, 255, 0.102)",
+          "rgba(0, 0, 0, 0.000)"
+        ],
+        "borderRadius": "8px",
+        "borderTopLeftRadius": "8px",
+        "borderWidth": {
+          "top": "0px",
+          "right": "0px",
+          "bottom": "0px",
+          "left": "0px"
+        },
+        "height": "171.5px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=input-plain]",
+        "found": true,
+        "background": "oklab(0.362015 -0.00522288 -0.0171734 / 0.3)",
+        "backgroundRgb": "rgba(56, 63, 70, 0.302)",
+        "color": "oklch(0.97807 0.029 256.847)",
+        "colorRgb": "rgb(236, 249, 255)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "6.4px",
+        "borderTopLeftRadius": "6.4px",
+        "borderWidth": {
+          "top": "1px",
+          "right": "1px",
+          "bottom": "1px",
+          "left": "1px"
+        },
+        "height": "28px",
+        "backgroundImage": "none"
+      },
+      {
+        "selector": "[data-testid=btn-default]",
+        "found": true,
+        "background": "oklch(0.58 0.233 277.117)",
+        "backgroundRgb": "rgb(96, 93, 255)",
+        "color": "oklch(0.96 0.018 272.314)",
+        "colorRgb": "rgb(237, 241, 254)",
+        "boxShadow": "none",
+        "boxShadowRgbs": [],
+        "borderRadius": "6.4px",
+        "borderTopLeftRadius": "6.4px",
+        "borderWidth": {
+          "top": "1px",
+          "right": "1px",
+          "bottom": "1px",
+          "left": "1px"
+        },
+        "height": "28px",
+        "backgroundImage": "none"
+      }
+    ]
+  }
+}
