@@ -129,3 +129,29 @@ fixtures no longer contain. The new table lives in `registry-16/`, which is the 
 | 2 | where the new mapping table lives | `registry-16/`, fixtures marked not rewritten | four closed tickets' evidence stays true |
 | 3 | why the harness `--then` step failed (handoff blamed `process.cwd()`) | **handoff was wrong**: shadcn-svelte's overwrite prompt hung on piped stdin because `install.mjs` passed `-y` without `-o`; the harness's own 600 s timeout then fired | run 1's error path was `../../../../` from `app`, i.e. cwd was correct; run 2 `add-install.log` 14:32:28 to `run.json` 14:42:28 = 600.038 s; `add badge -y` hung to a 90 s cap with `code=null`, `add badge -y -o` finished in 1.1 s |
 | 4 | does `pnpm exec node` keep cwd | yes, verified directly, so the handoff's proposed fix would have changed nothing | probe script and a `execFile` with the harness's own options both printed the app root |
+
+## 2026-10-30, cleanup after closeout
+
+Ticket 16 stays `Status: resolved`. This section records the leftover sweep and where the one
+falsification now lives.
+
+**The chart fallback defect has its own ticket.** It is
+[`issues/21-chart-no-theme-fallback.md`](../.scratch/daisyui-adapter/issues/21-chart-no-theme-fallback.md),
+`Type: task`, `Status: open`, `Blocked by: none`, with this ticket's measurements as its input. The
+Answer's "What the mapping must change" section now points at it. The binding split it cites was
+re-measured from `evidence/16-e2e-prototype/arm-missing/css-after-then-1.css` rather than copied:
+37 declarations per block, 27 bindings all carrying a fallback, 5 `--daisy-derived-*` helpers whose
+consumer carries the fallback for them, 5 chart rows carrying none.
+
+**Temp apps deleted.** 578.7 MB, all four `--keep` apps under `$TEMP\adapter-harness` plus
+`$TEMP\adapter-16-smoke`. Precondition checked before deleting: `cmp-dirs.mjs` proved both evidence
+directories are byte-identical to their harness runs, 17 files each, zero content differences. Each
+run held two files the evidence dir does not: `package-json-before.json` and `package-json-after.json`
+from the shadcn `add` step, and they are identical to each other, so they carried no claim. Nothing
+cited was lost. `harness/runs/` is gone too; it is gitignored and regenerable.
+
+**Ports.** 5199, 5209, 5301 to 5304 all free after the sweep.
+
+**Still an open operator call, unchanged:** the six stale chart fixture sites and the stale sidebar
+rows in `registry-14/probe-cli/init.mjs`. See Deviations 2 and 3. `registry-16/` is authoritative and
+ticket 21 is the fix path, but rewriting closed tickets' fixtures is still the operator's call.
