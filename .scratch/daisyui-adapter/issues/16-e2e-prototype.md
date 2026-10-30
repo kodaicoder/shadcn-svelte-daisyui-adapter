@@ -76,7 +76,7 @@ daisyUI's brand meanings for those names go unused.
 Radius and border width arrive as used values: buttons render `6.4px`, cards `8px`, inputs and
 buttons carry a real `1px` border.
 
-### Falsification 1, the chart ramp dies with no theme. Constraint 3 fails.
+### Falsification 1, the chart ramp dies with no theme. Half of constraint 3 fails.
 
 `ramp.mjs` writes each chart row as `oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.08) h)`.
 That has no fallback, and the CLI writes the ramp whenever the theme is present, including the row
