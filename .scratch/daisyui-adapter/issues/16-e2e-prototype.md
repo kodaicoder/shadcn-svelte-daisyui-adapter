@@ -114,15 +114,21 @@ dropping the daisyUI rungs ticket 10 settled.
 
 The five ticket questions, answered from the painted bytes rather than from the CSS:
 
-1. **Invisible borders.** No. The card has no border but a 1.24:1 ring, which reads at 1px. Inputs
-   carry a real border. Not a failure, but the card edge is the weakest thing on the page.
+1. **Invisible borders.** No, but two surfaces are thinner than they look. The card has no border,
+   only a 1.24:1 ring in light and 1.34:1 in dark, which reads at 1px. The dialog fill is exactly
+   the page colour in both schemes, so its whole edge is its 1px ring at 1.23:1 light and 1.34:1
+   dark, plus the `bg-black/80` scrim behind it doing most of the separating work. That is ticket
+   09's decision applied honestly, `card`, `popover` and `background` all taking `base-100`, and
+   daisyUI's ramp has no rung between 100% and 98% to elevate a popover onto. It is not a mapping
+   bug, but a user will call the card edge faint, and the dialog depends on the scrim to read at all.
 2. **Low-contrast muted text.** In `arm-full`, no: 5.77:1 on light and 5.97:1 on dark, above AA.
    In `arm-missing` light it drops to **4.25:1**, below the 4.5:1 AA floor for body text. The cause
    is the fallback the CLI writes from the project's own stylesheet, `oklch(0.58 0.031 107.3)`
    (which paints `rgb(124, 124, 103)`), not the theme's derived value. A no-theme project inherits
    this repo's muted grey, and that grey is too light.
-3. **Sidebar that does not separate.** Yes, confirmed and quantified above at 1.06:1. The active
-   row is barely darker than the panel at 1.09:1, so the current page does not stand out.
+3. **Sidebar that does not separate.** Yes, confirmed and quantified above: 1.062:1 in light and
+   1.059:1 in dark against the page. The active row is barely distinct from the panel, 1.092:1 in
+   light and 1.053:1 in dark, so the current page does not stand out.
 4. **Chart series reading as one colour.** No in `arm-full`; yes and worse in `arm-missing`, where
    they read as no colour at all. In `arm-full` the five series span relative luminance 0.279 to
    0.025 in light and 0.162 to 0.747 in dark, with adjacent luminance deltas from 0.031 to 0.203.
