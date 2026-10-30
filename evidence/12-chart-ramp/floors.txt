@@ -1,0 +1,12 @@
+OK    daisy light  L 0.6562 / 0.5662 / 0.4762 / 0.3862 / 0.2962
+      C 0.0800 / 0.0800 / 0.0800 / 0.0800 / 0.0800 | minAdj 0.090 | hue drift 0.00
+      contrast 3.20 / 4.60 / 6.76 / 9.94 / 14.06
+OK    daisy dark   L 0.5491 / 0.6391 / 0.7291 / 0.8191 / 0.9091
+      C 0.0800 / 0.0800 / 0.0800 / 0.0800 / 0.0442 | minAdj 0.090 | hue drift 0.00
+      contrast 3.20 / 4.63 / 6.52 / 8.94 / 12.03
+THROW mid L 0.45   [chart-ramp] base-100 at L 0.450 leaves no room for five steps (2 of 5 outside L 0.02 to 0.98). A mid-tone surface cannot carry a one-hue ramp; pick a base-100 closer to white or black, or supply chart values in the overrides file.
+THROW mid L 0.50   [chart-ramp] base-100 at L 0.500 leaves no room for five steps (3 of 5 outside L 0.02 to 0.98). A mid-tone surface cannot carry a one-hue ramp; pick a base-100 closer to white or black, or supply chart values in the overrides file.
+THROW mid L 0.55   [chart-ramp] base-100 at L 0.550 leaves no room for five steps (3 of 5 outside L 0.02 to 0.98). A mid-tone surface cannot carry a one-hue ramp; pick a base-100 closer to white or black, or supply chart values in the overrides file.
+OK    grey brand   L 0.6527 / 0.5627 / 0.4727 / 0.3827 / 0.2927
+      C 0.0000 / 0.0000 / 0.0000 / 0.0000 / 0.0000 | minAdj 0.090 | hue drift 0.00
+      contrast 3.20 / 4.60 / 6.75 / 9.90 / 13.98

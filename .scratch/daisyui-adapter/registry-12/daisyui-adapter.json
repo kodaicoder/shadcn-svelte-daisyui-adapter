@@ -1,0 +1,55 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "daisyui-adapter-12",
+	"title": "daisyui-adapter-12",
+	"type": "registry:lib",
+	"description": "Ticket 12 fixture: the probe plugin plus ticket 09's settled core rows, so the page is daisyUI's own surface and a ramp contrast is measured against it. Chart rows are deliberately absent, so --chart-1..5 keep the stock shadcn emerald ramp as the baseline the candidate constructions are compared to.",
+	"devDependencies": [
+		"daisyui-adapter-12-probe@file:./daisyui-adapter-12-probe-0.0.0.tgz"
+	],
+	"css": {
+		"@plugin \"daisyui-adapter-12-probe\"": {},
+		":root": {
+			"--background": "var(--daisy-color-base-100)",
+			"--foreground": "var(--daisy-color-base-content)",
+			"--card": "var(--daisy-color-base-100)",
+			"--card-foreground": "var(--daisy-color-base-content)",
+			"--popover": "var(--daisy-color-base-100)",
+			"--popover-foreground": "var(--daisy-color-base-content)",
+			"--primary": "var(--daisy-color-primary)",
+			"--primary-foreground": "var(--daisy-color-primary-content)",
+			"--secondary": "var(--daisy-color-base-200)",
+			"--secondary-foreground": "var(--daisy-color-base-content)",
+			"--muted": "var(--daisy-color-base-200)",
+			"--muted-foreground": "color-mix(in oklch, var(--daisy-color-base-content) 62%, var(--daisy-color-base-100))",
+			"--accent": "color-mix(in oklch, var(--daisy-color-base-200) 85%, var(--daisy-color-base-300))",
+			"--accent-foreground": "var(--daisy-color-base-content)",
+			"--destructive": "var(--daisy-color-error)",
+			"--border": "color-mix(in oklch, var(--daisy-color-base-content) 10%, var(--daisy-color-base-100))",
+			"--input": "color-mix(in oklch, var(--daisy-color-base-content) 15%, var(--daisy-color-base-100))",
+			"--ring": "var(--daisy-color-primary)",
+			"--radius": "var(--daisy-radius)"
+		},
+		".dark": {
+			"--background": "var(--daisy-color-base-100)",
+			"--foreground": "var(--daisy-color-base-content)",
+			"--card": "var(--daisy-color-base-100)",
+			"--card-foreground": "var(--daisy-color-base-content)",
+			"--popover": "var(--daisy-color-base-100)",
+			"--popover-foreground": "var(--daisy-color-base-content)",
+			"--primary": "var(--daisy-color-primary)",
+			"--primary-foreground": "var(--daisy-color-primary-content)",
+			"--secondary": "var(--daisy-color-base-200)",
+			"--secondary-foreground": "var(--daisy-color-base-content)",
+			"--muted": "var(--daisy-color-base-200)",
+			"--muted-foreground": "color-mix(in oklch, var(--daisy-color-base-content) 62%, var(--daisy-color-base-100))",
+			"--accent": "color-mix(in oklch, var(--daisy-color-base-200) 85%, var(--daisy-color-base-300))",
+			"--accent-foreground": "var(--daisy-color-base-content)",
+			"--destructive": "var(--daisy-color-error)",
+			"--border": "color-mix(in oklch, var(--daisy-color-base-content) 10%, var(--daisy-color-base-100))",
+			"--input": "color-mix(in oklch, var(--daisy-color-base-content) 15%, var(--daisy-color-base-100))",
+			"--ring": "var(--daisy-color-primary)",
+			"--radius": "var(--daisy-radius)"
+		}
+	}
+}
