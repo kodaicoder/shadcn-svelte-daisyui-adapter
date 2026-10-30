@@ -25,6 +25,9 @@ Playbook: `skip: no bundled poteto playbook matches a decision-only ticket; the 
 - [x] `code-review` on the Spec axis against `349c212`: nine findings, all accepted and fixed (the 28 variables vs 32 keys wording, 02's `color-scheme` tolerance, the failed-log citation, the ignored-token scan now covering the compiled CSS, four number and wording corrections, the map's registry `css` map phrasing)
 - [x] `deslop`: no casts, no defensive branches; one magic `16` named as `ROOT_PX`
 - [x] Conventional commit `eeed928` on `feat/daisyui-adapter`, tag `t11-non-colour-tokens`, both pushed, no merge to main
+- [x] Follow-up `4f8126c`: re-encode `evidence/11-non-colour-tokens/check.txt` from UTF-16LE to UTF-8, which the PowerShell redirect had produced. Git had it as binary; `check.mjs` still passes all 74 against the committed copy.
+- [x] Leftovers cleared: my six harness runs under `harness/runs/` and the 129 MB temp project it kept are gone, no server on 5199 or 5209, working tree clean
+- Base branch is `main`, which the delivery rule excludes from a merge, so nothing is merged back
 
 ## Settled input (do not re-litigate)
 
