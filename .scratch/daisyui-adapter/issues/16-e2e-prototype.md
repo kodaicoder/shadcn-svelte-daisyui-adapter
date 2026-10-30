@@ -143,11 +143,13 @@ The five ticket questions, answered from the painted bytes rather than from the 
 
 ### What the mapping must change
 
-Only one thing, and it is the chart fallback. Everything else this prototype found is either the
-input theme being tight, or this repo's palette leaking into a no-theme build through the CLI's
-own fallbacks. The second is worth a ticket, but note it is an artefact of the harness: the harness
-copies this repo's `layout.css` instead of running `shadcn-svelte init`, so under a real init the
-fallbacks would be shadcn's neutral values rather than this repo's olive grey.
+Only one thing, and it is the chart fallback. It is carried by
+[21](21-chart-no-theme-fallback.md), with this ticket's measurements as its input. Everything else
+this prototype found is either the input theme being tight, or this repo's palette leaking into a
+no-theme build through the CLI's own fallbacks. The second is worth a ticket, but note it is an
+artefact of the harness: the harness copies this repo's `layout.css` instead of running
+`shadcn-svelte init`, so under a real init the fallbacks would be shadcn's neutral values rather than
+this repo's olive grey.
 
 ### What this prototype did not measure
 

@@ -32,7 +32,7 @@ A public, installable daisyUI-to-shadcn-svelte theme adapter. A team installs sh
 - `cssVars` overwrites in place rather than appending;
 - a plain `--color-*` declaration is what sonner needs, since `@theme inline` emits none.
 
-**Work order.** 15 (harness) → 20 (mechanism spike) → 07, 08, 13. Tickets 09 to 12 are unblocked already and may run in any order before 16. 19 follows 13. 17 and 18 follow their own blockers. 07 and 08 were rewritten on 2026-10-29 for the pure CLI, so 16, 17 and 18 follow the CLI shape rather than a registry item.
+**Work order.** 15 (harness) → 20 (mechanism spike) → 07, 08, 13. Tickets 09 to 12 are unblocked already and may run in any order before 16. 19 follows 13. 17 and 18 follow their own blockers. 07 and 08 were rewritten on 2026-10-29 for the pure CLI, so 16, 17 and 18 follow the CLI shape rather than a registry item. 21 is the chart fallback defect 16 measured, and 17's clean-machine check gains a delete-theme rebuild once 21 lands.
 
 **Research convention.** Research notes live at `.scratch/daisyui-adapter/research/NN-<slug>.md` with the issue beside them, not on a separate branch. That convention predates the remote and still holds: research is decision input, and the ticket is the record.
 
