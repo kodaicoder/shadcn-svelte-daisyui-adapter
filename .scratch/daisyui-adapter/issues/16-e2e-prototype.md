@@ -40,7 +40,10 @@ CLI (07 and 08, rewritten the same day). Build this prototype against the CLI, n
 ## Answer
 
 Done 2026-10-30. The chain works end to end on a project that is not this one, with one real
-falsification: **the chart ramp breaks when the theme is absent**, which is exactly constraint 3.
+falsification: **five of the CLI's written values have no fallback**, so with no theme the chart
+colours vanish. Constraint 3 splits in two here: its build-and-render half holds in both arms, and
+its "render the CLI-written fallbacks" half holds for 27 of the 32 binding declarations the CLI
+writes and fails for the five chart rows.
 
 Both arms built and rendered. `arm-full` is the real install path, `arm-missing` deletes
 `src/daisyui-theme.css` after the CLI runs. Evidence is in `evidence/16-e2e-prototype/`.
