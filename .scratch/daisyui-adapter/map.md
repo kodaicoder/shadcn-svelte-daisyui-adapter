@@ -18,7 +18,7 @@ A public, installable daisyUI-to-shadcn-svelte theme adapter. A team installs sh
 
 **Constraints.**
 - Install is the adapter CLI (07 and 08, rewritten 2026-10-29): it reads `components.json` and the stylesheet, validates the theme, writes the bindings with the project's own values as fallbacks, creates the override file and its import, and installs its package. The `add`, `cssVars` and registry-item bullets below are the measurements that drove that choice; they no longer describe the install path.
-- This repo has no git remote and no commits. Public hosting needs a new home.
+- The repo has a remote: `github.com/kodaicoder/shadcn-svelte-daisyui-adapter`. Work lands on `feat/daisyui-adapter` off `main`, tagged per ticket (`t10-sidebar-mapping` through `t12-chart-ramp`). Public hosting is still unresolved: no package is published and ticket 17 owns the npm identity and the publish path.
 - shadcn-svelte 1.7 `add` accepts a component name or a full URL. There is no `@scope/name` namespacing in this version.
 - Registry items have no lifecycle hooks, so install-time computation is impossible. The plugin runs at build time.
 - `cssVars` edits the existing `:root` and `.dark` blocks in place. `css` merges by selector, appends new selectors at the end, and special-cases `@plugin`, inserting it at top level right after the last `@import`. `docs` prints nothing. There is no CSS existence check.
@@ -34,7 +34,7 @@ A public, installable daisyUI-to-shadcn-svelte theme adapter. A team installs sh
 
 **Work order.** 15 (harness) → 20 (mechanism spike) → 07, 08, 13. Tickets 09 to 12 are unblocked already and may run in any order before 16. 19 follows 13. 17 and 18 follow their own blockers. 07 and 08 were rewritten on 2026-10-29 for the pure CLI, so 16, 17 and 18 follow the CLI shape rather than a registry item.
 
-**Research convention.** No git remote exists, so research notes live at `.scratch/daisyui-adapter/research/NN-<slug>.md` instead of on a `research/<name>` branch.
+**Research convention.** Research notes live at `.scratch/daisyui-adapter/research/NN-<slug>.md` with the issue beside them, not on a separate branch. That convention predates the remote and still holds: research is decision input, and the ticket is the record.
 
 **Skills sessions should consult.** `research` for research tickets, `grilling` and `domain-modeling` for decision tickets, `prototype` for ticket 16.
 

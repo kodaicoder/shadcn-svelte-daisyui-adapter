@@ -18,9 +18,10 @@ drives the interview shape, one question at a time as the operator asked.
 - [x] Build `registry-12/`: probe theme (daisyUI built-in pair), probe package, item with 09's
       core rows, probe page, `measure.mjs`
 - [x] Run `harness/run.mjs` on 5199 and 5209, kill every server it starts. `2026-10-30T04-27-45-353Z`
-      is the cited render. `2026-10-30T02-10-55-497Z` measured the rejected constructions; its
-      `render.json` stays uncommitted because `runs/` is ignored. Two earlier runs failed on a page
-      importing a chart component the harness never installs, fixed with `--then`
+      is the cited render, preserved in `evidence/12-chart-ramp/`. `2026-10-30T02-10-55-497Z`
+      measured the rejected constructions; that run directory was deleted with the rest of `runs/`,
+      so the cross-check below is no longer re-runnable from the repo. Two earlier runs failed on a
+      page importing a chart component the harness never installs, fixed with `--then`
 - [x] Compute contrast and separation from the painted bytes, cross-checked against an offline
       OKLCH model (agree within 1%)
 - [x] Interview: the five decisions, one question at a time, each with a recommendation and facts
@@ -78,7 +79,9 @@ gitignoring `evidence/` (it is committed because `runs/` is ignored), the undefi
 spec for a frozen `src/`.
 
 Cross-check: `sweep.mjs` assignment contrasts agree with the painted bytes of run
-`2026-10-30T02-10-55-497Z` within 0.01, measured by `measure.mjs`.
+`2026-10-30T02-10-55-497Z` within 0.01, measured by `measure.mjs`. That directory was deleted in
+the ticket 12 cleanup, so the agreement is recorded here but cannot be re-derived without a fresh
+harness run.
 
 ## Settled input (do not re-litigate)
 
