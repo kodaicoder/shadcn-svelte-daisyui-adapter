@@ -48,7 +48,8 @@ drives the interview shape, one question at a time as the operator asked.
 - [x] `code-review` on the Spec axis against `e266ace`; `no-comments` only if the diff carries code
 - [x] `deslop`, conventional commit on `feat/daisyui-adapter`, tag `t12-chart-ramp`; push deferred by
       the operator
-- [ ] Clear leftovers: harness runs, temp project, ports 5199 and 5209, working tree
+- [x] Clear leftovers: 33 harness run dirs and the 101.8 MB temp project deleted; ports 5199 and 5209
+      free; working tree clean
 
 ## Review round (2026-10-30)
 
