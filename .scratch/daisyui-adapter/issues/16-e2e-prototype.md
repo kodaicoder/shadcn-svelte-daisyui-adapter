@@ -152,6 +152,6 @@ Stated plainly so the ticket is not read as covering more than it does:
   open judgement call for the operator, not a completed step.
 
 Status: resolved
-Lesson: A derived value that borrows another token's channel (oklch(from var(--x) … h)) has no fallback of its own, so the arm with no theme turns the whole chart black while every plain var() binding beside it degrades correctly.
+Lesson: A derived value that borrows another token's channel (oklch(from var(--x) … h)) has no fallback of its own, so the arm with no theme loses every chart colour while each plain var() binding beside it degrades correctly.
 Check: code - registry-16/probe-visual.mjs reads the painted sRGB bytes of five swatches plus the dialog, focus ring and computed contrast in both schemes, keeps alpha rather than dropping it, and exits non-zero on any series that paints transparent or unfound, so a chart ramp with no fallback cannot pass as a working no-theme build. Measured: `arm-missing` exits 1 naming all five series; `arm-full` exits 0.
 
