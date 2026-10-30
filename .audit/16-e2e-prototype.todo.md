@@ -152,6 +152,12 @@ cited was lost. `harness/runs/` is gone too; it is gitignored and regenerable.
 
 **Ports.** 5199, 5209, 5301 to 5304 all free after the sweep.
 
+**No merge to `main`.** The base branch is `main`, which the delivery rule excludes from a merge, so
+nothing is merged back. This matches ticket 11's recorded decision. The branch is pushed instead, and
+`main` stays two merge commits behind on history while being behind on content, not ahead: the files
+it lacks are the whole ticket 16 tree. If a merge is ever wanted, `git merge-tree --write-tree HEAD
+origin/main` returns a tree byte-identical to HEAD's, so it resolves with no conflict.
+
 **Still an open operator call, unchanged:** the six stale chart fixture sites and the stale sidebar
 rows in `registry-14/probe-cli/init.mjs`. See Deviations 2 and 3. `registry-16/` is authoritative and
 ticket 21 is the fix path, but rewriting closed tickets' fixtures is still the operator's call.
