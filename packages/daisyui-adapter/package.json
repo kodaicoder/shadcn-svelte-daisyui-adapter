@@ -1,7 +1,8 @@
 {
-	"name": "daisyui-adapter",
+	"name": "@kodaicoder/shadcn-svelte-daisyui-adapter",
 	"version": "0.1.0",
-	"private": true,
+	"description": "Generate a shadcn-svelte token set from a daisyUI v5 theme, at build time, with no daisyUI runtime dependency.",
+	"license": "MIT",
 	"type": "module",
 	"bin": {
 		"daisyui-adapter": "./cli/init.mjs"
@@ -15,6 +16,25 @@
 	},
 	"files": [
 		"dist",
-		"cli"
-	]
+		"cli",
+		"CHANGELOG.md"
+	],
+	"keywords": [
+		"daisyui",
+		"shadcn-svelte",
+		"sveltekit",
+		"tailwindcss",
+		"theme"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kodaicoder/shadcn-svelte-daisyui-adapter.git",
+		"directory": "packages/daisyui-adapter"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
 }
