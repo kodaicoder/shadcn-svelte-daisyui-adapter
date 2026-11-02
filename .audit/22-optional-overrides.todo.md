@@ -34,7 +34,11 @@ Ticket steps:
 - [x] README documents opt-in overrides, with the manual import and selectors
 - [x] CHANGELOG and version 0.2.0
 - [x] smoke and publish-test assert the absence and the kept state
-- [ ] pre-publish proof with the packed 0.2.0 tarball
+- [x] pre-publish proof with the packed 0.2.0 tarball
+  `evidence/22-optional-overrides/arm-full` and `arm-missing`. The CLI prints four lines, creates no
+  override file and writes no import. Six adds leave the stylesheet byte-identical, the re-run matches,
+  and both arms build and render. A fresh checkout on Windows failed `pnpm pack` with
+  `ERR_PNPM_BIN_CRLF`; `.gitattributes` now forces `*.mjs` to LF, and the bin checkout was regenerated.
 - [ ] gate: ask before publishing 0.2.0
 - [ ] publish 0.2.0, then the literal `pnpm dlx <pkg>@0.2.0 init`
 - [ ] merge to `feat/daisyui-adapter`, push
@@ -55,3 +59,4 @@ Ticket steps:
 | 1 | does the CLI delete an existing 0.1.0 file and import | no: the file may hold user overrides; the README says delete both manually | ticket 14 makes the file user-owned; smoke now asserts the kept state |
 | 2 | which version | 0.2.0 minor: the written bytes and the install contract change | ticket 17's version policy |
 | 3 | does the output keep the override line | no: it described a file the CLI no longer creates | smoke and the README output block |
+| 4 | why did the pre-publish pack fail | a fresh Windows checkout writes the bin with CRLF and pnpm refuses it; `.gitattributes` sets `*.mjs` to LF | `ERR_PNPM_BIN_CRLF` from `pnpm pack`, then a successful pack after the LF checkout |
