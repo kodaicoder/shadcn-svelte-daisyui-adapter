@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // The adapter CLI. It reads components.json and the stylesheet, validates the theme, then writes the
-// header comment, the plugin line, the override import, the empty override file, the bindings for
-// both blocks, and the five chart values. Re-running it is byte-identical.
+// header comment, the plugin line, the bindings for both blocks, and the five chart values. Re-running
+// it is byte-identical. The override file and its import are the project's to add; this CLI never
+// creates, deletes or rewrites either one.
 //
 // It never writes a raw `--color-*` name (ticket 14: that forms a cycle with `@theme inline`, and
 // the fallback is then silently ignored), and it writes the chart ramp itself rather than leaving it
@@ -13,7 +14,7 @@
 // that ran an older CLI must end up with exactly one line naming its version.
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, relative, resolve } from 'node:path';
+import { resolve } from 'node:path';
 
 import { BINDING_KEYS, SINGLE, mixValue } from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
@@ -26,7 +27,6 @@ const BIN = Object.keys(manifest.bin)[0];
 const HEADER = `/* ${PKG} ${VERSION} | re-run \`pnpm dlx ${PKG}@${VERSION} init\` after \`shadcn-svelte init\` */`;
 const HEADER_PATTERN = /^\/\* (\S+) (\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?) \| re-run [^\n]*\*\/\r?\n?/;
 const OVERRIDE = 'daisyui-adapter.overrides.css';
-const OVERRIDE_IMPORT = `@import "./${OVERRIDE}";`;
 const BORDER_ENTRY = '--default-border-width: var(--daisy-border, 1px);';
 const PLUGIN = `@plugin "${PKG}";`;
 const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
@@ -110,8 +110,8 @@ const warnBareRamp = (key) => {
 	rampWarned = true;
 	console.warn(
 		`[daisyui-adapter] --${key} holds a ramp written by an older CLI with no fallback. Its original ` +
-			`value is gone; restore the stylesheet from version control or set --daisyui-derived-${key} ` +
-			`in ${OVERRIDE}.`
+			`value is gone; restore the stylesheet from version control, or set --daisyui-derived-${key} ` +
+			`in the optional ${OVERRIDE} file, which the README's Overrides section describes.`
 	);
 };
 
@@ -266,7 +266,6 @@ const main = () => {
 	);
 	if (!css) throw new Error(`[daisyui-adapter] ${where} has no :root block`);
 
-	css = insertAfterLastImport(css, OVERRIDE_IMPORT);
 	if (themes) {
 		css = insertAfterLastImport(css, PLUGIN);
 		css = insertThemeEntries(css);
@@ -274,10 +273,6 @@ const main = () => {
 	css = `${HEADER}\n${css}`;
 
 	writeFileSync(cssPath, css);
-
-	const overridePath = resolve(dirname(cssPath), OVERRIDE);
-	const created = !existsSync(overridePath);
-	if (created) writeFileSync(overridePath, '');
 
 	// Read back what was written: a block the CLI matched but could not fill has to show a count
 	// below 32 rather than a number from the data it meant to write.
@@ -291,10 +286,6 @@ const main = () => {
 	if (themes) console.log('[daisyui-adapter] theme ok: light + dark');
 	console.log(`[daisyui-adapter] wrote ${where}`);
 	console.log(`[daisyui-adapter] ${lightCount} light, ${darkCount} dark`);
-	const overrideRel = relative(process.cwd(), overridePath).replaceAll('\\', '/');
-	console.log(
-		`[daisyui-adapter] ${created ? `created ${overrideRel}` : `left ${overrideRel} untouched`}`
-	);
 
 	// The install is last, after the lines that describe what was written, so a failed install
 	// still tells the user the stylesheet is in place.
