@@ -53,7 +53,7 @@ The first line of the stylesheet is the version marker:
 `shadcn-svelte init` keeps this line and the override import, wipes the bindings, and the next adapter run restores them. Re-run when:
 
 - `shadcn-svelte init` or a large `add` changed the stylesheet;
-- the header names an older version than the one you want;
+- you moved to a newer CLI and want the header to name it;
 - the changelog says the mapping table or the emitted shape changed.
 
 The CLI refuses to run when the header names a newer version than the CLI. It prints `E4`, exits non-zero and writes nothing, because an older CLI would undo bindings a newer one wrote. Run the version the header names, or upgrade the CLI.
@@ -82,18 +82,19 @@ The header records one exact version, and that number is what a project holds. A
 
 ## Checking the result
 
-`pnpm build` is the gate. The plugin reads `src/daisyui-theme.css` while Tailwind builds, so a stylesheet that missed a binding or a theme block that does not parse fails there. With the theme removed, the build still passes and the page renders the pre-adapter palette.
+`pnpm build` is the gate. The plugin reads `src/daisyui-theme.css` while Tailwind builds, so a malformed theme block fails there. With the theme removed, the build still passes and the page renders the pre-adapter palette.
 
 ## Testing a tarball before publish
 
-`pnpm pack` writes `kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz`. Set `DAISYUI_ADAPTER_INSTALL_SPEC` to that file and the CLI installs it instead of the registry copy:
+`pnpm pack` writes `kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz`. Set `DAISYUI_ADAPTER_INSTALL_SPEC` to that file and the CLI installs it instead of the registry copy. Pack from the package directory, then run the CLI from the app's root:
 
 ```bash
-pnpm pack --pack-destination .
+# in packages/daisyui-adapter, writing into the app's root
+pnpm pack --pack-destination <app>
+
+# in the app's root
 DAISYUI_ADAPTER_INSTALL_SPEC=./kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz \
   node <repo>/packages/daisyui-adapter/cli/init.mjs
 ```
-
-Run it from the app's root, so `components.json` and the stylesheet resolve.
 
 The CLI prints `installed ./kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz`. Without the variable it installs `@kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0` from the registry.
