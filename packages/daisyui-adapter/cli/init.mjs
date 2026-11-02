@@ -124,7 +124,9 @@ const rebuild = (current, fallback, scheme) => {
 		lines.push(`\t${prop}: ${value};`);
 	}
 	for (const key of BINDING_KEYS) {
-		const old = unwrapFallback(current.find((d) => d.prop === `--${key}`)?.value ?? fallback[`--${key}`] ?? '');
+		const old = unwrapFallback(
+			current.find((d) => d.prop === `--${key}`)?.value ?? fallback[`--${key}`] ?? ''
+		);
 		if (SINGLE[key]) {
 			lines.push(`\t--${key}: var(${targetVar(key)}, ${old});`);
 		} else {
@@ -147,7 +149,8 @@ const rebuild = (current, fallback, scheme) => {
 			}
 		}
 	} else {
-		for (const { prop, value } of current) if (prop.startsWith('--chart-')) lines.push(`\t${prop}: ${value};`);
+		for (const { prop, value } of current)
+			if (prop.startsWith('--chart-')) lines.push(`\t${prop}: ${value};`);
 	}
 	return lines.join('\n');
 };
@@ -243,12 +246,24 @@ const main = () => {
 		themes = parseTheme(readFileSync(path, 'utf8'), path);
 	}
 
-	const stockLight = Object.fromEntries(readBlock(css, ':root', where).map((d) => [d.prop, d.value]));
-	const chart = themes ? { light: solveScheme(themes.light), dark: solveScheme(themes.dark) } : null;
+	const stockLight = Object.fromEntries(
+		readBlock(css, ':root', where).map((d) => [d.prop, d.value])
+	);
+	const chart = themes
+		? { light: solveScheme(themes.light), dark: solveScheme(themes.dark) }
+		: null;
 
-	css = replaceBlock(css, '.dark', rebuild(readBlock(css, '.dark', where), stockLight, chart?.dark ?? null));
+	css = replaceBlock(
+		css,
+		'.dark',
+		rebuild(readBlock(css, '.dark', where), stockLight, chart?.dark ?? null)
+	);
 	if (!css) throw new Error(`[daisyui-adapter] ${where} has no .dark block`);
-	css = replaceBlock(css, ':root', rebuild(readBlock(css, ':root', where), stockLight, chart?.light ?? null));
+	css = replaceBlock(
+		css,
+		':root',
+		rebuild(readBlock(css, ':root', where), stockLight, chart?.light ?? null)
+	);
 	if (!css) throw new Error(`[daisyui-adapter] ${where} has no :root block`);
 
 	css = insertAfterLastImport(css, OVERRIDE_IMPORT);
@@ -268,19 +283,23 @@ const main = () => {
 	// below 32 rather than a number from the data it meant to write.
 	const written = readFileSync(cssPath, 'utf8');
 	const count = (selector) =>
-		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-')).length;
+		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-'))
+			.length;
 	const lightCount = count(':root');
 	const darkCount = count('.dark');
-
-	const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
-	const installed = installLine(spec);
 
 	if (themes) console.log('[daisyui-adapter] theme ok: light + dark');
 	console.log(`[daisyui-adapter] wrote ${where}`);
 	console.log(`[daisyui-adapter] ${lightCount} light, ${darkCount} dark`);
 	const overrideRel = relative(process.cwd(), overridePath).replaceAll('\\', '/');
-	console.log(`[daisyui-adapter] ${created ? `created ${overrideRel}` : `left ${overrideRel} untouched`}`);
-	console.log(`[daisyui-adapter] ${installed}`);
+	console.log(
+		`[daisyui-adapter] ${created ? `created ${overrideRel}` : `left ${overrideRel} untouched`}`
+	);
+
+	// The install is last, after the lines that describe what was written, so a failed install
+	// still tells the user the stylesheet is in place.
+	const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
+	console.log(`[daisyui-adapter] ${installLine(spec)}`);
 
 	if (chart) {
 		for (const scheme of ['light', 'dark']) {

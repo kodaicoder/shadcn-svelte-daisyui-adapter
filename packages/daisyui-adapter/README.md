@@ -24,6 +24,9 @@ pnpm dlx shadcn-svelte@latest init
 
 # 3. the adapter, at an exact version
 pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0 init
+
+# 4. the gate
+pnpm build
 ```
 
 The CLI adds the package as a devDependency at its own version, because the `@plugin` specifier resolves through `node_modules` at build time. Run it from the project root.
