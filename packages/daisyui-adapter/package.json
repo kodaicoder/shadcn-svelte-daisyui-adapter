@@ -1,6 +1,6 @@
 {
 	"name": "@kodaicoder/shadcn-svelte-daisyui-adapter",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "Generate a shadcn-svelte token set from a daisyUI v5 theme, at build time, with no daisyUI runtime dependency.",
 	"license": "MIT",
 	"type": "module",
