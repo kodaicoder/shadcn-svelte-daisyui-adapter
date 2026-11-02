@@ -300,7 +300,11 @@ export default defineConfig({
 		report.then.push({ command, code: result.code });
 		if (result.code !== 0) throw new Error(`--then ${n} failed, see then-${n}.log`);
 	}
-	if (THEN.length > 0) report.steps.push('then');
+	if (THEN.length > 0) {
+		// The manifest after the step, not before it: the CLI's self-install is the thing under test.
+		write(join(EVIDENCE, 'package-json-after-then.json'), readFileSync(join(APP, 'package.json'), 'utf8'));
+		report.steps.push('then');
+	}
 
 	server = stopRegistry(server);
 

@@ -1,7 +1,7 @@
 {
-  "stamp": "2026-11-02T09-08-52-703Z",
-  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-11-02T09-08-52-703Z\\app",
-  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-11-02T09-08-52-703Z",
+  "stamp": "2026-11-02T09-15-11-328Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-11-02T09-15-11-328Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-11-02T09-15-11-328Z",
   "steps": [
     "scaffold",
     "dependencies",
@@ -30,7 +30,7 @@
   ],
   "build": true,
   "render": {
-    "url": "http://127.0.0.1:5339/",
+    "url": "http://127.0.0.1:5349/",
     "status": 200,
     "consoleErrors": [],
     "light": {

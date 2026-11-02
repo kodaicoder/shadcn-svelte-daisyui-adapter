@@ -76,10 +76,11 @@ if (installed.version !== VERSION) fail(`installed ${installed.version}, expecte
 const appPackage = JSON.parse(readFileSync('package.json', 'utf8'));
 const dependency = appPackage.devDependencies?.[NAME];
 if (!dependency) fail(`${NAME} is not in the app's devDependencies`);
-if (FROM_REGISTRY && !String(dependency).includes(VERSION)) {
-	fail(`devDependencies names ${dependency}, expected a ${VERSION} spec`);
+if (FROM_REGISTRY && dependency !== VERSION) {
+	fail(`devDependencies names ${dependency}, expected the exact ${VERSION}`);
 }
 console.log(`[run-17:${ARM}] installed ${NAME} ${installed.version}`);
+console.log(`[run-17:${ARM}] devDependencies ${JSON.stringify(appPackage.devDependencies)}`);
 
 const shape = (css, when) => {
 	const headers = headerLines(css);

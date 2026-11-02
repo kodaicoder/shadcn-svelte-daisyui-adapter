@@ -43,7 +43,7 @@ computing gzip size...
 .svelte-kit/output/server/chunks/instance.js                                                            128.91 kB │ gzip: 34.69 kB │ map: 259.19 kB
 .svelte-kit/output/server/entries/pages/_page.svelte.js                                                 345.65 kB │ gzip: 73.65 kB │ map: 682.19 kB
 
-[32m✓ built in 2.41s[39m
+[32m✓ built in 4.64s[39m
 Analysing routes
 Building app
 [36mvite v8.3.5 [32mbuilding client environment for production...[36m[39m
@@ -83,7 +83,7 @@ computing gzip size...
 .svelte-kit/output/client/_app/immutable/chunks/cQKtAzno.js                                              50.46 kB │ gzip: 19.30 kB
 .svelte-kit/output/client/_app/immutable/nodes/2.BkduFctT.js                                            150.13 kB │ gzip: 46.50 kB
 
-[32m✓ built in 2.96s[39m
+[32m✓ built in 6.83s[39m
 
 Run npm run preview to preview your production build locally.
 
