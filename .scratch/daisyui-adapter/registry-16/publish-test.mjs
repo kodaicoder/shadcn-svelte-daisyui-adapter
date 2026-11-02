@@ -7,7 +7,7 @@
 // runs the published `pnpm dlx <name>@<version> init`, which is the DoD's literal command.
 import { execFileSync } from 'node:child_process';
 import { readdirSync, readFileSync, rmSync, existsSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join, dirname, resolve } from 'node:path';
 
 import { hashOf } from './hash.mjs';
 
@@ -88,8 +88,10 @@ const shape = (css, when) => {
 	if (!css.startsWith(`/* ${NAME} ${VERSION} `))
 		fail(`${when}: header does not name ${NAME} ${VERSION}`);
 	if (!css.includes(`@plugin "${NAME}";`)) fail(`${when}: no bare @plugin line`);
-	if (!css.includes('@import "./daisyui-adapter.overrides.css";'))
-		fail(`${when}: no override import`);
+	const overridePath = join(dirname(stylesheet), 'daisyui-adapter.overrides.css');
+	if (css.includes('@import "./daisyui-adapter.overrides.css";'))
+		fail(`${when}: the override import is present`);
+	if (existsSync(overridePath)) fail(`${when}: ${overridePath} exists`);
 };
 shape(readFileSync(stylesheet, 'utf8'), 'after the first init');
 const afterInit = hashOf(readFileSync(stylesheet));

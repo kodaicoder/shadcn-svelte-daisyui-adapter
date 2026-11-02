@@ -103,7 +103,7 @@ check(
 	e3.slice(0, 80)
 );
 
-// 5. The CLI writes bindings, the ramp, the plugin line and the override file.
+// 5. The CLI writes bindings, the ramp and the plugin line, and leaves overrides to the project.
 const full = join(WORK, 'full');
 scaffold(full);
 const first = cli(full);
@@ -119,12 +119,12 @@ check(
 	(css1.match(/@plugin "[^"]+";/) ?? ['none'])[0]
 );
 check(
-	'CLI writes the override import',
-	css1.includes('@import "./daisyui-adapter.overrides.css";')
+	'CLI writes no override import',
+	!css1.includes('@import "./daisyui-adapter.overrides.css";')
 );
 check(
-	'CLI creates the override file',
-	existsSync(join(full, 'src', 'routes', 'daisyui-adapter.overrides.css'))
+	'CLI creates no override file',
+	!existsSync(join(full, 'src', 'routes', 'daisyui-adapter.overrides.css'))
 );
 check(
 	'exactly one header line, naming the package and its version',
@@ -169,8 +169,8 @@ check(
 	css1.split('--default-border-width').length - 1 === 1
 );
 check(
-	'the override import sits before the plugin line',
-	css1.indexOf('daisyui-adapter.overrides.css') < css1.indexOf(`@plugin "${NAME}"`)
+	'the stylesheet names no override file at all',
+	!css1.includes('daisyui-adapter.overrides.css')
 );
 check('sidebar follows base-200', css1.includes('--sidebar: var(--daisy-color-base-200'));
 check(
@@ -187,6 +187,30 @@ check(
 	css1 === css2 ? '' : `${css1.length} vs ${css2.length} bytes`
 );
 console.log(first.trim().split('\n').join('\n      '));
+
+// 6b. A project that installed 0.1.0 already holds the import and the file. The CLI keeps both, so
+// the opt-in change never removes a working override from an existing project.
+const kept = join(WORK, 'kept');
+scaffold(kept);
+const keptPath = join(kept, 'src', 'routes', 'layout.css');
+const IMPORT = '@import "./daisyui-adapter.overrides.css";';
+writeFileSync(
+	keptPath,
+	readFileSync(keptPath, 'utf8').replace(
+		'@import "shadcn-svelte/tailwind.css";',
+		`@import "shadcn-svelte/tailwind.css";\n${IMPORT}`
+	)
+);
+const keptOverride = join(kept, 'src', 'routes', 'daisyui-adapter.overrides.css');
+const keptBody = 'html:not(.dark) {\n\t--daisy-derived-chart-1: oklch(0.62 0.08 250);\n}\n';
+writeFileSync(keptOverride, keptBody);
+cli(kept);
+const keptCss = readFileSync(keptPath, 'utf8');
+check('an existing override import is kept', keptCss.includes(IMPORT));
+check(
+	'an existing override file is left byte-identical',
+	readFileSync(keptOverride, 'utf8') === keptBody
+);
 
 // 7. Without a theme the CLI warns with E1, exits 0, and leaves the project's own values.
 const bare = join(WORK, 'bare');
