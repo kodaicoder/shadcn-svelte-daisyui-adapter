@@ -18,7 +18,7 @@ A public, installable daisyUI-to-shadcn-svelte theme adapter. A team installs sh
 
 **Constraints.**
 - Install is the adapter CLI (07 and 08, rewritten 2026-10-29): it reads `components.json` and the stylesheet, validates the theme, writes the bindings with the project's own values as fallbacks, creates the override file and its import, and installs its package. The `add`, `cssVars` and registry-item bullets below are the measurements that drove that choice; they no longer describe the install path.
-- The repo has a remote: `github.com/kodaicoder/shadcn-svelte-daisyui-adapter`. Work lands on `feat/daisyui-adapter` off `main`, tagged per ticket (`t10-sidebar-mapping` through `t17-public-hosting`). Public hosting is settled in [17](issues/17-public-hosting.md): `@kodaicoder/shadcn-svelte-daisyui-adapter` 0.1.0 ships from `packages/daisyui-adapter/` in this repo.
+- The repo has a remote: `github.com/kodaicoder/shadcn-svelte-daisyui-adapter`. Work lands on `feat/daisyui-adapter` off `main`, tagged per ticket (`t10-sidebar-mapping` through `t22-optional-overrides`). Public hosting is settled in [17](issues/17-public-hosting.md): `@kodaicoder/shadcn-svelte-daisyui-adapter` 0.1.0 ships from `packages/daisyui-adapter/` in this repo.
 - shadcn-svelte 1.7 `add` accepts a component name or a full URL. There is no `@scope/name` namespacing in this version.
 - Registry items have no lifecycle hooks, so install-time computation is impossible. The plugin runs at build time.
 - `cssVars` edits the existing `:root` and `.dark` blocks in place. `css` merges by selector, appends new selectors at the end, and special-cases `@plugin`, inserting it at top level right after the last `@import`. `docs` prints nothing. There is no CSS existence check.
