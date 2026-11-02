@@ -4,14 +4,17 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
-import { readTheme, bindingsFor, parseTheme } from '../../../packages/daisyui-adapter/dist/index.mjs';
+import {
+	readTheme,
+	bindingsFor,
+	parseTheme
+} from '../../../packages/daisyui-adapter/dist/index.mjs';
 
 const HERE = import.meta.dirname;
 const REPO = resolve(HERE, '..', '..', '..');
 const PKG_DIR = resolve(REPO, 'packages', 'daisyui-adapter');
 const WORK = join(process.env.TEMP ?? '/tmp', 'adapter-16-smoke');
 const THEME = join(HERE, '..', 'registry-12', 'probe-theme.css');
-
 
 const manifest = JSON.parse(readFileSync(join(PKG_DIR, 'package.json'), 'utf8'));
 const NAME = manifest.name;
@@ -94,27 +97,45 @@ try {
 } catch (error) {
 	e3 = error.message;
 }
-check('a missing colour throws E3 naming it', e3.includes('is missing --color-info'), e3.slice(0, 80));
+check(
+	'a missing colour throws E3 naming it',
+	e3.includes('is missing --color-info'),
+	e3.slice(0, 80)
+);
 
 // 5. The CLI writes bindings, the ramp, the plugin line and the override file.
 const full = join(WORK, 'full');
 scaffold(full);
 const first = cli(full);
 const css1 = readFileSync(join(full, 'src', 'routes', 'layout.css'), 'utf8');
-check('CLI writes the plugin line', css1.includes(`@plugin "${NAME}";`), (css1.match(/@plugin "[^"]+";/) ?? ['none'])[0]);
+check(
+	'CLI writes the plugin line',
+	css1.includes(`@plugin "${NAME}";`),
+	(css1.match(/@plugin "[^"]+";/) ?? ['none'])[0]
+);
 check(
 	'the plugin line is a bare specifier',
 	css1.includes(`@plugin "${NAME}";`) && !css1.includes('@plugin "./'),
 	(css1.match(/@plugin "[^"]+";/) ?? ['none'])[0]
 );
-check('CLI writes the override import', css1.includes('@import "./daisyui-adapter.overrides.css";'));
-check('CLI creates the override file', existsSync(join(full, 'src', 'routes', 'daisyui-adapter.overrides.css')));
+check(
+	'CLI writes the override import',
+	css1.includes('@import "./daisyui-adapter.overrides.css";')
+);
+check(
+	'CLI creates the override file',
+	existsSync(join(full, 'src', 'routes', 'daisyui-adapter.overrides.css'))
+);
 check(
 	'exactly one header line, naming the package and its version',
 	headerLines(css1).length === 1 && css1.startsWith(`/* ${NAME} ${VERSION} `),
 	`${headerLines(css1).length} header line(s)`
 );
-check('CLI counts 32 declarations per block with a theme', first.includes('32 light, 32 dark'), (first.match(/\d+ light, \d+ dark/) ?? ['none'])[0]);
+check(
+	'CLI counts 32 declarations per block with a theme',
+	first.includes('32 light, 32 dark'),
+	(first.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
+);
 check(
 	'CLI writes no raw --color-* name into :root or .dark',
 	!/(^|\n)[ \t]*--color-[\w-]+\s*:/m.test(
@@ -127,30 +148,44 @@ check(
 );
 check(
 	'all five chart tokens are written in both blocks',
-	[1, 2, 3, 4, 5].every(
-		(n) =>
-			(css1.split(`--chart-${n}:`).length - 1) === 2
-	),
+	[1, 2, 3, 4, 5].every((n) => css1.split(`--chart-${n}:`).length - 1 === 2),
 	`${css1.split('--chart-1:').length - 1} chart-1 declarations`
 );
 check(
 	'each chart row is the derived helper behind the project value',
 	[1, 2, 3, 4, 5].every(
 		(n) =>
-			new RegExp(`--chart-${n}: var\\(--daisy-derived-chart-${n}, oklch\\([^)]*\\)\\);`).test(css1) &&
-			new RegExp(`--daisy-derived-chart-${n}: oklch\\(from var\\(--daisy-color-primary\\)`).test(css1)
+			new RegExp(`--chart-${n}: var\\(--daisy-derived-chart-${n}, oklch\\([^)]*\\)\\);`).test(
+				css1
+			) &&
+			new RegExp(`--daisy-derived-chart-${n}: oklch\\(from var\\(--daisy-color-primary\\)`).test(
+				css1
+			)
 	),
 	(css1.match(/--chart-1: [^;]+/) ?? ['none'])[0]
 );
-check('CLI writes --default-border-width once', (css1.split('--default-border-width').length - 1) === 1);
-check('the override import sits before the plugin line', css1.indexOf('daisyui-adapter.overrides.css') < css1.indexOf(`@plugin "${NAME}"`));
+check(
+	'CLI writes --default-border-width once',
+	css1.split('--default-border-width').length - 1 === 1
+);
+check(
+	'the override import sits before the plugin line',
+	css1.indexOf('daisyui-adapter.overrides.css') < css1.indexOf(`@plugin "${NAME}"`)
+);
 check('sidebar follows base-200', css1.includes('--sidebar: var(--daisy-color-base-200'));
-check('sidebar-accent follows base-300', css1.includes('--sidebar-accent: var(--daisy-color-base-300'));
+check(
+	'sidebar-accent follows base-300',
+	css1.includes('--sidebar-accent: var(--daisy-color-base-300')
+);
 
 // 6. Re-run is byte-identical.
 cli(full);
 const css2 = readFileSync(join(full, 'src', 'routes', 'layout.css'), 'utf8');
-check('a re-run is byte-identical', css1 === css2, css1 === css2 ? '' : `${css1.length} vs ${css2.length} bytes`);
+check(
+	'a re-run is byte-identical',
+	css1 === css2,
+	css1 === css2 ? '' : `${css1.length} vs ${css2.length} bytes`
+);
 console.log(first.trim().split('\n').join('\n      '));
 
 // 7. Without a theme the CLI warns with E1, exits 0, and leaves the project's own values.
@@ -161,8 +196,15 @@ const stock = readFileSync(barePath, 'utf8');
 const bareRun = cliResult(bare);
 const bareCss = readFileSync(barePath, 'utf8');
 check('a missing theme exits 0', bareRun.code === 0, `exit ${bareRun.code}`);
-check('a missing theme counts 32 declarations per block', bareRun.out.includes('32 light, 32 dark'), (bareRun.out.match(/\d+ light, \d+ dark/) ?? ['none'])[0]);
-check('a missing theme writes the bindings for the build', bareCss.includes('--sidebar: var(--daisy-color-base-200'));
+check(
+	'a missing theme counts 32 declarations per block',
+	bareRun.out.includes('32 light, 32 dark'),
+	(bareRun.out.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
+);
+check(
+	'a missing theme writes the bindings for the build',
+	bareCss.includes('--sidebar: var(--daisy-color-base-200')
+);
 check(
 	'a missing theme keeps the project fallback',
 	bareCss.includes('var(--daisy-color-base-100, oklch(1 0 0))'),
@@ -262,11 +304,7 @@ const newerBefore =
 	readFileSync(newerPath, 'utf8');
 writeFileSync(newerPath, newerBefore);
 const newerRun = cliResult(newer);
-check(
-	'a newer header exits 1',
-	newerRun.code === 1,
-	`exit ${newerRun.code}`
-);
+check('a newer header exits 1', newerRun.code === 1, `exit ${newerRun.code}`);
 check(
 	'a newer header names E4 and writes nothing',
 	newerRun.out.includes('E4') && readFileSync(newerPath, 'utf8') === newerBefore,
@@ -300,5 +338,7 @@ check(
 );
 
 const failed = results.filter((r) => !r.ok);
-console.log(`\n${failed.length === 0 ? 'all smoke checks passed' : `${failed.length} smoke check(s) failed`}`);
+console.log(
+	`\n${failed.length === 0 ? 'all smoke checks passed' : `${failed.length} smoke check(s) failed`}`
+);
 process.exitCode = failed.length === 0 ? 0 : 1;
