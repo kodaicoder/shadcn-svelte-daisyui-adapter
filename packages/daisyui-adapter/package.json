@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"type": "module",
 	"bin": {
-		"daisyui-adapter": "./cli/init.mjs"
+		"daisyui-adapter": "cli/init.mjs"
 	},
 	"exports": {
 		".": {
