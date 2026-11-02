@@ -39,9 +39,13 @@ Ticket steps:
   override file and writes no import. Six adds leave the stylesheet byte-identical, the re-run matches,
   and both arms build and render. A fresh checkout on Windows failed `pnpm pack` with
   `ERR_PNPM_BIN_CRLF`; `.gitattributes` now forces `*.mjs` to LF, and the bin checkout was regenerated.
-- [ ] gate: ask before publishing 0.2.0
-- [ ] publish 0.2.0, then the literal `pnpm dlx <pkg>@0.2.0 init`
-- [ ] merge to `feat/daisyui-adapter`, push
+- [x] gate: ask before publishing 0.2.0
+  The operator approved the publish on the page. The OTP gate then published.
+- [x] publish 0.2.0, then the literal `pnpm dlx <pkg>@0.2.0 init`
+  Published 2026-11-02. `evidence/22-optional-overrides/arm-registry` shows the registry fetch, the four
+  lines, the exact `0.2.0` devDependency, no override file or import, six adds unchanged, and a build.
+- [x] merge to `feat/daisyui-adapter`, push
+  The branch fast-forwarded from `8b3603b` to the 0.2.0 commits and pushed with the tag.
 
 ## Throughput checkpoint
 
