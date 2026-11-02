@@ -68,7 +68,7 @@ No registry URL, no `-o`, no `add`. The adapter command:
 1. reads `components.json` and resolves `tailwind.css`;
 2. reads the stylesheet and keeps every `:root` and `.dark` declaration;
 3. reads and validates `src/daisyui-theme.css` (one light block and one dark block, classified by `color-scheme` per 02);
-4. writes a header comment, the `@plugin "<pkg>";` line after the last `@import`, an empty `daisyui-adapter.overrides.css` beside the stylesheet plus its one import line, and 32 bindings per block in the shape `var(--daisy-color-<source>, <the value that was in the file>)`;
+4. writes a header comment, the `@plugin "<pkg>";` line after the last `@import`, an empty `daisyui-adapter.overrides.css` beside the stylesheet plus its one import line, and 32 bindings per block in the shape `var(--daisy-color-<source>, <the value that was in the file>)`; 0.2.0 removed the automatic override file and import, so both are opt-in (22);
 5. installs `<pkg>` as a devDependency at the CLI's own version, so the `@plugin` line resolves at build.
 
 Reasons for `dlx` at an exact version rather than a moving tag: every install runs fresh, and the
@@ -89,7 +89,7 @@ build and owns the write. It prints, in order:
 - `theme ok: light + dark`, or the E1/E2/E3 text from ticket 02 with the absolute path and the generator URL;
 - the stylesheet it wrote (`src/app.css` or `src/routes/layout.css`, read from `components.json`);
 - `32 light, 32 dark`, so a stylesheet that matched no block is visible;
-- the override file it created, or that it left an existing one untouched;
+- the override file it created, or that it left an existing one untouched (removed in 0.2.0: the CLI no longer creates it and prints no line for it, see 22);
 - the package and version it installed.
 
 The build stays silent on success, as before. The header comment is the durable marker (decision 5 of

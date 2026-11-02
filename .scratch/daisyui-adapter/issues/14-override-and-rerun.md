@@ -36,6 +36,9 @@ The CLI creates `daisyui-adapter.overrides.css` in the same folder as the styles
 writes that file once and never again, so a user edit survives every later run. The user's second step
 is to edit that file, nothing else.
 
+0.2.0 reversed the automatic part: the file and the import are opt-in, and the CLI neither creates nor
+deletes them (22). The measurements below still explain the selectors and the import order.
+
 Reasons, each measured:
 
 - The base install still needs no user edit, and the override is still a deliberate second step: the
