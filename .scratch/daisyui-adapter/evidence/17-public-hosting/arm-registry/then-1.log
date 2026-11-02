@@ -1,0 +1,122 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-16/publish-test.mjs registry
+exit 0
+[run-17:registry] install spec @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0 from the registry
+
+[run-17:registry] cli init through pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0
+[daisyui-adapter] theme ok: light + dark
+[daisyui-adapter] wrote src/routes/layout.css
+[daisyui-adapter] 32 light, 32 dark
+[daisyui-adapter] created src/routes/daisyui-adapter.overrides.css
+✓ Lockfile passes supply-chain policies (verified 3s ago)
+Added 1 entry to minimumReleaseAgeExclude in pnpm-workspace.yaml (set minimumReleaseAgeStrict to true to gate these updates with a prompt):
+  @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0
+Packages: +1
++
+Progress: resolved 1, reused 3, downloaded 0, added 1, done
+
+devDependencies:
++ @kodaicoder/shadcn-svelte-daisyui-adapter 0.1.0
+
+Done in 123ms using pnpm v12.9.1
+[daisyui-adapter] installed @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0
+[daisyui-adapter] light chart L 0.6562 0.5662 0.4762 0.3862 0.2962 min adjacent 0.090
+[daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+
+[run-17:registry] the package landed at the CLI version
+[run-17:registry] installed @kodaicoder/shadcn-svelte-daisyui-adapter 0.1.0
+
+[run-17:registry] six component adds
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90mbutton[39m
+[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90mcard[39m
+[?25l│
+◇  [1m[36mcard[39m[22m installed at [90msrc\lib\components\ui\card[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90minput[39m
+[?25l│
+◇  [1m[36minput[39m[22m installed at [90msrc\lib\components\ui\input[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90mdialog[39m
+[?25l│
+◇  [1m[36mdialog[39m[22m installed at [90msrc\lib\components\ui\dialog[39m
+[?25h[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90mtabs[39m
+[?25l│
+◇  [1m[36mtabs[39m[22m installed at [90msrc\lib\components\ui\tabs[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90mchart[39m
+[?25l│
+◇  [1m[36mchart[39m[22m installed at [90msrc\lib\components\ui\chart[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+
+[run-17:registry] cli init again, through the installed bin
+[daisyui-adapter] theme ok: light + dark
+[daisyui-adapter] wrote src/routes/layout.css
+[daisyui-adapter] 32 light, 32 dark
+[daisyui-adapter] left src/routes/daisyui-adapter.overrides.css untouched
+[daisyui-adapter] already installed @kodaicoder/shadcn-svelte-daisyui-adapter 0.1.0
+[daisyui-adapter] light chart L 0.6562 0.5662 0.4762 0.3862 0.2962 min adjacent 0.090
+[daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+[run-17:registry] stylesheet sha256 fea1e298ab9855acf38a774b3e4339031a3603d072ada1f594940e2ec7af72dd unchanged across six adds and a re-run
+[run-17:registry] publish test complete
+
+.../mvz1elsv-11vw                        | Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages are hard linked from the content-addressable store to the virtual store.
+  Content-addressable store is at: C:\Users\LENOVO\AppData\Local\pnpm\store\v11
+  Virtual store is at:             ../../../../pnpm-cache/dlx/cf183a540d3ae1c3f3f96b437f008617/mvz1elsv-11vw/node_modules/.pnpm
+.../mvz1elsv-11vw                        | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+
+dependencies:
++ @kodaicoder/shadcn-svelte-daisyui-adapter 0.1.0
+
+Done in 1.8s using pnpm v12.9.1
+Done in 1.6s using pnpm v12.9.1
+Done in 2.2s using pnpm v12.9.1
+Done in 1.4s using pnpm v12.9.1
+Done in 7.9s using pnpm v12.9.1
+Done in 1.8s using pnpm v12.9.1
+Done in 2.6s using pnpm v12.9.1
+(node:40208) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

@@ -55,15 +55,19 @@ Ticket steps, from the order given with the ticket:
 - [x] Step 4: version policy, including what the CLI does on an older and a newer header
 - [x] Step 5: licence and changelog policy recorded
 - [x] Step 6: pack and prove the path on a fresh scaffold with the tarball
-- [ ] Gate: stop and ask before the first publish
+- [x] Gate: stop and ask before the first publish
   Pre-publish evidence: `evidence/17-public-hosting/arm-full` (self-install from the tarball, 32/32,
   six adds unchanged at `fea1e298…`, build true, render 200) and `arm-missing` (same install, theme
   deleted, build true, render 200, the project's own palette). Tarball contents checked: 8 files,
-  `dist` + `cli` + the three docs, no tests, no scratch.
-- [ ] Step 7: publish, then `pnpm dlx <pkg>@<exact> init` on a clean scaffold, transcript kept
-- [ ] DoD 2: package name and version policy in `map.md` Decisions so far
+  `dist` + `cli` + the three docs, no tests, no scratch. The operator approved the publish.
+- [x] Step 7: publish, then `pnpm dlx <pkg>@<exact> init` on a clean scaffold, transcript kept
+  Published 2026-11-02 as `@kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0`. The literal command ran
+  from the registry in `evidence/17-public-hosting/arm-registry`: self-install, 32/32, six adds
+  unchanged at `fea1e298…`, build true, render 200. The first PUT required an OTP; the org is
+  `@kodaicoder`, owned by `nutchyleo123`.
+- [x] DoD 2: package name and version policy in `map.md` Decisions so far
 - [ ] code-review on the Spec axis against `61333e9`
-- [ ] Lesson and Check, two lines
+- [x] Lesson and Check, two lines
 - [ ] cleanup, conventional commit, annotated tag `t17-public-hosting`, push
 - [ ] Do not merge to main. Do not touch the registry-10/11/14 fixtures. No publish without approval.
 
