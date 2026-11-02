@@ -7,23 +7,56 @@
 // the fallback is then silently ignored), and it writes the chart ramp itself rather than leaving it
 // to the plugin, because `addBase` lands in `@layer base` and the project's unlayered `:root` wins
 // (ticket 13).
+//
+// Name, version and the bin come from package.json, so the header, the plugin specifier and the
+// self-install spec cannot drift from each other. The header is replaced, not prepended: a project
+// that ran an older CLI must end up with exactly one line naming its version.
+import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, dirname, resolve } from 'node:path';
+import { dirname, relative, resolve } from 'node:path';
 
 import { BINDING_KEYS, SINGLE, mixValue } from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
 
-const PKG = 'daisyui-adapter';
-const VERSION = '0.1.0';
-const HEADER = `/* ${PKG} ${VERSION} | re-run \`npx ${PKG} init\` after \`shadcn-svelte init\` */`;
+const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+const PKG = manifest.name;
+const VERSION = manifest.version;
+const BIN = Object.keys(manifest.bin)[0];
+const HEADER = `/* ${PKG} ${VERSION} | re-run \`pnpm dlx ${PKG}@${VERSION} init\` after \`shadcn-svelte init\` */`;
+const HEADER_PATTERN = /^\/\* (\S+) (\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?) \| re-run [^\n]*\*\/\r?\n?/;
 const OVERRIDE = 'daisyui-adapter.overrides.css';
 const OVERRIDE_IMPORT = `@import "./${OVERRIDE}";`;
 const BORDER_ENTRY = '--default-border-width: var(--daisy-border, 1px);';
 const PLUGIN = `@plugin "${PKG}";`;
+const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 
 const colorVar = (source) => `--daisy-color-${source}`;
 const targetVar = (key) => (SINGLE[key].scalar ? '--daisy-radius' : colorVar(SINGLE[key].source));
+
+const compareVersions = (a, b) => {
+	const split = (value) => {
+		const [core, pre = ''] = value.split('-');
+		return { nums: core.split('.').map(Number), pre: pre ? pre.split('.') : [] };
+	};
+	const left = split(a);
+	const right = split(b);
+	for (let i = 0; i < 3; i++) {
+		if (left.nums[i] !== right.nums[i]) return Math.sign(left.nums[i] - right.nums[i]);
+	}
+	if (left.pre.length === 0 || right.pre.length === 0) {
+		return Math.sign(right.pre.length - left.pre.length);
+	}
+	for (let i = 0; i < Math.max(left.pre.length, right.pre.length); i++) {
+		if (left.pre[i] === right.pre[i]) continue;
+		if (left.pre[i] === undefined) return -1;
+		if (right.pre[i] === undefined) return 1;
+		const [x, y] = [Number(left.pre[i]), Number(right.pre[i])];
+		if (Number.isNaN(x) || Number.isNaN(y)) return left.pre[i] < right.pre[i] ? -1 : 1;
+		return Math.sign(x - y);
+	}
+	return 0;
+};
 
 // A value this CLI wrote on an earlier run keeps its fallback in the second var() argument. Reading
 // it back out is what makes a re-run byte-identical instead of nesting var() inside var().
@@ -67,8 +100,20 @@ const readBlock = (source, selector, where) => {
 //
 // A chart row takes a mix key's shape: the project's own row in the fallback slot, the ramp behind a
 // helper. A row that already holds a ramp is not a project value, and copying one into its own slot
-// is the one thing that must never happen.
+// is the one thing that must never happen. That row is left alone, because the value it replaced is
+// only in the project's history, and a second solve would hide that it was lost.
 const isRamp = (value) => value.includes('oklch(from var(--daisy-color-primary)');
+
+let rampWarned = false;
+const warnBareRamp = (key) => {
+	if (rampWarned) return;
+	rampWarned = true;
+	console.warn(
+		`[daisyui-adapter] --${key} holds a ramp written by an older CLI with no fallback. Its original ` +
+			`value is gone; restore the stylesheet from version control or set --daisyui-derived-${key} ` +
+			`in ${OVERRIDE}.`
+	);
+};
 
 const rebuild = (current, fallback, scheme) => {
 	const lines = [];
@@ -94,6 +139,9 @@ const rebuild = (current, fallback, scheme) => {
 			if (old && !isRamp(old)) {
 				lines.push(`\t--${key}: var(--daisy-derived-${key}, ${old});`);
 				lines.push(`\t--daisy-derived-${key}: ${value};`);
+			} else if (old) {
+				warnBareRamp(key);
+				lines.push(`\t--${key}: ${old};`);
 			} else {
 				lines.push(`\t--${key}: ${value};`);
 			}
@@ -132,6 +180,27 @@ const insertThemeEntries = (source) => {
 	return `${source.slice(0, bounds.close)}\t${BORDER_ENTRY}\n${source.slice(bounds.close)}`;
 };
 
+const installLine = (spec) => {
+	const local = resolve('node_modules', ...PKG.split('/'), 'package.json');
+	if (existsSync(local)) {
+		try {
+			if (JSON.parse(readFileSync(local, 'utf8')).version === VERSION) {
+				return `already installed ${PKG} ${VERSION}`;
+			}
+		} catch {}
+	}
+	try {
+		// One command string: an argument array with a shell makes Windows Node warn on every run
+		// (DEP0190), and `pnpm.cmd` cannot be executed without a shell there.
+		execSync(`${PNPM} add -D "${spec}"`, { stdio: 'inherit' });
+	} catch {
+		throw new Error(
+			`[daisyui-adapter] could not install ${spec}. Run \`pnpm add -D ${spec}\` yourself, then \`pnpm exec ${BIN} init\`.`
+		);
+	}
+	return `installed ${spec}`;
+};
+
 const main = () => {
 	const componentsPath = resolve('components.json');
 	if (!existsSync(componentsPath)) {
@@ -144,6 +213,21 @@ const main = () => {
 	const cssPath = resolve(components.tailwind.css);
 	const where = components.tailwind.css;
 	let css = readFileSync(cssPath, 'utf8');
+
+	// An older CLI cannot reproduce a newer version's bindings, so it would quietly undo them. The
+	// stylesheet still names the version that wrote it, which is the only record a project keeps.
+	const header = HEADER_PATTERN.exec(css);
+	const headerVersion = header?.[2] ?? null;
+	if (headerVersion && compareVersions(headerVersion, VERSION) > 0) {
+		throw new Error(
+			`[daisyui-adapter] E4 ${where} was written by ${PKG} ${headerVersion}, but this CLI is ${VERSION}. ` +
+				`Run \`pnpm dlx ${PKG}@${headerVersion} init\` or upgrade the CLI.`
+		);
+	}
+	if (headerVersion) css = css.replace(HEADER_PATTERN, '');
+	if (headerVersion && compareVersions(headerVersion, VERSION) < 0) {
+		console.log(`[daisyui-adapter] upgrading ${headerVersion} -> ${VERSION}`);
+	}
 
 	// E1: absence warns at init and continues, because a later paste fixes it. E2 and E3 throw,
 	// because a malformed pair would render wrong colours silently.
@@ -172,14 +256,32 @@ const main = () => {
 		css = insertAfterLastImport(css, PLUGIN);
 		css = insertThemeEntries(css);
 	}
-	if (!css.startsWith(HEADER)) css = `${HEADER}\n${css}`;
+	css = `${HEADER}\n${css}`;
 
 	writeFileSync(cssPath, css);
 
 	const overridePath = resolve(dirname(cssPath), OVERRIDE);
-	if (!existsSync(overridePath)) writeFileSync(overridePath, '');
+	const created = !existsSync(overridePath);
+	if (created) writeFileSync(overridePath, '');
 
-	console.log(`[daisyui-adapter] wrote ${where} and ${basename(overridePath)}`);
+	// Read back what was written: a block the CLI matched but could not fill has to show a count
+	// below 32 rather than a number from the data it meant to write.
+	const written = readFileSync(cssPath, 'utf8');
+	const count = (selector) =>
+		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-')).length;
+	const lightCount = count(':root');
+	const darkCount = count('.dark');
+
+	const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
+	const installed = installLine(spec);
+
+	if (themes) console.log('[daisyui-adapter] theme ok: light + dark');
+	console.log(`[daisyui-adapter] wrote ${where}`);
+	console.log(`[daisyui-adapter] ${lightCount} light, ${darkCount} dark`);
+	const overrideRel = relative(process.cwd(), overridePath).replaceAll('\\', '/');
+	console.log(`[daisyui-adapter] ${created ? `created ${overrideRel}` : `left ${overrideRel} untouched`}`);
+	console.log(`[daisyui-adapter] ${installed}`);
+
 	if (chart) {
 		for (const scheme of ['light', 'dark']) {
 			const solved = chart[scheme];
