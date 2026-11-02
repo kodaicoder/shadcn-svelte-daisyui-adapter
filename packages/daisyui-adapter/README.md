@@ -23,7 +23,7 @@ This package is not affiliated with shadcn-svelte or daisyUI. Both names are use
 pnpm dlx shadcn-svelte@latest init
 
 # 3. the adapter, at an exact version
-pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0 init
+pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.2.0 init
 
 # 4. the gate
 pnpm build
@@ -37,11 +37,10 @@ The CLI adds the package as a devDependency at its own version, because the `@pl
 [daisyui-adapter] theme ok: light + dark
 [daisyui-adapter] wrote src/routes/layout.css
 [daisyui-adapter] 32 light, 32 dark
-[daisyui-adapter] created src/routes/daisyui-adapter.overrides.css
-[daisyui-adapter] installed @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0
+[daisyui-adapter] installed @kodaicoder/shadcn-svelte-daisyui-adapter@0.2.0
 ```
 
-The declaration count comes back from the file it wrote, so a stylesheet missing a row the adapter expects shows a number below 32. A second run prints `already installed` instead of installing again. A run on an older stylesheet prints `upgrading 0.0.9 -> 0.1.0` before the rest.
+The declaration count comes back from the file it wrote, so a stylesheet missing a row the adapter expects shows a number below 32. A second run prints `already installed` instead of installing again. A run on a stylesheet from 0.1.0 prints `upgrading 0.1.0 -> 0.2.0` before the rest.
 
 A missing theme file is a warning, not a failure. The CLI prints `E1`, writes the bindings with your own values as fallbacks, and the build renders the project's palette. A malformed theme file exits non-zero with `E2` or `E3`, because a wrong pair would render wrong colours silently.
 
@@ -50,10 +49,10 @@ A missing theme file is a warning, not a failure. The CLI prints `E1`, writes th
 The first line of the stylesheet is the version marker:
 
 ```
-/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.1.0 | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0 init` after `shadcn-svelte init` */
+/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.2.0 | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.2.0 init` after `shadcn-svelte init` */
 ```
 
-`shadcn-svelte init` keeps this line and the override import, wipes the bindings, and the next adapter run restores them. Re-run when:
+`shadcn-svelte init` keeps the header comment, wipes the bindings, and the next adapter run restores them. If the project has an override import, that import is kept too, but the CLI does not create it. Re-run when:
 
 - `shadcn-svelte init` or a large `add` changed the stylesheet;
 - you moved to a newer CLI and want the header to name it;
@@ -61,11 +60,19 @@ The first line of the stylesheet is the version marker:
 
 The CLI refuses to run when the header names a newer version than the CLI. It prints `E4`, exits non-zero and writes nothing, because an older CLI would undo bindings a newer one wrote. Run the version the header names, or upgrade the CLI.
 
-## The override file
+## Overrides (optional)
 
-The CLI creates `daisyui-adapter.overrides.css` beside the stylesheet, empty, plus its `@import` line. It never writes that file again, so a user edit survives every later run.
+The CLI does not create `daisyui-adapter.overrides.css` and does not write its import. Overrides are opt-in: you add both yourself.
 
-The import comes before the generated blocks, so a plain `:root` there loses on source order. Raise the specificity and keep the light block out of dark mode:
+To use overrides, create `daisyui-adapter.overrides.css` beside the global stylesheet, then add this line after the other `@import` lines and before the generated `:root` and `.dark` blocks:
+
+```css
+@import "./daisyui-adapter.overrides.css";
+```
+
+The CLI never writes or deletes the file. If the project installed 0.1.0, the file and the import already exist. Keep them if you use them, or delete both if you do not.
+
+The import comes before the generated blocks, so a plain `:root` there loses on source order. Raise the specificity and keep the light block out of dark mode. Use `html:not(.dark)` for light and `html.dark` for dark:
 
 ```css
 html:not(.dark) {
@@ -89,15 +96,15 @@ The header records one exact version, and that number is what a project holds. A
 
 ## Testing a tarball before publish
 
-`pnpm pack` writes `kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz`. Set `DAISYUI_ADAPTER_INSTALL_SPEC` to that file and the CLI installs it instead of the registry copy. Pack from the package directory, then run the CLI from the app's root:
+`pnpm pack` writes `kodaicoder-shadcn-svelte-daisyui-adapter-0.2.0.tgz`. Set `DAISYUI_ADAPTER_INSTALL_SPEC` to that file and the CLI installs it instead of the registry copy. Pack from the package directory, then run the CLI from the app's root:
 
 ```bash
 # in packages/daisyui-adapter, writing into the app's root
 pnpm pack --pack-destination <app>
 
 # in the app's root
-DAISYUI_ADAPTER_INSTALL_SPEC=./kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz \
+DAISYUI_ADAPTER_INSTALL_SPEC=./kodaicoder-shadcn-svelte-daisyui-adapter-0.2.0.tgz \
   node <repo>/packages/daisyui-adapter/cli/init.mjs
 ```
 
-The CLI prints `installed ./kodaicoder-shadcn-svelte-daisyui-adapter-0.1.0.tgz`. Without the variable it installs `@kodaicoder/shadcn-svelte-daisyui-adapter@0.1.0` from the registry.
+The CLI prints `installed ./kodaicoder-shadcn-svelte-daisyui-adapter-0.2.0.tgz`. Without the variable it installs `@kodaicoder/shadcn-svelte-daisyui-adapter@0.2.0` from the registry.

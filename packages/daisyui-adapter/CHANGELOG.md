@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+The CLI no longer creates `daisyui-adapter.overrides.css` or writes its `@import` line. Overrides are opt-in: the user adds the file and the import, and the README's Overrides section describes how. An existing file and import are left untouched, so a project that installed 0.1.0 keeps both.
+
+A re-run applies the change to a 0.1.0 project, and the header comment updates to 0.2.0.
+
 ## 0.1.0
 
 First release. The CLI writes the header comment, the `@plugin "@kodaicoder/shadcn-svelte-daisyui-adapter";` line, the `daisyui-adapter.overrides.css` file and its import, and the 32 bindings per block; the plugin emits `--daisy-color-*` and `--daisy-radius` from `src/daisyui-theme.css` at build time.
