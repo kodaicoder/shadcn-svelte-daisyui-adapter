@@ -27,7 +27,7 @@ const targetVar = (key) => (SINGLE[key].scalar ? '--daisy-radius' : colorVar(SIN
 
 // A value this CLI wrote on an earlier run keeps its fallback in the second var() argument. Reading
 // it back out is what makes a re-run byte-identical instead of nesting var() inside var().
-const strip = (value) => {
+const unwrapFallback = (value) => {
 	const match = /^var\(--[\w-]+,\s*([\s\S]*)\)$/.exec(value.trim());
 	return match ? match[1].trim() : value.trim();
 };
@@ -64,6 +64,12 @@ const readBlock = (source, selector, where) => {
 // from its fallback, so a key the plugin never emits still resolves. Derived keys are dropped and
 // re-emitted rather than accumulated. Without a theme the chart rows are left as the project has
 // them, because a ramp cannot be solved from a file that is not there.
+//
+// A chart row takes a mix key's shape: the project's own row in the fallback slot, the ramp behind a
+// helper. A row that already holds a ramp is not a project value, and copying one into its own slot
+// is the one thing that must never happen.
+const isRamp = (value) => value.includes('oklch(from var(--daisy-color-primary)');
+
 const rebuild = (current, fallback, scheme) => {
 	const lines = [];
 	for (const { prop, value } of current) {
@@ -73,7 +79,7 @@ const rebuild = (current, fallback, scheme) => {
 		lines.push(`\t${prop}: ${value};`);
 	}
 	for (const key of BINDING_KEYS) {
-		const old = strip(current.find((d) => d.prop === `--${key}`)?.value ?? fallback[`--${key}`] ?? '');
+		const old = unwrapFallback(current.find((d) => d.prop === `--${key}`)?.value ?? fallback[`--${key}`] ?? '');
 		if (SINGLE[key]) {
 			lines.push(`\t--${key}: var(${targetVar(key)}, ${old});`);
 		} else {
@@ -82,7 +88,16 @@ const rebuild = (current, fallback, scheme) => {
 		}
 	}
 	if (scheme) {
-		for (const [i, value] of chartTokens(scheme).entries()) lines.push(`\t--chart-${i + 1}: ${value};`);
+		for (const [i, value] of chartTokens(scheme).entries()) {
+			const key = `chart-${i + 1}`;
+			const old = unwrapFallback(current.find((d) => d.prop === `--${key}`)?.value ?? '');
+			if (old && !isRamp(old)) {
+				lines.push(`\t--${key}: var(--daisy-derived-${key}, ${old});`);
+				lines.push(`\t--daisy-derived-${key}: ${value};`);
+			} else {
+				lines.push(`\t--${key}: ${value};`);
+			}
+		}
 	} else {
 		for (const { prop, value } of current) if (prop.startsWith('--chart-')) lines.push(`\t${prop}: ${value};`);
 	}

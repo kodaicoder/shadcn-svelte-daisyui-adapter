@@ -1,0 +1,58 @@
+{
+  "stamp": "2026-10-30T09-55-05-179Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-30T09-55-05-179Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-30T09-55-05-179Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "page",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "then",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/noop.json",
+  "layout": "routes",
+  "cssPath": "src/routes/layout.css",
+  "page": ".scratch/daisyui-adapter/registry-16/page/+page.svelte",
+  "theme": ".scratch/daisyui-adapter/registry-12/probe-theme.css",
+  "tarball": "daisyui-adapter-0.1.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": false,
+  "then": [
+    {
+      "command": "exec node D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\registry-16\\install.mjs missing",
+      "code": 0
+    }
+  ],
+  "build": true,
+  "render": {
+    "url": "http://127.0.0.1:5302/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "backgroundRgb": "rgb(255, 255, 255)",
+      "buttonBg": "oklch(0.508 0.118 165.612)",
+      "buttonCount": 6,
+      "props": {},
+      "propsRgb": {},
+      "elements": []
+    },
+    "dark": {
+      "background": "oklch(0.153 0.006 107.1)",
+      "backgroundRgb": "rgb(12, 12, 9)",
+      "buttonBg": "oklch(0.432 0.095 166.913)",
+      "buttonCount": 6,
+      "props": {},
+      "propsRgb": {},
+      "elements": []
+    }
+  },
+  "ok": true
+}

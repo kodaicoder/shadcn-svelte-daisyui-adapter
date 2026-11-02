@@ -148,21 +148,43 @@ the ramp.
 `addBase` emits into `@layer base` and the project's unlayered `:root` wins, which is why the CLI's
 writer emits them and the prototype's generator must emit them the same way.
 
+Each row is the same two-declaration shape the mix keys use: the ramp arrives through a
+`--daisy-derived-chart-N` helper, and the fallback slot holds the project's own row that was there
+before the first overwrite. Ticket 21 settled this. Without it a theme present at `init` and absent at
+build left `--daisy-color-primary` undefined, the `oklch(from …)` invalid at computed-value time, and
+all five rows empty. The lightness, chroma and ratio figures below are unchanged; only the wrapper
+around them moved.
+
 ```
 :root
-  --chart-1: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.0800) h);   3.20:1
-  --chart-2: oklch(from var(--daisy-color-primary) 0.5662 min(c, 0.0800) h);   4.60:1
-  --chart-3: oklch(from var(--daisy-color-primary) 0.4762 min(c, 0.0800) h);   6.76:1
-  --chart-4: oklch(from var(--daisy-color-primary) 0.3862 min(c, 0.0800) h);   9.94:1
-  --chart-5: oklch(from var(--daisy-color-primary) 0.2962 min(c, 0.0800) h);  14.06:1
+  --chart-1: var(--daisy-derived-chart-1, <project --chart-1>);
+  --daisy-derived-chart-1: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.0800) h);   3.20:1
+  --chart-2: var(--daisy-derived-chart-2, <project --chart-2>);
+  --daisy-derived-chart-2: oklch(from var(--daisy-color-primary) 0.5662 min(c, 0.0800) h);   4.60:1
+  --chart-3: var(--daisy-derived-chart-3, <project --chart-3>);
+  --daisy-derived-chart-3: oklch(from var(--daisy-color-primary) 0.4762 min(c, 0.0800) h);   6.76:1
+  --chart-4: var(--daisy-derived-chart-4, <project --chart-4>);
+  --daisy-derived-chart-4: oklch(from var(--daisy-color-primary) 0.3862 min(c, 0.0800) h);   9.94:1
+  --chart-5: var(--daisy-derived-chart-5, <project --chart-5>);
+  --daisy-derived-chart-5: oklch(from var(--daisy-color-primary) 0.2962 min(c, 0.0800) h);  14.06:1
 
 .dark
-  --chart-1: oklch(from var(--daisy-color-primary) 0.5491 min(c, 0.0800) h);   3.20:1
-  --chart-2: oklch(from var(--daisy-color-primary) 0.6391 min(c, 0.0800) h);   4.63:1
-  --chart-3: oklch(from var(--daisy-color-primary) 0.7291 min(c, 0.0800) h);   6.52:1
-  --chart-4: oklch(from var(--daisy-color-primary) 0.8191 min(c, 0.0800) h);   8.94:1
-  --chart-5: oklch(from var(--daisy-color-primary) 0.9091 min(c, 0.0442) h);  12.03:1
+  --chart-1: var(--daisy-derived-chart-1, <project --chart-1>);
+  --daisy-derived-chart-1: oklch(from var(--daisy-color-primary) 0.5491 min(c, 0.0800) h);   3.20:1
+  --chart-2: var(--daisy-derived-chart-2, <project --chart-2>);
+  --daisy-derived-chart-2: oklch(from var(--daisy-color-primary) 0.6391 min(c, 0.0800) h);   4.63:1
+  --chart-3: var(--daisy-derived-chart-3, <project --chart-3>);
+  --daisy-derived-chart-3: oklch(from var(--daisy-color-primary) 0.7291 min(c, 0.0800) h);   6.52:1
+  --chart-4: var(--daisy-derived-chart-4, <project --chart-4>);
+  --daisy-derived-chart-4: oklch(from var(--daisy-color-primary) 0.8191 min(c, 0.0800) h);   8.94:1
+  --chart-5: var(--daisy-derived-chart-5, <project --chart-5>);
+  --daisy-derived-chart-5: oklch(from var(--daisy-color-primary) 0.9091 min(c, 0.0442) h);  12.03:1
 ```
+
+`<project --chart-N>` is the row the stylesheet already had before the adapter ran. On this repo's
+stylesheet that is the green ramp; on a project from `shadcn-svelte init` it is whatever shadcn wrote.
+It is read before the first overwrite, so a re-run re-reads it out of the same slot rather than
+nesting the previous ramp inside itself (ticket 14's byte-identical rule).
 
 Painted bytes, from the render: light `rgb(132,141,194)` to `rgb(36,39,84)` on `rgb(255,255,255)`,
 dark `rgb(101,109,160)` to `rgb(217,223,255)` on `rgb(29,35,42)`. The ratios on the right of the block

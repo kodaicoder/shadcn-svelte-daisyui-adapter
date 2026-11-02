@@ -100,7 +100,15 @@ check(
 	),
 	`${css1.split('--chart-1:').length - 1} chart-1 declarations`
 );
-check('chart tokens are the ramp, not assignments', css1.includes('oklch(from var(--daisy-color-primary)'));
+check(
+	'each chart row is the derived helper behind the project value',
+	[1, 2, 3, 4, 5].every(
+		(n) =>
+			new RegExp(`--chart-${n}: var\\(--daisy-derived-chart-${n}, oklch\\([^)]*\\)\\);`).test(css1) &&
+			new RegExp(`--daisy-derived-chart-${n}: oklch\\(from var\\(--daisy-color-primary\\)`).test(css1)
+	),
+	(css1.match(/--chart-1: [^;]+/) ?? ['none'])[0]
+);
 check('CLI writes --default-border-width once', (css1.split('--default-border-width').length - 1) === 1);
 check('the override import sits before the plugin line', css1.indexOf('daisyui-adapter.overrides.css') < css1.indexOf('@plugin "daisyui-adapter"'));
 check('sidebar follows base-200', css1.includes('--sidebar: var(--daisy-color-base-200'));
@@ -140,11 +148,60 @@ check(
 	bareCss.match(/--background: [^;]+/)?.[0] ?? 'none'
 );
 check('a missing theme writes no plugin line', !bareCss.includes('@plugin "daisyui-adapter"'));
-check('a missing theme leaves the stock chart rows', !bareCss.includes('oklch(from var(--daisy-color-primary)'));
+
+// The real failing state: the CLI ran with the theme, so every chart row has a solved ramp behind it.
+// The plugin then emits nothing, so the helper's source var is undefined and the row paints only if
+// its own fallback slot holds the project's value. Both blocks are asserted, because a dark-only
+// regression is exactly what a first-match read would miss.
+const blockOf = (css, selector) => {
+	const start = css.indexOf(`\n${selector} {`);
+	if (start === -1) return '';
+	const open = css.indexOf('{', start);
+	let depth = 0;
+	for (let i = open; i < css.length; i++) {
+		if (css[i] === '{') depth++;
+		else if (css[i] === '}' && --depth === 0) return css.slice(open + 1, i);
+	}
+	return '';
+};
+const rowOf = (css, selector, n) =>
+	(blockOf(css, selector).match(new RegExp(`--chart-${n}: ([^;]+);`)) ?? [])[1]?.trim();
+const SLOTS = [':root', '.dark'];
+const chartSlots = (css) => SLOTS.flatMap((s) => [1, 2, 3, 4, 5].map((n) => rowOf(css, s, n)));
+const wrappedSlots = (css) =>
+	SLOTS.flatMap((s) =>
+		[1, 2, 3, 4, 5].map((n) => `var(--daisy-derived-chart-${n}, ${rowOf(css, s, n)})`)
+	);
+check(
+	'the theme-present rows carry the project value behind the derived helper',
+	JSON.stringify(chartSlots(css1)) === JSON.stringify(wrappedSlots(stock)),
+	chartSlots(css1)[0] ?? 'none'
+);
+check(
+	'a missing theme leaves the stock chart rows',
+	JSON.stringify(chartSlots(bareCss)) === JSON.stringify(chartSlots(stock)),
+	chartSlots(bareCss)[0] ?? 'none'
+);
 check(
 	'the stock file keeps a declaration the adapter does not own',
 	stock.includes(FOREIGN) && bareCss.includes(FOREIGN),
 	bareCss.includes(FOREIGN) ? '' : 'the CLI dropped it'
+);
+
+// The theme comes back after a no-theme run. The row it finds is the project's own, so the second
+// solve must land in the same slot, not wrap a ramp around the previous one.
+cpSync(THEME, join(bare, 'src', 'daisyui-theme.css'));
+cli(bare);
+const backCss = readFileSync(barePath, 'utf8');
+check(
+	'the theme returning after an absence does not nest a ramp in its own slot',
+	JSON.stringify(chartSlots(backCss)) === JSON.stringify(wrappedSlots(stock)),
+	chartSlots(backCss)[0] ?? 'none'
+);
+cli(bare);
+check(
+	'the theme-returned run is byte-identical on a re-run',
+	backCss === readFileSync(barePath, 'utf8')
 );
 
 const failed = results.filter((r) => !r.ok);

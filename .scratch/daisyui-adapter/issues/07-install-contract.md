@@ -103,7 +103,10 @@ Split, because the two states need different behaviour:
 - **Missing** (no `src/daisyui-theme.css`): the CLI prints a warning and continues, and the plugin
   emits nothing at build. The bindings' fallbacks are the project's own pre-adapter values, so the
   page renders exactly as it did before the adapter ran. Measured: build passes, every token falls
-  back, including the derived ones through one helper variable per key.
+  back, including the derived ones through one helper variable per key. The five chart rows take the
+  same shape, with the project's own row in the fallback slot ([ticket 21](21-chart-no-theme-fallback.md)
+  found that they did not, and a theme present at `init` then absent at build left them painting
+  nothing).
 - **Malformed** (a block that is not a valid v5 theme pair): the CLI prints E2/E3 and exits non-zero,
   and the plugin throws at build if the file is malformed by then. Absence is a state a later paste
   fixes; malformation is a defect that would otherwise render wrong colours silently.

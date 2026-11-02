@@ -1,0 +1,34 @@
+Deliberate sabotage: the writer reverted to emitting the bare ramp, which is the pre-21 shape. The new smoke assertion must fail.
+ok    parser reads one light and one dark block
+ok    bindings carry the daisy namespace :: 22 keys
+ok    bindings carry --daisy-radius
+ok    bindings carry --daisy-border
+ok    an absent theme reads as null
+ok    one block throws E2 :: [daisyui-adapter] src/daisyui-theme.css: holds 1 theme block(s). The file must h
+ok    a missing colour throws E3 naming it :: [daisyui-adapter] src/daisyui-theme.css: theme "daisy-light" is missing --color-
+ok    CLI writes the plugin line
+ok    CLI writes the override import
+ok    CLI creates the override file
+ok    CLI writes the header comment
+ok    CLI writes no raw --color-* name into :root or .dark
+ok    all five chart tokens are written in both blocks :: 2 chart-1 declarations
+FAIL  each chart row is the derived helper behind the project value :: --chart-1: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.08) h)
+ok    CLI writes --default-border-width once
+ok    the override import sits before the plugin line
+ok    sidebar follows base-200
+ok    sidebar-accent follows base-300
+ok    a re-run is byte-identical
+[daisyui-adapter] wrote src/routes/layout.css and daisyui-adapter.overrides.css
+      [daisyui-adapter] light chart L 0.6562 0.5662 0.4762 0.3862 0.2962 min adjacent 0.090
+      [daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+ok    a missing theme exits 0
+ok    a missing theme writes the bindings for the build
+ok    a missing theme keeps the project fallback :: --background: var(--daisy-color-base-100, oklch(1 0 0))
+ok    a missing theme writes no plugin line
+FAIL  the theme-present rows carry the project value behind the derived helper :: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.08) h)
+ok    a missing theme leaves the stock chart rows :: oklch(0.845 0.143 164.978)
+ok    the stock file keeps a declaration the adapter does not own
+FAIL  the theme returning after an absence does not nest a ramp in its own slot :: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.08) h)
+ok    the theme-returned run is byte-identical on a re-run
+
+3 smoke check(s) failed

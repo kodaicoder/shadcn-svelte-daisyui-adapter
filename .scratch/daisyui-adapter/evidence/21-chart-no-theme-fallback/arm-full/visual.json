@@ -1,0 +1,243 @@
+{
+  "url": "http://127.0.0.1:5303/",
+  "consoleErrors": [],
+  "light": {
+    "text": [
+      {
+        "name": "muted-on-card",
+        "found": true,
+        "foreground": "rgb(103, 101, 104)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 5.77
+      },
+      {
+        "name": "muted-on-page",
+        "found": true,
+        "foreground": "rgb(103, 101, 104)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 5.77
+      },
+      {
+        "name": "body-on-sidebar",
+        "found": true,
+        "foreground": "rgb(24, 24, 27)",
+        "background": "rgb(248, 248, 248)",
+        "ratio": 16.68
+      },
+      {
+        "name": "active-on-sidebar",
+        "found": true,
+        "foreground": "rgb(24, 24, 27)",
+        "background": "rgb(248, 248, 248)",
+        "ratio": 16.68
+      },
+      {
+        "name": "label-header",
+        "found": true,
+        "foreground": "rgb(24, 24, 27)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 17.72
+      }
+    ],
+    "series": [
+      {
+        "n": 1,
+        "found": true,
+        "rgba": "rgba(132, 141, 194, 1.000)",
+        "alpha": 255,
+        "luminance": 0.278503281977958
+      },
+      {
+        "n": 2,
+        "found": true,
+        "rgba": "rgba(106, 114, 165, 1.000)",
+        "alpha": 255,
+        "luminance": 0.17815411320003335
+      },
+      {
+        "n": 3,
+        "found": true,
+        "rgba": "rgba(81, 88, 137, 1.000)",
+        "alpha": 255,
+        "luminance": 0.10534920236916129
+      },
+      {
+        "n": 4,
+        "found": true,
+        "rgba": "rgba(58, 63, 110, 1.000)",
+        "alpha": 255,
+        "luminance": 0.05580343256953707
+      },
+      {
+        "n": 5,
+        "found": true,
+        "rgba": "rgba(36, 39, 84, 1.000)",
+        "alpha": 255,
+        "luminance": 0.02466199315218106
+      }
+    ],
+    "scheme": "light",
+    "ringRest": {
+      "label": "light rest",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.45 0.0293443 -0.238199 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.45 0.0293443 -0.238199 / 0.5)"
+      }
+    },
+    "ringSurfaceFocused": {
+      "label": "light surface focused",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.45 0.0293443 -0.238199 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(1 0 0) 0px 0px 0px 2px, oklch(0.45 0.24 277.023) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.45 0.0293443 -0.238199 / 0.5)"
+      }
+    },
+    "ringPrimaryFocused": {
+      "label": "light primary focused",
+      "primary": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(1 0 0) 0px 0px 0px 2px, oklch(0.45 0.24 277.023) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.45 0.0293443 -0.238199 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.45 0.0293443 -0.238199 / 0.5)"
+      }
+    },
+    "dialog": {
+      "found": true,
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.21 0.006 285.885)",
+      "borderWidth": "0px",
+      "borderColor": "oklch(0.921 0.0006 352.589)",
+      "borderRadius": "11.2px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.21 0.00164224 -0.00577088 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+    }
+  },
+  "dark": {
+    "text": [
+      {
+        "name": "muted-on-card",
+        "found": true,
+        "foreground": "rgb(149, 160, 174)",
+        "background": "rgb(29, 35, 42)",
+        "ratio": 5.97
+      },
+      {
+        "name": "muted-on-page",
+        "found": true,
+        "foreground": "rgb(149, 160, 174)",
+        "background": "rgb(29, 35, 42)",
+        "ratio": 5.97
+      },
+      {
+        "name": "body-on-sidebar",
+        "found": true,
+        "foreground": "rgb(236, 249, 255)",
+        "background": "rgb(25, 30, 36)",
+        "ratio": 15.62
+      },
+      {
+        "name": "active-on-sidebar",
+        "found": true,
+        "foreground": "rgb(236, 249, 255)",
+        "background": "rgb(25, 30, 36)",
+        "ratio": 15.62
+      },
+      {
+        "name": "label-header",
+        "found": true,
+        "foreground": "rgb(236, 249, 255)",
+        "background": "rgb(29, 35, 42)",
+        "ratio": 14.75
+      }
+    ],
+    "series": [
+      {
+        "n": 1,
+        "found": true,
+        "rgba": "rgba(101, 109, 160, 1.000)",
+        "alpha": 255,
+        "luminance": 0.16242045253594978
+      },
+      {
+        "n": 2,
+        "found": true,
+        "rgba": "rgba(127, 136, 189, 1.000)",
+        "alpha": 255,
+        "luminance": 0.25794467925339826
+      },
+      {
+        "n": 3,
+        "found": true,
+        "rgba": "rgba(154, 163, 218, 1.000)",
+        "alpha": 255,
+        "luminance": 0.381263659227264
+      },
+      {
+        "n": 4,
+        "found": true,
+        "rgba": "rgba(182, 192, 248, 1.000)",
+        "alpha": 255,
+        "luminance": 0.544216682552902
+      },
+      {
+        "n": 5,
+        "found": true,
+        "rgba": "rgba(217, 223, 255, 1.000)",
+        "alpha": 255,
+        "luminance": 0.7474706608049342
+      }
+    ],
+    "scheme": "dark",
+    "ringRest": {
+      "label": "dark rest",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 0.0288678 -0.231205 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 0.0288678 -0.231205 / 0.5)"
+      }
+    },
+    "ringSurfaceFocused": {
+      "label": "dark surface focused",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 0.0288678 -0.231205 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.2533 0.016 252.42) 0px 0px 0px 2px, oklch(0.58 0.233 277.117) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.58 0.0288678 -0.231205 / 0.5)"
+      }
+    },
+    "ringPrimaryFocused": {
+      "label": "dark primary focused",
+      "primary": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.2533 0.016 252.42) 0px 0px 0px 2px, oklch(0.58 0.233 277.117) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.58 0.0288678 -0.231205 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 0.0288678 -0.231205 / 0.5)"
+      }
+    },
+    "dialog": {
+      "found": true,
+      "background": "oklch(0.2533 0.016 252.42)",
+      "color": "oklch(0.97807 0.029 256.847)",
+      "borderWidth": "0px",
+      "borderColor": "oklch(0.325777 0.0173 252.863)",
+      "borderRadius": "11.2px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.97807 -0.00659902 -0.0282392 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+    }
+  },
+  "failures": []
+}
