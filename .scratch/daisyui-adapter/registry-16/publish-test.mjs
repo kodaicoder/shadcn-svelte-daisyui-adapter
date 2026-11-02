@@ -65,11 +65,14 @@ console.log(`[run-17:${ARM}] installed ${NAME} ${installed.version}`);
 const shape = (css, when) => {
 	const headers = headerLines(css);
 	if (headers.length !== 1) fail(`${when}: ${headers.length} header lines`);
-	if (!css.startsWith(`/* ${NAME} ${VERSION} `)) fail(`${when}: header does not name ${NAME} ${VERSION}`);
+	if (!css.startsWith(`/* ${NAME} ${VERSION} `))
+		fail(`${when}: header does not name ${NAME} ${VERSION}`);
 	if (!css.includes(`@plugin "${NAME}";`)) fail(`${when}: no bare @plugin line`);
-	if (!css.includes('@import "./daisyui-adapter.overrides.css";')) fail(`${when}: no override import`);
+	if (!css.includes('@import "./daisyui-adapter.overrides.css";'))
+		fail(`${when}: no override import`);
 };
 shape(readFileSync(stylesheet, 'utf8'), 'after the first init');
+const afterInit = hashOf(readFileSync(stylesheet));
 
 step('six component adds');
 for (const name of COMPONENTS) {
@@ -77,12 +80,15 @@ for (const name of COMPONENTS) {
 }
 
 step('cli init again, through the installed bin');
-const before = hashOf(readFileSync(stylesheet));
+const afterAdds = hashOf(readFileSync(stylesheet));
+if (afterInit !== afterAdds)
+	fail(`six component adds changed the stylesheet: ${afterInit} then ${afterAdds}`);
 sh(PNPM, ['exec', BIN, 'init']);
 const after = hashOf(readFileSync(stylesheet));
 const rerunCss = readFileSync(stylesheet, 'utf8');
 shape(rerunCss, 'after the second init');
-if (before !== after) fail(`init after six adds changed the stylesheet: ${before} then ${after}`);
+if (afterAdds !== after)
+	fail(`init after six adds changed the stylesheet: ${afterAdds} then ${after}`);
 console.log(`[run-17:${ARM}] stylesheet sha256 ${after} unchanged across six adds and a re-run`);
 
 if (ARM === 'missing') {
