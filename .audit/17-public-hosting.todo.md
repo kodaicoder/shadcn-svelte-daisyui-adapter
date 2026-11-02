@@ -80,6 +80,11 @@ Ticket steps, from the order given with the ticket:
   branch. Harness temp apps and the pack/registry/spec scratch dirs under `%TEMP%` are left for the
   operator to confirm before removal. `src/daisyui-theme.css` is untracked, was not created by this
   session's commands, and is left alone.
+- [x] identity fix after closeout: the repo-local `user.name kodaicoder`, `user.email
+  nutdeknon@gmail.com`, `user.signingkey 6A03…` (the GitHub key) and `tag.gpgsign true` now override the
+  `gitdir:D:/Workspace/**` work include. The 43 commits up to `20afa3d` were signed with the GitLab key
+  `38C6…`, which GitHub does not hold, and stay unverified by the operator's choice. A new personal repo
+  under `D:/Workspace` needs the same override, or a narrower `includeIf`.
 - [ ] Do not merge to main. Do not touch the registry-10/11/14 fixtures. No publish without approval.
 
 ## Throughput checkpoint
