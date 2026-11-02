@@ -66,9 +66,20 @@ Ticket steps, from the order given with the ticket:
   unchanged at `fea1e298…`, build true, render 200. The first PUT required an OTP; the org is
   `@kodaicoder`, owned by `nutchyleo123`.
 - [x] DoD 2: package name and version policy in `map.md` Decisions so far
-- [ ] code-review on the Spec axis against `61333e9`
+- [x] code-review on the Spec axis against `61333e9`
+  Findings and dispositions. The `0.0.0-stage` stub is npm's staged-publishing placeholder; recorded
+  in the Answer, not unpublished. The `shadcn-svelte init` limit was already stated in §5. The header
+  drift is now a pointer in 07 §4 and 14 §5. The stale 08 table row has a pointer in 08. The evidence
+  gap is fixed by `package-json-after-then.json` and the devDependencies line in the transcript. The
+  "range not exact" finding is disproven: `pnpm add -D <pkg>@0.1.0` writes `"0.1.0"` exactly, and the
+  registry arm now asserts equality. The bare-ramp nit is accepted: `rebuild()` is one function called
+  for both blocks, and the warning is once total.
 - [x] Lesson and Check, two lines
-- [ ] cleanup, conventional commit, annotated tag `t17-public-hosting`, push
+- [x] cleanup, conventional commit, annotated tag `t17-public-hosting`, push
+  Worktree `New_Project-t17` and branch `t17-work` removed. Tag points at `20afa3d`, pushed with the
+  branch. Harness temp apps and the pack/registry/spec scratch dirs under `%TEMP%` are left for the
+  operator to confirm before removal. `src/daisyui-theme.css` is untracked, was not created by this
+  session's commands, and is left alone.
 - [ ] Do not merge to main. Do not touch the registry-10/11/14 fixtures. No publish without approval.
 
 ## Throughput checkpoint
