@@ -32,6 +32,9 @@ Rewritten 2026-10-29 for the pure CLI, decided in ticket 14. There is no registr
 | bin | `daisyui-adapter` with the `init` command | the user's shell, through `pnpm dlx` / `npx` |
 | registry item | none | nothing |
 
+17 corrected this table: there is no `prepare: tsc` build, the published modules are
+`index`/`map`/`ramp`, and the parser lives in `index.mjs`. `dist/` and `cli/` ship as they are.
+
 No `files`, no `target`, no `registry:lib` or `registry:file`, no item JSON. The reason is decision 14.1
 and 14.4 together: the install has to read the project's stylesheet to keep its values as fallbacks,
 and a registry item is a static string that the CLI's `css` merge writes verbatim (04, 13).

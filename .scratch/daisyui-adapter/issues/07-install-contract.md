@@ -95,6 +95,8 @@ build and owns the write. It prints, in order:
 The build stays silent on success, as before. The header comment is the durable marker (decision 5 of
 14): `/* daisyui-adapter <version> | re-run ... after shadcn-svelte init */`. `add` could not write a
 comment; the CLI can, and the comment survives both `shadcn-svelte init` and `add button` (measured).
+17 pinned the exact version in that recovery command (`pnpm dlx <pkg>@<version> init`) and replaced the
+placeholder package name with the published one.
 
 ### 5. Missing theme degrades, malformed theme fails
 

@@ -134,6 +134,7 @@ docs page (18) says so.
 - **Stylesheet: yes, one comment line**, written by the CLI because the CLI owns the write. `add` could
   not write a comment (07, 2026-10-28); this is the first channel that can. The line is
   `/* daisyui-adapter <version> | re-run `shadcn-svelte-daisyui-adapter init` after `shadcn-svelte init` */`.
+  17 pinned the exact version in that command and replaced the placeholder name with the published one.
   Measured: it is present after the first run, survives `shadcn-svelte init` and `add button`, and a
   second CLI run does not duplicate it (`cli-lifecycle`: all four snapshots start with it).
 - It is the marker the old design could not have: version plus the recovery command, in the file a

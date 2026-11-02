@@ -33,9 +33,15 @@ Resolved 2026-11-02. Published as `@kodaicoder/shadcn-svelte-daisyui-adapter@0.1
 | package | `@kodaicoder/shadcn-svelte-daisyui-adapter` |
 | scope | `@kodaicoder`, an npm org owned by `nutchyleo123` |
 | bin | `daisyui-adapter`, so the command is `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@<exact> init` |
-| version | `0.1.0`, first publish, `latest` |
+| version | `0.1.0`, first release, `latest` |
 | licence | MIT |
 | repository | this repo, directory `packages/daisyui-adapter` |
+
+The registry also holds `0.0.0-stage`, npm's staged-publishing placeholder ("Temporary package
+placeholder for staged publishing", `stub: true`, 2 files, no bin, no dist-tag). It was created with the
+package at 09:03:42Z and is not a release. It is recorded here so the first real version is not
+miscounted, and it is left in place because unpublishing a stub is a destructive external change with no
+benefit.
 
 `package.json` is the only identity list. The CLI reads `name`, `version` and the bin name from it at
 runtime, and derives the `@plugin "<pkg>";` line, the header comment and its own install spec. No second
@@ -96,8 +102,9 @@ only difference is who creates the step-4 state.
 
 ### 6. Licence and changelog
 
-MIT, in `packages/daisyui-adapter/LICENSE`, with `"license": "MIT"`. `CHANGELOG.md` starts at 0.1.0 and
-records the re-run rule. The package is not affiliated with shadcn-svelte or daisyUI; the README says so.
+MIT, in `packages/daisyui-adapter/LICENSE`, with `"license": "MIT"`. `CHANGELOG.md` starts at the first release, 0.1.0, and
+records the re-run rule; the `0.0.0-stage` stub is not a release. The package is not affiliated with
+shadcn-svelte or daisyUI; the README says so.
 
 Lesson: A package name is publishable only when the publishing account sits inside the scope, and npm's publish dry run is the one place where the normalized bin target and the exact file list are visible.
-Check: code - `registry-16/publish-test.mjs` runs the published `pnpm dlx <pkg>@<version> init` with no copy of the package in the app, asserts the self-installed devDependency at the CLI version, one header, six adds unchanged at `fea1e298…`, and a real build; `smoke.mjs` covers the older header, the newer header and the bare pre-21 row.
+Check: code - `registry-16/publish-test.mjs` runs the published `pnpm dlx <pkg>@<version> init` with no copy of the package in the app, asserts the self-installed devDependency is the exact CLI version, one header, and six adds unchanged at `fea1e298…`; `harness/run.mjs` builds and renders that app, and `smoke.mjs` covers the older header, the newer header and the bare pre-21 row.
