@@ -1,15 +1,21 @@
 ﻿// Cheap unit check of the CLI and the plugin, before any harness run. It builds the exact input the
 // CLI sees on a fresh project: a stylesheet at shadcn step 4, a components.json, and the theme.
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 
-import { readTheme, bindingsFor, parseTheme } from './package/dist/index.mjs';
+import { readTheme, bindingsFor, parseTheme } from '../../../packages/daisyui-adapter/dist/index.mjs';
 
-const REPO = 'D:/Workspace/DesignSystem/New_Project';
 const HERE = import.meta.dirname;
+const REPO = resolve(HERE, '..', '..', '..');
+const PKG_DIR = resolve(REPO, 'packages', 'daisyui-adapter');
 const WORK = join(process.env.TEMP ?? '/tmp', 'adapter-16-smoke');
 const THEME = join(HERE, '..', 'registry-12', 'probe-theme.css');
+
+
+const manifest = JSON.parse(readFileSync(join(PKG_DIR, 'package.json'), 'utf8'));
+const NAME = manifest.name;
+const VERSION = manifest.version;
 
 const results = [];
 const check = (name, ok, detail) => {
@@ -26,14 +32,31 @@ const scaffold = (dir, { theme = true } = {}) => {
 		join(dir, 'components.json'),
 		JSON.stringify({ tailwind: { css: 'src/routes/layout.css' } }, null, '\t')
 	);
+	// The CLI installs its own version when node_modules holds nothing, so this stub is what keeps a
+	// unit check off the registry. publish-test.mjs covers the other branch against a real tarball.
+	const stub = join(dir, 'node_modules', ...NAME.split('/'), 'package.json');
+	mkdirSync(dirname(stub), { recursive: true });
+	writeFileSync(stub, JSON.stringify({ name: NAME, version: VERSION }, null, '\t'));
 };
 
 const cli = (dir) =>
-	execFileSync(process.execPath, [join(HERE, 'package', 'cli', 'init.mjs')], {
+	execFileSync(process.execPath, [join(PKG_DIR, 'cli', 'init.mjs')], {
 		cwd: dir,
 		encoding: 'utf8',
 		stdio: 'pipe'
 	});
+
+const cliResult = (dir) => {
+	try {
+		return { code: 0, out: cli(dir) };
+	} catch (error) {
+		return { code: error.status ?? 1, out: `${error.stdout ?? ''}${error.stderr ?? ''}` };
+	}
+};
+
+const headerLines = (css) => [
+	...css.matchAll(/^\/\* \S+ \d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)? \| re-run [^\n]*\*\/$/gm)
+];
 
 // 1. The parser accepts the daisyUI built-in pair and emits the prefixed namespace.
 const themes = parseTheme(readFileSync(THEME, 'utf8'), THEME);
@@ -64,7 +87,7 @@ try {
 check('one block throws E2', e2.includes('exactly two v5 theme blocks'), e2.slice(0, 80));
 
 // 4. A block missing a colour throws E3 and names the missing key.
-const missing = readFileSync(THEME, 'utf8').replace(/\t--color-info: [^;]+;\n/, '');
+const missing = readFileSync(THEME, 'utf8').replace(/\t--color-info: [^;]+;\r?\n/, '');
 let e3 = '';
 try {
 	parseTheme(missing, badPath);
@@ -78,10 +101,20 @@ const full = join(WORK, 'full');
 scaffold(full);
 const first = cli(full);
 const css1 = readFileSync(join(full, 'src', 'routes', 'layout.css'), 'utf8');
-check('CLI writes the plugin line', css1.includes('@plugin "daisyui-adapter";'));
+check('CLI writes the plugin line', css1.includes(`@plugin "${NAME}";`), (css1.match(/@plugin "[^"]+";/) ?? ['none'])[0]);
+check(
+	'the plugin line is a bare specifier',
+	css1.includes(`@plugin "${NAME}";`) && !css1.includes('@plugin "./'),
+	(css1.match(/@plugin "[^"]+";/) ?? ['none'])[0]
+);
 check('CLI writes the override import', css1.includes('@import "./daisyui-adapter.overrides.css";'));
 check('CLI creates the override file', existsSync(join(full, 'src', 'routes', 'daisyui-adapter.overrides.css')));
-check('CLI writes the header comment', css1.startsWith('/* daisyui-adapter 0.1.0'));
+check(
+	'exactly one header line, naming the package and its version',
+	headerLines(css1).length === 1 && css1.startsWith(`/* ${NAME} ${VERSION} `),
+	`${headerLines(css1).length} header line(s)`
+);
+check('CLI counts 32 declarations per block with a theme', first.includes('32 light, 32 dark'), (first.match(/\d+ light, \d+ dark/) ?? ['none'])[0]);
 check(
 	'CLI writes no raw --color-* name into :root or .dark',
 	!/(^|\n)[ \t]*--color-[\w-]+\s*:/m.test(
@@ -110,7 +143,7 @@ check(
 	(css1.match(/--chart-1: [^;]+/) ?? ['none'])[0]
 );
 check('CLI writes --default-border-width once', (css1.split('--default-border-width').length - 1) === 1);
-check('the override import sits before the plugin line', css1.indexOf('daisyui-adapter.overrides.css') < css1.indexOf('@plugin "daisyui-adapter"'));
+check('the override import sits before the plugin line', css1.indexOf('daisyui-adapter.overrides.css') < css1.indexOf(`@plugin "${NAME}"`));
 check('sidebar follows base-200', css1.includes('--sidebar: var(--daisy-color-base-200'));
 check('sidebar-accent follows base-300', css1.includes('--sidebar-accent: var(--daisy-color-base-300'));
 
@@ -123,31 +156,19 @@ console.log(first.trim().split('\n').join('\n      '));
 // 7. Without a theme the CLI warns with E1, exits 0, and leaves the project's own values.
 const bare = join(WORK, 'bare');
 scaffold(bare, { theme: false });
-// A declaration the adapter does not own, so "foreign declarations survive" can actually fail. Every
-// key in the stock :root is either a binding the CLI rewrites or a chart row it deliberately keeps.
-const FOREIGN = '--project-accent: oklch(0.7 0.1 20);';
 const barePath = join(bare, 'src', 'routes', 'layout.css');
-writeFileSync(barePath, readFileSync(barePath, 'utf8').replace('\t--radius:', `\t${FOREIGN}\n\t--radius:`));
 const stock = readFileSync(barePath, 'utf8');
-let warned = '';
-try {
-	execFileSync(process.execPath, [join(HERE, 'package', 'cli', 'init.mjs')], {
-		cwd: bare,
-		encoding: 'utf8',
-		stdio: 'pipe'
-	});
-} catch (error) {
-	warned = `exit ${error.status}`;
-}
-const bareCss = readFileSync(join(bare, 'src', 'routes', 'layout.css'), 'utf8');
-check('a missing theme exits 0', warned === '', warned);
+const bareRun = cliResult(bare);
+const bareCss = readFileSync(barePath, 'utf8');
+check('a missing theme exits 0', bareRun.code === 0, `exit ${bareRun.code}`);
+check('a missing theme counts 32 declarations per block', bareRun.out.includes('32 light, 32 dark'), (bareRun.out.match(/\d+ light, \d+ dark/) ?? ['none'])[0]);
 check('a missing theme writes the bindings for the build', bareCss.includes('--sidebar: var(--daisy-color-base-200'));
 check(
 	'a missing theme keeps the project fallback',
 	bareCss.includes('var(--daisy-color-base-100, oklch(1 0 0))'),
 	bareCss.match(/--background: [^;]+/)?.[0] ?? 'none'
 );
-check('a missing theme writes no plugin line', !bareCss.includes('@plugin "daisyui-adapter"'));
+check('a missing theme writes no plugin line', !bareCss.includes(`@plugin "${NAME}"`));
 
 // The real failing state: the CLI ran with the theme, so every chart row has a solved ramp behind it.
 // The plugin then emits nothing, so the helper's source var is undefined and the row paints only if
@@ -182,10 +203,17 @@ check(
 	JSON.stringify(chartSlots(bareCss)) === JSON.stringify(chartSlots(stock)),
 	chartSlots(bareCss)[0] ?? 'none'
 );
+
+// A declaration the adapter does not own, so "foreign declarations survive" can actually fail. Every
+// key in the stock :root is either a binding the CLI rewrites or a chart row it deliberately keeps.
+const FOREIGN = '--project-accent: oklch(0.7 0.1 20);';
+const withForeign = bareCss.replace('\t--radius:', `\t${FOREIGN}\n\t--radius:`);
+writeFileSync(barePath, withForeign);
+cli(bare);
 check(
 	'the stock file keeps a declaration the adapter does not own',
-	stock.includes(FOREIGN) && bareCss.includes(FOREIGN),
-	bareCss.includes(FOREIGN) ? '' : 'the CLI dropped it'
+	withForeign.includes(FOREIGN) && readFileSync(barePath, 'utf8').includes(FOREIGN),
+	readFileSync(barePath, 'utf8').includes(FOREIGN) ? '' : 'the CLI dropped it'
 );
 
 // The theme comes back after a no-theme run. The row it finds is the project's own, so the second
@@ -202,6 +230,73 @@ cli(bare);
 check(
 	'the theme-returned run is byte-identical on a re-run',
 	backCss === readFileSync(barePath, 'utf8')
+);
+
+// 8. The header is the version marker, so an older one is replaced and a newer one is refused.
+const older = join(WORK, 'older');
+scaffold(older);
+const olderPath = join(older, 'src', 'routes', 'layout.css');
+writeFileSync(
+	olderPath,
+	`/* ${NAME} 0.0.9 | re-run \`pnpm dlx ${NAME}@0.0.9 init\` after \`shadcn-svelte init\` */\n` +
+		readFileSync(olderPath, 'utf8')
+);
+const olderRun = cliResult(older);
+const olderCss = readFileSync(olderPath, 'utf8');
+check(
+	'an older header is replaced, not stacked',
+	headerLines(olderCss).length === 1 && olderCss.startsWith(`/* ${NAME} ${VERSION} `),
+	`${headerLines(olderCss).length} header line(s)`
+);
+check(
+	'an older header prints the upgrade',
+	olderRun.out.includes(`upgrading 0.0.9 -> ${VERSION}`),
+	olderRun.out.split('\n')[0]
+);
+
+const newer = join(WORK, 'newer');
+scaffold(newer);
+const newerPath = join(newer, 'src', 'routes', 'layout.css');
+const newerBefore =
+	`/* ${NAME} 9.9.9 | re-run \`pnpm dlx ${NAME}@9.9.9 init\` after \`shadcn-svelte init\` */\n` +
+	readFileSync(newerPath, 'utf8');
+writeFileSync(newerPath, newerBefore);
+const newerRun = cliResult(newer);
+check(
+	'a newer header exits 1',
+	newerRun.code === 1,
+	`exit ${newerRun.code}`
+);
+check(
+	'a newer header names E4 and writes nothing',
+	newerRun.out.includes('E4') && readFileSync(newerPath, 'utf8') === newerBefore,
+	newerRun.out.trim().slice(0, 100)
+);
+
+// 9. A bare ramp left by an older CLI has no saved original, so the row is left as it is and the
+// loss is said once instead of being papered over with a fresh ramp.
+const oldRamp = join(WORK, 'old-ramp');
+scaffold(oldRamp);
+const oldRampPath = join(oldRamp, 'src', 'routes', 'layout.css');
+const RAMP_ROW = '--chart-1: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.08) h);';
+writeFileSync(
+	oldRampPath,
+	readFileSync(oldRampPath, 'utf8').replace(/\t--chart-1: [^;]+;/, `\t${RAMP_ROW}`)
+);
+const oldRampRun = spawnSync(process.execPath, [join(PKG_DIR, 'cli', 'init.mjs')], {
+	cwd: oldRamp,
+	encoding: 'utf8'
+});
+const oldRampCss = readFileSync(oldRampPath, 'utf8');
+check(
+	'a bare ramp row from an older CLI is left as it is',
+	oldRampRun.status === 0 && oldRampCss.includes(RAMP_ROW),
+	oldRampCss.match(/--chart-1: [^;]+/)?.[0] ?? 'none'
+);
+check(
+	'a bare ramp warns once in total',
+	(oldRampRun.stderr.match(/holds a ramp written by an older CLI/g) ?? []).length === 1,
+	`${(oldRampRun.stderr.match(/holds a ramp written by an older CLI/g) ?? []).length} warning(s)`
 );
 
 const failed = results.filter((r) => !r.ok);

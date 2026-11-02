@@ -245,12 +245,16 @@ export default defineConfig({
 
 	// 6. optional package tarball + registry server + adapter install
 	if (PKG_DIR) {
-		const packedJson = JSON.parse(readFileSync(join(resolve(PKG_DIR), 'package.json'), 'utf8'));
+		const tarballs = () => readdirSync(APP).filter((file) => file.endsWith('.tgz'));
+		const before = new Set(tarballs());
 		run(PNPM, ['pack', '--pack-destination', APP], resolve(PKG_DIR));
-		report.tarball = `${packedJson.name}-${packedJson.version}.tgz`;
-		if (!existsSync(join(APP, report.tarball))) {
-			throw new Error(`pnpm pack did not produce ${report.tarball} in ${APP}`);
+		// A scoped package's tarball drops the `@` and turns the slash into a dash, so the name
+		// cannot be composed from package.json. Take the one file the pack added.
+		const added = tarballs().filter((file) => !before.has(file));
+		if (added.length !== 1) {
+			throw new Error(`pnpm pack produced ${added.length} new *.tgz in ${APP}: ${added.join(', ')}`);
 		}
+		report.tarball = added[0];
 		report.steps.push('package-tarball');
 	}
 
