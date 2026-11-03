@@ -17,6 +17,7 @@
 	"files": [
 		"dist",
 		"cli",
+		"component-fix.mjs",
 		"CHANGELOG.md"
 	],
 	"keywords": [

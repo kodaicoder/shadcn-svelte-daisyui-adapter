@@ -27,6 +27,7 @@ import {
 } from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
+import { fix } from '../component-fix.mjs';
 
 const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const PKG = manifest.name;
@@ -225,12 +226,42 @@ const installLine = (spec) => {
 	return `installed ${spec}`;
 };
 
-const main = () => {
+const USAGE =
+	`usage: ${BIN} init\n` +
+	`       ${BIN} fix [component...] [--dry-run]\n` +
+	'  init maps the theme into the stylesheet, then fixes the components you added\n' +
+	'  fix  patches the stock component classes; --dry-run reports without writing';
+
+const readComponents = () => {
 	const componentsPath = resolve('components.json');
 	if (!existsSync(componentsPath)) {
 		throw new Error('[daisyui-adapter] no components.json. Run `shadcn-svelte init` first.');
 	}
-	const components = JSON.parse(readFileSync(componentsPath, 'utf8'));
+	return JSON.parse(readFileSync(componentsPath, 'utf8'));
+};
+
+// No target component is a normal state: the project maps its tokens first and adds components later.
+// A component named on the command line still prints its `missing` row, because the user asked about it.
+const printFix = (report, dryRun, names = []) => {
+	if (report.sites.every((site) => site.state === 'missing') && names.length === 0) {
+		console.log('[daisyui-adapter] no target components found; nothing to fix');
+		return;
+	}
+	for (const site of report.sites) {
+		const tail = site.written ? ' -> fixed' : dryRun && site.state === 'stock' ? ' (dry run)' : '';
+		console.log(
+			`[daisyui-adapter] ${site.component} ${site.id} (${site.file}): ${site.state}${tail}`
+		);
+	}
+	const { stock, fixed, customized, missing } = report.counts;
+	console.log(
+		`[daisyui-adapter] fix: ${stock} stock, ${fixed} fixed, ${customized} customized, ${missing} missing` +
+			(dryRun ? '; dry run, nothing written' : '')
+	);
+};
+
+const init = () => {
+	const components = readComponents();
 	if (!components.tailwind?.css) {
 		throw new Error('[daisyui-adapter] components.json has no tailwind.css path');
 	}
@@ -306,6 +337,7 @@ const main = () => {
 	if (themes) console.log('[daisyui-adapter] theme ok: light + dark');
 	console.log(`[daisyui-adapter] wrote ${where}`);
 	console.log(`[daisyui-adapter] ${lightCount} light, ${darkCount} dark`);
+	printFix(fix({ components }), false);
 
 	// The install is last, after the lines that describe what was written, so a failed install
 	// still tells the user the stylesheet is in place.
@@ -323,8 +355,26 @@ const main = () => {
 	}
 };
 
+const fixCommand = (args) => {
+	const unknown = args.find((arg) => arg.startsWith('-') && arg !== '--dry-run');
+	if (unknown) throw new Error(`[daisyui-adapter] unknown flag "${unknown}".\n${USAGE}`);
+	const dryRun = args.includes('--dry-run');
+	const names = args.filter((arg) => arg !== '--dry-run');
+	printFix(fix({ components: readComponents(), names, dryRun }), dryRun, names);
+};
+
+const [command = 'init', ...rest] = process.argv.slice(2);
 try {
-	main();
+	if (command === 'init') {
+		if (rest.length > 0) {
+			throw new Error(`[daisyui-adapter] init takes no arguments, got "${rest[0]}".\n${USAGE}`);
+		}
+		init();
+	} else if (command === 'fix') {
+		fixCommand(rest);
+	} else {
+		throw new Error(`[daisyui-adapter] unknown command "${command}".\n${USAGE}`);
+	}
 } catch (error) {
 	console.error(String(error.message ?? error));
 	process.exitCode = 1;
