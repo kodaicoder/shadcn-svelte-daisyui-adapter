@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 // The adapter CLI. It reads components.json and the stylesheet, validates the theme, then writes the
-// header comment, the plugin line, the bindings for both blocks, and the five chart values. Re-running
-// it is byte-identical. The override file and its import are the project's to add; this CLI never
-// creates, deletes or rewrites either one.
+// header comment, the plugin line, the bindings for both blocks, the `@theme inline` aliases and the
+// five chart values. Re-running it is byte-identical. The override file and its import are the
+// project's to add; this CLI never creates, deletes or rewrites either one.
 //
-// It never writes a raw `--color-*` name (ticket 14: that forms a cycle with `@theme inline`, and
-// the fallback is then silently ignored), and it writes the chart ramp itself rather than leaving it
-// to the plugin, because `addBase` lands in `@layer base` and the project's unlayered `:root` wins
+// It never writes a `--color-*` value into `:root` or `.dark` (ticket 14: that forms a cycle with
+// `@theme inline`, and the fallback is then silently ignored); the `@theme inline` aliases are the
+// only `--color-*` names it writes. It writes the chart ramp itself rather than leaving it to the
+// plugin, because `addBase` lands in `@layer base` and the project's unlayered `:root` wins
 // (ticket 13).
 //
 // Name, version and the bin come from package.json, so the header, the plugin specifier and the
@@ -16,7 +17,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { BINDING_KEYS, SINGLE, mixValue } from '../dist/map.mjs';
+import { BINDING_KEYS, SINGLE, TOKEN_FALLBACKS, mixValue } from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
 
@@ -125,7 +126,10 @@ const rebuild = (current, fallback, scheme) => {
 	}
 	for (const key of BINDING_KEYS) {
 		const old = unwrapFallback(
-			current.find((d) => d.prop === `--${key}`)?.value ?? fallback[`--${key}`] ?? ''
+			current.find((d) => d.prop === `--${key}`)?.value ??
+				fallback[`--${key}`] ??
+				TOKEN_FALLBACKS[key] ??
+				''
 		);
 		if (SINGLE[key]) {
 			lines.push(`\t--${key}: var(${targetVar(key)}, ${old});`);
@@ -170,17 +174,26 @@ const insertAfterLastImport = (source, line) => {
 	return lines.join('\n');
 };
 
-// The one entry the bindings cannot carry. Tailwind reads a bare border width from
+// The entries the bindings cannot carry. Tailwind reads a bare border width from
 // `--default-border-width`, and `--daisy-border` is emitted by the plugin from the theme's --border,
-// so the 1px here is only the fallback for a project with no theme (ticket 11).
-const insertThemeEntries = (source) => {
-	if (source.includes('--default-border-width')) return source;
+// so the 1px here is only the fallback for a project with no theme (ticket 11). The aliases are not
+// theme-gated: an alias resolves the binding, and the binding carries the fallback without a theme.
+//
+// An entry whose property the block already declares is left alone, even when its value differs: a
+// second declaration would silently override the project's own.
+const propertyOf = (entry) => entry.slice(0, entry.indexOf(':'));
+const insertThemeEntries = (source, entries) => {
 	const bounds = blockBounds(source, '@theme inline');
 	if (!bounds) {
-		console.warn('[daisyui-adapter] no @theme inline block, so --border will not reach border');
+		console.warn(
+			`[daisyui-adapter] no @theme inline block, so these entries are not written: ${entries.join(' ')}`
+		);
 		return source;
 	}
-	return `${source.slice(0, bounds.close)}\t${BORDER_ENTRY}\n${source.slice(bounds.close)}`;
+	const body = source.slice(bounds.open, bounds.close);
+	const missing = entries.filter((entry) => !body.includes(`${propertyOf(entry)}:`));
+	if (missing.length === 0) return source;
+	return `${source.slice(0, bounds.close)}${missing.map((entry) => `\t${entry}\n`).join('')}${source.slice(bounds.close)}`;
 };
 
 const installLine = (spec) => {
@@ -266,16 +279,15 @@ const main = () => {
 	);
 	if (!css) throw new Error(`[daisyui-adapter] ${where} has no :root block`);
 
-	if (themes) {
-		css = insertAfterLastImport(css, PLUGIN);
-		css = insertThemeEntries(css);
-	}
+	const aliases = Object.keys(TOKEN_FALLBACKS).map((key) => `--color-${key}: var(--${key});`);
+	if (themes) css = insertAfterLastImport(css, PLUGIN);
+	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
 	css = `${HEADER}\n${css}`;
 
 	writeFileSync(cssPath, css);
 
 	// Read back what was written: a block the CLI matched but could not fill has to show a count
-	// below 32 rather than a number from the data it meant to write.
+	// below 39 rather than a number from the data it meant to write.
 	const written = readFileSync(cssPath, 'utf8');
 	const count = (selector) =>
 		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-'))

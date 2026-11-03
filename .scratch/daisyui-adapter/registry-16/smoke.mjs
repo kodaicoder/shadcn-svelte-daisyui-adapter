@@ -61,6 +61,23 @@ const headerLines = (css) => [
 	...css.matchAll(/^\/\* \S+ \d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)? \| re-run [^\n]*\*\/$/gm)
 ];
 
+const blockOf = (css, selector) => {
+	const start = css.indexOf(`\n${selector} {`);
+	if (start === -1) return '';
+	const open = css.indexOf('{', start);
+	let depth = 0;
+	for (let i = open; i < css.length; i++) {
+		if (css[i] === '{') depth++;
+		else if (css[i] === '}' && --depth === 0) return css.slice(open + 1, i);
+	}
+	return '';
+};
+
+const declarationOf = (css, selector, prop) =>
+	(blockOf(css, selector).match(new RegExp(`(?:^|\\n)\\s*${prop}: ([^;]+);`)) ?? [])[1]?.trim();
+
+const SLOTS = [':root', '.dark'];
+
 // 1. The parser accepts the daisyUI built-in pair and emits the prefixed namespace.
 const themes = parseTheme(readFileSync(THEME, 'utf8'), THEME);
 const light = bindingsFor(themes.light);
@@ -103,7 +120,47 @@ check(
 	e3.slice(0, 80)
 );
 
-// 5. The CLI writes bindings, the ramp and the plugin line, and leaves overrides to the project.
+// 5. The CLI writes bindings, their aliases, the ramp and the plugin line, and leaves overrides to
+// the project.
+// Written out rather than imported from map.mjs, so a wrong fallback in the map cannot pass by
+// agreeing with itself.
+const STATUS = {
+	success: { source: 'success', value: 'oklch(69% 0.17 162.48)' },
+	'success-foreground': { source: 'success-content', value: 'oklch(26% 0.051 172.552)' },
+	warning: { source: 'warning', value: 'oklch(79% 0.184 86.047)' },
+	'warning-foreground': { source: 'warning-content', value: 'oklch(28% 0.066 53.813)' },
+	info: { source: 'info', value: 'oklch(74% 0.16 232.661)' },
+	'info-foreground': { source: 'info-content', value: 'oklch(29% 0.066 243.157)' },
+	'destructive-foreground': { source: 'error-content', value: 'oklch(97% 0.013 17.38)' }
+};
+const STATUS_KEYS = Object.keys(STATUS);
+
+const checkStatusBindings = (css, run) => {
+	for (const key of STATUS_KEYS) {
+		const { source, value } = STATUS[key];
+		const expected = `var(--daisy-color-${source}, ${value})`;
+		for (const selector of SLOTS) {
+			const actual = declarationOf(css, selector, `--${key}`);
+			check(
+				`${run}: the ${selector} --${key} binding reads --daisy-color-${source} with the fixed fallback`,
+				actual === expected,
+				actual ?? `no --${key} in ${selector}`
+			);
+		}
+	}
+};
+
+const checkStatusAliases = (css, run) => {
+	for (const key of STATUS_KEYS) {
+		const alias = declarationOf(css, '@theme inline', `--color-${key}`);
+		check(
+			`${run}: the @theme inline --color-${key} alias points at --${key}`,
+			alias === `var(--${key})`,
+			alias ?? `no --color-${key} alias`
+		);
+	}
+};
+
 const full = join(WORK, 'full');
 scaffold(full);
 const first = cli(full);
@@ -132,8 +189,8 @@ check(
 	`${headerLines(css1).length} header line(s)`
 );
 check(
-	'CLI counts 32 declarations per block with a theme',
-	first.includes('32 light, 32 dark'),
+	'CLI counts 39 declarations per block with a theme',
+	first.includes('39 light, 39 dark'),
 	(first.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
 );
 check(
@@ -177,7 +234,10 @@ check(
 	'sidebar-accent follows base-300',
 	css1.includes('--sidebar-accent: var(--daisy-color-base-300')
 );
-check('secondary follows the daisyUI brand', css1.includes('--secondary: var(--daisy-color-secondary,'));
+check(
+	'secondary follows the daisyUI brand',
+	css1.includes('--secondary: var(--daisy-color-secondary,')
+);
 check(
 	'secondary-foreground follows secondary-content',
 	css1.includes('--secondary-foreground: var(--daisy-color-secondary-content,')
@@ -188,6 +248,8 @@ check(
 	'accent-foreground follows accent-content',
 	css1.includes('--accent-foreground: var(--daisy-color-accent-content,')
 );
+checkStatusBindings(css1, 'themed');
+checkStatusAliases(css1, 'themed');
 
 // 6. Re-run is byte-identical.
 cli(full);
@@ -232,8 +294,8 @@ const bareRun = cliResult(bare);
 const bareCss = readFileSync(barePath, 'utf8');
 check('a missing theme exits 0', bareRun.code === 0, `exit ${bareRun.code}`);
 check(
-	'a missing theme counts 32 declarations per block',
-	bareRun.out.includes('32 light, 32 dark'),
+	'a missing theme counts 39 declarations per block',
+	bareRun.out.includes('39 light, 39 dark'),
 	(bareRun.out.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
 );
 check(
@@ -246,25 +308,37 @@ check(
 	bareCss.match(/--background: [^;]+/)?.[0] ?? 'none'
 );
 check('a missing theme writes no plugin line', !bareCss.includes(`@plugin "${NAME}"`));
+checkStatusBindings(bareCss, 'theme-less');
+checkStatusAliases(bareCss, 'theme-less');
+
+// A property the project already declares in @theme inline keeps its value and is not duplicated.
+const owned = join(WORK, 'owned');
+scaffold(owned);
+const ownedPath = join(owned, 'src', 'routes', 'layout.css');
+writeFileSync(
+	ownedPath,
+	readFileSync(ownedPath, 'utf8').replace(
+		'@theme inline {',
+		'@theme inline {\n\t--color-success: oklch(0.5 0.2 150);\n\t--default-border-width: 2px;'
+	)
+);
+cli(owned);
+const ownedCss = readFileSync(ownedPath, 'utf8');
+check(
+	'a project entry in @theme inline is neither duplicated nor overridden',
+	ownedCss.split('--color-success:').length - 1 === 1 &&
+		ownedCss.includes('--color-success: oklch(0.5 0.2 150);') &&
+		ownedCss.split('--default-border-width:').length - 1 === 1 &&
+		ownedCss.includes('--default-border-width: 2px;'),
+	ownedCss.match(/--color-success: [^;]+/)?.[0] ?? 'none'
+);
 
 // The real failing state: the CLI ran with the theme, so every chart row has a solved ramp behind it.
 // The plugin then emits nothing, so the helper's source var is undefined and the row paints only if
 // its own fallback slot holds the project's value. Both blocks are asserted, because a dark-only
 // regression is exactly what a first-match read would miss.
-const blockOf = (css, selector) => {
-	const start = css.indexOf(`\n${selector} {`);
-	if (start === -1) return '';
-	const open = css.indexOf('{', start);
-	let depth = 0;
-	for (let i = open; i < css.length; i++) {
-		if (css[i] === '{') depth++;
-		else if (css[i] === '}' && --depth === 0) return css.slice(open + 1, i);
-	}
-	return '';
-};
 const rowOf = (css, selector, n) =>
 	(blockOf(css, selector).match(new RegExp(`--chart-${n}: ([^;]+);`)) ?? [])[1]?.trim();
-const SLOTS = [':root', '.dark'];
 const chartSlots = (css) => SLOTS.flatMap((s) => [1, 2, 3, 4, 5].map((n) => rowOf(css, s, n)));
 const wrappedSlots = (css) =>
 	SLOTS.flatMap((s) =>

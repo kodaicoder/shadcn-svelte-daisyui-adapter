@@ -46,6 +46,13 @@ export const SINGLE = {
 	accent: { source: 'accent' },
 	'accent-foreground': { source: 'accent-content' },
 	destructive: { source: 'error' },
+	'destructive-foreground': { source: 'error-content' },
+	success: { source: 'success' },
+	'success-foreground': { source: 'success-content' },
+	warning: { source: 'warning' },
+	'warning-foreground': { source: 'warning-content' },
+	info: { source: 'info' },
+	'info-foreground': { source: 'info-content' },
 	ring: { source: 'primary' },
 	sidebar: { source: 'base-200' },
 	'sidebar-foreground': { source: 'base-content' },
@@ -55,6 +62,18 @@ export const SINGLE = {
 	'sidebar-accent-foreground': { source: 'base-content' },
 	'sidebar-ring': { source: 'primary' },
 	radius: { scalar: 'radius' }
+};
+
+// Tokens the stock stylesheet does not have. Each value is the fallback its binding renders with when
+// no theme is present, and each key also needs a `@theme inline` alias.
+export const TOKEN_FALLBACKS = {
+	'destructive-foreground': 'oklch(97% 0.013 17.38)',
+	success: 'oklch(69% 0.17 162.48)',
+	'success-foreground': 'oklch(26% 0.051 172.552)',
+	warning: 'oklch(79% 0.184 86.047)',
+	'warning-foreground': 'oklch(28% 0.066 53.813)',
+	info: 'oklch(74% 0.16 232.661)',
+	'info-foreground': 'oklch(29% 0.066 243.157)'
 };
 
 // A mix row is a derivation over two sources. Values stay opaque: Tailwind's opacity modifiers
