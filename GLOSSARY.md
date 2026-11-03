@@ -69,7 +69,7 @@ The readable text form of a status tone, mixed with the page foreground; the fil
 _Avoid_: Tone text, text color
 
 **Target manifest**:
-The single data source for the components, the contrast pairs and the supported shadcn-svelte version and style.
+The single data source for the components, the contrast pairs and the supported shadcn-svelte version.
 _Avoid_: Fix table, config
 
 **Fixer state**:

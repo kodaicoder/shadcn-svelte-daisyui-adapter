@@ -1,4 +1,4 @@
-// The fixer reads the project's own files, so the style and the installed version are parsed at this
+// The fixer reads the project's own files, so the installed shadcn-svelte version is parsed at this
 // boundary before any byte is written.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
@@ -71,23 +71,11 @@ const warnUnknownVersion = () => {
 	);
 };
 
-const guard = ({ root, components, scope, directory }) => {
+const guard = ({ root, scope, directory }) => {
 	const present = [...new Set(scope.map((site) => site.file))].some((file) =>
 		existsSync(join(directory, ...file.split('/')))
 	);
 	if (!present) return;
-
-	const style = components?.style;
-	if (!style) {
-		throw new Error(
-			`[daisyui-adapter] components.json has no style; this adapter fixes the "${SUPPORTED.style}" style`
-		);
-	}
-	if (style !== SUPPORTED.style) {
-		throw new Error(
-			`[daisyui-adapter] unsupported shadcn-svelte style "${style}"; this adapter fixes the "${SUPPORTED.style}" style`
-		);
-	}
 
 	const raw = installedVersion(root);
 	const parsed = raw ? /(\d+)\.(\d+)\.(\d+)/.exec(raw) : null;
@@ -126,7 +114,7 @@ const targetSites = (names) => {
 const run = ({ root = process.cwd(), components, names = [], dryRun = false }, write) => {
 	const directory = uiDirectory(components, root);
 	const scope = targetSites(names);
-	guard({ root, components, scope, directory });
+	guard({ root, scope, directory });
 
 	const scopeFiles = new Set(scope.map((site) => site.file));
 	const files = new Map();

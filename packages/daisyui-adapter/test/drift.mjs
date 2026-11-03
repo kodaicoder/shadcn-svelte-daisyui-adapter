@@ -59,13 +59,6 @@ check(
 	missingStock.join(', ')
 );
 
-const componentsJson = readJson(join(ROOT, 'components.json'));
-check(
-	`the repo components.json style is ${SUPPORTED.style}`,
-	componentsJson?.style === SUPPORTED.style,
-	componentsJson?.style ?? 'none'
-);
-
 const shadcnVersion = () => {
 	const installed = readJson(join(ROOT, 'node_modules', 'shadcn-svelte', 'package.json'));
 	if (typeof installed?.version === 'string') return installed.version;

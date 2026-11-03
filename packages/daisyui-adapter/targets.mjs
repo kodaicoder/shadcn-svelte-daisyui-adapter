@@ -1,7 +1,8 @@
-// The one target manifest: the stock the fixer patches and the version and style it patches. The
-// `stock` strings come from the pinned shadcn-svelte 1.7.x `mira` template, not markup this repo
-// owns; `packages/daisyui-adapter/test/drift.mjs` fails when a pin moves without this list.
-export const SUPPORTED = { style: 'mira', version: { major: 1, minor: 7 } };
+// The one target manifest: the stock the fixer patches and the shadcn-svelte version it patches. The
+// `stock` strings come from the pinned `src/lib/components/ui` snapshot; nine of the eleven sites
+// match every 1.7.x style, so the style label is not part of the guard.
+// `packages/daisyui-adapter/test/drift.mjs` fails when the pin moves without this list.
+export const SUPPORTED = { version: { major: 1, minor: 7 } };
 
 export const COMPONENTS = [
 	'dialog',

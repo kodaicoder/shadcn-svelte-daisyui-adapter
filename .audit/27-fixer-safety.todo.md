@@ -57,8 +57,8 @@ Matched playbook: Feature. Its steps, verbatim, then the ticket's own steps.
   `targets.mjs` joins `files` in package.json.
 - **Version read order.** `node_modules/shadcn-svelte/package.json`, then the project
   `package.json` dependency range. A missing or unparseable version warns and continues, because
-  shadcn-svelte is a `dlx` CLI and many projects never list it; an unsupported style or a parsed
-  version outside 1.7.x throws. The style has no fallback: it is a file in the project.
+  shadcn-svelte is a `dlx` CLI and many projects never list it; a parsed version outside 1.7.x
+  throws. The style is not checked (see the correction at the end).
 - **Guard scope.** The guard runs when the run's scope holds at least one present target file.
   `init` with no component present stays a map-only run that exits zero, as spec L110 requires.
 - **Flag semantics.** `--check` and `--strict` never write (not the components, not the marker).
@@ -108,7 +108,27 @@ Matched playbook: Feature. Its steps, verbatim, then the ticket's own steps.
 - Review gate: the independent `comment-sicko` pass was cancelled by the operator after a hang.
   The lead did the comment and Spec-axis review instead. Recorded as `BLOCKED: independent review`
   for that pass, so it is not claimed. No comment was deleted; one pointer sentence was trimmed.
-- Verification: `registry-26` 100 checks, `registry-16` 139, `registry-27` 53, drift 9. All exit 0.
+- Verification: `registry-26` 100 checks, `registry-16` 139, `registry-27` 54, drift 8. All exit 0.
+
+## Correction after the operator's review
+
+The operator reported that `vega` is the style a plain `shadcn-svelte init` lands on and that
+the style is not something they care about. Measured with `shadcn-svelte@1.7.1`:
+
+- The preset chooser and the registry URL both fall back to `vega` (`initialValue: style ?? 'vega'`,
+  `style ?? 'vega'`), so the default install was being refused.
+- At tag `shadcn-svelte@1.7.1`, nine of the eleven sites match every one of the eight styles.
+  `dialog-close` and `sheet-close` differ per style, and the repo's pinned copies match `sera`
+  (`top-5 right-5 bg-secondary`), not mira (`top-2 right-2`) or vega (`top-4 right-4`). The drift
+  test cannot see this because it compares the manifest to the same repo snapshot.
+- The four-state matcher already makes a style mismatch safe: an exact-match miss reports
+  `customized` and writes nothing.
+
+Decision (operator chose A): the style guard is removed. The version guard stays, a version outside
+1.7.x exits, and an unreadable version warns. `SUPPORTED` now holds the version only, the drift test
+drops its style check, and the seams accept `vega`, `default` and a missing style. The spec, ADR
+0003 and the glossary keep the version and drop the style. The two close sites stay in the manifest
+as the repo snapshot; on another style they report `customized` rather than blocking the run.
 
 ## Delegation brief (blocking scope)
 

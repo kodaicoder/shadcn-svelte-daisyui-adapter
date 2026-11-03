@@ -140,9 +140,9 @@ check(
 	`${TARGETS.pairs.length}`
 );
 check(
-	'TARGETS.supported is the same object with the mira style',
-	TARGETS.supported === SUPPORTED && SUPPORTED.style === 'mira',
-	SUPPORTED.style
+	'TARGETS.supported is the same object and holds no style gate',
+	TARGETS.supported === SUPPORTED && !('style' in SUPPORTED),
+	JSON.stringify(Object.keys(SUPPORTED))
 );
 check(
 	'TARGETS.supported pins major 1 minor 7',
@@ -157,44 +157,17 @@ check(
 		FIX_SUPPORTED === SUPPORTED
 );
 
-const badStyle = join(WORK, 'bad-style');
-scaffold(badStyle, { style: 'default' });
-const badStyleBefore = snapshot(badStyle);
-const badStyleInit = cliResult(badStyle);
-check(
-	'init refuses the default style',
-	badStyleInit.code === 1 &&
-		badStyleInit.out.includes('unsupported shadcn-svelte style "default"') &&
-		badStyleInit.out.includes('"mira"'),
-	`exit ${badStyleInit.code}`
-);
-check(
-	'a refused init leaves the stylesheet and the components byte-identical',
-	snapshot(badStyle).join('\n') === badStyleBefore.join('\n')
-);
-const badStyleFix = cliResult(badStyle, 'fix');
-check(
-	'fix refuses the default style',
-	badStyleFix.code === 1 &&
-		badStyleFix.out.includes('unsupported shadcn-svelte style "default"') &&
-		badStyleFix.out.includes('"mira"'),
-	`exit ${badStyleFix.code}`
-);
-check(
-	'a refused fix leaves the stylesheet and the components byte-identical',
-	snapshot(badStyle).join('\n') === badStyleBefore.join('\n')
-);
-
-const noStyle = join(WORK, 'no-style');
-scaffold(noStyle, { style: null });
-const noStyleRun = cliResult(noStyle, 'fix');
-check(
-	'a missing style exits 1 and says none was found',
-	noStyleRun.code === 1 &&
-		noStyleRun.out.includes('components.json has no style') &&
-		noStyleRun.out.includes('"mira"'),
-	`exit ${noStyleRun.code}`
-);
+for (const style of ['vega', 'default', null]) {
+	const label = style ?? 'missing';
+	const anyStyle = join(WORK, `style-${label}`);
+	scaffold(anyStyle, { style });
+	const anyStyleRun = cliResult(anyStyle);
+	check(`init accepts the ${label} style`, anyStyleRun.code === 0, `exit ${anyStyleRun.code}`);
+	check(
+		`init fixes every site under the ${label} style`,
+		SITES.every((site) => readSiteFile(anyStyle, site).includes(site.fixed))
+	);
+}
 
 const future = join(WORK, 'future-version');
 scaffold(future, { shadcn: '1.8.0' });
@@ -239,7 +212,7 @@ const mapOnly = join(WORK, 'map-only');
 scaffold(mapOnly, { components: [], style: 'default' });
 const mapOnlyRun = cliResult(mapOnly);
 check(
-	'init with no component present exits 0 even under a refused style',
+	'init with no component present exits 0 even with another style',
 	mapOnlyRun.code === 0,
 	`exit ${mapOnlyRun.code}`
 );
