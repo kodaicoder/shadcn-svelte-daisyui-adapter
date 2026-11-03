@@ -1,203 +1,11 @@
-// The `stock` strings are the shadcn-svelte 1.7.x `mira` template, not markup this repo owns.
+// The fixer reads the project's own files, so the style and the installed version are parsed at this
+// boundary before any byte is written.
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
 
-export const COMPONENTS = [
-	'dialog',
-	'sheet',
-	'calendar',
-	'range-calendar',
-	'dropdown-menu',
-	'context-menu',
-	'menubar',
-	'chart',
-	'bubble'
-];
+import { COMPONENTS, PAIRS, SITES, SUPPORTED } from './targets.mjs';
 
-export const SITES = [
-	{
-		id: 'dialog-close',
-		component: 'dialog',
-		file: 'dialog/dialog-content.svelte',
-		stock: 'class="absolute top-5 right-5 bg-secondary"',
-		fixed: 'class="absolute top-5 right-5 bg-muted"'
-	},
-	{
-		id: 'sheet-close',
-		component: 'sheet',
-		file: 'sheet/sheet-content.svelte',
-		stock: 'class="absolute top-4 right-4 bg-secondary"',
-		fixed: 'class="absolute top-4 right-4 bg-muted"'
-	},
-	{
-		id: 'calendar-hover',
-		component: 'calendar',
-		file: 'calendar/calendar-day.svelte',
-		stock: 'not-data-selected:hover:bg-accent/50 not-data-selected:hover:text-accent-foreground',
-		fixed: 'not-data-selected:hover:bg-accent not-data-selected:hover:text-accent-foreground'
-	},
-	{
-		id: 'range-hover',
-		component: 'range-calendar',
-		file: 'range-calendar/range-calendar-day.svelte',
-		stock: 'not-data-selected:hover:bg-accent/50 not-data-selected:hover:text-accent-foreground',
-		fixed: 'not-data-selected:hover:bg-accent not-data-selected:hover:text-accent-foreground'
-	},
-	{
-		id: 'range-middle',
-		component: 'range-calendar',
-		file: 'range-calendar/range-calendar-cell.svelte',
-		stock: '[&:has([data-range-middle])]:bg-accent first:',
-		fixed:
-			'[&:has([data-range-middle])]:bg-accent [&:has([data-range-middle])]:text-accent-foreground first:'
-	},
-	{
-		id: 'range-middle-hover',
-		component: 'range-calendar',
-		file: 'range-calendar/range-calendar-cell.svelte',
-		stock: 'dark:[&:has([data-range-middle])]:hover:bg-accent/50 [&:has([data-range-start])]',
-		fixed: 'dark:[&:has([data-range-middle])]:hover:bg-accent [&:has([data-range-start])]'
-	},
-	{
-		id: 'dropdown-destructive',
-		component: 'dropdown-menu',
-		file: 'dropdown-menu/dropdown-menu-item.svelte',
-		stock:
-			'data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive',
-		fixed:
-			'data-[variant=destructive]:text-destructive-text data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive-text data-[variant=destructive]:*:[svg]:text-destructive-text data-[variant=destructive]:[&_[data-slot=dropdown-menu-shortcut]]:text-destructive-text!'
-	},
-	{
-		id: 'context-destructive',
-		component: 'context-menu',
-		file: 'context-menu/context-menu-item.svelte',
-		stock:
-			'data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive',
-		fixed:
-			'data-[variant=destructive]:text-destructive-text data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive-text data-[variant=destructive]:*:[svg]:text-destructive-text data-[variant=destructive]:[&_[data-slot=context-menu-shortcut]]:text-destructive-text!'
-	},
-	{
-		id: 'menubar-destructive',
-		component: 'menubar',
-		file: 'menubar/menubar-item.svelte',
-		stock:
-			'data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:*:[svg]:text-destructive!',
-		fixed:
-			'data-[variant=destructive]:text-destructive-text data-[variant=destructive]:focus:bg-destructive/10 dark:data-[variant=destructive]:focus:bg-destructive/20 data-[variant=destructive]:focus:text-destructive-text data-[variant=destructive]:*:[svg]:text-destructive-text! data-[variant=destructive]:[&_[data-slot=menubar-shortcut]]:text-destructive-text!'
-	},
-	{
-		id: 'chart-tooltip-label',
-		component: 'chart',
-		file: 'chart/chart-tooltip.svelte',
-		stock: '<span class="text-muted-foreground">',
-		fixed: '<span class="text-foreground">'
-	},
-	{
-		id: 'bubble-muted',
-		component: 'bubble',
-		file: 'bubble/bubble.svelte',
-		stock:
-			'*:data-[slot=bubble-content]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]',
-		fixed:
-			'*:data-[slot=bubble-content]:bg-muted *:data-[slot=bubble-content]:text-foreground [&>[data-slot=bubble-content]:is(button,a):hover]'
-	}
-];
-
-export const PAIRS = [
-	{
-		id: 'dialog-close',
-		component: 'dialog',
-		name: 'dialog close',
-		threshold: 4.5,
-		foreground: 'foreground',
-		background: 'muted',
-		sites: ['dialog-close']
-	},
-	{
-		id: 'sheet-close',
-		component: 'sheet',
-		name: 'sheet close',
-		threshold: 4.5,
-		foreground: 'foreground',
-		background: 'muted',
-		sites: ['sheet-close']
-	},
-	{
-		id: 'calendar-hover',
-		component: 'calendar',
-		name: 'calendar hover',
-		threshold: 4.5,
-		foreground: 'accent-foreground',
-		background: 'accent',
-		sites: ['calendar-hover']
-	},
-	{
-		id: 'range-hover',
-		component: 'range-calendar',
-		name: 'range hover',
-		threshold: 4.5,
-		foreground: 'accent-foreground',
-		background: 'accent',
-		sites: ['range-hover']
-	},
-	{
-		id: 'range-middle',
-		component: 'range-calendar',
-		name: 'range middle',
-		threshold: 4.5,
-		foreground: 'accent-foreground',
-		background: 'accent',
-		sites: ['range-middle', 'range-middle-hover']
-	},
-	{
-		id: 'dropdown-destructive',
-		component: 'dropdown-menu',
-		name: 'dropdown destructive',
-		threshold: 4.5,
-		foreground: 'destructive-text',
-		background: 'destructive/10',
-		backgroundDark: 'destructive/20',
-		sites: ['dropdown-destructive']
-	},
-	{
-		id: 'context-destructive',
-		component: 'context-menu',
-		name: 'context destructive',
-		threshold: 4.5,
-		foreground: 'destructive-text',
-		background: 'destructive/10',
-		backgroundDark: 'destructive/20',
-		sites: ['context-destructive']
-	},
-	{
-		id: 'menubar-destructive',
-		component: 'menubar',
-		name: 'menubar destructive',
-		threshold: 4.5,
-		foreground: 'destructive-text',
-		background: 'destructive/10',
-		backgroundDark: 'destructive/20',
-		sites: ['menubar-destructive']
-	},
-	{
-		id: 'chart-tooltip-label',
-		component: 'chart',
-		name: 'chart tooltip',
-		threshold: 4.5,
-		foreground: 'foreground',
-		background: 'background',
-		sites: ['chart-tooltip-label']
-	},
-	{
-		id: 'bubble-muted',
-		component: 'bubble',
-		name: 'bubble muted',
-		threshold: 4.5,
-		foreground: 'foreground',
-		background: 'muted',
-		sites: ['bubble-muted']
-	}
-];
+export { COMPONENTS, PAIRS, SITES, SUPPORTED };
 
 // A `#` alias is a package.json subpath import and can point anywhere, so the project's own
 // `imports` map wins over the convention below. `$lib` is SvelteKit's fixed lib alias; `@/` and
@@ -233,6 +41,68 @@ export function uiDirectory(componentsJson = {}, root = process.cwd()) {
 	return resolveAlias(aliases.ui ?? `${aliases.components}/ui`, root);
 }
 
+const readJson = (path) => {
+	if (!existsSync(path)) return null;
+	try {
+		return JSON.parse(readFileSync(path, 'utf8'));
+	} catch {
+		return null;
+	}
+};
+
+// shadcn-svelte is usually run through `dlx`, so a project often has no dependency entry at all. The
+// installed manifest is authoritative; the range in package.json is the fallback. A version that
+// cannot be read warns once and continues, because refusing would break those projects for no gain.
+const installedVersion = (root) => {
+	const manifest = readJson(join(root, 'node_modules', 'shadcn-svelte', 'package.json'));
+	if (typeof manifest?.version === 'string') return manifest.version;
+	const project = readJson(join(root, 'package.json')) ?? {};
+	const range =
+		project.dependencies?.['shadcn-svelte'] ?? project.devDependencies?.['shadcn-svelte'];
+	return typeof range === 'string' ? range : null;
+};
+
+let versionWarned = false;
+const warnUnknownVersion = () => {
+	if (versionWarned) return;
+	versionWarned = true;
+	console.warn(
+		'[daisyui-adapter] cannot read the installed shadcn-svelte version; continuing without the version guard'
+	);
+};
+
+const guard = ({ root, components, scope, directory }) => {
+	const present = [...new Set(scope.map((site) => site.file))].some((file) =>
+		existsSync(join(directory, ...file.split('/')))
+	);
+	if (!present) return;
+
+	const style = components?.style;
+	if (!style) {
+		throw new Error(
+			`[daisyui-adapter] components.json has no style; this adapter fixes the "${SUPPORTED.style}" style`
+		);
+	}
+	if (style !== SUPPORTED.style) {
+		throw new Error(
+			`[daisyui-adapter] unsupported shadcn-svelte style "${style}"; this adapter fixes the "${SUPPORTED.style}" style`
+		);
+	}
+
+	const raw = installedVersion(root);
+	const parsed = raw ? /(\d+)\.(\d+)\.(\d+)/.exec(raw) : null;
+	if (!parsed) {
+		warnUnknownVersion();
+		return;
+	}
+	const { major, minor } = SUPPORTED.version;
+	if (Number(parsed[1]) !== major || Number(parsed[2]) !== minor) {
+		throw new Error(
+			`[daisyui-adapter] unsupported shadcn-svelte version ${parsed[0]}; this adapter fixes ${major}.${minor}.x`
+		);
+	}
+};
+
 const stateOf = (content, site) => {
 	if (content.includes(site.fixed)) return 'fixed';
 	if (content.includes(site.stock)) return 'stock';
@@ -251,27 +121,38 @@ const targetSites = (names) => {
 	return SITES.filter((site) => names.includes(site.component));
 };
 
-export function fix({ root = process.cwd(), components, names = [], dryRun = false } = {}) {
+// Every target file is read once, because the fully fixed count covers all ten of them even when the
+// run edits one. Only the reported scope is patched and written; the rest is counted from disk.
+const run = ({ root = process.cwd(), components, names = [], dryRun = false }, write) => {
 	const directory = uiDirectory(components, root);
-	const groups = new Map();
-	for (const site of targetSites(names)) {
-		const group = groups.get(site.file) ?? [];
+	const scope = targetSites(names);
+	guard({ root, components, scope, directory });
+
+	const scopeFiles = new Set(scope.map((site) => site.file));
+	const files = new Map();
+	for (const site of SITES) {
+		const group = files.get(site.file) ?? [];
 		group.push(site);
-		groups.set(site.file, group);
+		files.set(site.file, group);
 	}
 
+	const apply = write && !dryRun;
 	const sites = [];
-	for (const [file, group] of groups) {
+	let fullyFixed = 0;
+
+	for (const [file, group] of files) {
 		const path = join(directory, ...file.split('/'));
 		if (!existsSync(path)) {
-			for (const site of group) {
-				sites.push({
-					id: site.id,
-					component: site.component,
-					file,
-					state: 'missing',
-					written: false
-				});
+			if (scopeFiles.has(file)) {
+				for (const site of group) {
+					sites.push({
+						id: site.id,
+						component: site.component,
+						file,
+						state: 'missing',
+						written: false
+					});
+				}
 			}
 			continue;
 		}
@@ -281,28 +162,41 @@ export function fix({ root = process.cwd(), components, names = [], dryRun = fal
 		let content = crlf ? raw.replace(/\r\n/g, '\n') : raw;
 		const states = group.map((site) => ({ site, state: stateOf(content, site), written: false }));
 
-		if (!dryRun) {
+		if (apply && scopeFiles.has(file)) {
 			for (const entry of states) {
 				if (entry.state !== 'stock') continue;
 				content = content.split(entry.site.stock).join(entry.site.fixed);
 				entry.written = true;
 			}
-			const changed = states.some((entry) => entry.written);
-			if (changed) writeFileSync(path, crlf ? content.replace(/\n/g, '\r\n') : content);
+			if (states.some((entry) => entry.written)) {
+				writeFileSync(path, crlf ? content.replace(/\n/g, '\r\n') : content);
+			}
 		}
 
-		for (const entry of states) {
-			sites.push({
-				id: entry.site.id,
-				component: entry.site.component,
-				file,
-				state: entry.state,
-				written: entry.written
-			});
+		if (scopeFiles.has(file)) {
+			for (const entry of states) {
+				sites.push({
+					id: entry.site.id,
+					component: entry.site.component,
+					file,
+					state: entry.state,
+					written: entry.written
+				});
+			}
 		}
+
+		if (group.every((site) => stateOf(content, site) === 'fixed')) fullyFixed += 1;
 	}
 
 	const counts = { stock: 0, fixed: 0, customized: 0, missing: 0 };
 	for (const site of sites) counts[site.state] += 1;
-	return { sites, counts };
+	return { sites, counts, fullyFixed };
+};
+
+export function scan(options = {}) {
+	return run(options, false);
+}
+
+export function fix(options = {}) {
+	return run(options, true);
 }

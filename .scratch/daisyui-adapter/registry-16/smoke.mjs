@@ -33,13 +33,17 @@ const scaffold = (dir, { theme = true } = {}) => {
 	if (theme) cpSync(THEME, join(dir, 'src', 'daisyui-theme.css'));
 	writeFileSync(
 		join(dir, 'components.json'),
-		JSON.stringify({ tailwind: { css: 'src/routes/layout.css' } }, null, '\t')
+		JSON.stringify({ tailwind: { css: 'src/routes/layout.css' }, style: 'mira' }, null, '\t')
 	);
 	// The CLI installs its own version when node_modules holds nothing, so this stub is what keeps a
 	// unit check off the registry. publish-test.mjs covers the other branch against a real tarball.
 	const stub = join(dir, 'node_modules', ...NAME.split('/'), 'package.json');
 	mkdirSync(dirname(stub), { recursive: true });
 	writeFileSync(stub, JSON.stringify({ name: NAME, version: VERSION }, null, '\t'));
+	// The fixer's guard reads the installed shadcn-svelte, so the fixture names the supported pin.
+	const shadcn = join(dir, 'node_modules', 'shadcn-svelte', 'package.json');
+	mkdirSync(dirname(shadcn), { recursive: true });
+	writeFileSync(shadcn, JSON.stringify({ name: 'shadcn-svelte', version: '1.7.1' }, null, '\t'));
 };
 
 const cli = (dir) =>
@@ -58,7 +62,9 @@ const cliResult = (dir) => {
 };
 
 const headerLines = (css) => [
-	...css.matchAll(/^\/\* \S+ \d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)? \| re-run [^\n]*\*\/$/gm)
+	...css.matchAll(
+		/^\/\* \S+ \d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)? \| (?:components \d+ fixed \| )?re-run [^\n]*\*\/$/gm
+	)
 ];
 
 const blockOf = (css, selector) => {

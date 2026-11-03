@@ -27,14 +27,16 @@ import {
 } from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
-import { fix } from '../component-fix.mjs';
+import { fix, scan } from '../component-fix.mjs';
 
 const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 const PKG = manifest.name;
 const VERSION = manifest.version;
 const BIN = Object.keys(manifest.bin)[0];
-const HEADER = `/* ${PKG} ${VERSION} | re-run \`pnpm dlx ${PKG}@${VERSION} init\` after \`shadcn-svelte init\` */`;
-const HEADER_PATTERN = /^\/\* (\S+) (\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?) \| re-run [^\n]*\*\/\r?\n?/;
+const headerFor = (n) =>
+	`/* ${PKG} ${VERSION} | components ${n} fixed | re-run \`pnpm dlx ${PKG}@${VERSION} init\` after \`shadcn-svelte init\` */`;
+const HEADER_PATTERN =
+	/^\/\* (\S+) (\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?) \| (?:components \d+ fixed \| )?re-run [^\n]*\*\/\r?\n?/;
 const OVERRIDE = 'daisyui-adapter.overrides.css';
 const BORDER_ENTRY = '--default-border-width: var(--daisy-border, 1px);';
 const PLUGIN = `@plugin "${PKG}";`;
@@ -228,9 +230,11 @@ const installLine = (spec) => {
 
 const USAGE =
 	`usage: ${BIN} init\n` +
-	`       ${BIN} fix [component...] [--dry-run]\n` +
+	`       ${BIN} fix [component...] [--dry-run] [--check] [--strict]\n` +
 	'  init maps the theme into the stylesheet, then fixes the components you added\n' +
-	'  fix  patches the stock component classes; --dry-run reports without writing';
+	'  fix  patches the stock component classes; --dry-run reports without writing\n' +
+	'       --check exits 1 while a stock site remains\n' +
+	'       --strict exits 1 on a customized site or on a named component with no files';
 
 const readComponents = () => {
 	const componentsPath = resolve('components.json');
@@ -242,7 +246,7 @@ const readComponents = () => {
 
 // No target component is a normal state: the project maps its tokens first and adds components later.
 // A component named on the command line still prints its `missing` row, because the user asked about it.
-const printFix = (report, dryRun, names = []) => {
+const printFix = (report, { dryRun = false, suffix = '', names = [] } = {}) => {
 	if (report.sites.every((site) => site.state === 'missing') && names.length === 0) {
 		console.log('[daisyui-adapter] no target components found; nothing to fix');
 		return;
@@ -256,8 +260,20 @@ const printFix = (report, dryRun, names = []) => {
 	const { stock, fixed, customized, missing } = report.counts;
 	console.log(
 		`[daisyui-adapter] fix: ${stock} stock, ${fixed} fixed, ${customized} customized, ${missing} missing` +
-			(dryRun ? '; dry run, nothing written' : '')
+			suffix
 	);
+};
+
+// The marker records the count of files whose every site is fixed, not the files this run changed, so
+// a second run has nothing to rewrite. A stylesheet the adapter never wrote has no marker to update.
+const updateHeader = (cssPath, report) => {
+	if (!cssPath || !existsSync(cssPath)) return;
+	const raw = readFileSync(cssPath, 'utf8');
+	const match = HEADER_PATTERN.exec(raw);
+	if (!match) return;
+	const newline = match[0].endsWith('\r\n') ? '\r\n' : match[0].endsWith('\n') ? '\n' : '';
+	const next = `${headerFor(report.fullyFixed)}${newline}${raw.slice(match[0].length)}`;
+	if (next !== raw) writeFileSync(cssPath, next);
 };
 
 const init = () => {
@@ -321,7 +337,11 @@ const init = () => {
 	const aliases = Object.keys(TOKEN_FALLBACKS).map((key) => `--color-${key}: var(--${key});`);
 	if (themes) css = insertAfterLastImport(css, PLUGIN);
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
-	css = `${HEADER}\n${css}`;
+
+	// The fixer runs before the stylesheet is written: a refused style or version must leave the
+	// project untouched, so the map waits in memory until the guard has passed.
+	const report = fix({ components });
+	css = `${headerFor(report.fullyFixed)}\n${css}`;
 
 	writeFileSync(cssPath, css);
 
@@ -337,7 +357,7 @@ const init = () => {
 	if (themes) console.log('[daisyui-adapter] theme ok: light + dark');
 	console.log(`[daisyui-adapter] wrote ${where}`);
 	console.log(`[daisyui-adapter] ${lightCount} light, ${darkCount} dark`);
-	printFix(fix({ components }), false);
+	printFix(report);
 
 	// The install is last, after the lines that describe what was written, so a failed install
 	// still tells the user the stylesheet is in place.
@@ -355,12 +375,45 @@ const init = () => {
 	}
 };
 
+const FLAGS = new Set(['--dry-run', '--check', '--strict']);
+
+// A check or strict run prints its report first, then throws, so the user sees the sites before the
+// exit code. Neither flag writes: not a component file, not the marker.
 const fixCommand = (args) => {
-	const unknown = args.find((arg) => arg.startsWith('-') && arg !== '--dry-run');
+	const unknown = args.find((arg) => arg.startsWith('-') && !FLAGS.has(arg));
 	if (unknown) throw new Error(`[daisyui-adapter] unknown flag "${unknown}".\n${USAGE}`);
 	const dryRun = args.includes('--dry-run');
-	const names = args.filter((arg) => arg !== '--dry-run');
-	printFix(fix({ components: readComponents(), names, dryRun }), dryRun, names);
+	const check = args.includes('--check');
+	const strict = args.includes('--strict');
+	const names = args.filter((arg) => !FLAGS.has(arg));
+	const components = readComponents();
+	const write = !check && !strict && !dryRun;
+	const report = write ? fix({ components, names }) : scan({ components, names });
+	const suffix =
+		check || strict ? '; check only, nothing written' : dryRun ? '; dry run, nothing written' : '';
+	printFix(report, { dryRun, suffix, names });
+
+	if (write) {
+		if (components.tailwind?.css) updateHeader(resolve(components.tailwind.css), report);
+		return;
+	}
+
+	if (check && report.counts.stock > 0) {
+		throw new Error(`[daisyui-adapter] --check: ${report.counts.stock} stock site(s) remain`);
+	}
+	if (strict) {
+		if (report.counts.customized > 0) {
+			throw new Error(
+				`[daisyui-adapter] --strict: ${report.counts.customized} customized site(s) found`
+			);
+		}
+		for (const name of names) {
+			const rows = report.sites.filter((site) => site.component === name);
+			if (rows.length > 0 && rows.every((site) => site.state === 'missing')) {
+				throw new Error(`[daisyui-adapter] --strict: "${name}" has no target files`);
+			}
+		}
+	}
 };
 
 const [command = 'init', ...rest] = process.argv.slice(2);

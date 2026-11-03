@@ -35,7 +35,7 @@ const scaffold = (dir, { components = COMPONENTS, aliases } = {}) => {
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
 	cpSync(join(REPO, 'src', 'routes', 'layout.css'), join(dir, 'src', 'routes', 'layout.css'));
 	cpSync(THEME, join(dir, 'src', 'daisyui-theme.css'));
-	const json = { tailwind: { css: 'src/routes/layout.css' } };
+	const json = { tailwind: { css: 'src/routes/layout.css' }, style: 'mira' };
 	if (aliases) json.aliases = aliases;
 	writeFileSync(join(dir, 'components.json'), JSON.stringify(json, null, '\t'));
 	writeFileSync(
@@ -51,6 +51,10 @@ const scaffold = (dir, { components = COMPONENTS, aliases } = {}) => {
 	const stub = join(dir, 'node_modules', ...NAME.split('/'), 'package.json');
 	mkdirSync(dirname(stub), { recursive: true });
 	writeFileSync(stub, JSON.stringify({ name: NAME, version: VERSION }, null, '\t'));
+	// The fixer's guard reads the installed shadcn-svelte, so the fixture names the supported pin.
+	const shadcn = join(dir, 'node_modules', 'shadcn-svelte', 'package.json');
+	mkdirSync(dirname(shadcn), { recursive: true });
+	writeFileSync(shadcn, JSON.stringify({ name: 'shadcn-svelte', version: '1.7.1' }, null, '\t'));
 	const ui = uiDirectory(json, dir);
 	if (components.length > 0) {
 		mkdirSync(ui, { recursive: true });

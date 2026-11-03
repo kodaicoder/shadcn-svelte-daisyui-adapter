@@ -18,6 +18,7 @@
 		"dist",
 		"cli",
 		"component-fix.mjs",
+		"targets.mjs",
 		"CHANGELOG.md"
 	],
 	"keywords": [
