@@ -12,6 +12,10 @@ _Avoid_: Theme source, palette file
 A stylesheet declaration that points a shadcn-svelte token at a daisyUI source and keeps the project's previous value as its fallback.
 _Avoid_: Variable, override
 
+**Derived helper**:
+The `--daisy-derived-*` declaration that carries a mix or chart expression behind a binding's fallback slot; the smoke's declaration count excludes it.
+_Avoid_: Helper variable
+
 **Alias**:
 A `@theme inline` entry that exposes a binding as a Tailwind utility, such as `bg-success`.
 _Avoid_: Utility token
