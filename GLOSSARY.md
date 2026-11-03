@@ -60,6 +60,22 @@ _Avoid_: Customization, patch
 A foreground and background the adapter checks against WCAG AA in both schemes.
 _Avoid_: Color pair
 
+**Text tone**:
+The readable text form of a status tone, mixed with the page foreground; the fill keeps the raw tone.
+_Avoid_: Tone text, text color
+
+**Target manifest**:
+The single data source for the components, the contrast pairs and the supported shadcn-svelte version and style.
+_Avoid_: Fix table, config
+
+**Fixer state**:
+One of missing, stock, fixed or customized for a replacement site.
+_Avoid_: Status, result
+
+**Component boundary**:
+The 3:1 non-text contrast a filled control needs against the page.
+_Avoid_: Fill contrast
+
 **Header marker**:
 The first-line comment that records the adapter version and the exact re-run command.
 _Avoid_: Version comment
