@@ -1,0 +1,47 @@
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mhttp://127.0.0.1:5199/r/daisyui-adapter.json[39m
+[?25l│
+◇  [1m[36mdaisyui-adapter[39m[22m installed at [90msrc\lib\daisyui-adapter[39m
+[?25h│
+└  CssSyntaxError: <css input>:1:7: Unknown word var
+    at Input.error (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\input.js:135:16)
+    at Parser.unknownWord (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parser.js:610:22)
+    at Parser.other (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parser.js:447:12)
+    at Parser.parse (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parser.js:482:16)
+    at postcss.parse (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parse.js:11:12)
+    at Es (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:121:1576)
+    at Ts (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:121:242)
+    at ws (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:120:1183)
+    at Ds (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:122:192)
+    at ks (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:126:3002)
+
+
+Error parsing rule content: --default-border-width var(--daisy-border, 1px) CssSyntaxError: <css input>:1:7: Unknown word var
+    at Input.error (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\input.js:135:16)
+    at Parser.unknownWord (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parser.js:610:22)
+    at Parser.other (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parser.js:447:12)
+    at Parser.parse (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parser.js:482:16)
+    at postcss.parse (C:\Users\LENOVO\AppData\Local\pnpm-cache\dlx\06d92a667db68c824fe90f81d4449083\mvsvza49-fv0\node_modules\.pnpm\postcss@8.5.32\node_modules\postcss\lib\parse.js:11:12)
+    at Es (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:121:1576)
+    at Ts (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:121:242)
+    at ws (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:120:1183)
+    at Ds (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:122:192)
+    at ks (file:///C:/Users/LENOVO/AppData/Local/pnpm-cache/dlx/06d92a667db68c824fe90f81d4449083/mvsvza49-fv0/node_modules/.pnpm/shadcn-svelte@1.7.1_svelte@5.57.3/node_modules/shadcn-svelte/dist/index.mjs:126:3002) {
+  reason: 'Unknown word var',
+  source: '.temp{var(--daisy-border, 1px)}',
+  line: 1,
+  column: 7,
+  endLine: 1,
+  endColumn: 10,
+  input: {
+    column: 7,
+    endColumn: 10,
+    endLine: 1,
+    endOffset: 9,
+    line: 1,
+    offset: 6,
+    source: '.temp{var(--daisy-border, 1px)}'
+  }
+}

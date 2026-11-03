@@ -1,0 +1,14 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "cascade-raw",
+	"title": "cascade-raw",
+	"type": "registry:lib",
+	"description": "Plugin-only arm: addBase output with no cssVars.",
+	"devDependencies": [
+		"daisyui-adapter-13-probe@file:./daisyui-adapter-13-probe-0.0.0.tgz"
+	],
+	"css": {
+		"@plugin \"daisyui-adapter-13-probe\"": {}
+	},
+	"files": []
+}

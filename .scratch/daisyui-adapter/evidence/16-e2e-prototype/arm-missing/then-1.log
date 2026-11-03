@@ -1,0 +1,114 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-16/install.mjs missing
+exit 0
+[run-16:missing] packed adapter tarball (the unpublished stand-in for pnpm dlx <pkg> init)
+✓ Lockfile passes supply-chain policies (verified 1s ago)
+Packages: +1
++
+Progress: resolved 1, reused 3, downloaded 0, added 1, done
+
+devDependencies:
++ daisyui-adapter 0.1.0
+
+Done in 90ms using pnpm v12.9.1
+
+[run-16:missing] cli init
+[daisyui-adapter] wrote src/routes/layout.css and daisyui-adapter.overrides.css
+[daisyui-adapter] light chart L 0.6562 0.5662 0.4762 0.3862 0.2962 min adjacent 0.090
+[daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+[run-16] stylesheet sha256 after first init: 65189342cbfc2f576f021cf1f6f38359f18e68dd9055d6eef1bd7fc1b470aba6
+
+[run-16:missing] first-run stylesheet, before any component add
+
+[run-16:missing] add button
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mbutton[39m
+[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+
+[run-16:missing] add card
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mcard[39m
+[?25l│
+◇  [1m[36mcard[39m[22m installed at [90msrc\lib\components\ui\card[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+
+[run-16:missing] add input
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90minput[39m
+[?25l│
+◇  [1m[36minput[39m[22m installed at [90msrc\lib\components\ui\input[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+
+[run-16:missing] add dialog
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mdialog[39m
+[?25l│
+◇  [1m[36mdialog[39m[22m installed at [90msrc\lib\components\ui\dialog[39m
+[?25h[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+
+[run-16:missing] add tabs
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mtabs[39m
+[?25l│
+◇  [1m[36mtabs[39m[22m installed at [90msrc\lib\components\ui\tabs[39m
+[?25h│
+└  [32mSuccess![39m Components added.
+
+
+[run-16:missing] add chart
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90mchart[39m
+[?25l│
+◇  [1m[36mchart[39m[22m installed at [90msrc\lib\components\ui\chart[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+
+[run-16:missing] cli init again (idempotency, and it must survive six component adds)
+[daisyui-adapter] wrote src/routes/layout.css and daisyui-adapter.overrides.css
+[daisyui-adapter] light chart L 0.6562 0.5662 0.4762 0.3862 0.2962 min adjacent 0.090
+[daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+[run-16] stylesheet sha256 after second init: 65189342cbfc2f576f021cf1f6f38359f18e68dd9055d6eef1bd7fc1b470aba6
+
+[run-16:missing] delete the theme, so the plugin emits nothing
+[run-16:missing] install chain complete
+
+Done in 892ms using pnpm v12.9.1
+Done in 1.1s using pnpm v12.9.1
+Done in 1.1s using pnpm v12.9.1
+Done in 7.8s using pnpm v12.9.1
+Done in 907ms using pnpm v12.9.1
+Done in 2.5s using pnpm v12.9.1
+(node:17868) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

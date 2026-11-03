@@ -1,7 +1,7 @@
 # Override and re-run policy
 
 Type: grilling
-Status: open
+Status: resolved
 Blocked by: 13
 
 ## Question
@@ -19,4 +19,164 @@ Depends on ticket 13 for where the bindings live.
 
 ## Answer
 
-<!-- fill on resolution -->
+Resolved 2026-10-29 on the pure-CLI contract. During this ticket the install changed from a registry
+item to an adapter CLI (07 and 08 were rewritten the same day), because the item is a static string and
+cannot read the stylesheet, which is what a fallback needs. The carrier, the namespace and the
+lifecycle findings from 13 stand; only the writer changed.
+
+Behaviour that mattered was run, not read. Fixture: `registry-14/` (two probe plugins, a probe CLI, one
+no-op item for the harness's `--then` precondition). Evidence: `evidence/14-override-rerun/` from
+twenty harness runs; `check.mjs` re-runs 89 assertions against the committed copies. Every run uses
+the two-block theme in `registry-14/probe-theme.css` at `src/daisyui-theme.css` on `--layout app`.
+
+### 1. Escape hatch: one user-owned file, created empty by the CLI, plus one import line
+
+The CLI creates `daisyui-adapter.overrides.css` in the same folder as the stylesheet it reads from
+`components.json`, empty, and adds `@import "./daisyui-adapter.overrides.css";` as the last import. It
+writes that file once and never again, so a user edit survives every later run. The user's second step
+is to edit that file, nothing else.
+
+0.2.0 reversed the automatic part: the file and the import are opt-in, and the CLI neither creates nor
+deletes them (22). The measurements below still explain the selectors and the import order.
+
+Reasons, each measured:
+
+- The base install still needs no user edit, and the override is still a deliberate second step: the
+  file exists and is empty, and an empty file with its import changes nothing (`empty-file`).
+- The import line cannot be forgotten, which was the separate-file carrier's one silent failure. The
+  CLI writes it in the same step (`cli-lifecycle`), and an import without the file is a loud build
+  failure (`import-only`: `Can't resolve './daisyui-adapter.overrides.css'` under
+  `[plugin @tailwindcss/vite:generate:build]`), so the order inside the CLI is file first, line second.
+- A marker-fenced block inside the generated region was rejected. A duplicate declaration for a key the
+  map owns survives a re-run (the CLI replaces the first match and leaves the duplicate, measured in
+  `fenced`) but it wins only in the block it is written in, is inert in dark, and depends on an
+  implementation detail no one documents. A fenced key the map does not own survives too, which is not
+  the escape hatch this ticket needs.
+- Plugin options were rejected on the cascade, not the syntax: `addBase` output is always inside
+  `@layer base`, and 13 measured a layered declaration losing to the unlayered stock `:root`
+  (`cascade-raw`: compiled base has red and green, computed stays step-4).
+- The theme file cannot carry the override at all. Measured in `theme-rule`: an extra
+  `--daisy-color-primary: rgb(22 22 22)` inside the light block is dropped, and a
+  `html:not(.dark) { --primary: rgb(21 21 21) }` rule at the end of the file has no effect, because the
+  file is read as text and never compiled.
+
+### 2. Precedence: specificity, and the import cannot be last in source order
+
+`@import` must precede every other rule, so an imported override file is earlier in source order than
+the stylesheet's `:root`. Source order cannot put it last. Specificity does.
+
+Measured in `carriers`, one token per row, one build:
+
+| carrier, inside the imported file | light | dark |
+| --- | --- | --- |
+| plain `:root` / `.dark` | loses | loses |
+| `html:root` / `html.dark` | wins | wins |
+| `:root:root` / `:root.dark` | wins | wins |
+| inside `@layer overrides` | loses | loses |
+| light-only `html:root` | wins | leaks into dark |
+| light-only `html:not(.dark)` | wins | no leak |
+| appended pair at end of file, plain | wins | wins |
+| appended light-only `:root` | wins | leaks into dark |
+
+Decision: the file's light block is `html:not(.dark)` and its dark block is `html.dark`. Both are
+`0,1,1` against the generated `:root` and `.dark` at `0,1,0`, and the `:not()` makes the light block
+opt out of dark instead of winning there. `:root:root` also wins but reads worse and does not solve the
+leak on its own. A user writes one block when they need one scheme; the pair when they need both.
+
+Stated limit: this assumes dark mode is the `.dark` class on `<html>` or an ancestor, which is what
+`@custom-variant dark (&:is(.dark *))` and the generated `.dark` block already assume. A project that
+switches dark with a media query or `[data-theme]` gets no switch from the generated block either; the
+docs page (18) says so.
+
+### 3. Re-run: the CLI is idempotent, `init` wipes, hand edits are unsupported
+
+- **The CLI again**: byte-identical (`cli-rerun`, `cli-lifecycle`). The writer's strip step recognises
+  the `var(--…, …)` it wrote and reuses the inner value as the next fallback, and the outputs show no
+  nesting.
+- **`shadcn-svelte init`**: wipes the values, keeps the header comment and the override import, and
+  inserts its own font import after ours (`cli-lifecycle`, `init`). The recovery is the CLI again, which
+  re-binds with the post-init values as the new fallbacks (`cli-after-init`: `--primary: var(--daisy-color-primary, oklch(0.205 0 0))` in light, `oklch(0.922 0 0)` in dark).
+- **`add -a` and `add <component>`**: byte-identical. 13 measured both against the item; 14 re-measured
+  `add button -y -o` after `shadcn-svelte init` and `add -a -y -o` after the CLI (`cli-lifecycle`,
+  `cli-add-all`: the stylesheet is unchanged and the build still follows the theme). Nothing in the
+  shadcn component flow touches the token blocks.
+- **A hand edit inside the generated region**: an edit to an existing declaration is reverted by the
+  next CLI run, because the writer replaces that declaration with the binding (`re-add`: `--ring` goes
+  back to `var(--daisy-color-primary)` in both blocks, and those two lines are the only diff). A
+  duplicate declaration added after it survives, wins in its own block, and is unsupported
+  (`fenced`: `--primary: rgb(77 77 77)` survives in light, dark keeps the theme value).
+- **The override file**: never written after creation. `cli-lifecycle` runs four commands and the file
+  is still 0 bytes; `re-add` and `init` show the same for a populated file (byte-identical copies).
+
+### 4. Drift: none between the theme and the build, one axis left, and no build-time detector
+
+- **Theme → build**: live. Editing `src/daisyui-theme.css` after the install and rebuilding, with no
+  install in between, follows the new value in both schemes (`theme-drift`: `--primary` becomes
+  `rgb(12 34 56)` / `rgb(65 43 21)` while the stylesheet still says `var(--daisy-color-primary)`).
+  Nothing is cached, so a stale-output warning has nothing to warn about.
+- **The mapping table**: static per package version. It lives in two places, the CLI's writer and the
+  plugin's emission, and ticket 08 makes generating one from the other a release requirement. Two copies
+  at one version are only safe while that holds; if they drift, a renamed key becomes an invalid token.
+- **The fallback**: a deliberate snapshot of the project's values at install time. That is the point of
+  it, and it is why `init` needs a re-run: the snapshot then describes the pre-init palette.
+- **The one axis that can drift**: bumping the package without re-running the CLI. The plugin never sees
+  the stylesheet, and `add`/`docs` never printed anything, so no build gate can compare the two. The
+  build does nothing about it; the exact version in the header comment, the exact version in the
+  command, and "re-run after a bump" are the policy.
+- **Why the prefixed namespace is load-bearing**: if the writer used daisyUI's own `--color-*` names, a
+  missing source leaves only `@theme inline`'s `--color-primary: var(--primary)`, and the binding is then
+  a cycle. Measured in `cli-missing-theme`: `--primary` computes to `""`, the button is transparent, and
+  the fallback is ignored. The same run with `--daisy-color-*` (`cli-missing-theme-daisy`) renders every
+  token from the fallback, including the five derived ones through one helper variable each.
+
+### 5. Marker: none on the theme file, one header comment in the stylesheet
+
+- **Theme file: no marker.** It is input, pasted from daisyUI's generator and never written by anything
+  here. Any marker would be user-maintained and stale, and `theme-rule` shows the file is not even
+  compiled, so it could not hold one that means anything.
+- **Stylesheet: yes, one comment line**, written by the CLI because the CLI owns the write. `add` could
+  not write a comment (07, 2026-10-28); this is the first channel that can. The line is
+  `/* daisyui-adapter <version> | re-run `shadcn-svelte-daisyui-adapter init` after `shadcn-svelte init` */`.
+  17 pinned the exact version in that command and replaced the placeholder name with the published one.
+  Measured: it is present after the first run, survives `shadcn-svelte init` and `add button`, and a
+  second CLI run does not duplicate it (`cli-lifecycle`: all four snapshots start with it).
+- It is the marker the old design could not have: version plus the recovery command, in the file a
+  reader opens. It cannot go stale into a false positive because `init` keeps it, which is exactly when
+  the reader needs to know the values are gone.
+
+### Evidence
+
+- `carriers/`: eight override carriers, one build, the precedence table.
+- `re-add/`, `init/`: the override and a hand edit through a re-add and a later `init`.
+- `fenced/`: a duplicate declaration inside the generated `:root`.
+- `theme-rule/`, `theme-drift/`: the theme file cannot carry an override; the build is live.
+- `missing-name/`, `win-probe/`: a missing source computes to `""`; emitted aliases follow the token.
+- `empty-file/`, `import-only/`: an empty override file is a no-op; the line without the file fails.
+- `raw-collision/`, `raw-map/`: raw `--color-*` names split the token from the name and move the hook.
+- `cli-init/`, `cli-rerun/`, `cli-lifecycle/`, `cli-after-init/`: the CLI's write, idempotency, lifecycle.
+- `cli-add-all/`: `add -a` after the CLI leaves the stylesheet byte-identical.
+- `cli-missing-theme/`, `cli-missing-theme-daisy/`: raw names break the fallback, the prefixed namespace keeps it.
+- `check.txt`: `registry-14/check.mjs` against the committed copies, 89 checks.
+
+### Not proved here
+
+- A real CSS parser. The probe CLI uses regexes against the fixture's formatting; the shipped CLI needs
+  a parser and must survive a stylesheet whose `:root`/`.dark` are not exact selectors (13's cost note).
+- The package's bin under `pnpm dlx` and `npx`, and Windows and macOS packaging.
+- Whether the header comment survives an arbitrary future shadcn-svelte version; it survived 1.7.1's
+  `init` and `add`.
+- The auto-created override file on a layout whose stylesheet is `src/routes/layout.css`; all runs here
+  are `--layout app`.
+
+### Constraints this puts on later tickets
+
+- 16: one list drives the CLI's bindings and the plugin's emission; the plugin emits nothing when the
+  theme is absent and throws E2/E3 when it is malformed.
+- 17: publish one package with the `init` bin at an exact version; the header comment is the version
+  marker, so the number in it is a public promise.
+- 18: one override page: the created file, the light and dark selectors, "the CLI never rewrites it",
+  and the recovery after `shadcn-svelte init`. No registry URL and no `-o`.
+- 19: no work. The scrim keeps `bg-black/20` and sonner needs nothing (13, re-measured in `win-probe`).
+
+Lesson: A fallback can only preserve a value the writer has read, and a binding that borrows the framework's own alias turns that fallback into a cycle.
+Check: code - registry-14/check.mjs asserts the CLI writes the stylesheet's own `oklch(0.508 0.118 165.612)` as the fallback, that deleting the theme renders that exact value, and that the same run with raw `--color-*` names renders `""` instead.

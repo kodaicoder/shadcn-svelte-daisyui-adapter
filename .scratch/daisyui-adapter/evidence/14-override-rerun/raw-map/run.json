@@ -1,0 +1,62 @@
+{
+  "stamp": "2026-10-29T02-52-06-984Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-29T02-52-06-984Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-29T02-52-06-984Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "then",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/daisyui-adapter-raw.json",
+  "layout": "app",
+  "cssPath": "src/app.css",
+  "theme": ".scratch/daisyui-adapter/registry-14/probe-theme.css",
+  "tarball": "daisyui-adapter-14-raw-probe-0.0.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": true,
+  "then": [
+    {
+      "command": "exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-14/apply.mjs raw-map",
+      "code": 0
+    }
+  ],
+  "build": true,
+  "pluginSentinel": [
+    "_app/immutable/assets/0.-g1MuEQ2.css: --probe-14-raw:1",
+    "_app/immutable/assets/0.-g1MuEQ2.css: --probe-14-raw:1"
+  ],
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "rgb(3, 3, 3)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "rgb(3 3 3)",
+        "--color-primary": "rgb(3 3 3)",
+        "--color-base-100": "rgb(210 210 210)"
+      }
+    },
+    "dark": {
+      "background": "oklch(0.15 0.006 107)",
+      "buttonBg": "oklch(0.6 0.13 166)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(60% 0.13 166)",
+        "--color-primary": "rgb(201 0 0)",
+        "--color-base-100": "rgb(211 211 211)"
+      }
+    }
+  },
+  "ok": true
+}

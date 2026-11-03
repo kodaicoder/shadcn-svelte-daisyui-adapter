@@ -1,0 +1,38 @@
+
+[light] page rgb(255, 255, 255)
+  contrast  3.20 / 4.60 / 6.76 / 9.92 / 14.06
+ok    light: every step is at or above 3:1 against the page
+  adjacent  0.090 / 0.090 / 0.090 / 0.090
+ok    light: adjacent OKLab dE >= 0.06 (worst 0.090)
+ok    light: lightness moves one direction with no flat step
+  protanopia  0.090 / 0.090 / 0.090 / 0.091
+ok    light: under protanopia adjacent dE >= 0.05 (worst 0.090)
+  deuteranopia  0.090 / 0.090 / 0.090 / 0.091
+ok    light: under deuteranopia adjacent dE >= 0.05 (worst 0.090)
+  tritanopia  0.090 / 0.090 / 0.090 / 0.091
+ok    light: under tritanopia adjacent dE >= 0.05 (worst 0.090)
+
+[dark] page rgb(29, 35, 42)
+  contrast  3.20 / 4.64 / 6.50 / 8.96 / 12.03
+ok    dark: every step is at or above 3:1 against the page
+  adjacent  0.091 / 0.089 / 0.091 / 0.096
+ok    dark: adjacent OKLab dE >= 0.06 (worst 0.089)
+ok    dark: lightness moves one direction with no flat step
+  protanopia  0.091 / 0.088 / 0.091 / 0.093
+ok    dark: under protanopia adjacent dE >= 0.05 (worst 0.088)
+  deuteranopia  0.091 / 0.089 / 0.091 / 0.100
+ok    dark: under deuteranopia adjacent dE >= 0.05 (worst 0.089)
+  tritanopia  0.091 / 0.089 / 0.091 / 0.093
+ok    dark: under tritanopia adjacent dE >= 0.05 (worst 0.089)
+
+[light] hue 276.54 / 276.71 / 276.74 / 277.39 / 277.43 (drift 0.90 deg)
+       chroma 0.080 / 0.079 / 0.079 / 0.080 / 0.080
+ok    light: hue holds within 2 degrees, so the ramp is one hue (drift 0.90)
+ok    light: painted chroma within 0.005 of the 0.08 cap (max 0.080)
+
+[dark] hue 276.60 / 276.46 / 277.01 / 276.62 / 277.08 (drift 0.62 deg)
+       chroma 0.080 / 0.080 / 0.081 / 0.080 / 0.044
+ok    dark: hue holds within 2 degrees, so the ramp is one hue (drift 0.62)
+ok    dark: painted chroma within 0.005 of the 0.08 cap (max 0.081)
+
+all checks passed

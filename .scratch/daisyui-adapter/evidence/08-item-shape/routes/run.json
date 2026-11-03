@@ -1,0 +1,44 @@
+{
+  "stamp": "2026-10-28T08-03-01-867Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T08-03-01-867Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T08-03-01-867Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/daisyui-adapter.json",
+  "layout": "routes",
+  "cssPath": "src/routes/layout.css",
+  "theme": ".scratch/daisyui-adapter/registry-08/probe-theme.css",
+  "tarball": "daisyui-adapter-08-probe-0.0.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": true,
+  "build": true,
+  "pluginSentinel": [
+    "_app/immutable/assets/0.DEFqXAHa.css: --probe-08-loaded:1",
+    "_app/immutable/assets/0.DEFqXAHa.css: --probe-08-theme-bytes:2240"
+  ],
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "oklch(0.508 0.118 165.612)",
+      "buttonCount": 3
+    },
+    "dark": {
+      "background": "oklch(0.153 0.006 107.1)",
+      "buttonBg": "oklch(0.432 0.095 166.913)"
+    }
+  },
+  "ok": true
+}

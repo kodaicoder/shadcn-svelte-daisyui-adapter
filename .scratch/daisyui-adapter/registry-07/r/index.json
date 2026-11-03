@@ -1,0 +1,14 @@
+[
+	{
+		"name": "theme-probe",
+		"title": "Install contract probe",
+		"type": "registry:file",
+		"description": "Throwaway item observing the missing-theme-file build error surface.",
+		"dependencies": [
+			"tailwindcss"
+		],
+		"devDependencies": [],
+		"registryDependencies": [],
+		"relativeUrl": "theme-probe.json"
+	}
+]

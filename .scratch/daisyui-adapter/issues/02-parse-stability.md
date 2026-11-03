@@ -38,3 +38,12 @@ Write findings to `.scratch/daisyui-adapter/research/02-parse-stability.md`, end
 - E3: `[daisyui-adapter] <path>: theme "<label>" <problem>. Replace that block with a complete v5 block from https://daisyui.com/theme-generator/, then re-run the build.`
 - Path: one fixed path resolved from the adapter module, `fileURLToPath(new URL("daisyui-theme.css", import.meta.url))`. No plugin options (the registry `css` injection is a static body-less string), no search, no `process.cwd()` (Vite root is configurable). Ticket 07 owns the literal filename and override policy.
 - Throw from inside the plugin handler so `compile()` rejects with the message intact. Read per compile, no module cache. Dev-server invalidation on theme-only edits is unverified and left to ticket 14.
+
+## Amendment (ticket 14, 2026-10-29): where the three messages surface
+
+The parse contract, the tolerate and reject lists, and the three message texts stand. Two things
+change under the pure CLI (07 and 08, rewritten the same day):
+
+- Path: 07 replaced the module-sibling resolution with `resolve(process.cwd(), 'src/daisyui-theme.css')`. That stands; the line above is history.
+- E1 no longer fails the build. The CLI prints E1 at init and continues, and the plugin emits nothing when the file is absent, so the CLI-written fallbacks render (measured). E2 and E3 still exit non-zero at init and still throw at build: absence is a state a later paste fixes, malformation is a defect that would render wrong colours silently (07 decision 5).
+- Dev-server invalidation on a theme-only edit was left to ticket 14. Ticket 14 measured a rebuild after a theme edit with no install in between following the new value in both schemes (`evidence/14-override-rerun/theme-drift/`), so there is no cached output to invalidate.

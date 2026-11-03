@@ -1,0 +1,135 @@
+@import 'tailwindcss';
+@import "tw-animate-css";
+@import "shadcn-svelte/tailwind.css";
+@import "@fontsource-variable/noto-sans";
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource-variable/manrope";
+
+@plugin "daisyui-adapter-14-raw-probe";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	--background: var(--daisy-color-base-100);
+	--foreground: var(--daisy-color-base-content);
+	--card: var(--daisy-color-base-100);
+	--card-foreground: var(--daisy-color-base-content);
+	--popover: var(--daisy-color-base-100);
+	--popover-foreground: var(--daisy-color-base-content);
+	--primary: var(--daisy-color-primary);
+	--primary-foreground: var(--daisy-color-primary-content);
+	--secondary: var(--daisy-color-base-200);
+	--secondary-foreground: var(--daisy-color-base-content);
+	--muted: var(--daisy-color-base-200);
+	--muted-foreground: color-mix(in oklch, var(--daisy-color-base-content) 62%, var(--daisy-color-base-100));
+	--accent: color-mix(in oklch, var(--daisy-color-base-200) 85%, var(--daisy-color-base-300));
+	--accent-foreground: var(--daisy-color-base-content);
+	--destructive: var(--daisy-color-error);
+	--border: color-mix(in oklch, var(--daisy-color-base-content) 10%, var(--daisy-color-base-100));
+	--input: color-mix(in oklch, var(--daisy-color-base-content) 15%, var(--daisy-color-base-100));
+	--ring: var(--daisy-color-primary);
+	--chart-1: var(--daisy-color-primary);
+	--chart-2: var(--daisy-color-accent);
+	--chart-3: var(--daisy-color-secondary);
+	--chart-4: var(--daisy-color-info);
+	--chart-5: var(--daisy-color-success);
+	--radius: var(--daisy-radius);
+	--sidebar: var(--daisy-color-base-100);
+	--sidebar-foreground: var(--daisy-color-base-content);
+	--sidebar-primary: var(--daisy-color-primary);
+	--sidebar-primary-foreground: var(--daisy-color-primary-content);
+	--sidebar-accent: var(--daisy-color-base-200);
+	--sidebar-accent-foreground: var(--daisy-color-base-content);
+	--sidebar-border: color-mix(in oklch, var(--daisy-color-base-content) 10%, var(--daisy-color-base-100));
+	--sidebar-ring: var(--daisy-color-primary);
+}
+
+.dark {
+	--background: var(--daisy-color-base-100);
+	--foreground: var(--daisy-color-base-content);
+	--card: var(--daisy-color-base-100);
+	--card-foreground: var(--daisy-color-base-content);
+	--popover: var(--daisy-color-base-100);
+	--popover-foreground: var(--daisy-color-base-content);
+	--primary: var(--daisy-color-primary);
+	--primary-foreground: var(--daisy-color-primary-content);
+	--secondary: var(--daisy-color-base-200);
+	--secondary-foreground: var(--daisy-color-base-content);
+	--muted: var(--daisy-color-base-200);
+	--muted-foreground: color-mix(in oklch, var(--daisy-color-base-content) 62%, var(--daisy-color-base-100));
+	--accent: color-mix(in oklch, var(--daisy-color-base-200) 85%, var(--daisy-color-base-300));
+	--accent-foreground: var(--daisy-color-base-content);
+	--destructive: var(--daisy-color-error);
+	--border: color-mix(in oklch, var(--daisy-color-base-content) 10%, var(--daisy-color-base-100));
+	--input: color-mix(in oklch, var(--daisy-color-base-content) 15%, var(--daisy-color-base-100));
+	--ring: var(--daisy-color-primary);
+	--chart-1: var(--daisy-color-primary);
+	--chart-2: var(--daisy-color-accent);
+	--chart-3: var(--daisy-color-secondary);
+	--chart-4: var(--daisy-color-info);
+	--chart-5: var(--daisy-color-success);
+	--sidebar: var(--daisy-color-base-100);
+	--sidebar-foreground: var(--daisy-color-base-content);
+	--sidebar-primary: var(--daisy-color-primary);
+	--sidebar-primary-foreground: var(--daisy-color-primary-content);
+	--sidebar-accent: var(--daisy-color-base-200);
+	--sidebar-accent-foreground: var(--daisy-color-base-content);
+	--sidebar-border: color-mix(in oklch, var(--daisy-color-base-content) 10%, var(--daisy-color-base-100));
+	--sidebar-ring: var(--daisy-color-primary);
+	--radius: var(--daisy-radius);
+}
+
+@theme inline {
+	--font-sans: 'Manrope Variable', sans-serif;
+	--font-heading: 'Playfair Display Variable', serif;
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
+	}
+}

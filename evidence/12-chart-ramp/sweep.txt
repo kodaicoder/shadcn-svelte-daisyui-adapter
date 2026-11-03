@@ -1,0 +1,33 @@
+[1] one-hue ramp, daisyUI built-in pair
+light adjacent 0.090 protanopia 0.090 deuteranopia 0.090 tritanopia 0.090  hue drift 0.00 deg
+dark  adjacent 0.090 protanopia 0.090 deuteranopia 0.090 tritanopia 0.090  hue drift 0.00 deg
+
+[2] per-step gamut fit vs one cap for the whole ramp, 10 hues x 6 surfaces
+fit  worst adjacent 0.086  worst hue drift 9.33 deg  over the 2 deg hue guard 7/60  contrast failures 0  no room 0
+clip worst adjacent 0.075  worst hue drift 39.51 deg  over the 2 deg hue guard 19/60  contrast failures 0  no room 0
+daisy dark step 5: fit C 0.0442 drift 0.01 deg  | clip C 0.0800 drift 4.48 deg
+
+[3] the settled rule over the same 10 hues x 6 surfaces, refusals included
+solved 53/60  worst adjacent 0.090 normal  worst simulated 0.091  refused 7
+  hue   0 surface L 0.80: the ramp drifts 2.19 degrees in hue, so it is not one hue
+  hue  36 surface L 0.80: the ramp drifts 6.77 degrees in hue, so it is not one hue
+  hue  72 surface L 0.90: the ramp drifts 2.48 degrees in hue, so it is not one hue
+  hue  72 surface L 0.80: the ramp drifts 9.33 degrees in hue, so it is not one hue
+  hue 180 surface L 0.80: the ramp drifts 2.25 degrees in hue, so it is not one hue
+  hue 216 surface L 0.80: the ramp drifts 4.38 degrees in hue, so it is not one hue
+  hue 252 surface L 0.80: the ramp drifts 4.77 degrees in hue, so it is not one hue
+
+[4] the light scheme band laid on the dark page
+contrast 4.95 / 3.44 / 2.34 / 1.59 / 1.13  worst 1.13 at step 5
+
+[5] five plain assignments against the light page
+name-to-name    primary 8.33, secondary 3.67, accent 1.91, neutral 19.91, base-content 17.73
+                 below 3:1 1 of 5 (accent)  adjacent 0.361 / 0.401 / 0.652 / 0.070  min pair 0.070
+semantic spread primary 8.33, secondary 3.67, accent 1.91, warning 1.76, info 2.22
+                 below 3:1 3 of 5 (accent, warning, info)  adjacent 0.361 / 0.401 / 0.243 / 0.326  min pair 0.137
+
+[6] separation under CVD, normal and simulated
+               normal / protanopia / deuteranopia / tritanopia, adjacent then any pair
+one hue        adjacent 0.090 / 0.090 / 0.090 / 0.090   pair 0.090 / 0.090 / 0.090 / 0.090
+name-to-name   adjacent 0.070 / 0.070 / 0.070 / 0.070   pair 0.070 / 0.070 / 0.070 / 0.070
+semantic       adjacent 0.243 / 0.149 / 0.112 / 0.244   pair 0.137 / 0.128 / 0.112 / 0.035

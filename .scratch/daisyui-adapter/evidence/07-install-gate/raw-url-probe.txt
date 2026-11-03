@@ -1,0 +1,4 @@
+﻿command: node -e "fetch('https://raw.githubusercontent.com/sveltejs/kit/main/packages/kit/package.json').then(async r=>{console.log('raw status',r.status,'type',r.headers.get('content-type')); const j=await r.json(); console.log('parsed name',j.name)})"
+
+raw status 200 type text/plain; charset=utf-8
+parsed name @sveltejs/kit

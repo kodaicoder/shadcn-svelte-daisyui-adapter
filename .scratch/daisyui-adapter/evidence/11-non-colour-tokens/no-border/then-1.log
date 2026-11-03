@@ -1,0 +1,21 @@
+$ pnpm dlx shadcn-svelte@latest add input card checkbox -y -o
+exit 0
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90minput, card, checkbox[39m
+[?25l│
+◇  [1m[36minput[39m[22m installed at [90msrc\lib\components\ui\input[39m
+[?25h[?25l│
+◇  [1m[36mcard[39m[22m installed at [90msrc\lib\components\ui\card[39m
+[?25h[?25l│
+◇  [1m[36mcheckbox[39m[22m installed at [90msrc\lib\components\ui\checkbox[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+
+Done in 5.5s using pnpm v12.9.1

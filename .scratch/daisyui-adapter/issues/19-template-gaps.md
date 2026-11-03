@@ -1,7 +1,7 @@
 # Template gaps: overlay scrims and sonner
 
 Type: grilling
-Status: open
+Status: resolved
 Blocked by: 13
 
 ## Question
@@ -21,4 +21,14 @@ Depends on ticket 13 for where declarations land.
 
 ## Answer
 
-<!-- fill on resolution -->
+Resolved 2026-11-03. The scrim stays exactly as it is: `dialog-overlay`, `alert-dialog-overlay`,
+`sheet-overlay` and `drawer-overlay` keep `bg-black/20`. A token would not reach an unpatched overlay,
+and patching the component is undone by `shadcn-svelte add -a`. This is a documented gap, not a mapping
+defect (13).
+
+Sonner needs no output. Ticket 20's claim 3 measured that the stock `@theme inline` map emits the
+`--color-*` values `sonner.svelte` reads, so the "invalid values" half of this ticket is wrong. No plain
+declarations, no `static` theme block, no component patch.
+
+Lesson: A hardcoded scrim and a runtime `--color-*` read are not token problems; one needs a component patch that `add -a` would overwrite, the other was measured as already working.
+Check: code - 20's claim 3 shows the sonner values resolve from the stock map; 13 keeps the scrim and the gap is recorded in 18's docs.

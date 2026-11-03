@@ -1,0 +1,11 @@
+probe-visual.mjs sets `process.exitCode = report.failures.length === 0 ? 0 : 1`, and failures is the
+set of series that paint transparent or are not found. The exit code is therefore a pure function of
+the `visual.json` beside this file; it is recorded here because the exit code itself is not a file.
+
+baseline-repro   failures 10  exit 1   (all five series, both schemes)
+arm-missing      failures  0  exit 0
+arm-full         failures  0  exit 0
+
+Observed on the runs listed in each arm's run.json. Check the derivation with:
+
+  node -e "for (const d of ['baseline-repro','arm-missing','arm-full']) { const v = require('./' + d + '/visual.json'); console.log(d, v.failures.length, v.failures.length === 0 ? 0 : 1); }"

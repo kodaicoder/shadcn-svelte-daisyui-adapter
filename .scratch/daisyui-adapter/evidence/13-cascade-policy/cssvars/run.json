@@ -1,0 +1,55 @@
+{
+  "stamp": "2026-10-28T11-18-49-400Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T11-18-49-400Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T11-18-49-400Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/cssvars-namespaced.json",
+  "layout": "app",
+  "cssPath": "src/app.css",
+  "theme": ".scratch/daisyui-adapter/registry-13/probe-theme.css",
+  "tarball": "daisyui-adapter-13-probe-0.0.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": true,
+  "build": true,
+  "pluginSentinel": [
+    "_app/immutable/assets/0.B_EBl6YG.css: --cascade-raw:base-light",
+    "_app/immutable/assets/0.B_EBl6YG.css: --cascade-raw:base-dark"
+  ],
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "oklch(0.49 0.118 165)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(49% 0.118 165)",
+        "--background": "oklch(100% 0 0)",
+        "--daisy-color-primary": "oklch(49% 0.118 165)"
+      }
+    },
+    "dark": {
+      "background": "oklch(0.15 0.006 107)",
+      "buttonBg": "oklch(0.6 0.13 166)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(60% 0.13 166)",
+        "--background": "oklch(15% 0.006 107)",
+        "--daisy-color-primary": "oklch(60% 0.13 166)"
+      }
+    }
+  },
+  "ok": true
+}

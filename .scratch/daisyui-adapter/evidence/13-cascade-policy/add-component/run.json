@@ -1,0 +1,62 @@
+{
+  "stamp": "2026-10-28T11-21-11-678Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-10-28T11-21-11-678Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\harness\\runs\\2026-10-28T11-21-11-678Z",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "baseline-add",
+    "theme-file",
+    "package-tarball",
+    "registry-server",
+    "adapter-add",
+    "then",
+    "build",
+    "render"
+  ],
+  "addUrl": "http://127.0.0.1:5199/r/daisyui-adapter.json",
+  "layout": "app",
+  "cssPath": "src/app.css",
+  "theme": ".scratch/daisyui-adapter/registry-13/probe-theme.css",
+  "tarball": "daisyui-adapter-13-probe-0.0.0.tgz",
+  "addExitCode": 0,
+  "cssChanged": true,
+  "then": [
+    {
+      "command": "dlx shadcn-svelte@1.7.1 add card -y -o",
+      "code": 0
+    }
+  ],
+  "build": true,
+  "pluginSentinel": [
+    "_app/immutable/assets/0.DgjxJ-47.css: --cascade-raw:base-light",
+    "_app/immutable/assets/0.DgjxJ-47.css: --cascade-raw:base-dark"
+  ],
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "buttonBg": "rgb(255, 0, 0)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(49% 0.118 165)",
+        "--background": "oklch(100% 0 0)",
+        "--radius": "0.5rem"
+      }
+    },
+    "dark": {
+      "background": "oklch(0.15 0.006 107)",
+      "buttonBg": "rgb(255, 0, 0)",
+      "buttonCount": 3,
+      "props": {
+        "--primary": "oklch(60% 0.13 166)",
+        "--background": "oklch(15% 0.006 107)",
+        "--radius": "0.5rem"
+      }
+    }
+  },
+  "ok": true
+}

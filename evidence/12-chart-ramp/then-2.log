@@ -1,0 +1,5 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-12/apply.mjs
+exit 0
+[apply-12] wrote the ramp to src/routes/layout.css
+[apply-12] light 0.6562 / 0.5662 / 0.4762 / 0.3862 / 0.2962 minAdj 0.090
+[apply-12] dark  0.5491 / 0.6391 / 0.7291 / 0.8191 / 0.9091 minAdj 0.090

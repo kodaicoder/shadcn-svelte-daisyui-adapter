@@ -1,0 +1,153 @@
+$ pnpm dlx shadcn-svelte@1.7.1 add -a -y -o
+exit 0
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.1 [39m
+│
+◇  Components to install:
+│  [90maccordion, alert, alert-dialog, aspect-ratio, attachment, avatar, badge, breadcrumb, bubble,
+│  button, button-group, calendar, card, carousel, chart, checkbox, code-block, collapsible,
+│  command, context-menu, dialog, drawer, dropdown-menu, empty, field, form, hover-card,
+│  input, input-group, input-otp, item, kbd, label, marker, menubar, message,
+│  message-scroller, native-select, navigation-menu, pagination, popover, progress, questionnaire, radio-group, range-calendar,
+│  resizable, scroll-area, select, separator, sheet, sidebar, skeleton, slider, sonner,
+│  spinner, switch, table, tabs, textarea, toggle, toggle-group, tooltip, trace[39m
+[?25l│
+◇  [1m[36maccordion[39m[22m installed at [90msrc\lib\components\ui\accordion[39m
+[?25h[?25l│
+◇  [1m[36malert[39m[22m installed at [90msrc\lib\components\ui\alert[39m
+[?25h[?25l│
+◇  [1m[36malert-dialog[39m[22m installed at [90msrc\lib\components\ui\alert-dialog[39m
+[?25h[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h[?25l│
+◇  [1m[36maspect-ratio[39m[22m installed at [90msrc\lib\components\ui\aspect-ratio[39m
+[?25h[?25l│
+◇  [1m[36mattachment[39m[22m installed at [90msrc\lib\components\ui\attachment[39m
+[?25h[?25l│
+◇  [1m[36mavatar[39m[22m installed at [90msrc\lib\components\ui\avatar[39m
+[?25h[?25l│
+◇  [1m[36mbadge[39m[22m installed at [90msrc\lib\components\ui\badge[39m
+[?25h[?25l│
+◇  [1m[36mbreadcrumb[39m[22m installed at [90msrc\lib\components\ui\breadcrumb[39m
+[?25h[?25l│
+◇  [1m[36mbubble[39m[22m installed at [90msrc\lib\components\ui\bubble[39m
+[?25h[?25l│
+◇  [1m[36mbutton-group[39m[22m installed at [90msrc\lib\components\ui\button-group[39m
+[?25h[?25l│
+◇  [1m[36mseparator[39m[22m installed at [90msrc\lib\components\ui\separator[39m
+[?25h[?25l│
+◇  [1m[36mcalendar[39m[22m installed at [90msrc\lib\components\ui\calendar[39m
+[?25h[?25l│
+◇  [1m[36mcard[39m[22m installed at [90msrc\lib\components\ui\card[39m
+[?25h[?25l│
+◇  [1m[36mcarousel[39m[22m installed at [90msrc\lib\components\ui\carousel[39m
+[?25h[?25l│
+◇  [1m[36mchart[39m[22m installed at [90msrc\lib\components\ui\chart[39m
+[?25h[?25l│
+◇  [1m[36mcheckbox[39m[22m installed at [90msrc\lib\components\ui\checkbox[39m
+[?25h[?25l│
+◇  [1m[36mcode-block[39m[22m installed at [90msrc\lib\components\ui\code-block[39m
+[?25h[?25l│
+◇  [1m[36muse-highlighted-code[39m[22m installed at [90msrc\lib\hooks\use-highlighted-code[39m
+[?25h[?25l│
+◇  [1m[36mhighlighter[39m[22m installed at [90msrc\lib\highlighter[39m
+[?25h[?25l│
+◇  [1m[36mcollapsible[39m[22m installed at [90msrc\lib\components\ui\collapsible[39m
+[?25h[?25l│
+◇  [1m[36mcommand[39m[22m installed at [90msrc\lib\components\ui\command[39m
+[?25h[?25l│
+◇  [1m[36mdialog[39m[22m installed at [90msrc\lib\components\ui\dialog[39m
+[?25h[?25l│
+◇  [1m[36minput-group[39m[22m installed at [90msrc\lib\components\ui\input-group[39m
+[?25h[?25l│
+◇  [1m[36minput[39m[22m installed at [90msrc\lib\components\ui\input[39m
+[?25h[?25l│
+◇  [1m[36mtextarea[39m[22m installed at [90msrc\lib\components\ui\textarea[39m
+[?25h[?25l│
+◇  [1m[36mcontext-menu[39m[22m installed at [90msrc\lib\components\ui\context-menu[39m
+[?25h[?25l│
+◇  [1m[36mdrawer[39m[22m installed at [90msrc\lib\components\ui\drawer[39m
+[?25h[?25l│
+◇  [1m[36mdropdown-menu[39m[22m installed at [90msrc\lib\components\ui\dropdown-menu[39m
+[?25h[?25l│
+◇  [1m[36mempty[39m[22m installed at [90msrc\lib\components\ui\empty[39m
+[?25h[?25l│
+◇  [1m[36mfield[39m[22m installed at [90msrc\lib\components\ui\field[39m
+[?25h[?25l│
+◇  [1m[36mlabel[39m[22m installed at [90msrc\lib\components\ui\label[39m
+[?25h[?25l│
+◇  [1m[36mform[39m[22m installed at [90msrc\lib\components\ui\form[39m
+[?25h[?25l│
+◇  [1m[36mhover-card[39m[22m installed at [90msrc\lib\components\ui\hover-card[39m
+[?25h[?25l│
+◇  [1m[36minput-otp[39m[22m installed at [90msrc\lib\components\ui\input-otp[39m
+[?25h[?25l│
+◇  [1m[36mitem[39m[22m installed at [90msrc\lib\components\ui\item[39m
+[?25h[?25l│
+◇  [1m[36mkbd[39m[22m installed at [90msrc\lib\components\ui\kbd[39m
+[?25h[?25l│
+◇  [1m[36mmarker[39m[22m installed at [90msrc\lib\components\ui\marker[39m
+[?25h[?25l│
+◇  [1m[36mmenubar[39m[22m installed at [90msrc\lib\components\ui\menubar[39m
+[?25h[?25l│
+◇  [1m[36mmessage[39m[22m installed at [90msrc\lib\components\ui\message[39m
+[?25h[?25l│
+◇  [1m[36mmessage-scroller[39m[22m installed at [90msrc\lib\components\ui\message-scroller[39m
+[?25h[?25l│
+◇  [1m[36mnative-select[39m[22m installed at [90msrc\lib\components\ui\native-select[39m
+[?25h[?25l│
+◇  [1m[36mnavigation-menu[39m[22m installed at [90msrc\lib\components\ui\navigation-menu[39m
+[?25h[?25l│
+◇  [1m[36mpagination[39m[22m installed at [90msrc\lib\components\ui\pagination[39m
+[?25h[?25l│
+◇  [1m[36mpopover[39m[22m installed at [90msrc\lib\components\ui\popover[39m
+[?25h[?25l│
+◇  [1m[36mprogress[39m[22m installed at [90msrc\lib\components\ui\progress[39m
+[?25h[?25l│
+◇  [1m[36mquestionnaire[39m[22m installed at [90msrc\lib\components\ui\questionnaire[39m
+[?25h[?25l│
+◇  [1m[36mradio-group[39m[22m installed at [90msrc\lib\components\ui\radio-group[39m
+[?25h[?25l│
+◇  [1m[36mrange-calendar[39m[22m installed at [90msrc\lib\components\ui\range-calendar[39m
+[?25h[?25l│
+◇  [1m[36mresizable[39m[22m installed at [90msrc\lib\components\ui\resizable[39m
+[?25h[?25l│
+◇  [1m[36mscroll-area[39m[22m installed at [90msrc\lib\components\ui\scroll-area[39m
+[?25h[?25l│
+◇  [1m[36mselect[39m[22m installed at [90msrc\lib\components\ui\select[39m
+[?25h[?25l│
+◇  [1m[36msheet[39m[22m installed at [90msrc\lib\components\ui\sheet[39m
+[?25h[?25l│
+◇  [1m[36msidebar[39m[22m installed at [90msrc\lib\components\ui\sidebar[39m
+[?25h[?25l│
+◇  [1m[36mis-mobile[39m[22m installed at [90msrc\lib\hooks\is-mobile[39m
+[?25h[?25l│
+◇  [1m[36mtooltip[39m[22m installed at [90msrc\lib\components\ui\tooltip[39m
+[?25h[?25l│
+◇  [1m[36mskeleton[39m[22m installed at [90msrc\lib\components\ui\skeleton[39m
+[?25h[?25l│
+◇  [1m[36mslider[39m[22m installed at [90msrc\lib\components\ui\slider[39m
+[?25h[?25l│
+◇  [1m[36msonner[39m[22m installed at [90msrc\lib\components\ui\sonner[39m
+[?25h[?25l│
+◇  [1m[36mspinner[39m[22m installed at [90msrc\lib\components\ui\spinner[39m
+[?25h[?25l│
+◇  [1m[36mswitch[39m[22m installed at [90msrc\lib\components\ui\switch[39m
+[?25h[?25l│
+◇  [1m[36mtable[39m[22m installed at [90msrc\lib\components\ui\table[39m
+[?25h[?25l│
+◇  [1m[36mtabs[39m[22m installed at [90msrc\lib\components\ui\tabs[39m
+[?25h[?25l│
+◇  [1m[36mtoggle[39m[22m installed at [90msrc\lib\components\ui\toggle[39m
+[?25h[?25l│
+◇  [1m[36mtoggle-group[39m[22m installed at [90msrc\lib\components\ui\toggle-group[39m
+[?25h[?25l│
+◇  [1m[36mtrace[39m[22m installed at [90msrc\lib\components\ui\trace[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+
+Done in 21.4s using pnpm v12.9.1

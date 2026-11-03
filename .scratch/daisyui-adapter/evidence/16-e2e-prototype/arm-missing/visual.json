@@ -1,0 +1,254 @@
+{
+  "url": "http://127.0.0.1:5302/",
+  "consoleErrors": [],
+  "light": {
+    "text": [
+      {
+        "name": "muted-on-card",
+        "found": true,
+        "foreground": "rgb(124, 124, 103)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 4.25
+      },
+      {
+        "name": "muted-on-page",
+        "found": true,
+        "foreground": "rgb(124, 124, 103)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 4.25
+      },
+      {
+        "name": "body-on-sidebar",
+        "found": true,
+        "foreground": "rgb(12, 12, 9)",
+        "background": "rgb(251, 251, 249)",
+        "ratio": 18.9
+      },
+      {
+        "name": "active-on-sidebar",
+        "found": true,
+        "foreground": "rgb(29, 29, 22)",
+        "background": "rgb(251, 251, 249)",
+        "ratio": 16.35
+      },
+      {
+        "name": "label-header",
+        "found": true,
+        "foreground": "rgb(12, 12, 9)",
+        "background": "rgb(255, 255, 255)",
+        "ratio": 19.59
+      }
+    ],
+    "series": [
+      {
+        "n": 1,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 2,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 3,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 4,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 5,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      }
+    ],
+    "scheme": "light",
+    "ringRest": {
+      "label": "light rest",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.737 -0.00610475 0.0200931 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.737 -0.00610475 0.0200931 / 0.5)"
+      }
+    },
+    "ringSurfaceFocused": {
+      "label": "light surface focused",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.737 -0.00610475 0.0200931 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(1 0 0) 0px 0px 0px 2px, oklch(0.737 0.021 106.9) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.737 -0.00610475 0.0200931 / 0.5)"
+      }
+    },
+    "ringPrimaryFocused": {
+      "label": "light primary focused",
+      "primary": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(1 0 0) 0px 0px 0px 2px, oklch(0.737 0.021 106.9) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.737 -0.00610475 0.0200931 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.737 -0.00610475 0.0200931 / 0.5)"
+      }
+    },
+    "dialog": {
+      "found": true,
+      "background": "oklch(1 0 0)",
+      "color": "oklch(0.153 0.006 107.1)",
+      "borderWidth": "0px",
+      "borderColor": "oklch(0.93 0.007 106.5)",
+      "borderRadius": "14px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.153 -0.00176424 0.00573476 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+    }
+  },
+  "dark": {
+    "text": [
+      {
+        "name": "muted-on-card",
+        "found": true,
+        "foreground": "rgb(171, 171, 156)",
+        "background": "rgb(29, 29, 22)",
+        "ratio": 7.29
+      },
+      {
+        "name": "muted-on-page",
+        "found": true,
+        "foreground": "rgb(171, 171, 156)",
+        "background": "rgb(12, 12, 9)",
+        "ratio": 8.43
+      },
+      {
+        "name": "body-on-sidebar",
+        "found": true,
+        "foreground": "rgb(251, 251, 249)",
+        "background": "rgb(29, 29, 22)",
+        "ratio": 16.35
+      },
+      {
+        "name": "active-on-sidebar",
+        "found": true,
+        "foreground": "rgb(251, 251, 249)",
+        "background": "rgb(29, 29, 22)",
+        "ratio": 16.35
+      },
+      {
+        "name": "label-header",
+        "found": true,
+        "foreground": "rgb(251, 251, 249)",
+        "background": "rgb(12, 12, 9)",
+        "ratio": 18.9
+      }
+    ],
+    "series": [
+      {
+        "n": 1,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 2,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 3,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 4,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      },
+      {
+        "n": 5,
+        "found": true,
+        "rgba": "rgba(0, 0, 0, 0.000)",
+        "alpha": 0,
+        "luminance": null
+      }
+    ],
+    "scheme": "dark",
+    "ringRest": {
+      "label": "dark rest",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 -0.00921862 0.0295976 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 -0.00921862 0.0295976 / 0.5)"
+      }
+    },
+    "ringSurfaceFocused": {
+      "label": "dark surface focused",
+      "primary": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 -0.00921862 0.0295976 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.153 0.006 107.1) 0px 0px 0px 2px, oklch(0.58 0.031 107.3) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.58 -0.00921862 0.0295976 / 0.5)"
+      }
+    },
+    "ringPrimaryFocused": {
+      "label": "dark primary focused",
+      "primary": {
+        "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklch(0.153 0.006 107.1) 0px 0px 0px 2px, oklch(0.58 0.031 107.3) 0px 0px 0px 4px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+        "outline": "none 1px oklab(0.58 -0.00921862 0.0295976 / 0.5)"
+      },
+      "surface": {
+        "boxShadow": "none",
+        "outline": "none 3px oklab(0.58 -0.00921862 0.0295976 / 0.5)"
+      }
+    },
+    "dialog": {
+      "found": true,
+      "background": "oklch(0.228 0.013 107.4)",
+      "color": "oklch(0.988 0.003 106.5)",
+      "borderWidth": "0px",
+      "borderColor": "oklch(1 0 0 / 0.1)",
+      "borderRadius": "14px",
+      "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.988 -0.000852046 0.00287646 / 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"
+    }
+  },
+  "failures": [
+    "chart series 1 paints no colour",
+    "chart series 2 paints no colour",
+    "chart series 3 paints no colour",
+    "chart series 4 paints no colour",
+    "chart series 5 paints no colour",
+    "chart series 1 paints no colour",
+    "chart series 2 paints no colour",
+    "chart series 3 paints no colour",
+    "chart series 4 paints no colour",
+    "chart series 5 paints no colour"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "url": "http://127.0.0.1:5209/",
+  "status": 200,
+  "consoleErrors": [],
+  "light": {
+    "background": "oklch(1 0 0)",
+    "buttonBg": "rgba(0, 0, 0, 0)",
+    "buttonCount": 3,
+    "props": {
+      "--primary": "",
+      "--primary-foreground": "oklch(0.979 0.021 166.113)",
+      "--border": "oklch(0.93 0.007 106.5)",
+      "--radius": "0.625rem"
+    }
+  },
+  "dark": {
+    "background": "oklch(0.153 0.006 107.1)",
+    "buttonBg": "rgba(0, 0, 0, 0)",
+    "buttonCount": 3,
+    "props": {
+      "--primary": "",
+      "--primary-foreground": "oklch(0.979 0.021 166.113)",
+      "--border": "oklch(1 0 0 / 10%)",
+      "--radius": "0.625rem"
+    }
+  }
+}

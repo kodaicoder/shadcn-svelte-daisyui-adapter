@@ -1,0 +1,90 @@
+﻿PASS  carriers: add, apply, build and render pass
+PASS  carriers: one import line, last among the imports
+PASS  carriers: imported plain :root loses to the binding :: oklch(49% 0.118 165) / oklch(60% 0.13 166)
+PASS  carriers: imported html:root / html.dark wins in both schemes
+PASS  carriers: imported :root:root / :root.dark wins in both schemes
+PASS  carriers: imported @layer overrides loses in both schemes
+PASS  carriers: an appended pair wins in both schemes
+PASS  carriers: an appended light-only :root leaks into dark
+PASS  carriers: an imported light-only html:root leaks into dark
+PASS  carriers: imported light-only html:not(.dark) wins in light and does not leak
+PASS  carriers: the item installed 32 bindings per block :: 32 / 32
+PASS  re-add: apply and re-add exit 0, build and render pass
+PASS  re-add: the import line survives, exactly once
+PASS  re-add: a hand-edited declaration is reverted in both blocks
+PASS  re-add: the only lines the re-add changed are the hand edit :: ["\t--ring: rgb(99 99 99);","\t--ring: rgb(99 99 99);"]
+PASS  re-add: the override still wins after the re-add
+PASS  re-add: the override file is byte-identical to what was written
+PASS  init: init exits 0, build and render pass
+PASS  init: the import line survives
+PASS  init: the override file is untouched
+PASS  init: the bindings are wiped, one dark radius left
+PASS  init: the preset values now hold for the tokens no override covers :: oklch(1 0 0) / oklch(0.145 0 0)
+PASS  init: the override still wins over the preset literals
+PASS  init: the plugin still loads and reads the theme
+PASS  fenced: both commands exit 0, build and render pass
+PASS  fenced: the re-add replaces the first declaration and leaves the duplicate
+PASS  fenced: the duplicate wins in light only
+PASS  fenced: a key the map does not own survives
+PASS  drift: add, edit and build pass
+PASS  drift: the stylesheet still carries the reference, not the value
+PASS  drift: the theme file no longer matches the fixture
+PASS  drift: the build follows the edited theme with no add in between
+PASS  missing-name: add, edit and build pass
+PASS  missing-name: the light binding points at a name nothing emits
+PASS  missing-name: the token computes to nothing and the component loses its fill
+PASS  missing-name: the other scheme is unaffected
+PASS  empty-file: the import line resolves against an empty file and the build passes
+PASS  empty-file: nothing changes while the file is empty
+PASS  import-only: the line without the file fails the build :: ok=false build=false
+PASS  import-only: the failure names the missing file and the stylesheet
+PASS  theme-rule: add, theme edit and build pass
+PASS  theme-rule: the theme file carries both shapes
+PASS  theme-rule: an extra --daisy-color-* key inside the block is dropped
+PASS  theme-rule: a selector rule in the theme file has no effect
+PASS  raw-collision: add, escape hatch, build and render pass
+PASS  raw-collision: the raw name takes the plugin value while the token takes the override
+PASS  raw-collision: the utility follows the token, not the raw name
+PASS  raw-collision: a fallback hides a missing source name
+PASS  raw-collision: a raw daisyUI name lands in the --color-* namespace
+PASS  prefixed-win: the token takes the override and the utility follows it
+PASS  prefixed-win: Tailwind emits no --color-* alias in a button-only build :: ""
+PASS  raw-map: add, raw map, escape hatch and build pass
+PASS  raw-map: a raw binding resolves and the hook moves to --color-*
+PASS  raw-map: the dark scheme is untouched because the hook was scoped to light
+PASS  win-probe: sonner plus the escape hatch build and render
+PASS  win-probe: an emitted --color-* alias follows the token
+PASS  win-probe: --color-primary is still not emitted, even with sonner :: ""
+PASS  win-probe: a self-reference in the fallback slot resolves when the first name exists
+PASS  win-probe: a self-reference cannot recover a value the property never had :: ""
+PASS  cli-init: a no-op add writes nothing and the CLI build passes
+PASS  cli-init: the CLI wrote the value the file already had as the fallback
+PASS  cli-init: 32 bindings per block plus one derived helper each
+PASS  cli-init: the plugin package is a devDependency
+PASS  cli-init: the runtime follows the theme, not the fallback
+PASS  cli-init: radius comes from the theme, not the fallback
+PASS  cli-rerun: both runs exit 0 and the build passes
+PASS  cli-rerun: a second run is byte-identical, no nested fallback
+PASS  cli-missing-theme: exactly one compiled stylesheet was kept
+PASS  cli-missing-theme: the build passes with no theme
+PASS  cli-missing-theme: @theme inline still emits the alias as var(--primary)
+PASS  cli-missing-theme: the binding and the alias form a cycle, so the fallback is ignored
+PASS  cli-missing-theme: a derived token still falls back
+PASS  cli-missing-theme-daisy: the build passes with no theme
+PASS  cli-missing-theme-daisy: every token falls back to the value the project had
+PASS  cli-missing-theme-daisy: the page renders in the pre-adapter palette
+PASS  cli-after-init: init then the CLI both exit 0 and the build passes
+PASS  cli-after-init: init left plain preset literals
+PASS  cli-after-init: the CLI re-bound with the post-init values as fallbacks
+PASS  cli-after-init: 32 bindings per block are back
+PASS  cli-after-init: the runtime follows the theme again
+PASS  cli-lifecycle: all four commands exit 0 and the build passes
+PASS  cli-lifecycle: the header comment and the override import survive init and add
+PASS  cli-lifecycle: a second CLI run is byte-identical
+PASS  cli-lifecycle: the run created the override file empty and never wrote it again
+PASS  cli-lifecycle: shadcn init wipes the bindings and keeps the comment
+PASS  cli-lifecycle: add button leaves the stylesheet byte-identical
+PASS  cli-lifecycle: the render after init shows the preset values, so a re-run is required
+PASS  cli-add-all: the CLI then add -a exit 0 and the build passes
+PASS  cli-add-all: add -a leaves the stylesheet byte-identical
+ALL CHECKS PASSED

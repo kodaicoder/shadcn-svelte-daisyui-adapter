@@ -1,0 +1,3 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/registry-11/apply.mjs
+exit 0
+[apply-11] wrote --default-border-width: var(--daisy-border, 1px); into @theme inline in src/routes/layout.css

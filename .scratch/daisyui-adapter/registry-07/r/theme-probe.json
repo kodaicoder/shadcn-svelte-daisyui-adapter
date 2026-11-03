@@ -1,0 +1,20 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry-item.json",
+	"name": "theme-probe",
+	"title": "Install contract probe",
+	"type": "registry:file",
+	"description": "Throwaway item observing the missing-theme-file build error surface.",
+	"dependencies": [
+		"tailwindcss"
+	],
+	"css": {
+		"@plugin \"./theme-probe.js\"": {}
+	},
+	"files": [
+		{
+			"content": "import { existsSync, readFileSync } from 'node:fs';\nimport { resolve } from 'node:path';\nimport plugin from 'tailwindcss/plugin';\n\nconst themeFile = resolve(process.cwd(), 'src/daisyui-theme.css');\n\nconsole.log(\n\t`[probe] cwd=${process.cwd()} module=${import.meta.url} theme=${themeFile} exists=${existsSync(themeFile)}`\n);\n\nexport default plugin(function probe({ addBase }) {\n\tif (!existsSync(themeFile)) {\n\t\tthrow new Error(\n\t\t\t`[daisyui-adapter] Cannot read the daisyUI theme file at ${themeFile}: ENOENT. Put one light and one dark theme block from https://daisyui.com/theme-generator/ in that file, then re-run the build.`\n\t\t);\n\t}\n\n\tconst text = readFileSync(themeFile, 'utf8');\n\taddBase({\n\t\t':root': {\n\t\t\t'--probe-theme-bytes': String(text.length),\n\t\t\t'--probe-cwd': process.cwd()\n\t\t}\n\t});\n});\n",
+			"type": "registry:file",
+			"target": "src/theme-probe.js"
+		}
+	]
+}

@@ -1,0 +1,20 @@
+{
+	"$schema": "https://shadcn-svelte.com/schema/registry.json",
+	"name": "daisyui-adapter-08",
+	"homepage": "https://example.invalid/daisyui-adapter-08",
+	"items": [
+		{
+			"name": "daisyui-adapter",
+			"type": "registry:lib",
+			"title": "daisyUI theme adapter",
+			"description": "Zero-file probe: a css @plugin line and a build-time devDependency only.",
+			"dependencies": [],
+			"devDependencies": ["daisyui-adapter-08-probe@file:./daisyui-adapter-08-probe-0.0.0.tgz"],
+			"registryDependencies": [],
+			"files": [],
+			"css": {
+				"@plugin \"daisyui-adapter-08-probe\"": {}
+			}
+		}
+	]
+}

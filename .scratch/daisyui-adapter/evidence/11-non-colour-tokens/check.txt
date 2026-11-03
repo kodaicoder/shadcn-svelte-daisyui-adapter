@@ -1,0 +1,76 @@
+PASS  install: the run built, added and rendered :: true / 200
+PASS  install: no console errors in either scheme :: 0
+PASS  install: light.png was captured :: light.png
+PASS  install: dark.png was captured :: dark.png
+PASS  install: the plugin reached the compiled CSS with the box rung and the border width :: .75rem / 2px
+PASS  radius: the emitted radius is the theme box rung, not the field or selector rung :: .75rem vs 0.75rem / 0.25rem / 1rem
+PASS  radius: light --radius is one binding to --daisy-radius :: 1
+PASS  radius: dark --radius is one binding to --daisy-radius :: 1
+PASS  radius: the template --radius-sm line is byte-identical :: --radius-sm: calc(var(--radius) * 0.6); -> --radius-sm: calc(var(--radius) * 0.6);
+PASS  radius: the template --radius-md line is byte-identical :: --radius-md: calc(var(--radius) * 0.8); -> --radius-md: calc(var(--radius) * 0.8);
+PASS  radius: the template --radius-lg line is byte-identical :: --radius-lg: var(--radius); -> --radius-lg: var(--radius);
+PASS  radius: the template --radius-xl line is byte-identical :: --radius-xl: calc(var(--radius) * 1.4); -> --radius-xl: calc(var(--radius) * 1.4);
+PASS  radius: the template --radius-2xl line is byte-identical :: --radius-2xl: calc(var(--radius) * 1.8); -> --radius-2xl: calc(var(--radius) * 1.8);
+PASS  radius: the template --radius-3xl line is byte-identical :: --radius-3xl: calc(var(--radius) * 2.2); -> --radius-3xl: calc(var(--radius) * 2.2);
+PASS  radius: the template --radius-4xl line is byte-identical :: --radius-4xl: calc(var(--radius) * 2.6); -> --radius-4xl: calc(var(--radius) * 2.6);
+PASS  radius: the @theme inline block stayed one block :: 1
+PASS  border: the @theme inline block carries the default width from the source token :: 	--default-border-width: var(--daisy-border, 1px);
+PASS  radius: light --radius resolves to the box rung :: 0.75rem vs 0.75rem
+PASS  radius: light --daisy-radius is the box rung :: 0.75rem
+PASS  radius: light rounded-sm is 0.6x the box rung :: 7.2px vs 7.20px
+PASS  radius: light rounded-md is 0.8x the box rung :: 9.6px vs 9.60px
+PASS  radius: light rounded-lg is 1x the box rung :: 12px vs 12.00px
+PASS  radius: light rounded-xl is 1.4x the box rung :: 16.8px vs 16.80px
+PASS  radius: light rounded-2xl is 1.8x the box rung :: 21.6px vs 21.60px
+PASS  radius: light rounded-3xl is 2.2x the box rung :: 26.4px vs 26.40px
+PASS  radius: light rounded-4xl is 2.6x the box rung :: 31.2px vs 31.20px
+PASS  radius: light the button takes md, 0.8x the box rung :: 9.6px
+PASS  radius: light the card takes lg, the box rung itself :: 12px
+PASS  radius: light the input takes md, 0.8x the box rung :: 9.6px
+PASS  radius: light the checkbox keeps its literal radius, so the selector rung is unused :: 4px vs selector 1rem
+PASS  radius: dark --radius resolves to the box rung :: 0.75rem vs 0.75rem
+PASS  radius: dark --daisy-radius is the box rung :: 0.75rem
+PASS  radius: dark rounded-sm is 0.6x the box rung :: 7.2px vs 7.20px
+PASS  radius: dark rounded-md is 0.8x the box rung :: 9.6px vs 9.60px
+PASS  radius: dark rounded-lg is 1x the box rung :: 12px vs 12.00px
+PASS  radius: dark rounded-xl is 1.4x the box rung :: 16.8px vs 16.80px
+PASS  radius: dark rounded-2xl is 1.8x the box rung :: 21.6px vs 21.60px
+PASS  radius: dark rounded-3xl is 2.2x the box rung :: 26.4px vs 26.40px
+PASS  radius: dark rounded-4xl is 2.6x the box rung :: 31.2px vs 31.20px
+PASS  radius: dark the button takes md, 0.8x the box rung :: 9.6px
+PASS  radius: dark the card takes lg, the box rung itself :: 12px
+PASS  radius: dark the input takes md, 0.8x the box rung :: 9.6px
+PASS  radius: dark the checkbox keeps its literal radius, so the selector rung is unused :: 4px vs selector 1rem
+PASS  border: light the button border follows the theme width :: 2px
+PASS  border: light the input border follows the theme width :: 2px
+PASS  border: light divide-y follows the theme width :: 2px
+PASS  border: light border-b follows the theme width :: 2px
+PASS  depth: light the button gains no shadow from --depth :: none
+PASS  noise: light the button gains no texture from --noise :: none
+PASS  depth: light a shadow-md element keeps its shadow :: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0
+PASS  size: light the button height is not size-field x 10 :: 28px vs 50.00px
+PASS  size: light the checkbox height is not size-selector x 6 :: 16px vs 30.00px
+PASS  border: dark the button border follows the theme width :: 2px
+PASS  border: dark the input border follows the theme width :: 2px
+PASS  border: dark divide-y follows the theme width :: 2px
+PASS  border: dark border-b follows the theme width :: 2px
+PASS  depth: dark the button gains no shadow from --depth :: none
+PASS  noise: dark the button gains no texture from --noise :: none
+PASS  depth: dark a shadow-md element keeps its shadow :: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0
+PASS  size: dark the button height is not size-field x 10 :: 28px vs 50.00px
+PASS  size: dark the checkbox height is not size-selector x 6 :: 16px vs 30.00px
+PASS  ignored: --daisy-radius-field has no output in the stylesheet or the compiled CSS :: daisy-radius-field
+PASS  ignored: --daisy-radius-selector has no output in the stylesheet or the compiled CSS :: daisy-radius-selector
+PASS  ignored: --daisy-size-field has no output in the stylesheet or the compiled CSS :: daisy-size-field
+PASS  ignored: --daisy-size-selector has no output in the stylesheet or the compiled CSS :: daisy-size-selector
+PASS  ignored: --daisy-depth has no output in the stylesheet or the compiled CSS :: daisy-depth
+PASS  ignored: --daisy-noise has no output in the stylesheet or the compiled CSS :: daisy-noise
+PASS  fallback: the run without --border built and rendered :: true / 200
+PASS  fallback: the theme without --border emits no --daisy-border :: _app/immutable/assets/0.DOeg797H.css: daisy-color-base-100:oklch(100% 0 0) | _app/immutable/assets/0.DOeg797H.css: daisy-color-base-200:oklch(98% 0 0)
+PASS  fallback: the fallback line is still written to @theme inline :: theme has no --border
+PASS  fallback: light borders fall back to 1px :: 1px / 1px
+PASS  fallback: light the radius is unaffected by the missing border :: 12px
+PASS  fallback: dark borders fall back to 1px :: 1px / 1px
+PASS  fallback: dark the radius is unaffected by the missing border :: 12px
+
+ALL CHECKS PASSED
