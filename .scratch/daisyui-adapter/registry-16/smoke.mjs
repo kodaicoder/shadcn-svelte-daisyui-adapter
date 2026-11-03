@@ -177,6 +177,17 @@ check(
 	'sidebar-accent follows base-300',
 	css1.includes('--sidebar-accent: var(--daisy-color-base-300')
 );
+check('secondary follows the daisyUI brand', css1.includes('--secondary: var(--daisy-color-secondary,'));
+check(
+	'secondary-foreground follows secondary-content',
+	css1.includes('--secondary-foreground: var(--daisy-color-secondary-content,')
+);
+check('accent follows the daisyUI brand', css1.includes('--accent: var(--daisy-color-accent,'));
+check('accent has no derived helper', !css1.includes('--daisy-derived-accent'));
+check(
+	'accent-foreground follows accent-content',
+	css1.includes('--accent-foreground: var(--daisy-color-accent-content,')
+);
 
 // 6. Re-run is byte-identical.
 cli(full);
