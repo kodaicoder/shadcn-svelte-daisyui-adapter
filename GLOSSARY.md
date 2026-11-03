@@ -76,6 +76,10 @@ _Avoid_: Fix table, config
 One of missing, stock, fixed or customized for a replacement site.
 _Avoid_: Status, result
 
+**Fully fixed**:
+A component file whose every replacement site is in the fixed state; the header marker counts these.
+_Avoid_: Fixed file
+
 **Component boundary**:
 The 3:1 non-text contrast a filled control needs against the page.
 _Avoid_: Fill contrast

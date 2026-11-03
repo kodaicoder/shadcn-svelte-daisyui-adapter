@@ -1,6 +1,6 @@
 # Fix phase: apply the 0.3.0 mapping to the components
 
-Status: draft
+Status: ready-for-agent
 Type: spec
 Date: 2026-11-03
 Feature: daisyui-adapter
@@ -53,7 +53,7 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 21. As a SvelteKit developer, I want the dialog and sheet close buttons, the calendar hover, the range middle and the destructive menu shortcuts repaired, so that their text is readable in both schemes.
 22. As a SvelteKit developer, I want the chart tooltip and the muted bubble surface repaired, so that their surfaces are consistent with the rest of the theme.
 23. As a SvelteKit developer, I want the sidebar accent to stay neutral, so that the sidebar does not turn brand-colored.
-24. As a SvelteKit developer, I want the header marker to record the adapter version and the number of components in the fixed state, so that I can tell whether the components were fixed and by which version.
+24. As a SvelteKit developer, I want the header marker to record the adapter version and the number of fully fixed components, so that I can tell whether the components were fixed and by which version.
 25. As a SvelteKit developer, I want the docs to describe the `add` prerequisite and the `fix` order, so that I know the workflow.
 26. As a design-system maintainer, I want the fixer to read one target manifest, so that the components, the contrast pairs and the supported version cannot drift apart.
 27. As a design-system maintainer, I want `init` to warn when a theme's own content colors make a pair fail, so that AA is not claimed for a theme it cannot hold.
@@ -68,7 +68,7 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 - The seven status tokens keep the fixed fallbacks: `success` `oklch(69% 0.17 162.48)`, `success-foreground` `oklch(26% 0.051 172.552)`, `warning` `oklch(79% 0.184 86.047)`, `warning-foreground` `oklch(28% 0.066 53.813)`, `info` `oklch(74% 0.16 232.661)`, `info-foreground` `oklch(29% 0.066 243.157)`, `destructive-foreground` `oklch(97% 0.013 17.38)`. A text tone falls back to its status fallback mixed with the project's own foreground, so the no-theme state is still readable.
 - Each of the eleven tokens gets a `@theme inline` alias: `--color-success`, `--color-success-foreground`, `--color-success-text`, and the same for warning, info and destructive.
 - The smoke's declaration count is the non-derived declarations per block. It is 32 today: 27 binding keys (23 single and 4 mix) plus the 5 chart rows. The four mix keys and the five chart rows also write nine derived helpers, which the count excludes; the 0.2.0 "five derived helpers" figure was its mix count and is superseded by this breakdown. The change adds 11 non-derived declarations (7 status and 4 text) to 43 and four derived text helpers, so the derived count becomes 13. The chart rows and their five helpers are unchanged. The smoke asserts 43.
-- The filled status and destructive variants carry the text-tone border in addition to the fill and the foreground. The fill-vs-page pair itself stays below 3:1 for the light status tones (1.95 to 2.52) and for the dark destructive tone (2.89); the border-vs-page pair measures 8.90 to 10.37 on light and 8.24 to 9.68 on dark. The component boundary is the border, not the fill; the matrix records both and the warning checks the border pair.
+- The filled status and destructive variants carry the text-tone border in addition to the fill and the foreground. The border uses the same `--<tone>-text` token as the text; no separate border tone is introduced. The fill-vs-page pair itself stays below 3:1 for the light status tones (1.95 to 2.52) and for the dark destructive tone (2.89); the border-vs-page pair measures 8.90 to 10.37 on light and 8.24 to 9.68 on dark. The component boundary is the border, not the fill; the matrix records both and the warning checks the border pair.
 - The raw tone remains available as `bg-*`; the docs say to use the text alias for text. The `init` output warns when a theme's own tone or content makes a filled or text pair fall below its threshold.
 
 **Radius**
@@ -79,7 +79,7 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 - The four existing scale sites (calendar head cells and selects, chart tooltip) are aligned to their role.
 - `rounded-full` circles, edge-joining utilities and the calendar `--cell-radius` custom property are excluded from the blanket replacement.
 - The three daisyUI role values collapse into the shadcn scale, which derives from the box rung. This is a deliberate loss: a theme whose field and selector rungs differ from its box rung is approximated. ADR 0002 records the trade-off.
-- The scale is linear in `--radius`: sm 0.6, md 0.8, lg 1.0, xl 1.4, 2xl 1.8, 3xl 2.2, 4xl 2.6. At `--radius: 0` every step is zero; for any positive radius sm < md < lg. There is no clamp in the scale; the adapter passes the theme's length unchanged. `init` warns when `--radius` exceeds 2rem, naming the value, because the components become pill-like and the theme is likely wrong. The tests assert the order except at zero and the warning at the 2rem edge. The `--size-field` and `--size-selector` mappings remain out of scope.
+- The scale is linear in `--radius`: sm 0.6, md 0.8, lg 1.0, xl 1.4, 2xl 1.8, 3xl 2.2, 4xl 2.6. At `--radius: 0` every step is zero; for any positive radius sm < md < lg. There is no clamp in the scale; the adapter passes the theme's length unchanged. `--radius` is read as a CSS length; `init` warns when it exceeds 2rem, comparing after converting to px at 16px per rem (32px), and prints the raw length and the px value, because the components become pill-like and the theme is likely wrong. The tests assert the order except at zero and the warning at the 2rem edge. The `--size-field` and `--size-selector` mappings remain out of scope.
 
 **Variants**
 
@@ -108,7 +108,7 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 - `init` runs the map and then the fixer over the components the project has added. `fix` runs every present target component; `fix <component>` runs the named ones; `--dry-run` reports without writing. `--check` exits 0 when every present site is fixed, customized or a component that was never added, and non-zero only when a stock site remains. `--strict` turns a customized site and a missing component that the user named on the command line into an error; a target that was never added is not an error.
 - The fixer reads the `components.json` aliases, normalizes CRLF and Windows paths before matching, and reports the four states per file and per site.
 - When no target component is present, `init` maps the stylesheet, reports that no components were found and exits zero. It does not create an empty component.
-- The CLI also updates the header marker after the fixer: `/* <pkg> <version> | components <n> fixed | re-run ... */`, where `n` is the number of target component files in the fixed state, not the files changed in the run. A second `fix` that changes nothing keeps the same `n`, so the re-run stays byte-identical. A map-only run records `components 0 fixed`. The pre-fixer 0.3.0 is a development state; the first published 0.3.0 includes the fixer and the marker.
+- The CLI also updates the header marker after the fixer: `/* <pkg> <version> | components <n> fixed | re-run ... */`, where `n` is the number of target component files whose every replacement site is in the fixed state, not the files changed in the run. A file with a mix of fixed and customized sites is reported as mixed and is not counted. A second `fix` that changes nothing keeps the same `n`, so the re-run stays byte-identical. A map-only run records `components 0 fixed`. The pre-fixer 0.3.0 is a development state; the first published 0.3.0 includes the fixer and the marker.
 - The version stays 0.3.0. The 0.2.0 is the published predecessor; the 0.3.0 before the fixer is not published. The marker, not a prerelease, distinguishes the states.
 
 **Workflow and visual check**
