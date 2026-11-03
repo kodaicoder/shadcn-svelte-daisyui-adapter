@@ -108,7 +108,7 @@ Matched playbook: Feature. Its steps, verbatim, then the ticket's own steps.
 - Review gate: the independent `comment-sicko` pass was cancelled by the operator after a hang.
   The lead did the comment and Spec-axis review instead. Recorded as `BLOCKED: independent review`
   for that pass, so it is not claimed. No comment was deleted; one pointer sentence was trimmed.
-- Verification: `registry-26` 100 checks, `registry-16` 139, `registry-27` 54, drift 8. All exit 0.
+- Verification: `registry-26` 100 checks, `registry-16` 139, `registry-27` 64, drift 8. All exit 0.
 
 ## Correction after the operator's review
 
@@ -142,3 +142,28 @@ Files the delegate may write: `packages/daisyui-adapter/targets.mjs` (new),
 `.github/workflows/adapter-drift.yml` (new), `package.json` (one `test:adapter` script).
 
 Out of scope: `src/lib/components/ui`, radius, variants, docs, `dist`, CHANGELOG, release.
+## Independent review
+
+Reviewer: `subagents/code/reviewer`, fresh session `ses_e5f13617dffei2aKR0f3GfJPtf`, verdict
+changes requested, 8 findings. The session ran no git; it read a precomputed diff because git opens
+a pager in a subagent and hangs.
+
+- Accepted 1, contract: a version refusal beats a passing `--check`. Spec L108 and the ticket now
+  say so, with a seam check at 1.8 plus every site fixed.
+- Accepted 2, code: `fix` restamped the header with the running version, so an older `fix` could
+  downgrade a newer marker and defeat E4. `refuseNewerHeader` now runs before a write-mode fix.
+  Mutation run: both new checks fail without it, exit 0 and the header downgraded.
+- Accepted 4: the combined check/strict check now asserts the `--check:` message. The strict-only
+  rule was already covered by the customized fixture.
+- Accepted 5: the style checks are named `ignores the ... style`, and a vega-shaped close fixture
+  pins the accepted tradeoff: two customized sites, eight fully fixed, `--check` 0, `--strict` 1.
+- Accepted 6: a named write-mode `fix` keeps the global count, and leaves the other stock file.
+- Accepted 7: stale style wording removed from spec L25 and L126, the glossary Header marker now
+  names the count, and the CLI comment says version only.
+- Accepted 8: the drift claim in spec L106 and ADR 0003 now says the committed snapshot and the
+  manifest cannot drift apart, and names the node_modules then package.json read.
+- Dismissed 3, manifest reference equality: those checks pin the re-export contract, which is what a
+  refactor would break. A source-duplication scan would be brittle, and the length and supported-key
+  assertions carry the shape.
+
+Counts after the fixes: registry-26 100, registry-16 139, safety 64, drift 8, all exit 0.

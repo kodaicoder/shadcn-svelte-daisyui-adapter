@@ -37,6 +37,19 @@ const headerFor = (n) =>
 	`/* ${PKG} ${VERSION} | components ${n} fixed | re-run \`pnpm dlx ${PKG}@${VERSION} init\` after \`shadcn-svelte init\` */`;
 const HEADER_PATTERN =
 	/^\/\* (\S+) (\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?) \| (?:components \d+ fixed \| )?re-run [^\n]*\*\/\r?\n?/;
+const headerVersionOf = (css) => HEADER_PATTERN.exec(css)?.[2] ?? null;
+
+// An older CLI cannot reproduce a newer version's bindings or marker, so both `init` and a
+// write-mode `fix` refuse to touch a stylesheet a newer CLI wrote. The stylesheet still names the
+// version that wrote it, which is the only record a project keeps.
+const refuseNewerHeader = (css, where) => {
+	const version = headerVersionOf(css);
+	if (!version || compareVersions(version, VERSION) <= 0) return;
+	throw new Error(
+		`[daisyui-adapter] E4 ${where} was written by ${PKG} ${version}, but this CLI is ${VERSION}. ` +
+			`Run \`pnpm dlx ${PKG}@${version} init\` or upgrade the CLI.`
+	);
+};
 const OVERRIDE = 'daisyui-adapter.overrides.css';
 const BORDER_ENTRY = '--default-border-width: var(--daisy-border, 1px);';
 const PLUGIN = `@plugin "${PKG}";`;
@@ -285,16 +298,8 @@ const init = () => {
 	const where = components.tailwind.css;
 	let css = readFileSync(cssPath, 'utf8');
 
-	// An older CLI cannot reproduce a newer version's bindings, so it would quietly undo them. The
-	// stylesheet still names the version that wrote it, which is the only record a project keeps.
-	const header = HEADER_PATTERN.exec(css);
-	const headerVersion = header?.[2] ?? null;
-	if (headerVersion && compareVersions(headerVersion, VERSION) > 0) {
-		throw new Error(
-			`[daisyui-adapter] E4 ${where} was written by ${PKG} ${headerVersion}, but this CLI is ${VERSION}. ` +
-				`Run \`pnpm dlx ${PKG}@${headerVersion} init\` or upgrade the CLI.`
-		);
-	}
+	refuseNewerHeader(css, where);
+	const headerVersion = headerVersionOf(css);
 	if (headerVersion) css = css.replace(HEADER_PATTERN, '');
 	if (headerVersion && compareVersions(headerVersion, VERSION) < 0) {
 		console.log(`[daisyui-adapter] upgrading ${headerVersion} -> ${VERSION}`);
@@ -338,7 +343,7 @@ const init = () => {
 	if (themes) css = insertAfterLastImport(css, PLUGIN);
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
 
-	// The fixer runs before the stylesheet is written: a refused style or version must leave the
+	// The fixer runs before the stylesheet is written: a refused version must leave the
 	// project untouched, so the map waits in memory until the guard has passed.
 	const report = fix({ components });
 	css = `${headerFor(report.fullyFixed)}\n${css}`;
@@ -388,6 +393,11 @@ const fixCommand = (args) => {
 	const names = args.filter((arg) => !FLAGS.has(arg));
 	const components = readComponents();
 	const write = !check && !strict && !dryRun;
+	const where = components.tailwind?.css;
+	if (write && where) {
+		const cssPath = resolve(where);
+		if (existsSync(cssPath)) refuseNewerHeader(readFileSync(cssPath, 'utf8'), where);
+	}
 	const report = write ? fix({ components, names }) : scan({ components, names });
 	const suffix =
 		check || strict ? '; check only, nothing written' : dryRun ? '; dry run, nothing written' : '';

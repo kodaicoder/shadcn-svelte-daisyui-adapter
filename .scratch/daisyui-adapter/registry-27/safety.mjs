@@ -162,12 +162,51 @@ for (const style of ['vega', 'default', null]) {
 	const anyStyle = join(WORK, `style-${label}`);
 	scaffold(anyStyle, { style });
 	const anyStyleRun = cliResult(anyStyle);
-	check(`init accepts the ${label} style`, anyStyleRun.code === 0, `exit ${anyStyleRun.code}`);
+	check(`init ignores the ${label} style`, anyStyleRun.code === 0, `exit ${anyStyleRun.code}`);
 	check(
-		`init fixes every site under the ${label} style`,
+		`init fixes every site with the ${label} style`,
 		SITES.every((site) => readSiteFile(anyStyle, site).includes(site.fixed))
 	);
 }
+
+const vegaShaped = join(WORK, 'style-vega-shaped');
+scaffold(vegaShaped);
+cli(vegaShaped);
+const vegaDialog = pathOf(vegaShaped, SITES[0]);
+const vegaSheet = pathOf(vegaShaped, SITES[1]);
+replaceIn(vegaDialog, SITES[0].fixed, 'class="absolute top-4 right-4"');
+replaceIn(vegaSheet, SITES[1].fixed, 'class="absolute top-4 right-4"');
+const vegaShapedRun = cliResult(vegaShaped, 'fix');
+const vegaShapedCss = readFileSync(cssPathOf(vegaShaped), 'utf8');
+check(
+	'a close site shaped like the 1.7.x vega template reports customized, not blocked',
+	vegaShapedRun.code === 0 &&
+		readFileSync(vegaDialog, 'utf8').includes('class="absolute top-4 right-4"') &&
+		!readFileSync(vegaDialog, 'utf8').includes(SITES[0].fixed),
+	`exit ${vegaShapedRun.code}`
+);
+check(
+	'the nine shared sites still fix around the customized close sites',
+	readSiteFile(vegaShaped, SITES[9]).includes(SITES[9].fixed) &&
+		readSiteFile(vegaShaped, SITES[10]).includes(SITES[10].fixed)
+);
+check(
+	'a vega-shaped run counts eight fully fixed files',
+	headerLines(vegaShapedCss)[0]?.startsWith(headerFor(8)),
+	headerLines(vegaShapedCss)[0]
+);
+const vegaShapedCheck = cliResult(vegaShaped, 'fix', '--check');
+check(
+	'--check accepts the vega-shaped customized sites',
+	vegaShapedCheck.code === 0,
+	`exit ${vegaShapedCheck.code}`
+);
+const vegaShapedStrict = cliResult(vegaShaped, 'fix', '--strict');
+check(
+	'--strict fails on the vega-shaped customized sites',
+	vegaShapedStrict.code === 1 && vegaShapedStrict.out.includes('--strict:'),
+	`exit ${vegaShapedStrict.code}`
+);
 
 const future = join(WORK, 'future-version');
 scaffold(future, { shadcn: '1.8.0' });
@@ -183,6 +222,21 @@ check(
 check(
 	'an unsupported version writes nothing',
 	snapshot(future).join('\n') === futureBefore.join('\n')
+);
+
+const futureFixed = join(WORK, 'future-version-fixed');
+scaffold(futureFixed);
+cli(futureFixed);
+writeFileSync(
+	join(futureFixed, 'node_modules', 'shadcn-svelte', 'package.json'),
+	JSON.stringify({ name: 'shadcn-svelte', version: '1.8.0' }, null, '\t')
+);
+const futureFixedCheck = cliResult(futureFixed, 'fix', '--check');
+check(
+	'a version refusal beats a passing check',
+	futureFixedCheck.code === 1 &&
+		futureFixedCheck.out.includes('unsupported shadcn-svelte version 1.8.0'),
+	`exit ${futureFixedCheck.code}`
 );
 
 const unknownVersion = join(WORK, 'unknown-version');
@@ -356,7 +410,7 @@ replaceIn(cellPathOf(strictBoth), middle.stock, 'class="hand-edited"');
 const strictBothRun = cliResult(strictBoth, 'fix', '--check', '--strict');
 check(
 	'--check --strict exits 1 with stock and customized sites present',
-	strictBothRun.code === 1,
+	strictBothRun.code === 1 && strictBothRun.out.includes('--check:'),
 	`exit ${strictBothRun.code}`
 );
 
@@ -498,6 +552,43 @@ check(
 		dryHeaderAfter[0].startsWith(headerFor(10)) &&
 		snapshot(dryHeader).join('\n') === dryHeaderBefore.join('\n'),
 	dryHeaderAfter[0]
+);
+
+const named = join(WORK, 'header-named');
+scaffold(named);
+cli(named);
+cpSync(join(STOCK, 'chart', 'chart-tooltip.svelte'), pathOf(named, SITES[9]));
+const namedRun = cliResult(named, 'fix', 'dialog');
+const namedHeader = headerLines(readFileSync(cssPathOf(named), 'utf8'));
+check(
+	'a named fix still counts every fully fixed file',
+	namedRun.code === 0 && namedHeader.length === 1 && namedHeader[0].startsWith(headerFor(9)),
+	`exit ${namedRun.code} :: ${namedHeader[0]}`
+);
+check(
+	'a named fix leaves the other stock file untouched',
+	readSiteFile(named, SITES[9]).includes(SITES[9].stock)
+);
+
+const newer = join(WORK, 'header-newer');
+scaffold(newer);
+cli(newer);
+const newerPath = cssPathOf(newer);
+writeFileSync(
+	newerPath,
+	`/* ${NAME} 9.9.9 | components 10 fixed | re-run \`pnpm dlx ${NAME}@9.9.9 init\` after \`shadcn-svelte init\` */\n` +
+		readFileSync(newerPath, 'utf8')
+);
+const newerBefore = snapshot(newer);
+const newerRun = cliResult(newer, 'fix');
+check(
+	'a write-mode fix refuses a newer header',
+	newerRun.code === 1 && newerRun.out.includes('E4') && newerRun.out.includes('9.9.9'),
+	`exit ${newerRun.code}`
+);
+check(
+	'a refused newer-header fix leaves every file byte-identical',
+	snapshot(newer).join('\n') === newerBefore.join('\n')
 );
 
 const failed = results.filter((result) => !result.ok);

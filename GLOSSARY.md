@@ -85,7 +85,7 @@ The 3:1 non-text contrast a filled control needs against the page.
 _Avoid_: Fill contrast
 
 **Header marker**:
-The first-line comment that records the adapter version and the exact re-run command.
+The first-line comment that records the adapter version, the count of fully fixed files after the fixer, and the exact re-run command.
 _Avoid_: Version comment
 
 **Showcase**:
