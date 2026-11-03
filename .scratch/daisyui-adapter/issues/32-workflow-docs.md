@@ -1,8 +1,11 @@
-# 28: Workflow, docs and version
+# 32: Workflow, docs and version
+Session IDs:
+Lesson:
+Check:
 
-**What to build:** The install contract and docs describe the `add` prerequisite and the `init`/`fix` order; the version and marker are 0.3.0.
+**What to build:** The install contract and the docs describe the `add` prerequisite and the `init`/`fix` order, and the version and header marker are 0.3.0.
 
-**Blocked by:** 25, 26, 27
+**Blocked by:** 26, 27, 28, 29, 30, 31
 
 **Status:** ready-for-agent
 

@@ -1,4 +1,7 @@
 # Prior art and reported failures
+Session IDs:
+Lesson:
+Check:
 
 Type: research
 Status: resolved

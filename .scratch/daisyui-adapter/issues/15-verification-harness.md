@@ -1,4 +1,7 @@
 # Verification harness
+Session IDs:
+Lesson:
+Check:
 
 Type: task
 Status: resolved

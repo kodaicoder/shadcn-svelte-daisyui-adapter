@@ -1,4 +1,7 @@
 # daisyUI generator output inventory
+Session IDs:
+Lesson:
+Check:
 
 Type: research
 Status: resolved

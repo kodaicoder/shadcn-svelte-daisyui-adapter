@@ -1,4 +1,7 @@
 # Component var() consumption audit
+Session IDs:
+Lesson:
+Check:
 
 Type: research
 Status: resolved

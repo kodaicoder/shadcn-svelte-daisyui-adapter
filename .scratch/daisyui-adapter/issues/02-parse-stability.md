@@ -1,4 +1,7 @@
 # daisyUI parse stability and edge cases
+Session IDs:
+Lesson:
+Check:
 
 Type: research
 Status: resolved

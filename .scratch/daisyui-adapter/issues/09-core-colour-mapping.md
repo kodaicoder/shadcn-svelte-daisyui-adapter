@@ -1,4 +1,7 @@
 # Core colour mapping
+Session IDs:
+Lesson:
+Check:
 
 Type: grilling
 Status: resolved

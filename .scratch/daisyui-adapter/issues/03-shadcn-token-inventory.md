@@ -1,4 +1,7 @@
 # shadcn-svelte token inventory by style
+Session IDs:
+Lesson:
+Check:
 
 Type: research
 Status: resolved

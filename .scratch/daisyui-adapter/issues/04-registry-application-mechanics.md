@@ -1,4 +1,7 @@
 # Registry application mechanics
+Session IDs:
+Lesson:
+Check:
 
 Type: research
 Status: resolved

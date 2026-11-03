@@ -1,4 +1,5 @@
 # Chart rows have no fallback, so a deleted theme paints them black
+Session IDs:
 
 Type: task
 Status: resolved
