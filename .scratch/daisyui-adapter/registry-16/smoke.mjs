@@ -135,6 +135,15 @@ const STATUS = {
 };
 const STATUS_KEYS = Object.keys(STATUS);
 
+const TEXT = {
+	'success-text': 'color-mix(in oklch, var(--success) 40%, var(--foreground) 60%)',
+	'warning-text': 'color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%)',
+	'info-text': 'color-mix(in oklch, var(--info) 40%, var(--foreground) 60%)',
+	'destructive-text': 'color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%)'
+};
+const TEXT_KEYS = Object.keys(TEXT);
+const TONES = ['success', 'warning', 'info', 'destructive'];
+
 const checkStatusBindings = (css, run) => {
 	for (const key of STATUS_KEYS) {
 		const { source, value } = STATUS[key];
@@ -157,6 +166,60 @@ const checkStatusAliases = (css, run) => {
 			`${run}: the @theme inline --color-${key} alias points at --${key}`,
 			alias === `var(--${key})`,
 			alias ?? `no --color-${key} alias`
+		);
+	}
+};
+
+const checkTextTones = (css, run) => {
+	for (const key of TEXT_KEYS) {
+		for (const selector of SLOTS) {
+			const binding = declarationOf(css, selector, `--${key}`);
+			const helper = declarationOf(css, selector, `--daisy-derived-${key}`);
+			check(
+				`${run}: the ${selector} --${key} binding falls back to the 40/60 mix`,
+				binding === `var(--daisy-derived-${key}, ${TEXT[key]})`,
+				binding ?? `no --${key} in ${selector}`
+			);
+			check(
+				`${run}: the ${selector} --daisy-derived-${key} helper is the 40/60 mix`,
+				helper === TEXT[key],
+				helper ?? `no --daisy-derived-${key} in ${selector}`
+			);
+		}
+	}
+};
+
+const checkTextAliases = (css, run) => {
+	for (const key of TEXT_KEYS) {
+		const alias = declarationOf(css, '@theme inline', `--color-${key}`);
+		check(
+			`${run}: the @theme inline --color-${key} alias points at --${key}`,
+			alias === `var(--${key})`,
+			alias ?? `no --color-${key} alias`
+		);
+	}
+};
+
+const checkNoBorderTokens = (css, run) => {
+	for (const tone of TONES) {
+		check(
+			`${run}: the text tones introduce no separate --${tone}-border token`,
+			!new RegExp(`--${tone}-border\\s*:`).test(css) && !css.includes(`--color-${tone}-border:`),
+			(css.match(new RegExp(`--(?:color-)?${tone}-border[^;]*`)) ?? ['none'])[0]
+		);
+	}
+};
+
+const derivedCount = (css, selector) =>
+	(blockOf(css, selector).match(/(?:^|\n)\s*--daisy-derived-[\w-]+\s*:/g) ?? []).length;
+
+const checkDerivedCount = (css, run, expected) => {
+	for (const selector of SLOTS) {
+		const count = derivedCount(css, selector);
+		check(
+			`${run}: ${selector} carries ${expected} derived helpers`,
+			count === expected,
+			`${count}`
 		);
 	}
 };
@@ -189,8 +252,8 @@ check(
 	`${headerLines(css1).length} header line(s)`
 );
 check(
-	'CLI counts 39 declarations per block with a theme',
-	first.includes('39 light, 39 dark'),
+	'CLI counts 43 declarations per block with a theme',
+	first.includes('43 light, 43 dark'),
 	(first.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
 );
 check(
@@ -250,6 +313,10 @@ check(
 );
 checkStatusBindings(css1, 'themed');
 checkStatusAliases(css1, 'themed');
+checkTextTones(css1, 'themed');
+checkTextAliases(css1, 'themed');
+checkNoBorderTokens(css1, 'themed');
+checkDerivedCount(css1, 'themed', 13);
 
 // 6. Re-run is byte-identical.
 cli(full);
@@ -294,8 +361,8 @@ const bareRun = cliResult(bare);
 const bareCss = readFileSync(barePath, 'utf8');
 check('a missing theme exits 0', bareRun.code === 0, `exit ${bareRun.code}`);
 check(
-	'a missing theme counts 39 declarations per block',
-	bareRun.out.includes('39 light, 39 dark'),
+	'a missing theme counts 43 declarations per block',
+	bareRun.out.includes('43 light, 43 dark'),
 	(bareRun.out.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
 );
 check(
@@ -310,6 +377,10 @@ check(
 check('a missing theme writes no plugin line', !bareCss.includes(`@plugin "${NAME}"`));
 checkStatusBindings(bareCss, 'theme-less');
 checkStatusAliases(bareCss, 'theme-less');
+checkTextTones(bareCss, 'theme-less');
+checkTextAliases(bareCss, 'theme-less');
+checkNoBorderTokens(bareCss, 'theme-less');
+checkDerivedCount(bareCss, 'theme-less', 8);
 
 // A property the project already declares in @theme inline keeps its value and is not duplicated.
 const owned = join(WORK, 'owned');

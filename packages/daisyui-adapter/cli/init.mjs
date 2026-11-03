@@ -17,7 +17,14 @@ import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import { BINDING_KEYS, SINGLE, TOKEN_FALLBACKS, mixValue } from '../dist/map.mjs';
+import {
+	BINDING_KEYS,
+	SINGLE,
+	TOKEN_FALLBACKS,
+	isMix,
+	mixValue,
+	textToneValue
+} from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
 
@@ -134,8 +141,9 @@ const rebuild = (current, fallback, scheme) => {
 		if (SINGLE[key]) {
 			lines.push(`\t--${key}: var(${targetVar(key)}, ${old});`);
 		} else {
+			const helper = isMix(key) ? mixValue(key, colorVar) : textToneValue(key);
 			lines.push(`\t--${key}: var(--daisy-derived-${key}, ${old});`);
-			lines.push(`\t--daisy-derived-${key}: ${mixValue(key, colorVar)};`);
+			lines.push(`\t--daisy-derived-${key}: ${helper};`);
 		}
 	}
 	if (scheme) {
@@ -287,7 +295,7 @@ const main = () => {
 	writeFileSync(cssPath, css);
 
 	// Read back what was written: a block the CLI matched but could not fill has to show a count
-	// below 39 rather than a number from the data it meant to write.
+	// below 43 rather than a number from the data it meant to write.
 	const written = readFileSync(cssPath, 'utf8');
 	const count = (selector) =>
 		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-'))

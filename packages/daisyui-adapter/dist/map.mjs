@@ -64,6 +64,23 @@ export const SINGLE = {
 	radius: { scalar: 'radius' }
 };
 
+// A text tone is a status tone mixed toward the page foreground, because the raw tone reads below AA as
+// text and stays the fill.
+const TEXT_TONE = {
+	'success-text': ['success', 40, 'foreground', 60],
+	'warning-text': ['warning', 40, 'foreground', 60],
+	'info-text': ['info', 40, 'foreground', 60],
+	'destructive-text': ['destructive', 40, 'foreground', 60]
+};
+
+export const TEXT_TONE_KEYS = Object.keys(TEXT_TONE);
+
+export const textToneValue = (key) => {
+	const row = TEXT_TONE[key];
+	if (!row) throw new Error(`[daisyui-adapter] no text-tone row for ${key}`);
+	return `color-mix(in oklch, var(--${row[0]}) ${row[1]}%, var(--${row[2]}) ${row[3]}%)`;
+};
+
 // Tokens the stock stylesheet does not have. Each value is the fallback its binding renders with when
 // no theme is present, and each key also needs a `@theme inline` alias.
 export const TOKEN_FALLBACKS = {
@@ -73,7 +90,8 @@ export const TOKEN_FALLBACKS = {
 	warning: 'oklch(79% 0.184 86.047)',
 	'warning-foreground': 'oklch(28% 0.066 53.813)',
 	info: 'oklch(74% 0.16 232.661)',
-	'info-foreground': 'oklch(29% 0.066 243.157)'
+	'info-foreground': 'oklch(29% 0.066 243.157)',
+	...Object.fromEntries(TEXT_TONE_KEYS.map((key) => [key, textToneValue(key)]))
 };
 
 // A mix row is a derivation over two sources. Values stay opaque: Tailwind's opacity modifiers
@@ -103,4 +121,4 @@ export const isSingle = (key) => key in SINGLE;
 export const isMix = (key) => key in MIX;
 
 // Every binding key the CLI writes into each block, in a stable order.
-export const BINDING_KEYS = [...Object.keys(SINGLE), ...MIX_KEYS];
+export const BINDING_KEYS = [...Object.keys(SINGLE), ...MIX_KEYS, ...TEXT_TONE_KEYS];
