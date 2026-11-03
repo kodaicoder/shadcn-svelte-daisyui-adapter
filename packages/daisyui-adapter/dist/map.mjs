@@ -2,6 +2,10 @@
 // token. Ticket 09 (surfaces), 10 (sidebar rungs) and 11 (radius) settled the rows; ticket 12
 // settled that the chart ramp is computed, not assigned, so chart-1..5 are absent here on purpose
 // and are written by the CLI from ramp.mjs.
+//
+// 0.3.0 maps secondary and accent to daisyUI's brand tokens, overriding 09's surface-first rows at
+// the operator's request. Both are surfaces in shadcn, so the components that paint with them need
+// a visual check; ticket 23 records the measured pairs.
 
 export const COLOR_SOURCES = [
 	'base-100',
@@ -36,10 +40,11 @@ export const SINGLE = {
 	'popover-foreground': { source: 'base-content' },
 	primary: { source: 'primary' },
 	'primary-foreground': { source: 'primary-content' },
-	secondary: { source: 'base-200' },
-	'secondary-foreground': { source: 'base-content' },
+	secondary: { source: 'secondary' },
+	'secondary-foreground': { source: 'secondary-content' },
 	muted: { source: 'base-200' },
-	'accent-foreground': { source: 'base-content' },
+	accent: { source: 'accent' },
+	'accent-foreground': { source: 'accent-content' },
 	destructive: { source: 'error' },
 	ring: { source: 'primary' },
 	sidebar: { source: 'base-200' },
@@ -56,7 +61,6 @@ export const SINGLE = {
 // multiply alpha, so any alpha baked in here would be wrong at every use site.
 const MIX = {
 	'muted-foreground': ['base-content', 62, 'base-100'],
-	accent: ['base-200', 85, 'base-300'],
 	border: ['base-content', 10, 'base-100'],
 	input: ['base-content', 15, 'base-100'],
 	'sidebar-border': ['base-content', 10, 'base-100']
