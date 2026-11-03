@@ -37,7 +37,7 @@ with the mapping and is not the first thing a user reads; the README points at t
 light/dark pair. The README already says the package is not affiliated and installs no runtime
 dependency; the short section can land the next time the docs are touched.
 
-0.3.0 is on `feat/daisyui-adapter` and is not published. The version examples in the README stay at the
+0.3.0 is on `develop` and is not published. The version examples in the README stay at the
 published 0.2.0 until the fix phase settles the final mapping and releases it.
 
 Lesson: User docs belong to the package that ships them, so the README is the only surface; the mapping table stays with the code because it changes with it.

@@ -118,4 +118,4 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 
 ## Further Notes
 
-The audit found 63 installed component directories; the docs catalog lists 67 entries, the extra four being the Combobox, Data Table and Date Picker compositions and Typography. The `mira` style has 90 `rounded-none` occurrences across 82 files, so the radius change is a deliberate visual shift, not a small fix. The ADRs record the brand mapping, the radius direction and the fixer boundary. The 0.3.0 package is already on `feat/daisyui-adapter` but unpublished; the release follows the visual check.
+The audit found 63 installed component directories; the docs catalog lists 67 entries, the extra four being the Combobox, Data Table and Date Picker compositions and Typography. The `mira` style has 90 `rounded-none` occurrences across 82 files, so the radius change is a deliberate visual shift, not a small fix. The ADRs record the brand mapping, the radius direction and the fixer boundary. The 0.3.0 package is already on `develop` but unpublished; the release follows the visual check.
