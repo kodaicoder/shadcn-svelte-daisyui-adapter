@@ -118,7 +118,7 @@ is the same surface the ghost variant already paints on hover.
 
 ## Verification evidence
 
-- `node .scratch/daisyui-adapter/registry-26/fix.mjs`: `all fix checks passed`, 99 checks, exit 0.
+- `node .scratch/daisyui-adapter/registry-26/fix.mjs`: `all fix checks passed`, 100 checks, exit 0.
   Covers the table shape (9/11/10), the alias rules including a `package.json` subpath import, a fresh
   stock tree fixed by `init`, the second run byte-identical, one hand-edited site beside one stock
   site in the same file, `--dry-run` writing nothing, `fix dialog` touching one file, a deleted
