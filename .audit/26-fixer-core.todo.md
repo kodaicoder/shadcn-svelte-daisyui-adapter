@@ -2,8 +2,9 @@ Phase: feature
 
 # Ticket 26, fixer core
 
-Ticket: `.scratch/daisyui-adapter/issues/26-fixer-core.md` (Status: ready-for-agent, Blocked by: none).
+Ticket: `.scratch/daisyui-adapter/issues/26-fixer-core.md` (Status: resolved, Blocked by: none).
 Branch: `fix/nutchapon/ai/new-variants`. Base: `3a4e1f1` (ticket 25, tag `t25-text-tones`).
+Commit: `5243cd4`, tag `t26-fixer-core`.
 Session: `ses_e5f793088ffeivY0j080ONkUda`.
 Playbook: Feature. poteto-mode drives; the ticket is input.
 Next ticket, untouched: `.scratch/daisyui-adapter/issues/27-fixer-safety.md`.
@@ -48,22 +49,22 @@ Matched playbook: Feature. Its steps, verbatim, then the ticket's own steps.
 
 Ticket steps, from the operator's order:
 
-- [ ] Read poteto-mode and pick the playbook, then write this plan
-- [ ] Claim ticket 26
-- [ ] Add `packages/daisyui-adapter/component-fix.mjs` with the target table: nine components,
+- [x] Read poteto-mode and pick the playbook, then write this plan
+- [x] Claim ticket 26
+- [x] Add `packages/daisyui-adapter/component-fix.mjs` with the target table: nine components,
       ten contrast pairs, stock strings copied from `src/lib/components/ui` at 1.7.1 `mira`
-- [ ] Wire `cli/init.mjs`: `init` maps then fixes; add `fix [component...]` and `--dry-run`
-- [ ] Four states per site, per-site application, `components.json` aliases, CRLF and Windows paths,
+- [x] Wire `cli/init.mjs`: `init` maps then fixes; add `fix [component...]` and `--dry-run`
+- [x] Four states per site, per-site application, `components.json` aliases, CRLF and Windows paths,
       no-components exits 0
-- [ ] Unit seam in `.scratch/daisyui-adapter/registry-26/fix.mjs`: states, custom alias, CRLF,
+- [x] Unit seam in `.scratch/daisyui-adapter/registry-26/fix.mjs`: states, custom alias, CRLF,
       add-after-init, overwrite then fix restores, no-components, second run byte-identical
-- [ ] Run the existing smoke and the seam; `init` twice byte-identical
-- [ ] Done: every ticket checkbox; ten pairs pass 4.5 in both schemes; no new dependency; tickets
+- [x] Run the existing smoke and the seam; `init` twice byte-identical
+- [x] Done: every ticket checkbox; ten pairs pass 4.5 in both schemes; no new dependency; tickets
       27-34 untouched
-- [ ] Closeout: Status resolved, Session IDs / Lesson / Check, conventional commit
+- [x] Closeout: Status resolved, Session IDs / Lesson / Check, conventional commit
       `feat(adapter): add the component fixer`, annotated tag `t26-fixer-core`, push branch and tag
-- [ ] Do not merge back to `develop`
-- [ ] `deslop` before commit
+- [x] Do not merge back to `develop`
+- [x] `deslop` before commit
 
 ## Throughput checkpoint
 
