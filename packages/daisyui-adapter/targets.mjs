@@ -895,10 +895,11 @@ export const SURFACES = [
 	}
 ];
 
-export const VARIANT_COMPONENTS = ['button'];
+export const VARIANT_COMPONENTS = ['button', 'badge', 'alert', 'bubble'];
 
-export const BUTTON_VARIANTS = [
+export const VARIANT_ROWS = [
 	{
+		component: 'button',
 		key: 'destructive',
 		tone: 'destructive',
 		presentation: 'solid',
@@ -906,133 +907,437 @@ export const BUTTON_VARIANTS = [
 			'bg-destructive text-destructive-foreground border-destructive-text hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 focus-visible:border-destructive/40'
 	},
 	{
+		component: 'button',
 		key: 'success',
 		tone: 'success',
 		presentation: 'solid',
 		class: 'bg-success text-success-foreground border-success-text hover:bg-success/80'
 	},
 	{
+		component: 'button',
 		key: 'warning',
 		tone: 'warning',
 		presentation: 'solid',
 		class: 'bg-warning text-warning-foreground border-warning-text hover:bg-warning/80'
 	},
 	{
+		component: 'button',
 		key: 'info',
 		tone: 'info',
 		presentation: 'solid',
 		class: 'bg-info text-info-foreground border-info-text hover:bg-info/80'
 	},
 	{
+		component: 'button',
 		key: 'outline-destructive',
 		tone: 'destructive',
 		presentation: 'outline',
 		class: 'border-destructive-text bg-transparent text-destructive-text hover:bg-destructive/10'
 	},
 	{
+		component: 'button',
 		key: 'outline-success',
 		tone: 'success',
 		presentation: 'outline',
 		class: 'border-success-text bg-transparent text-success-text hover:bg-success/10'
 	},
 	{
+		component: 'button',
 		key: 'outline-warning',
 		tone: 'warning',
 		presentation: 'outline',
 		class: 'border-warning-text bg-transparent text-warning-text hover:bg-warning/10'
 	},
 	{
+		component: 'button',
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
 		class: 'border-info-text bg-transparent text-info-text hover:bg-info/10'
 	},
 	{
+		component: 'button',
 		key: 'ghost-destructive',
 		tone: 'destructive',
 		presentation: 'ghost',
 		class: 'text-destructive-text hover:bg-destructive/10'
 	},
 	{
+		component: 'button',
 		key: 'ghost-success',
 		tone: 'success',
 		presentation: 'ghost',
 		class: 'text-success-text hover:bg-success/10'
 	},
 	{
+		component: 'button',
 		key: 'ghost-warning',
 		tone: 'warning',
 		presentation: 'ghost',
 		class: 'text-warning-text hover:bg-warning/10'
 	},
 	{
+		component: 'button',
 		key: 'ghost-info',
 		tone: 'info',
 		presentation: 'ghost',
 		class: 'text-info-text hover:bg-info/10'
 	},
 	{
+		component: 'button',
 		key: 'link-destructive',
 		tone: 'destructive',
 		presentation: 'link',
 		class: 'text-destructive-text underline underline-offset-4 hover:underline'
 	},
 	{
+		component: 'button',
 		key: 'link-success',
 		tone: 'success',
 		presentation: 'link',
 		class: 'text-success-text underline underline-offset-4 hover:underline'
 	},
 	{
+		component: 'button',
 		key: 'link-warning',
 		tone: 'warning',
 		presentation: 'link',
 		class: 'text-warning-text underline underline-offset-4 hover:underline'
 	},
 	{
+		component: 'button',
 		key: 'link-info',
 		tone: 'info',
 		presentation: 'link',
 		class: 'text-info-text underline underline-offset-4 hover:underline'
+	},
+	{
+		component: 'badge',
+		key: 'destructive',
+		tone: 'destructive',
+		presentation: 'solid',
+		class:
+			'text-destructive [a]:hover:text-destructive/70 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
+	},
+	{
+		component: 'badge',
+		key: 'success',
+		tone: 'success',
+		presentation: 'solid',
+		class: 'bg-success text-success-foreground [a]:hover:bg-success/80'
+	},
+	{
+		component: 'badge',
+		key: 'warning',
+		tone: 'warning',
+		presentation: 'solid',
+		class: 'bg-warning text-warning-foreground [a]:hover:bg-warning/80'
+	},
+	{
+		component: 'badge',
+		key: 'info',
+		tone: 'info',
+		presentation: 'solid',
+		class: 'bg-info text-info-foreground [a]:hover:bg-info/80'
+	},
+	{
+		component: 'badge',
+		key: 'outline-destructive',
+		tone: 'destructive',
+		presentation: 'outline',
+		class: 'text-destructive-text [a]:hover:text-destructive-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'outline-success',
+		tone: 'success',
+		presentation: 'outline',
+		class: 'text-success-text [a]:hover:text-success-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'outline-warning',
+		tone: 'warning',
+		presentation: 'outline',
+		class: 'text-warning-text [a]:hover:text-warning-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'outline-info',
+		tone: 'info',
+		presentation: 'outline',
+		class: 'text-info-text [a]:hover:text-info-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'ghost-destructive',
+		tone: 'destructive',
+		presentation: 'ghost',
+		class: 'text-destructive-text hover:text-destructive-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'ghost-success',
+		tone: 'success',
+		presentation: 'ghost',
+		class: 'text-success-text hover:text-success-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'ghost-warning',
+		tone: 'warning',
+		presentation: 'ghost',
+		class: 'text-warning-text hover:text-warning-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'ghost-info',
+		tone: 'info',
+		presentation: 'ghost',
+		class: 'text-info-text hover:text-info-text/70'
+	},
+	{
+		component: 'badge',
+		key: 'link-destructive',
+		tone: 'destructive',
+		presentation: 'link',
+		class: 'text-destructive-text underline-offset-4 hover:underline'
+	},
+	{
+		component: 'badge',
+		key: 'link-success',
+		tone: 'success',
+		presentation: 'link',
+		class: 'text-success-text underline-offset-4 hover:underline'
+	},
+	{
+		component: 'badge',
+		key: 'link-warning',
+		tone: 'warning',
+		presentation: 'link',
+		class: 'text-warning-text underline-offset-4 hover:underline'
+	},
+	{
+		component: 'badge',
+		key: 'link-info',
+		tone: 'info',
+		presentation: 'link',
+		class: 'text-info-text underline-offset-4 hover:underline'
+	},
+	{
+		component: 'alert',
+		key: 'destructive',
+		tone: 'destructive',
+		presentation: 'solid',
+		class:
+			'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current after:bg-destructive'
+	},
+	{
+		component: 'alert',
+		key: 'success',
+		tone: 'success',
+		presentation: 'solid',
+		class:
+			'text-success-text bg-card *:data-[slot=alert-description]:text-success-text/90 *:[svg]:text-current after:bg-success'
+	},
+	{
+		component: 'alert',
+		key: 'warning',
+		tone: 'warning',
+		presentation: 'solid',
+		class:
+			'text-warning-text bg-card *:data-[slot=alert-description]:text-warning-text/90 *:[svg]:text-current after:bg-warning'
+	},
+	{
+		component: 'alert',
+		key: 'info',
+		tone: 'info',
+		presentation: 'solid',
+		class:
+			'text-info-text bg-card *:data-[slot=alert-description]:text-info-text/90 *:[svg]:text-current after:bg-info'
+	},
+	{
+		component: 'bubble',
+		key: 'destructive',
+		tone: 'destructive',
+		presentation: 'solid',
+		class:
+			'*:data-[slot=bubble-content]:bg-destructive/10 dark:*:data-[slot=bubble-content]:bg-destructive/20 *:data-[slot=bubble-content]:text-destructive [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/20 dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30'
+	},
+	{
+		component: 'bubble',
+		key: 'success',
+		tone: 'success',
+		presentation: 'solid',
+		class:
+			'*:data-[slot=bubble-content]:bg-success *:data-[slot=bubble-content]:border-success-text *:data-[slot=bubble-content]:text-success-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/80'
+	},
+	{
+		component: 'bubble',
+		key: 'warning',
+		tone: 'warning',
+		presentation: 'solid',
+		class:
+			'*:data-[slot=bubble-content]:bg-warning *:data-[slot=bubble-content]:border-warning-text *:data-[slot=bubble-content]:text-warning-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/80'
+	},
+	{
+		component: 'bubble',
+		key: 'info',
+		tone: 'info',
+		presentation: 'solid',
+		class:
+			'*:data-[slot=bubble-content]:bg-info *:data-[slot=bubble-content]:border-info-text *:data-[slot=bubble-content]:text-info-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/80'
+	},
+	{
+		component: 'bubble',
+		key: 'outline-destructive',
+		tone: 'destructive',
+		presentation: 'outline',
+		class:
+			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-destructive-text *:data-[slot=bubble-content]:text-destructive-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/10'
+	},
+	{
+		component: 'bubble',
+		key: 'outline-success',
+		tone: 'success',
+		presentation: 'outline',
+		class:
+			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-success-text *:data-[slot=bubble-content]:text-success-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/10'
+	},
+	{
+		component: 'bubble',
+		key: 'outline-warning',
+		tone: 'warning',
+		presentation: 'outline',
+		class:
+			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-warning-text *:data-[slot=bubble-content]:text-warning-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/10'
+	},
+	{
+		component: 'bubble',
+		key: 'outline-info',
+		tone: 'info',
+		presentation: 'outline',
+		class:
+			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-info-text *:data-[slot=bubble-content]:text-info-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/10'
+	},
+	{
+		component: 'bubble',
+		key: 'ghost-destructive',
+		tone: 'destructive',
+		presentation: 'ghost',
+		class:
+			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 *:data-[slot=bubble-content]:text-destructive-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/10 border-none'
+	},
+	{
+		component: 'bubble',
+		key: 'ghost-success',
+		tone: 'success',
+		presentation: 'ghost',
+		class:
+			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 *:data-[slot=bubble-content]:text-success-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/10 border-none'
+	},
+	{
+		component: 'bubble',
+		key: 'ghost-warning',
+		tone: 'warning',
+		presentation: 'ghost',
+		class:
+			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 *:data-[slot=bubble-content]:text-warning-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/10 border-none'
+	},
+	{
+		component: 'bubble',
+		key: 'ghost-info',
+		tone: 'info',
+		presentation: 'ghost',
+		class:
+			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 *:data-[slot=bubble-content]:text-info-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/10 border-none'
 	}
 ];
 
-const BUTTON_STOCK_VARIANTS = {
-	default: 'bg-primary text-primary-foreground hover:bg-primary/80',
-	outline:
-		'border-border bg-transparent hover:bg-muted hover:text-foreground dark:hover:bg-input/30 aria-expanded:bg-muted aria-expanded:text-foreground',
-	secondary:
-		'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
-	ghost:
-		'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground',
-	destructive:
-		'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30',
-	link: 'text-primary underline-offset-4 hover:underline underline'
+const rowsOf = (component) => VARIANT_ROWS.filter((row) => row.component === component);
+
+export const BUTTON_VARIANTS = rowsOf('button');
+export const BADGE_VARIANTS = rowsOf('badge');
+export const ALERT_VARIANTS = rowsOf('alert');
+export const BUBBLE_VARIANTS = rowsOf('bubble');
+
+const VARIANT_FILES = {
+	button: 'button/button.svelte',
+	badge: 'badge/badge.svelte',
+	alert: 'alert/alert.svelte',
+	bubble: 'bubble/bubble.svelte'
 };
 
-// The pinned file writes `variant:` at three tabs and its keys at four, and the stock string has to
-// match it byte for byte, so the block opens at zero and the closing line returns to three.
-const renderVariantBlock = (rows) =>
-	[
-		'variant: {',
-		`\t\t\t\tdefault: "${BUTTON_STOCK_VARIANTS.default}",`,
-		`\t\t\t\toutline: "${BUTTON_STOCK_VARIANTS.outline}",`,
-		`\t\t\t\tsecondary: "${BUTTON_STOCK_VARIANTS.secondary}",`,
-		`\t\t\t\tghost: "${BUTTON_STOCK_VARIANTS.ghost}",`,
+const VARIANT_PINNED = {
+	button: {
+		default: 'bg-primary text-primary-foreground hover:bg-primary/80',
+		outline:
+			'border-border bg-transparent hover:bg-muted hover:text-foreground dark:hover:bg-input/30 aria-expanded:bg-muted aria-expanded:text-foreground',
+		secondary:
+			'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+		ghost:
+			'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground',
+		link: 'text-primary underline-offset-4 hover:underline underline'
+	},
+	badge: {
+		default: 'text-foreground [a]:hover:text-foreground/70',
+		secondary: 'text-muted-foreground [a]:hover:text-foreground',
+		outline: 'text-foreground [a]:hover:text-foreground/70',
+		ghost: 'text-muted-foreground hover:text-foreground',
+		link: 'text-foreground underline-offset-4 hover:underline'
+	},
+	alert: {
+		default: 'bg-card text-card-foreground after:bg-foreground'
+	},
+	bubble: {
+		tinted:
+			'*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.93_calc(c*0.4)_h)] dark:*:data-[slot=bubble-content]:bg-[oklch(from_var(--primary)_0.3_calc(c*0.4)_h)] *:data-[slot=bubble-content]:text-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.88_calc(c*0.5)_h)] dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-[oklch(from_var(--primary)_0.35_calc(c*0.5)_h)]',
+		outline:
+			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-border [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-input/30',
+		ghost:
+			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 [&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]:text-foreground dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-muted/50 border-none'
+	}
+};
+
+// bubble opens at `tinted`: `bubble-muted` owns the `muted:` line, and the fixer states every site
+// before it writes, so the two stock strings must not share a byte.
+const VARIANT_LAYOUT = {
+	button: { lead: ['default', 'outline', 'secondary', 'ghost'], trail: ['link'], open: true },
+	badge: { lead: ['default', 'secondary'], trail: ['outline', 'ghost', 'link'], open: true },
+	alert: { lead: ['default'], trail: [], open: true },
+	bubble: { lead: ['tinted', 'outline', 'ghost'], trail: [], open: false }
+};
+
+const VARIANT_STOCK_CLASS = {
+	button:
+		'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30'
+};
+
+const renderVariantBlock = (component, rows) => {
+	const { lead, trail, open } = VARIANT_LAYOUT[component];
+	const pinned = VARIANT_PINNED[component];
+	const line = (key) => `\t\t\t\t${key}: "${pinned[key]}",`;
+	return [
+		...(open ? ['variant: {'] : []),
+		...lead.map(line),
 		...rows.map((row) => `\t\t\t\t${row.key}: "${row.class}",`),
-		`\t\t\t\tlink: "${BUTTON_STOCK_VARIANTS.link}",`,
+		...trail.map(line),
 		'\t\t\t}'
 	].join('\n');
+};
 
-export const VARIANTS = [
-	{
-		id: 'button-variants',
-		component: 'button',
-		file: 'button/button.svelte',
-		stock: renderVariantBlock([{ key: 'destructive', class: BUTTON_STOCK_VARIANTS.destructive }]),
-		fixed: renderVariantBlock(BUTTON_VARIANTS)
-	}
-];
+const stockRowsOf = (component) =>
+	rowsOf(component)
+		.slice(0, 1)
+		.map((row) => ({ ...row, class: VARIANT_STOCK_CLASS[component] ?? row.class }));
+
+export const VARIANTS = VARIANT_COMPONENTS.map((component) => ({
+	id: `${component}-variants`,
+	component,
+	file: VARIANT_FILES[component],
+	stock: renderVariantBlock(component, stockRowsOf(component)),
+	fixed: renderVariantBlock(component, rowsOf(component))
+}));
 
 export const KNOWN_COMPONENTS = [
 	...new Set([...COMPONENTS, ...RADIUS_COMPONENTS, ...SURFACE_COMPONENTS, ...VARIANT_COMPONENTS])
@@ -1049,5 +1354,9 @@ export const TARGETS = {
 	surfaceComponents: SURFACE_COMPONENTS,
 	variants: VARIANTS,
 	variantComponents: VARIANT_COMPONENTS,
-	buttonVariants: BUTTON_VARIANTS
+	buttonVariants: BUTTON_VARIANTS,
+	variantRows: VARIANT_ROWS,
+	badgeVariants: BADGE_VARIANTS,
+	alertVariants: ALERT_VARIANTS,
+	bubbleVariants: BUBBLE_VARIANTS
 };

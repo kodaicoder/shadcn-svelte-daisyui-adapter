@@ -178,15 +178,15 @@ const freshRun = cliResult(fresh);
 const freshSites = parseSites(freshRun.out);
 check('init with components present exits 0', freshRun.code === 0, `exit ${freshRun.code}`);
 check('init still writes 43 declarations per block', freshRun.out.includes('43 light, 43 dark'));
-check('init reports every site', freshSites.length === 38, `${freshSites.length}`);
+check('init reports every site', freshSites.length === 39, `${freshSites.length}`);
 check(
 	'init finds every site stock and writes it',
 	freshSites.every((site) => site.state === 'stock' && site.written)
 );
 check(
-	'init totals thirty-eight stock',
+	'init totals thirty-nine stock',
 	TOTALS.test(freshRun.out) &&
-		freshRun.out.includes('fix: 38 stock, 0 fixed, 0 customized, 0 missing')
+		freshRun.out.includes('fix: 39 stock, 0 fixed, 0 customized, 0 missing')
 );
 check(
 	'the report path is forward-slash relative',
@@ -222,12 +222,12 @@ const secondSites = parseSites(secondRun.out);
 check('a second fix exits 0', secondRun.code === 0, `exit ${secondRun.code}`);
 check(
 	'a second fix finds every site fixed and writes nothing',
-	secondSites.length === 38 && secondSites.every((site) => site.state === 'fixed' && !site.written)
+	secondSites.length === 39 && secondSites.every((site) => site.state === 'fixed' && !site.written)
 );
 check(
-	'a second fix totals thirty-eight fixed',
+	'a second fix totals thirty-nine fixed',
 	TOTALS.test(secondRun.out) &&
-		secondRun.out.includes('fix: 0 stock, 38 fixed, 0 customized, 0 missing')
+		secondRun.out.includes('fix: 0 stock, 39 fixed, 0 customized, 0 missing')
 );
 check('a second fix is byte-identical', snapshot(fresh).join('\n') === fixedSnapshot.join('\n'));
 
@@ -269,13 +269,13 @@ const drySites = parseSites(dryRun.out);
 check('a dry run exits 0', dryRun.code === 0, `exit ${dryRun.code}`);
 check(
 	'a dry run reports every site stock and unwritten',
-	drySites.length === 38 &&
+	drySites.length === 39 &&
 		drySites.every((site) => site.state === 'stock' && !site.written && site.dryRun)
 );
 check(
 	'a dry run totals with the dry-run note',
 	TOTALS.test(dryRun.out) &&
-		dryRun.out.includes('fix: 38 stock, 0 fixed, 0 customized, 0 missing; dry run, nothing written')
+		dryRun.out.includes('fix: 39 stock, 0 fixed, 0 customized, 0 missing; dry run, nothing written')
 );
 check(
 	'a dry run leaves every file byte-identical',
@@ -424,7 +424,7 @@ const customRun = cliResult(custom, 'fix');
 const customSites = parseSites(customRun.out);
 check(
 	'every site is fixed under a custom alias',
-	customSites.length === 38 && customSites.every((site) => site.state === 'stock' && site.written)
+	customSites.length === 39 && customSites.every((site) => site.state === 'stock' && site.written)
 );
 check(
 	'the custom alias is patched',
@@ -470,7 +470,7 @@ check(
 );
 check(
 	'a second init reports every site fixed',
-	twiceSites.length === 38 && twiceSites.every((site) => site.state === 'fixed' && !site.written)
+	twiceSites.length === 39 && twiceSites.every((site) => site.state === 'fixed' && !site.written)
 );
 
 // WCAG 2.x relative luminance and sRGB transfer.

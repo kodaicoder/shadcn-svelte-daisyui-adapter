@@ -130,8 +130,8 @@ check(
 	`${BUTTON_VARIANTS.length}`
 );
 check(
-	'VARIANTS holds one site for the pinned button file',
-	VARIANTS.length === 1 &&
+	'VARIANTS[0] is the pinned button site',
+	VARIANTS.length === 4 &&
 		site.id === 'button-variants' &&
 		site.component === 'button' &&
 		site.file === FILENAME,
