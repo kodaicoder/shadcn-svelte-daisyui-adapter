@@ -2,7 +2,31 @@
 
 ## 0.3.0
 
-`--secondary` and `--secondary-foreground` now read daisyUI's `secondary` and `secondary-content`; `--accent` and `--accent-foreground` read `accent` and `accent-content`, and `accent` is no longer a mix of `base-200` and `base-300`. This is a mapping change: re-run the CLI, and the header updates to 0.3.0. The components that paint with these tokens as surfaces need a visual check; ticket 23 lists them and the measured contrast on the light-blue/dark-blue pair.
+This release completes the theme. The stylesheet gains eleven bindings, and the component fixer patches the stock shadcn classes so the painted UI matches the mapped tokens.
+
+The eleven tokens are the seven status tokens (`success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground`, `destructive-foreground`) and the four text tones (`success-text`, `warning-text`, `info-text`, `destructive-text`). Each has a `--color-*` alias. A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. The raw tone stays the fill and never the text, because the raw tone measures below AA as text on the light page and the destructive raw tone does on the dark page. The status fallbacks are fixed, so a project with no theme stays readable. Each block now holds 43 non-derived declarations: 38 binding keys and 5 chart rows. The four mix keys and five chart rows write nine derived helpers, and the four text tones add four more, for 13.
+
+`--secondary` and `--secondary-foreground` read daisyUI's `secondary` and `secondary-content`; `--accent` and `--accent-foreground` read `accent` and `accent-content`, and `accent` is no longer a mix of `base-200` and `base-300`. This is a mapping change, so re-run the CLI.
+
+The radius follows the daisyUI roles. The role picks the step: selector to `--radius-sm`, field to `--radius-md`, box to `--radius-lg`. The shadcn size shifts it: `xs`, `sm`, `icon-xs` and `icon-sm` to `sm`; `default`, `md` and `icon` to `md`; `lg` and `icon-lg` to `lg`. The scale is linear in `--radius` with no clamp, so at zero every step is zero. `init` warns above 2rem, because the controls become pill-like. Circles, edge-joining utilities and the calendar cell property are unchanged.
+
+Button gains `success`, `warning` and `info` as filled buttons, and `outline-*`, `ghost-*` and `link-*` for the four tones. The destructive button base is filled with `destructive-foreground`. Badge gains the three status tones as filled chips with the text-tone border, the three presentations for the four tones, and keeps its stock destructive text badge; the outline keys are border-only chips. Bubble gains the three status tones as filled bubbles with the border, outline and ghost for the four tones, and keeps its stock destructive tint; it has no link. Alert gains the three status tones as card-backed alerts and keeps its stock destructive text treatment. Filled status keys and the filled destructive button carry the text-tone border, so the component boundary clears 3:1 while the fill against the page can stay below it.
+
+The package now ships `component-fix.mjs`, and `init` runs the mapping and then the fixer over the components already on disk. The fixer has four states per replacement site: `missing`, `stock`, `fixed` and `customized`. It patches `stock`, leaves `fixed`, reports `customized` and still applies the other sites in the same file, so a second run is byte-identical. One target manifest holds the component list, the ten contrast pairs and the supported version. The fixer reads the installed shadcn-svelte version and refuses one outside 1.7.x. An unreadable version warns and continues, because `dlx` often leaves no dependency entry. The style label is not checked. `--dry-run` reports without writing, `--check` exits 1 only while a stock site remains, and `--strict` exits 1 on a customized site or on a component named on the command line with no files.
+
+The workflow changes. Add the components you use before `init`, because `init` fixes the components already on disk. A component added later needs `fix`, and `shadcn-svelte add -a` can overwrite a fixed file, which the next `fix` restores.
+
+The header marker now records the fixer state:
+
+```
+/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components <n> fixed | re-run ... */
+```
+
+`n` is the number of component files whose every replacement site is `fixed`, not the files changed in the run. A mixed file is reported and not counted, and a map-only run records `components 0 fixed`. A no-op `fix` keeps `n`, so the re-run stays byte-identical.
+
+Ten contrast pairs are repaired: the dialog and sheet close buttons, the calendar and range hover, the range middle, the three destructive menu shortcuts, the chart tooltip and the muted bubble. The filled status and destructive button rows use the text-tone border as the component boundary, because the fill alone is below 3:1 against the page.
+
+The visual check uses the repo harness screenshots in light and dark plus a short checklist: the ten repaired pairs, the four tones in every presentation, the filled border, the radius on the button, card and input, and the destructive base. Storybook is not part of this release.
 
 ## 0.2.0
 
