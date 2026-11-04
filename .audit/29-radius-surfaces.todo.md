@@ -172,7 +172,7 @@ of the table, not a relaxed assertion.
       `registry-28` 71, drift 8
 - [x] No dependency, no `src/lib/components/ui` edit, no ten-pair change, header/`--check`/`--strict`
       behavior per ticket 27
-- [ ] Closeout: Status resolved, Session IDs, Lesson, Check, conventional commit, annotated
+- [x] Closeout: Status resolved, Session IDs, Lesson, Check, conventional commit, annotated
       `t29-radius-surfaces` on that commit, push branch and tag, no merge to develop
 
 ## Delegation brief
