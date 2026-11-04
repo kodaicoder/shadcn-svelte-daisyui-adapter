@@ -242,5 +242,6 @@ the lead reads the diff from the worktree.
 - Open decisions: the `ALL_SITES` list is duplicated in the fixer and drift, so the next table has to
   touch both; the five pinned class strings are literals in the manifest and drift is the guard that
   they still match the pin.
-- Commit: pending
+- Commit: `019cf5d` `feat(adapter): add the button variants`, annotated tag `t30-button-variants` on
+  that commit.
 
