@@ -227,3 +227,6 @@ writes `git diff` output to `$TEMP/t29-diff.txt` for the lead to read.
   because the ticket names the four existing calendar sites and the calendar component only. The
   drawer and sheet surfaces get `lg` on all four corners even on a flush edge, because the ticket
   maps the box role to the surface; both are recorded rather than silently widened.
+- Commit: `9d5bfa8` `feat(adapter): round the surfaces`, annotated tag `t29-radius-surfaces` on that
+  commit, branch and tag pushed to `origin`. Temp fixtures and the mutation copies were removed
+  after the close.
