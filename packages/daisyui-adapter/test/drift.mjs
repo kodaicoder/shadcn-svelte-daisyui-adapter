@@ -14,7 +14,9 @@ import {
 	SITES,
 	SUPPORTED,
 	SURFACES,
-	SURFACE_COMPONENTS
+	SURFACE_COMPONENTS,
+	VARIANTS,
+	VARIANT_COMPONENTS
 } from '../targets.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
@@ -47,12 +49,13 @@ check(
 		.filter((id) => !siteIds.has(id))
 		.join(', ')
 );
-const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES];
+const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS];
 check(
 	'every site belongs to a named component of its own table',
 	SITES.every((site) => COMPONENTS.includes(site.component)) &&
 		RADIUS.every((site) => RADIUS_COMPONENTS.includes(site.component)) &&
-		SURFACES.every((site) => SURFACE_COMPONENTS.includes(site.component))
+		SURFACES.every((site) => SURFACE_COMPONENTS.includes(site.component)) &&
+		VARIANTS.every((site) => VARIANT_COMPONENTS.includes(site.component))
 );
 
 // A component name is not always a directory: input-group-button is a file inside input-group. A

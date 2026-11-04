@@ -10,12 +10,13 @@ import {
 	RADIUS,
 	SITES,
 	SUPPORTED,
-	SURFACES
+	SURFACES,
+	VARIANTS
 } from './targets.mjs';
 
 export { COMPONENTS, PAIRS, SITES, SUPPORTED };
 
-const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES];
+const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS];
 
 // A `#` alias is a package.json subpath import and can point anywhere, so the project's own
 // `imports` map wins over the convention below. `$lib` is SvelteKit's fixed lib alias; `@/` and

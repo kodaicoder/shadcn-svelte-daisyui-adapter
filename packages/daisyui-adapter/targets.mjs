@@ -895,8 +895,147 @@ export const SURFACES = [
 	}
 ];
 
+export const VARIANT_COMPONENTS = ['button'];
+
+export const BUTTON_VARIANTS = [
+	{
+		key: 'destructive',
+		tone: 'destructive',
+		presentation: 'solid',
+		class:
+			'bg-destructive text-destructive-foreground border-destructive-text hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 focus-visible:border-destructive/40'
+	},
+	{
+		key: 'success',
+		tone: 'success',
+		presentation: 'solid',
+		class: 'bg-success text-success-foreground border-success-text hover:bg-success/80'
+	},
+	{
+		key: 'warning',
+		tone: 'warning',
+		presentation: 'solid',
+		class: 'bg-warning text-warning-foreground border-warning-text hover:bg-warning/80'
+	},
+	{
+		key: 'info',
+		tone: 'info',
+		presentation: 'solid',
+		class: 'bg-info text-info-foreground border-info-text hover:bg-info/80'
+	},
+	{
+		key: 'outline-destructive',
+		tone: 'destructive',
+		presentation: 'outline',
+		class: 'border-destructive-text bg-transparent text-destructive-text hover:bg-destructive/10'
+	},
+	{
+		key: 'outline-success',
+		tone: 'success',
+		presentation: 'outline',
+		class: 'border-success-text bg-transparent text-success-text hover:bg-success/10'
+	},
+	{
+		key: 'outline-warning',
+		tone: 'warning',
+		presentation: 'outline',
+		class: 'border-warning-text bg-transparent text-warning-text hover:bg-warning/10'
+	},
+	{
+		key: 'outline-info',
+		tone: 'info',
+		presentation: 'outline',
+		class: 'border-info-text bg-transparent text-info-text hover:bg-info/10'
+	},
+	{
+		key: 'ghost-destructive',
+		tone: 'destructive',
+		presentation: 'ghost',
+		class: 'text-destructive-text hover:bg-destructive/10'
+	},
+	{
+		key: 'ghost-success',
+		tone: 'success',
+		presentation: 'ghost',
+		class: 'text-success-text hover:bg-success/10'
+	},
+	{
+		key: 'ghost-warning',
+		tone: 'warning',
+		presentation: 'ghost',
+		class: 'text-warning-text hover:bg-warning/10'
+	},
+	{
+		key: 'ghost-info',
+		tone: 'info',
+		presentation: 'ghost',
+		class: 'text-info-text hover:bg-info/10'
+	},
+	{
+		key: 'link-destructive',
+		tone: 'destructive',
+		presentation: 'link',
+		class: 'text-destructive-text underline underline-offset-4 hover:underline'
+	},
+	{
+		key: 'link-success',
+		tone: 'success',
+		presentation: 'link',
+		class: 'text-success-text underline underline-offset-4 hover:underline'
+	},
+	{
+		key: 'link-warning',
+		tone: 'warning',
+		presentation: 'link',
+		class: 'text-warning-text underline underline-offset-4 hover:underline'
+	},
+	{
+		key: 'link-info',
+		tone: 'info',
+		presentation: 'link',
+		class: 'text-info-text underline underline-offset-4 hover:underline'
+	}
+];
+
+const BUTTON_STOCK_VARIANTS = {
+	default: 'bg-primary text-primary-foreground hover:bg-primary/80',
+	outline:
+		'border-border bg-transparent hover:bg-muted hover:text-foreground dark:hover:bg-input/30 aria-expanded:bg-muted aria-expanded:text-foreground',
+	secondary:
+		'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+	ghost:
+		'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground',
+	destructive:
+		'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30',
+	link: 'text-primary underline-offset-4 hover:underline underline'
+};
+
+// The pinned file writes `variant:` at three tabs and its keys at four, and the stock string has to
+// match it byte for byte, so the block opens at zero and the closing line returns to three.
+const renderVariantBlock = (rows) =>
+	[
+		'variant: {',
+		`\t\t\t\tdefault: "${BUTTON_STOCK_VARIANTS.default}",`,
+		`\t\t\t\toutline: "${BUTTON_STOCK_VARIANTS.outline}",`,
+		`\t\t\t\tsecondary: "${BUTTON_STOCK_VARIANTS.secondary}",`,
+		`\t\t\t\tghost: "${BUTTON_STOCK_VARIANTS.ghost}",`,
+		...rows.map((row) => `\t\t\t\t${row.key}: "${row.class}",`),
+		`\t\t\t\tlink: "${BUTTON_STOCK_VARIANTS.link}",`,
+		'\t\t\t}'
+	].join('\n');
+
+export const VARIANTS = [
+	{
+		id: 'button-variants',
+		component: 'button',
+		file: 'button/button.svelte',
+		stock: renderVariantBlock([{ key: 'destructive', class: BUTTON_STOCK_VARIANTS.destructive }]),
+		fixed: renderVariantBlock(BUTTON_VARIANTS)
+	}
+];
+
 export const KNOWN_COMPONENTS = [
-	...new Set([...COMPONENTS, ...RADIUS_COMPONENTS, ...SURFACE_COMPONENTS])
+	...new Set([...COMPONENTS, ...RADIUS_COMPONENTS, ...SURFACE_COMPONENTS, ...VARIANT_COMPONENTS])
 ];
 
 export const TARGETS = {
@@ -907,5 +1046,8 @@ export const TARGETS = {
 	radius: RADIUS,
 	radiusComponents: RADIUS_COMPONENTS,
 	surfaces: SURFACES,
-	surfaceComponents: SURFACE_COMPONENTS
+	surfaceComponents: SURFACE_COMPONENTS,
+	variants: VARIANTS,
+	variantComponents: VARIANT_COMPONENTS,
+	buttonVariants: BUTTON_VARIANTS
 };
