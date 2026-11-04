@@ -8,10 +8,12 @@ Check: code - `.scratch/daisyui-adapter/registry-37/warning.mjs` pins the matrix
 
 **Blocked by:** None
 
-**Status:** ready-for-agent
+**Status:** resolved
 
 - [x] `init` reports the ten repaired pairs and the four text-tone pairs from the theme in both schemes.
 - [x] A pair below 4.5 for text, or below 3 for a component boundary, prints a warning naming the pair and the ratio; it does not fail the run.
 - [x] The filled fill-vs-page pair is reported as a known limit, not a failure.
 - [x] A theme with the pinned light-blue/dark-blue content colors reports the dark filled rows below 4.5 (success 3.49, warning 1.85, info 3.49) without failing.
 - [x] The matrix helpers live in the package, and both the CLI and the harness read the same code.
+
+Closeout: `dbef0ce` (contrast matrix at init; both review rounds folded in before the commit).
