@@ -43,9 +43,9 @@
 [daisyui-adapter] input-group input-group-addon-keycap (input-group/input-group-addon.svelte): stock -> fixed
 [daisyui-adapter] checkbox checkbox-selector (checkbox/checkbox.svelte): stock -> fixed
 [daisyui-adapter] switch switch-base (switch/switch.svelte): stock -> fixed
-[daisyui-adapter] card card-image (card/card.svelte): stock -> fixed
-[daisyui-adapter] card card-header (card/card-header.svelte): stock -> fixed
-[daisyui-adapter] alert alert-base (alert/alert.svelte): stock -> fixed
+[daisyui-adapter] card card-image (card/card.svelte): fixed
+[daisyui-adapter] card card-header (card/card-header.svelte): fixed
+[daisyui-adapter] alert alert-base (alert/alert.svelte): fixed
 [daisyui-adapter] alert alert-variants (alert/alert.svelte): stock -> fixed
 [daisyui-adapter] popover popover-content (popover/popover-content.svelte): fixed
 [daisyui-adapter] dropdown-menu dropdown-content (dropdown-menu/dropdown-menu-content.svelte): fixed
@@ -82,8 +82,8 @@
 [daisyui-adapter] calendar calendar-year-select (calendar/calendar-year-select.svelte): stock -> fixed
 [daisyui-adapter] calendar calendar-year-select-label (calendar/calendar-year-select.svelte): stock -> fixed
 [daisyui-adapter] badge badge-variants (badge/badge.svelte): stock -> fixed
-[daisyui-adapter] fix: 58 stock, 22 fixed, 0 customized, 1 missing
-✓ Lockfile passes supply-chain policies (verified 763ms ago)
+[daisyui-adapter] fix: 55 stock, 25 fixed, 0 customized, 1 missing
+✓ Lockfile passes supply-chain policies (verified 489ms ago)
 Packages: +1
 +
 Progress: resolved 1, reused 3, downloaded 1, added 1, done
@@ -92,7 +92,7 @@ Progress: resolved 1, reused 3, downloaded 1, added 1, done
 devDependencies:
 + @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0
 
-Done in 279ms using pnpm v12.9.1
+Done in 136ms using pnpm v12.9.1
 [daisyui-adapter] installed ./kodaicoder-shadcn-svelte-daisyui-adapter-0.3.0.tgz
 [daisyui-adapter] light chart L 0.6496 0.5596 0.4696 0.3796 0.2896 min adjacent 0.090
 [daisyui-adapter] dark chart L 0.5017 0.5917 0.6817 0.7717 0.8617 min adjacent 0.090

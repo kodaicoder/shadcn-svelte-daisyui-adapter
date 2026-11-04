@@ -202,19 +202,40 @@ check(
 	missingStock.length === 0,
 	missingStock.join(', ')
 );
-const noLg = SURFACES.filter((site) => !site.fixed.includes('rounded-lg')).map((site) => site.id);
-check('every fixed string writes rounded-lg', noLg.length === 0, noLg.join(', '));
+const LG = /(?<![\w-])rounded-(?:[trbl]{1,2}-)?lg(?![\w-])/;
+const noLg = SURFACES.filter((site) => !LG.test(site.fixed)).map((site) => site.id);
+check(
+	'every fixed string writes the box step, whole or directional',
+	noLg.length === 0,
+	noLg.join(', ')
+);
 const none = SURFACES.filter((site) => site.fixed.includes('rounded-none')).map((site) => site.id);
 check('no fixed string writes rounded-none', none.length === 0, none.join(', '));
 const full = SURFACES.filter((site) => site.fixed.includes('rounded-full')).map((site) => site.id);
 check('no fixed string writes rounded-full', full.length === 0, full.join(', '));
-// A 1.8 stock that already holds the box step is an assertion: the fixer reports it fixed and
-// writes nothing, so its stock and fixed are the same string on purpose.
-const unchanged = SURFACES.filter((site) => site.stock === site.fixed);
+// Copied from the ticket instead of derived from the manifest, so a site wrongly turned no-op
+// cannot agree with itself.
+const ASSERTED_SURFACES = [
+	'card-image',
+	'card-header',
+	'alert-base',
+	'popover-content',
+	'dropdown-content',
+	'dropdown-sub-content',
+	'context-content',
+	'context-sub-content',
+	'menubar-root',
+	'menubar-content',
+	'menubar-sub-content',
+	'hover-card-content',
+	'nav-trigger'
+];
+const unchanged = SURFACES.filter((site) => site.stock === site.fixed).map((site) => site.id);
 check(
-	'every entry changes its stock string or already holds the box step',
-	unchanged.every((site) => site.fixed.includes('rounded-lg')),
-	unchanged.map((site) => site.id).join(', ')
+	'the assertion entries are exactly the sites whose 1.8 stock holds the box step',
+	unchanged.length === ASSERTED_SURFACES.length &&
+		ASSERTED_SURFACES.every((id) => unchanged.includes(id)),
+	unchanged.join(', ')
 );
 check(
 	'no changed entry hides its fixed inside its own stock',
@@ -363,9 +384,9 @@ const checkStock = join(WORK, 'check-stock');
 scaffold(checkStock);
 cli(checkStock);
 replaceIn(
-	pathOf(checkStock, 'card/card-header.svelte'),
-	byId('card-header').fixed,
-	byId('card-header').stock
+	pathOf(checkStock, 'dialog/dialog-content.svelte'),
+	byId('dialog-content').fixed,
+	byId('dialog-content').stock
 );
 const checkStockBefore = surfaceSnapshot(checkStock);
 const checkStockRun = cliResult(checkStock, 'fix', '--check');

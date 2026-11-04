@@ -101,6 +101,11 @@ try {
 	const init1 = cli(['init']);
 	write('01-init-1.log', init1.output);
 	assert(init1.code === 0, `init 1 exited ${init1.code}:\n${init1.output.slice(-4000)}`);
+	const initCounts = counts(init1.output);
+	assert(
+		initCounts.customized === 0,
+		`init reported ${initCounts.customized} customized site(s), so the stock drifted:\n${init1.output.slice(-4000)}`
+	);
 	assert(
 		init1.output.includes('sheet sheet-close (sheet/sheet-content.svelte): missing'),
 		'init 1 did not report the sheet site as missing'
@@ -149,6 +154,15 @@ try {
 	const fix1 = cli(['fix']);
 	write('06-fix-1.log', fix1.output);
 	assert(fix1.code === 0, `fix 1 exited ${fix1.code}:\n${fix1.output.slice(-4000)}`);
+	const fixCounts = counts(fix1.output);
+	assert(
+		fixCounts.customized === 0,
+		`fix reported ${fixCounts.customized} customized site(s), so the stock drifted:\n${fix1.output.slice(-4000)}`
+	);
+	assert(
+		fixCounts.missing === 0 && fixCounts.stock + fixCounts.fixed === 82,
+		`fix covered ${fixCounts.stock + fixCounts.fixed} sites with ${fixCounts.missing} missing, expected 82:\n${fix1.output.slice(-4000)}`
+	);
 	assert(
 		fix1.output.includes('sheet sheet-close (sheet/sheet-content.svelte): stock -> fixed'),
 		'fix 1 did not report the sheet site as stock -> fixed'
@@ -174,7 +188,16 @@ try {
 	const check = cli(['fix', '--check']);
 	write('11-check.log', check.output);
 	assert(check.code === 0, `fix --check exited ${check.code}:\n${check.output.slice(-4000)}`);
+	const checkCounts = counts(check.output);
+	assert(
+		checkCounts.stock === 0 &&
+			checkCounts.fixed === 82 &&
+			checkCounts.customized === 0 &&
+			checkCounts.missing === 0,
+		`fix --check reported ${JSON.stringify(checkCounts)}, expected 0 stock / 82 fixed / 0 customized / 0 missing`
+	);
 	report.fix.checkExit = check.code;
+	report.fix.checkCounts = checkCounts;
 
 	report.ok = true;
 } catch (error) {

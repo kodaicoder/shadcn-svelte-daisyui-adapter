@@ -498,7 +498,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: '*:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg',
-		fixed: '*:[img:first-child]:rounded-lg *:[img:last-child]:rounded-lg'
+		fixed: '*:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg'
 	},
 	{
 		id: 'card-header',
@@ -507,7 +507,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'gap-1 rounded-t-lg px-(--card-spacing)',
-		fixed: 'gap-1 rounded-lg px-(--card-spacing)'
+		fixed: 'gap-1 rounded-t-lg px-(--card-spacing)'
 	},
 	{
 		id: 'dialog-content',
@@ -525,8 +525,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'grid gap-0.5 rounded-lg border px-2 py-1.5',
-		fixed:
-			'grid gap-0.5 rounded-lg border px-2 py-1.5 after:absolute after:-inset-y-px after:-left-px after:w-0.5'
+		fixed: 'grid gap-0.5 rounded-lg border px-2 py-1.5'
 	},
 	{
 		id: 'popover-content',
@@ -1119,7 +1118,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current after:bg-destructive'
+			'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current'
 	},
 	{
 		component: 'alert',
@@ -1127,7 +1126,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'solid',
 		class:
-			'text-success-text bg-card *:data-[slot=alert-description]:text-success-text/90 *:[svg]:text-current after:bg-success'
+			'text-success-text bg-card *:data-[slot=alert-description]:text-success-text/90 *:[svg]:text-current'
 	},
 	{
 		component: 'alert',
@@ -1135,7 +1134,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'solid',
 		class:
-			'text-warning-text bg-card *:data-[slot=alert-description]:text-warning-text/90 *:[svg]:text-current after:bg-warning'
+			'text-warning-text bg-card *:data-[slot=alert-description]:text-warning-text/90 *:[svg]:text-current'
 	},
 	{
 		component: 'alert',
@@ -1143,7 +1142,7 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'solid',
 		class:
-			'text-info-text bg-card *:data-[slot=alert-description]:text-info-text/90 *:[svg]:text-current after:bg-info'
+			'text-info-text bg-card *:data-[slot=alert-description]:text-info-text/90 *:[svg]:text-current'
 	},
 	{
 		component: 'bubble',

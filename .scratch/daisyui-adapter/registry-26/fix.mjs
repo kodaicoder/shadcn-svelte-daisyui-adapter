@@ -11,7 +11,7 @@ import {
 	SITES,
 	uiDirectory
 } from '../../../packages/daisyui-adapter/component-fix.mjs';
-import { SURFACES, VARIANTS } from '../../../packages/daisyui-adapter/targets.mjs';
+import { SURFACES } from '../../../packages/daisyui-adapter/targets.mjs';
 
 const HERE = import.meta.dirname;
 const REPO = resolve(HERE, '..', '..', '..');
@@ -169,14 +169,12 @@ check(
 );
 
 const fresh = join(WORK, 'fresh');
-// The fixture installs COMPONENTS only, so its report covers the sites whose files those
-// components hold. A site whose 1.8 stock already holds the target step is reported fixed
-// without a write, so the expected split comes from the manifest rather than a copied total.
-const FIXTURE_SITES = [...SITES, ...SURFACES, ...VARIANTS].filter((site) =>
-	COMPONENTS.includes(site.component)
-);
-const ASSERTED = FIXTURE_SITES.filter((site) => site.stock === site.fixed).length;
-const CHANGED = FIXTURE_SITES.length - ASSERTED;
+// Copied from the ticket instead of derived from the manifest, so a site wrongly turned no-op
+// cannot agree with itself. The fixture installs COMPONENTS only: 39 sites, 7 already at their
+// step and 32 that need a write.
+const FIXTURE_COUNT = 39;
+const FIXTURE_STOCK = 32;
+const FIXTURE_FIXED = 7;
 scaffold(fresh);
 check(
 	'the scaffold copies into src/lib/components/ui',
@@ -186,11 +184,7 @@ const freshRun = cliResult(fresh);
 const freshSites = parseSites(freshRun.out);
 check('init with components present exits 0', freshRun.code === 0, `exit ${freshRun.code}`);
 check('init still writes 43 declarations per block', freshRun.out.includes('43 light, 43 dark'));
-check(
-	'init reports every site',
-	freshSites.length === FIXTURE_SITES.length,
-	`${freshSites.length}`
-);
+check('init reports every site', freshSites.length === FIXTURE_COUNT, `${freshSites.length}`);
 check(
 	'init finds every site stock or already at its step, and writes the stock ones',
 	freshSites.every((site) =>
@@ -200,7 +194,9 @@ check(
 check(
 	'init totals the changed stock and the already-fixed sites',
 	TOTALS.test(freshRun.out) &&
-		freshRun.out.includes(`fix: ${CHANGED} stock, ${ASSERTED} fixed, 0 customized, 0 missing`),
+		freshRun.out.includes(
+			`fix: ${FIXTURE_STOCK} stock, ${FIXTURE_FIXED} fixed, 0 customized, 0 missing`
+		),
 	freshRun.out.trim().split('\n').at(-1)
 );
 check(
@@ -237,7 +233,7 @@ const secondSites = parseSites(secondRun.out);
 check('a second fix exits 0', secondRun.code === 0, `exit ${secondRun.code}`);
 check(
 	'a second fix finds every site fixed and writes nothing',
-	secondSites.length === FIXTURE_SITES.length &&
+	secondSites.length === FIXTURE_COUNT &&
 		secondSites.every((site) => site.state === 'fixed' && !site.written)
 );
 check(
@@ -285,7 +281,7 @@ const drySites = parseSites(dryRun.out);
 check('a dry run exits 0', dryRun.code === 0, `exit ${dryRun.code}`);
 check(
 	'a dry run reports every site stock or already fixed, and unwritten',
-	drySites.length === FIXTURE_SITES.length &&
+	drySites.length === FIXTURE_COUNT &&
 		drySites.every(
 			(site) => !site.written && (site.state === 'fixed' || (site.state === 'stock' && site.dryRun))
 		)
@@ -294,7 +290,7 @@ check(
 	'a dry run totals with the dry-run note',
 	TOTALS.test(dryRun.out) &&
 		dryRun.out.includes(
-			`fix: ${CHANGED} stock, ${ASSERTED} fixed, 0 customized, 0 missing; dry run, nothing written`
+			`fix: ${FIXTURE_STOCK} stock, ${FIXTURE_FIXED} fixed, 0 customized, 0 missing; dry run, nothing written`
 		),
 	dryRun.out.trim().split('\n').at(-1)
 );
@@ -445,7 +441,7 @@ const customRun = cliResult(custom, 'fix');
 const customSites = parseSites(customRun.out);
 check(
 	'every site is fixed under a custom alias',
-	customSites.length === FIXTURE_SITES.length &&
+	customSites.length === FIXTURE_COUNT &&
 		customSites.every((site) =>
 			site.state === 'fixed' ? !site.written : site.state === 'stock' && site.written
 		)
@@ -494,7 +490,7 @@ check(
 );
 check(
 	'a second init reports every site fixed',
-	twiceSites.length === FIXTURE_SITES.length &&
+	twiceSites.length === FIXTURE_COUNT &&
 		twiceSites.every((site) => site.state === 'fixed' && !site.written)
 );
 

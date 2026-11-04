@@ -332,7 +332,7 @@ ok    every step matches its role or size
 ok    every entry carries exactly one of role or size
 ok    every fixed string writes its step, with only the sm data-size as a smaller override
 ok    every step is sm, md or lg
-ok    every entry changes its stock string or already holds its step :: button-base, button-xs, button-icon-xs, toggle-base, input-field, textarea-field, select-content-box, select-item-field, input-group-field, input-group-block-end, input-group-block-start, input-group-textarea
+ok    the assertion entries are exactly the sites whose 1.8 stock holds its step :: button-base, button-xs, button-icon-xs, toggle-base, input-field, textarea-field, select-content-box, select-item-field, input-group-field, input-group-block-end, input-group-block-start, input-group-textarea
 ok    no changed entry hides its fixed inside its own stock
 ok    no radius file is a calendar or range-calendar file
 ok    init over the form fixture exits 0 :: exit 0
@@ -405,10 +405,10 @@ ok    every surface component is in SURFACE_COMPONENTS
 ok    every surface file sits under its component directory
 ok    no surface file is a range-calendar file
 ok    every surface stock string occurs exactly once in the pinned file
-ok    every fixed string writes rounded-lg
+ok    every fixed string writes the box step, whole or directional
 ok    no fixed string writes rounded-none
 ok    no fixed string writes rounded-full
-ok    every entry changes its stock string or already holds the box step :: popover-content, dropdown-content, dropdown-sub-content, context-content, context-sub-content, menubar-root, menubar-content, menubar-sub-content, nav-trigger, hover-card-content
+ok    the assertion entries are exactly the sites whose 1.8 stock holds the box step :: card-image, card-header, alert-base, popover-content, dropdown-content, dropdown-sub-content, context-content, context-sub-content, menubar-root, menubar-content, menubar-sub-content, nav-trigger, hover-card-content
 ok    no changed entry hides its fixed inside its own stock
 ok    the chart tooltip already carries rounded-lg
 ok    the chart tooltip has no surface entry
@@ -526,7 +526,7 @@ ok    every filled status row on a bordered component carries the text-tone bord
 ok    every badge outline row is a border-only chip
 ok    every badge filled status row is a filled chip with the text-tone border
 ok    the badge ghost and link rows stay borderless and unpadded
-ok    the badge destructive row is a bordered chip with the text tone
+ok    the badge destructive row is a bordered chip with the text tone on the 1.8 fill
 ok    button: the stock block occurs exactly once in the pin :: 1
 ok    button: the stock block is not contained in the fixed block
 ok    button: the stock and fixed blocks differ
@@ -552,11 +552,11 @@ ok    bubble: the fixed block adds no link key
 ok    init over the badge, alert and bubble fixture exits 0 :: exit 0
 ok    init fixes the badge, alert and bubble variant sites :: [daisyui-adapter] badge badge-variants (badge/badge.svelte): stock -> fixed | [daisyui-adapter] alert alert-variants (alert/alert.svelte): stock -> fixed | [daisyui-adapter] bubble bubble-variants (bubble/bubble.svelte): stock -> fixed
 ok    bubble-muted reports stock -> fixed in the same run :: [daisyui-adapter] bubble bubble-muted (bubble/bubble.svelte): stock -> fixed
-ok    alert-base reports stock -> fixed in the same run :: [daisyui-adapter] alert alert-base (alert/alert.svelte): stock -> fixed
+ok    alert-base is already at its step in the same run :: [daisyui-adapter] alert alert-base (alert/alert.svelte): fixed
 ok    the badge file holds its fixed block
 ok    the alert file holds its fixed block
 ok    the bubble file holds its fixed block
-ok    the badge destructive row keeps the 1.8 soft fill and the text tone
+ok    the applied badge holds the destructive row exactly once :: 1
 ok    the bubble file keeps its four rounded-none ghost rows :: ghost-destructive, ghost-success, ghost-warning, ghost-info
 ok    the header records three fully fixed components :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 3 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
 ok    --check exits 0 after init :: exit 0

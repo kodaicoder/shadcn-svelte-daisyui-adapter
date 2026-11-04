@@ -35,11 +35,12 @@ scale (`rounded-md`, `rounded-lg`, `rounded-xl`). That is why every radius ancho
   `absolute top-4 right-4`. The fix now adds `bg-muted` to a stock the 1.8 add writes.
 - The nine other contrast sites still match byte for byte.
 - `button`, `badge` and `alert` variant blocks were rewritten. `bubble` is unchanged.
-- `card-header` and the card image use `rounded-t-lg`/`rounded-b-lg`; the adapter keeps the 1.7
-  contract and writes the box step (`rounded-lg`).
+- `card-header` and the card image use `rounded-t-lg`/`rounded-b-lg`. Both are assertions: 1.8
+  already applies the box step directionally, and forcing the full `rounded-lg` would round the
+  inner edges and expose the card background under an `overflow-hidden` card.
 - The alert base lost its `after:` positioning, which made the adapter's `after:bg-*` tone bars
-  inert. The `alert-base` site restores `after:absolute after:-inset-y-px after:-left-px
-after:w-0.5` on the base.
+  inert. The alert is an assertion instead: the tone rows drop the dead `after:bg-*` classes, so no
+  variant carries a bar that only some rows would paint.
 - The badge destructive row is a soft fill in 1.8. The adapter now keeps `bg-destructive/10` and
   uses the text tone with the text-tone border, instead of the 1.7 text-only row. The raw tone as
   text count drops from three rows to two (alert and bubble).
@@ -50,11 +51,12 @@ after:w-0.5` on the base.
 ## Assertion sites
 
 A site whose 1.8 stock already holds the role step repeats the string as its own `fixed`. The fixer
-reads `fixed` first, so it reports `fixed` and writes nothing; `--check` still fails when a hand
-edit moves the file off the step. 22 sites are assertions: 12 in RADIUS (`button-base`,
-`button-xs`, `button-icon-xs`, `toggle-base`, `input-field`, `textarea-field`, `select-content-box`,
-`select-item-field`, `input-group-field`, `input-group-block-end`, `input-group-block-start`,
-`input-group-textarea`) and 10 in SURFACES (`popover-content`, `dropdown-content`,
+reads `fixed` first, so it reports `fixed` and writes nothing. A hand edit moves it to `customized`:
+`--strict` fails and `--check` accepts it, exactly as for any other customized site. 25 sites are
+assertions: 12 in RADIUS (`button-base`, `button-xs`, `button-icon-xs`, `toggle-base`, `input-field`,
+`textarea-field`, `select-content-box`, `select-item-field`, `input-group-field`,
+`input-group-block-end`, `input-group-block-start`, `input-group-textarea`) and 13 in SURFACES
+(`card-image`, `card-header`, `alert-base`, `popover-content`, `dropdown-content`,
 `dropdown-sub-content`, `context-content`, `context-sub-content`, `menubar-root`, `menubar-content`,
 `menubar-sub-content`, `hover-card-content`, `nav-trigger`).
 
@@ -72,18 +74,20 @@ The check totals stay at 139/100/64/71/45/43/82/8.
 
 - `registry-16/smoke.mjs`: the shadcn stub is 1.8.0.
 - `registry-26/fix.mjs`: the stub is 1.8.0; the init and dry-run state checks accept an assertion
-  site as `fixed` and unwritten; the stock/fixed totals are derived from the manifest (`58 stock,
-22 fixed` for this fixture) instead of a copied 39; the overwrite check compares the 1.8 close
-  stock instead of `bg-secondary`.
+  site as `fixed` and unwritten; the site count and the stock/fixed split are the copied `39` and
+  `32 stock, 7 fixed` for this fixture instead of values derived from the manifest, so a site
+  wrongly turned no-op fails; the overwrite check compares the 1.8 close stock instead of
+  `bg-secondary`.
 - `registry-27/safety.mjs`: the stub is 1.8.0; `SUPPORTED` is asserted at minor 8; the future
   version is 1.9.0 and the refusal names `1.8.x`; the dependency range is `^1.8.0`; the
   vega-shaped header count is 29 instead of 28, because the 1.8 pin changes which files are fully
   fixed around the one customized close.
-- `registry-28/radius.mjs`: the stub is 1.8.0; the two entry-shape checks allow an assertion entry
-  whose stock already writes its step, and still reject a changed entry whose fixed hides inside
-  its stock.
-- `registry-29/surfaces.mjs`: the same two checks; the navigation-menu indicator check expects
-  `rounded-tl-sm`, the 1.8 stock, instead of `rounded-none`.
+- `registry-28/radius.mjs`: the stub is 1.8.0; the assertion list is the copied twelve ids, so a
+  site wrongly turned no-op fails; a changed entry whose fixed hides inside its stock still fails.
+- `registry-29/surfaces.mjs`: the stub is 1.8.0; the box-step check accepts the directional
+  `rounded-t-lg`/`rounded-b-lg` that `card-image` and `card-header` use; the assertion list is the
+  copied thirteen ids; the navigation-menu indicator check expects `rounded-tl-sm`, the 1.8 stock,
+  instead of `rounded-none`.
 - `registry-30/variants.mjs`: the stub is 1.8.0.
 - `registry-31/variants.mjs`: the stub is 1.8.0; the badge destructive checks expect the soft fill
   and the text tone; the raw-tone-as-text allowance is two rows.
@@ -95,10 +99,12 @@ The check totals stay at 139/100/64/71/45/43/82/8.
 
 `prove.json` records:
 
-- init twice, byte-identical, with `58 stock, 22 fixed, 0 customized, 1 missing` (the sheet is
-  added later, so its close site is missing);
+- init twice, byte-identical, with `55 stock, 25 fixed, 0 customized, 1 missing` (the sheet is
+  added later, so its close site is missing); the proof asserts the `0 customized` row, so a live
+  registry drift fails it;
 - the late `sheet` add is the 1.8 stock and becomes `fixed`;
-- `fix` twice, byte-identical, `--check` exits 0.
+- `fix` twice, byte-identical, `--check` exits 0 and its counts are asserted at `0 stock / 82
+fixed / 0 customized / 0 missing`.
 
 `11-check.log` records `fix: 0 stock, 82 fixed, 0 customized, 0 missing; check only, nothing
 written`.

@@ -2,7 +2,7 @@
 
 Session IDs: ses_e5b18eda9ffe06dUDmesGVhLvK
 Lesson: The supported pin is the stock the public registry serves today, not the stock the repo happened to install. A manifest that matches a stale pin reports every new file as customized, and a harness that serves its own pin cannot see the drift. Move the pin with the stock strings, and let the live registry drive the harness.
-Check: process - `.scratch/daisyui-adapter/evidence/36-pin-drift/run.json` is a fresh SvelteKit 3 project that adds the 27 targets from the live registry with no `--pin-registry`, builds, renders light and dark with no console error, and holds the ticket 33 AA matrix; `prove.json` and `11-check.log` report `0 stock, 82 fixed, 0 customized, 0 missing` after a late 1.8 `sheet` add; `seams.log` keeps the eight seams at 139/100/64/71/45/43/82/8.
+Check: process - `.scratch/daisyui-adapter/evidence/36-pin-drift/run.json` is a fresh SvelteKit 3 project that adds the 27 targets from the live registry with no `--pin-registry`, builds, renders light and dark with no console error, and holds the ticket 33 AA matrix; `prove.json` records the init split and asserts no `customized` row, and `11-check.log` reports `0 stock, 82 fixed, 0 customized, 0 missing` after a late 1.8 `sheet` add; `seams.log` keeps the eight seams at 139/100/64/71/45/43/82/8.
 
 **What to build:** The fixer matches the stock that `shadcn-svelte add` produces today, or accepts both the current pin and the live stock with one stock variant per site. The live `mira` registry has moved past the `src/lib/components/ui` snapshot: `sheet.json` now ships a separate `sheet-close.svelte` without `bg-secondary`, `button.json` uses `rounded-md` and `text-xs/relaxed font-medium`, and `badge.json` and `card.json` no longer hold their pinned strings. A fresh app that runs `add` today reports 63 `customized` sites, so the fixer applies almost nothing.
 
@@ -18,16 +18,26 @@ are in `.scratch/daisyui-adapter/evidence/36-pin-drift/migration.md`.
 - The pin is `src/lib/components/ui` at shadcn-svelte 1.8.0, refreshed with the repo's own
   `components.json`. The root `package.json`, lockfile and pnpm workspace follow.
 - `SUPPORTED` is 1.8.x. A radius or surface site whose 1.8 stock already holds the role step is an
-  assertion: `stock` equals `fixed`, the fixer reports `fixed`, writes nothing, and `--check` still
-  fails on a hand edit. 22 sites are assertions.
+  assertion: `stock` equals `fixed`, the fixer reports `fixed`, writes nothing, and `--strict` fails
+  a hand edit while `--check` accepts it as `customized`. 25 sites are assertions: 12 radius and 13
+  surfaces.
 - `drawer-left`, `drawer-right` and `drawer-top` are pruned: 1.8 has one shared
   `before:rounded-xl` panel surface for every direction. SURFACES is 42 entries; the seam check
   totals are unchanged.
-- The badge destructive row keeps the 1.8 soft fill and uses the text tone and border. The alert
-  base restores the `after:` positioning that 1.8 dropped, so the tone bars paint again.
-- Seam expectations moved: the 1.8 stub, the assertion-aware entry checks, the future version
+- The badge destructive row keeps the 1.8 soft fill and uses the text tone and border. The alert is
+  an assertion: 1.8 dropped the accent bar, so the tone rows drop their dead `after:bg-*` classes
+  instead of adding bar geometry that only some variants paint.
+- Seam expectations moved: the 1.8 stub, the hardcoded assertion-site lists, the future version
   1.9.0, `^1.8.0`, the vega header count 29, the navigation-menu indicator `rounded-tl-sm`, and
-  the badge destructive checks. The check totals stay 139/100/64/71/45/43/82/8.
+  the badge destructive row. The check totals stay 139/100/64/71/45/43/82/8.
+
+### Spec deviation
+
+Spec L104 orders the states with `stock` before `fixed`. An assertion site matches both, and the
+fixer tests `fixed` first. Testing `stock` first would make the site rewrite itself identically on
+every run and would never reach `fixed`, so the order is deliberate. The visible cost is that a
+file the author never fixed reports `fixed` rather than `stock`. Pruning the site would have met
+L104 literally but dropped the `--strict` guard on a stock that is already at the step.
 
 ### Version implication (operator decides)
 

@@ -21,7 +21,7 @@ computing gzip size...
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-cyrillic-ext-wght-normal.DSNfmdVt.woff2        70.68 kB
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-devanagari-wght-normal.Cv-Vwajv.woff2          99.23 kB
 .svelte-kit/output/server/_app/immutable/assets/noto-sans-latin-ext-wght-normal.W1qJv59z.woff2          167.96 kB
-.svelte-kit/output/server/_app/immutable/assets/_layout.BCHAy-fC.css                                    131.04 kB │ gzip: 21.68 kB
+.svelte-kit/output/server/_app/immutable/assets/_layout.DZ_eTcsQ.css                                    130.72 kB │ gzip: 21.63 kB
 .svelte-kit/output/server/chunks/index-server.js                                                          0.03 kB │ gzip:  0.05 kB
 .svelte-kit/output/server/handler.js                                                                      0.05 kB │ gzip:  0.07 kB
 .svelte-kit/output/server/adapter-env.js                                                                  0.06 kB │ gzip:  0.08 kB
@@ -41,9 +41,9 @@ computing gzip size...
 .svelte-kit/output/server/chunks/internal.js                                                            118.58 kB │ gzip: 31.13 kB │ map: 261.45 kB
 .svelte-kit/output/server/chunks/server2.js                                                             118.80 kB │ gzip: 31.57 kB │ map: 361.19 kB
 .svelte-kit/output/server/chunks/instance.js                                                            128.91 kB │ gzip: 34.68 kB │ map: 259.19 kB
-.svelte-kit/output/server/entries/pages/_page.svelte.js                                                 230.64 kB │ gzip: 47.56 kB │ map: 460.03 kB
+.svelte-kit/output/server/entries/pages/_page.svelte.js                                                 230.51 kB │ gzip: 47.53 kB │ map: 459.90 kB
 
-[32m✓ built in 1.62s[39m
+[32m✓ built in 1.16s[39m
 Analysing routes
 Building app
 [36mvite v8.3.5 [32mbuilding client environment for production...[36m[39m
@@ -70,20 +70,20 @@ computing gzip size...
 .svelte-kit/output/client/_app/immutable/assets/noto-sans-cyrillic-ext-wght-normal.DSNfmdVt.woff2        70.68 kB
 .svelte-kit/output/client/_app/immutable/assets/noto-sans-devanagari-wght-normal.Cv-Vwajv.woff2          99.23 kB
 .svelte-kit/output/client/_app/immutable/assets/noto-sans-latin-ext-wght-normal.W1qJv59z.woff2          167.96 kB
-.svelte-kit/output/client/_app/immutable/assets/0.BCHAy-fC.css                                          131.04 kB │ gzip: 21.68 kB
+.svelte-kit/output/client/_app/immutable/assets/0.DZ_eTcsQ.css                                          130.72 kB │ gzip: 21.63 kB
 .svelte-kit/output/client/_app/immutable/entry/payload.DSmR2FwN.js                                        0.06 kB │ gzip:  0.07 kB
 .svelte-kit/output/client/_app/immutable/nodes/1.BpG7QiEP.js                                              0.32 kB │ gzip:  0.24 kB
 .svelte-kit/output/client/_app/immutable/entry/start.xFMlX_qv.js                                          0.52 kB │ gzip:  0.30 kB
-.svelte-kit/output/client/_app/immutable/entry/app.DegGtyAJ.js                                            1.09 kB │ gzip:  0.56 kB
+.svelte-kit/output/client/_app/immutable/entry/app.B5BesD-w.js                                            1.09 kB │ gzip:  0.55 kB
 .svelte-kit/output/client/_app/immutable/chunks/Bjy-W4x2.js                                               1.36 kB │ gzip:  0.65 kB
 .svelte-kit/output/client/_app/immutable/chunks/CRzLMJPS.js                                               1.53 kB │ gzip:  0.80 kB
-.svelte-kit/output/client/_app/immutable/nodes/0.BzpB1T6c.js                                              2.38 kB │ gzip:  0.98 kB
+.svelte-kit/output/client/_app/immutable/nodes/0.Dpa0khcj.js                                              2.38 kB │ gzip:  0.98 kB
 .svelte-kit/output/client/_app/immutable/chunks/DSzslcYR.js                                               4.29 kB │ gzip:  1.93 kB
 .svelte-kit/output/client/_app/immutable/chunks/CIv83KO8.js                                              39.72 kB │ gzip: 14.68 kB
 .svelte-kit/output/client/_app/immutable/chunks/c1OkoHUp.js                                              44.59 kB │ gzip: 17.13 kB
-.svelte-kit/output/client/_app/immutable/nodes/2.B2idGdgK.js                                            108.57 kB │ gzip: 32.06 kB
+.svelte-kit/output/client/_app/immutable/nodes/2.COjHRPVk.js                                            108.45 kB │ gzip: 32.03 kB
 
-[32m✓ built in 1.44s[39m
+[32m✓ built in 1.00s[39m
 
 Run npm run preview to preview your production build locally.
 

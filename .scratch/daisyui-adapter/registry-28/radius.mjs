@@ -213,13 +213,30 @@ check(
 	'every step is sm, md or lg',
 	RADIUS.every((site) => ['sm', 'md', 'lg'].includes(site.step))
 );
-// A 1.8 stock that already holds the step is an assertion: the fixer reports it fixed and writes
-// nothing, so its stock and fixed are the same string on purpose.
+// Copied from the ticket instead of derived from the manifest, so a site wrongly turned no-op
+// cannot agree with itself.
+const ASSERTED_RADIUS = [
+	'button-base',
+	'button-xs',
+	'button-icon-xs',
+	'toggle-base',
+	'input-field',
+	'textarea-field',
+	'select-content-box',
+	'select-item-field',
+	'input-group-field',
+	'input-group-block-end',
+	'input-group-block-start',
+	'input-group-textarea'
+];
 const unchanged = RADIUS.filter((site) => site.stock === site.fixed);
 check(
-	'every entry changes its stock string or already holds its step',
-	unchanged.every((site) => new RegExp(`rounded-${site.step}(?![\\w-])`).test(site.fixed)) &&
-		RADIUS.filter((site) => site.stock !== site.fixed).every((site) => site.stock.length > 0),
+	'the assertion entries are exactly the sites whose 1.8 stock holds its step',
+	unchanged.length === ASSERTED_RADIUS.length &&
+		ASSERTED_RADIUS.every((id) => {
+			const site = unchanged.find((entry) => entry.id === id);
+			return site !== undefined && new RegExp(`rounded-${site.step}(?![\\w-])`).test(site.fixed);
+		}),
 	unchanged.map((site) => site.id).join(', ')
 );
 check(

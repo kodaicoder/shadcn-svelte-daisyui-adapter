@@ -5,12 +5,12 @@ exit 0
   "init": {
     "runs": 2,
     "identical": true,
-    "sha": "eefddaf1771359e502339d137589a0d8a316f341032a3f261c6ad0a12611396d",
+    "sha": "a4edc97f84d76833984dee324a0ba9b94a9723e4eb440519ad1de3951126d514",
     "sheetMissing": true,
     "header": "/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 58 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */",
     "counts": {
-      "stock": 58,
-      "fixed": 22,
+      "stock": 55,
+      "fixed": 25,
       "customized": 0,
       "missing": 1
     }
@@ -24,10 +24,16 @@ exit 0
   "fix": {
     "runs": 2,
     "identical": true,
-    "sha": "21a97417923f79c71536d85187e82aa3d60805aff42e04dbcda2e0848bdbd6d0",
-    "checkExit": 0
+    "sha": "4c2ec40a07575c5d8a2bf77b21af192ed55fa9c802cd79724f341cc419d07f75",
+    "checkExit": 0,
+    "checkCounts": {
+      "stock": 0,
+      "fixed": 82,
+      "customized": 0,
+      "missing": 0
+    }
   }
 }
 
-(node:57748) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(node:49132) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
 (Use `node --trace-deprecation ...` to show where the warning was created)

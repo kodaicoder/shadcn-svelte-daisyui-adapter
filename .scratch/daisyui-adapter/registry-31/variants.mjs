@@ -466,13 +466,16 @@ check(
 );
 
 const badgePinnedDestructive = BADGE_VARIANTS.find((row) => row.key === 'destructive');
+const pinnedBadgeDestructive = pinnedClass('badge', 'destructive');
 const destructiveChip =
+	typeof pinnedBadgeDestructive === 'string' &&
+	pinnedBadgeDestructive.includes('bg-destructive/10') &&
 	badgePinnedDestructive !== undefined &&
 	badgePinnedDestructive.class.includes('border-destructive-text') &&
 	badgePinnedDestructive.class.includes('bg-destructive/10') &&
 	badgePinnedDestructive.class.includes('text-destructive-text');
 check(
-	'the badge destructive row is a bordered chip with the text tone',
+	'the badge destructive row is a bordered chip with the text tone on the 1.8 fill',
 	destructiveChip,
 	destructiveChip ? '' : `badge:destructive :: ${badgePinnedDestructive?.class ?? 'missing'}`
 );
@@ -617,8 +620,8 @@ check(
 	lineWith(appliedRun.out, 'bubble-muted')
 );
 check(
-	'alert-base reports stock -> fixed in the same run',
-	appliedRun.out.includes(`alert alert-base (${FILES.alert}): stock -> fixed`),
+	'alert-base is already at its step in the same run',
+	appliedRun.out.includes(`alert alert-base (${FILES.alert}): fixed`),
 	lineWith(appliedRun.out, 'alert-base')
 );
 
@@ -629,10 +632,12 @@ check('the badge file holds its fixed block', appliedBadge.includes(badgeSite.fi
 check('the alert file holds its fixed block', appliedAlert.includes(alertSite.fixed));
 check('the bubble file holds its fixed block', appliedBubble.includes(bubbleSite.fixed));
 check(
-	'the badge destructive row keeps the 1.8 soft fill and the text tone',
-	pinnedClass('badge', 'destructive').includes('bg-destructive/10') &&
-		appliedBadge.includes('bg-destructive/10') &&
-		appliedBadge.includes('text-destructive-text')
+	'the applied badge holds the destructive row exactly once',
+	badgePinnedDestructive !== undefined &&
+		countOf(appliedBadge, `destructive: "${badgePinnedDestructive.class}",`) === 1,
+	badgePinnedDestructive === undefined
+		? 'missing'
+		: `${countOf(appliedBadge, `destructive: "${badgePinnedDestructive.class}",`)}`
 );
 const bubbleGhostRows = BUBBLE_VARIANTS.filter((row) => row.key.startsWith('ghost-'));
 check(

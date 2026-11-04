@@ -22,10 +22,10 @@ This package is not affiliated with shadcn-svelte or daisyUI. Both names are use
 #    into src/daisyui-theme.css
 
 # 2. create the shadcn-svelte setup
-pnpm dlx shadcn-svelte@latest init
+pnpm dlx shadcn-svelte@1.8 init
 
 # 3. add the components you use
-pnpm dlx shadcn-svelte@latest add <components you use>
+pnpm dlx shadcn-svelte@1.8 add <components you use>
 
 # 4. map the stylesheet and fix those components
 pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init
@@ -71,7 +71,7 @@ pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 fix dialog
 
 The fixer reads four states per replacement site: `missing`, `stock`, `fixed` and `customized`. It patches a `stock` site, leaves a `fixed` site, reports a `customized` site, and still applies the other sites in the same file. A second run is byte-identical.
 
-`--dry-run` reports without writing. `--check` exits 1 only while a stock site remains. A fixed, customized or never-added component does not fail it. `--strict` exits 1 on a customized site or on a component you named that has no files. A target you never added is not an error. A radius or surface site whose 1.8 stock already holds the role step is reported `fixed` without a write, so `--check` still fails if a hand edit moves it off the step.
+`--dry-run` reports without writing. `--check` exits 1 only while a stock site remains. A fixed, customized or never-added component does not fail it. `--strict` exits 1 on a customized site or on a component you named that has no files. A target you never added is not an error. A radius or surface site whose 1.8 stock already holds the role step is reported `fixed` without a write; a hand edit moves it to `customized`, which `--strict` fails and `--check` accepts, like any other customized site.
 
 The fixer reads the installed shadcn-svelte version and refuses one outside 1.8.x with a clear message, exiting 1 before the report. An unreadable version warns and continues, because `dlx` often leaves no dependency entry. The style label is not checked. An unmatched style only reports `customized`.
 
