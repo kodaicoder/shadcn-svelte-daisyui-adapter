@@ -42,4 +42,4 @@ minor bump or a dual-stock manifest. Nothing was published or bumped in this tic
 - [x] `pnpm --filter` build of the harness page still passes after the move.
 - [x] The drift test compares the manifest with the refreshed pin at the new version.
 
-Closeout: see the commit that closes this ticket (`fix(adapter): move the supported shadcn-svelte pin to 1.8`).
+Closeout: `7ebcf2a` (`fix(adapter): move the supported shadcn-svelte pin to 1.8`).
