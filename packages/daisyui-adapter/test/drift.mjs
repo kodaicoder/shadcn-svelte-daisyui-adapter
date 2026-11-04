@@ -5,7 +5,15 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { COMPONENTS, PAIRS, SITES, SUPPORTED } from '../targets.mjs';
+import {
+	COMPONENTS,
+	KNOWN_COMPONENTS,
+	PAIRS,
+	RADIUS,
+	RADIUS_COMPONENTS,
+	SITES,
+	SUPPORTED
+} from '../targets.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
 const UI = join(ROOT, 'src', 'lib', 'components', 'ui');
@@ -37,19 +45,30 @@ check(
 		.filter((id) => !siteIds.has(id))
 		.join(', ')
 );
+const ALL_SITES = [...SITES, ...RADIUS];
 check(
-	'every site belongs to a named component',
-	SITES.every((site) => COMPONENTS.includes(site.component))
+	'every site belongs to a named component of its own table',
+	SITES.every((site) => COMPONENTS.includes(site.component)) &&
+		RADIUS.every((site) => RADIUS_COMPONENTS.includes(site.component))
 );
 
-const missingComponents = COMPONENTS.filter((name) => !existsSync(join(UI, name)));
+// A component name is not always a directory: input-group-button is a file inside input-group. A
+// component with a site is checked through that file; a site-less name (radio-group) is a directory.
+const firstSite = new Map();
+for (const site of ALL_SITES) {
+	if (!firstSite.has(site.component)) firstSite.set(site.component, site);
+}
+const missingComponents = KNOWN_COMPONENTS.filter((name) => {
+	const site = firstSite.get(name);
+	return site ? !existsSync(join(UI, ...site.file.split('/'))) : !existsSync(join(UI, name));
+});
 check(
 	'every component directory exists under the pinned ui directory',
 	missingComponents.length === 0,
 	missingComponents.join(', ')
 );
 
-const missingStock = SITES.filter((site) => {
+const missingStock = ALL_SITES.filter((site) => {
 	const path = join(UI, ...site.file.split('/'));
 	return !existsSync(path) || !readFileSync(path, 'utf8').includes(site.stock);
 }).map((site) => site.id);

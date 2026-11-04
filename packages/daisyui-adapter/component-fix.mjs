@@ -3,9 +3,11 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
 
-import { COMPONENTS, PAIRS, SITES, SUPPORTED } from './targets.mjs';
+import { COMPONENTS, KNOWN_COMPONENTS, PAIRS, RADIUS, SITES, SUPPORTED } from './targets.mjs';
 
 export { COMPONENTS, PAIRS, SITES, SUPPORTED };
+
+const ALL_SITES = [...SITES, ...RADIUS];
 
 // A `#` alias is a package.json subpath import and can point anywhere, so the project's own
 // `imports` map wins over the convention below. `$lib` is SvelteKit's fixed lib alias; `@/` and
@@ -98,19 +100,19 @@ const stateOf = (content, site) => {
 };
 
 const targetSites = (names) => {
-	if (names.length === 0) return SITES;
+	if (names.length === 0) return ALL_SITES;
 	for (const name of names) {
-		if (!COMPONENTS.includes(name)) {
+		if (!KNOWN_COMPONENTS.includes(name)) {
 			throw new Error(
-				`[daisyui-adapter] unknown fix target "${name}". Known targets: ${COMPONENTS.join(', ')}`
+				`[daisyui-adapter] unknown fix target "${name}". Known targets: ${KNOWN_COMPONENTS.join(', ')}`
 			);
 		}
 	}
-	return SITES.filter((site) => names.includes(site.component));
+	return ALL_SITES.filter((site) => names.includes(site.component));
 };
 
-// Every target file is read once, because the fully fixed count covers all ten of them even when the
-// run edits one. Only the reported scope is patched and written; the rest is counted from disk.
+// Every target file is read once, because the fully fixed count covers both tables even when the run
+// edits one. Only the reported scope is patched and written; the rest is counted from disk.
 const run = ({ root = process.cwd(), components, names = [], dryRun = false }, write) => {
 	const directory = uiDirectory(components, root);
 	const scope = targetSites(names);
@@ -118,11 +120,20 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 
 	const scopeFiles = new Set(scope.map((site) => site.file));
 	const files = new Map();
-	for (const site of SITES) {
+	for (const site of ALL_SITES) {
 		const group = files.get(site.file) ?? [];
 		group.push(site);
 		files.set(site.file, group);
 	}
+
+	// A radius component the project never installed is not a gap, and reporting every form-control
+	// file as missing would inflate the missing count of every project that uses only some components.
+	// A named component always reports its rows, and a site whose directory exists but whose file is
+	// gone is a real missing file.
+	const reportMissing = (site) =>
+		names.length > 0 ||
+		SITES.includes(site) ||
+		existsSync(join(directory, ...site.file.split('/').slice(0, -1)));
 
 	const apply = write && !dryRun;
 	const sites = [];
@@ -133,6 +144,7 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 		if (!existsSync(path)) {
 			if (scopeFiles.has(file)) {
 				for (const site of group) {
+					if (!reportMissing(site)) continue;
 					sites.push({
 						id: site.id,
 						component: site.component,

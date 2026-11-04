@@ -89,6 +89,25 @@ const unwrapFallback = (value) => {
 	return match ? match[1].trim() : value.trim();
 };
 
+// Above 2rem the form controls are pill-like, which is nearly always a theme-generator mistake
+// rather than a choice. Only px and rem can be compared; a calc() or an unknown unit is skipped,
+// because a wrong warning is worse than none.
+const toPx = (value) => {
+	const text = String(value).trim();
+	const match = /^(-?(?:\d+\.?\d*|\.\d+))(px|rem)$/.exec(text);
+	if (match) return match[2] === 'px' ? Number(match[1]) : Number(match[1]) * 16;
+	return text === '0' ? 0 : null;
+};
+
+const warnRadius = (raw) => {
+	const px = toPx(raw);
+	if (px === null || px <= 32) return;
+	console.warn(
+		`[daisyui-adapter] --radius ${raw} (${Number(px.toFixed(2))}px) is above 2rem (32px); ` +
+			`the components become pill-like, so the theme's radius is likely wrong.`
+	);
+};
+
 const blockBounds = (source, selector) => {
 	const pattern = new RegExp(`^${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{`, 'm');
 	const match = pattern.exec(source);
@@ -322,6 +341,7 @@ const init = () => {
 	const stockLight = Object.fromEntries(
 		readBlock(css, ':root', where).map((d) => [d.prop, d.value])
 	);
+	warnRadius(themes ? themes.light['--radius-box'] : unwrapFallback(stockLight['--radius'] ?? ''));
 	const chart = themes
 		? { light: solveScheme(themes.light), dark: solveScheme(themes.dark) }
 		: null;
