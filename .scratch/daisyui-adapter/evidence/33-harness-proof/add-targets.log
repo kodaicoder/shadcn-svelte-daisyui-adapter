@@ -1,0 +1,69 @@
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.7.2 [39m
+│
+◇  Components to install:
+│  [90mdialog, calendar, range-calendar, dropdown-menu, context-menu, menubar, chart, bubble, button,
+│  toggle, input, textarea, native-select, select, input-group, checkbox, radio-group, switch,
+│  card, alert, popover, drawer, navigation-menu, command, hover-card, table, badge[39m
+[?25l│
+◇  [1m[36mdialog[39m[22m installed at [90msrc\lib\components\ui\dialog[39m
+[?25h[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h[?25l│
+◇  [1m[36mcalendar[39m[22m installed at [90msrc\lib\components\ui\calendar[39m
+[?25h[?25l│
+◇  [1m[36mrange-calendar[39m[22m installed at [90msrc\lib\components\ui\range-calendar[39m
+[?25h[?25l│
+◇  [1m[36mdropdown-menu[39m[22m installed at [90msrc\lib\components\ui\dropdown-menu[39m
+[?25h[?25l│
+◇  [1m[36mcontext-menu[39m[22m installed at [90msrc\lib\components\ui\context-menu[39m
+[?25h[?25l│
+◇  [1m[36mmenubar[39m[22m installed at [90msrc\lib\components\ui\menubar[39m
+[?25h[?25l│
+◇  [1m[36mchart[39m[22m installed at [90msrc\lib\components\ui\chart[39m
+[?25h[?25l│
+◇  [1m[36mbubble[39m[22m installed at [90msrc\lib\components\ui\bubble[39m
+[?25h[?25l│
+◇  [1m[36mtoggle[39m[22m installed at [90msrc\lib\components\ui\toggle[39m
+[?25h[?25l│
+◇  [1m[36minput[39m[22m installed at [90msrc\lib\components\ui\input[39m
+[?25h[?25l│
+◇  [1m[36mtextarea[39m[22m installed at [90msrc\lib\components\ui\textarea[39m
+[?25h[?25l│
+◇  [1m[36mnative-select[39m[22m installed at [90msrc\lib\components\ui\native-select[39m
+[?25h[?25l│
+◇  [1m[36mselect[39m[22m installed at [90msrc\lib\components\ui\select[39m
+[?25h[?25l│
+◇  [1m[36minput-group[39m[22m installed at [90msrc\lib\components\ui\input-group[39m
+[?25h[?25l│
+◇  [1m[36mcheckbox[39m[22m installed at [90msrc\lib\components\ui\checkbox[39m
+[?25h[?25l│
+◇  [1m[36mradio-group[39m[22m installed at [90msrc\lib\components\ui\radio-group[39m
+[?25h[?25l│
+◇  [1m[36mswitch[39m[22m installed at [90msrc\lib\components\ui\switch[39m
+[?25h[?25l│
+◇  [1m[36mcard[39m[22m installed at [90msrc\lib\components\ui\card[39m
+[?25h[?25l│
+◇  [1m[36malert[39m[22m installed at [90msrc\lib\components\ui\alert[39m
+[?25h[?25l│
+◇  [1m[36mpopover[39m[22m installed at [90msrc\lib\components\ui\popover[39m
+[?25h[?25l│
+◇  [1m[36mdrawer[39m[22m installed at [90msrc\lib\components\ui\drawer[39m
+[?25h[?25l│
+◇  [1m[36mnavigation-menu[39m[22m installed at [90msrc\lib\components\ui\navigation-menu[39m
+[?25h[?25l│
+◇  [1m[36mcommand[39m[22m installed at [90msrc\lib\components\ui\command[39m
+[?25h[?25l│
+◇  [1m[36mhover-card[39m[22m installed at [90msrc\lib\components\ui\hover-card[39m
+[?25h[?25l│
+◇  [1m[36mtable[39m[22m installed at [90msrc\lib\components\ui\table[39m
+[?25h[?25l│
+◇  [1m[36mbadge[39m[22m installed at [90msrc\lib\components\ui\badge[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+
+Done in 6.6s using pnpm v12.9.1

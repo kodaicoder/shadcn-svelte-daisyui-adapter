@@ -24,6 +24,11 @@
 //                 baseline buttons is what gets rendered
 // --selectors <l> element selectors to sample, because a component's painted fill is a utility result
 //                 (bg-sidebar, bg-background) that no root custom property names
+// --evidence <d>  directory for the run artefacts (default harness/runs/<stamp>)
+// --components <l> comma-separated components to add in one `add` call instead of the baseline button
+// --pin-registry  serve the repo's pinned components as the shadcn registry for every add, because the
+//                 live registry has moved past the pin
+// --contrast <f>  theme file to check the painted AA matrix against; the matrix lands in <evidence>
 
 import { execFile, execFileSync, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
@@ -38,7 +43,9 @@ import {
 } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
-import { startRegistry, stopRegistry, REGISTRY_PORT } from './registry.mjs';
+import { startRegistry, startStatic, stopRegistry, REGISTRY_PORT } from './registry.mjs';
+import { SELECTORS as MATRIX_SELECTORS } from './matrix.mjs';
+import { buildPinRegistry } from './pin-registry.mjs';
 
 const execFileAsync = promisify(execFile);
 
@@ -71,12 +78,19 @@ const PROPS = option('--props', '');
 const PAGE_FILE = option('--page', null);
 const SELECTORS = option('--selectors', '');
 const THEN = options('--then');
+const EVIDENCE_OPTION = option('--evidence', null);
+const COMPONENTS = (option('--components', '') ?? '')
+	.split(',')
+	.map((name) => name.trim())
+	.filter(Boolean);
+const CONTRAST = option('--contrast', null);
+const PIN_REGISTRY = flag('--pin-registry');
 
 if (LAYOUT !== 'app' && LAYOUT !== 'routes') {
 	throw new Error(`--layout must be app or routes, got ${LAYOUT}`);
 }
-if (THEN.length > 0 && !ADD_URL) {
-	throw new Error('--then only makes sense after --add');
+if (CONTRAST && !THEME_FILE) {
+	throw new Error('--contrast needs --theme, the same file the project builds with');
 }
 
 const HARNESS = import.meta.dirname;
@@ -84,7 +98,9 @@ const REPO = resolve(HARNESS, '..', '..', '..');
 const STAMP = new Date().toISOString().replace(/[:.]/g, '-');
 const WORK = join(tmpdir(), 'adapter-harness', `run-${STAMP}`);
 const APP = join(WORK, 'app');
-const EVIDENCE = join(REPO, '.scratch', 'daisyui-adapter', 'harness', 'runs', STAMP);
+const EVIDENCE = EVIDENCE_OPTION
+	? resolve(EVIDENCE_OPTION)
+	: join(REPO, '.scratch', 'daisyui-adapter', 'harness', 'runs', STAMP);
 const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 const NODE = process.execPath;
 
@@ -131,20 +147,37 @@ const listPaths = (dir, base = dir) =>
 		return entry.isDirectory() ? [`${rel}/`, ...listPaths(path, base)] : [rel];
 	});
 
-const write = (path, text) =>
-	writeFileSync(path, text, { encoding: 'utf8' }); // Node writes no BOM
+const write = (path, text) => writeFileSync(path, text, { encoding: 'utf8' }); // Node writes no BOM
 
 mkdirSync(EVIDENCE, { recursive: true });
 mkdirSync(WORK, { recursive: true });
+cpSync(join(HARNESS, 'checklist.md'), join(EVIDENCE, 'checklist.md'));
 
 const report = { stamp: STAMP, app: APP, evidence: EVIDENCE, steps: [], addUrl: ADD_URL };
 
 let server = null;
+let pinServer = null;
 
 try {
 	// 1. scaffold
 	log('scaffolding SvelteKit 3 project');
-	run(PNPM, ['dlx', 'sv@1.1.1', 'create', APP, '--template', 'minimal', '--types', 'ts', '--no-add-ons', '--no-install', '--no-dir-check'], WORK);
+	run(
+		PNPM,
+		[
+			'dlx',
+			'sv@1.1.1',
+			'create',
+			APP,
+			'--template',
+			'minimal',
+			'--types',
+			'ts',
+			'--no-add-ons',
+			'--no-install',
+			'--no-dir-check'
+		],
+		WORK
+	);
 	report.steps.push('scaffold');
 
 	// 2. dependencies
@@ -204,17 +237,39 @@ export default defineConfig({
 	write(layoutPath, layout);
 	cpSync(join(REPO, 'src', 'lib', 'utils.ts'), join(APP, 'src', 'lib', 'utils.ts'));
 
-	const componentsJson = JSON.parse(
-		readFileSync(join(REPO, 'components.json'), 'utf8')
-	);
+	const componentsJson = JSON.parse(readFileSync(join(REPO, 'components.json'), 'utf8'));
 	componentsJson.tailwind.css = cssFile;
 	write(join(APP, 'components.json'), JSON.stringify(componentsJson, null, '\t'));
 	report.layout = LAYOUT;
 	report.cssPath = cssFile;
 	report.steps.push('step-4-state');
 
-	// 5. baseline component, proving `add` works before the adapter is involved
-	run(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', 'button', '-y'], APP);
+	// 5. the add source: the live registry has moved past the pin, so serve the pin itself
+	if (PIN_REGISTRY) {
+		const pin = buildPinRegistry(join(WORK, 'pin-registry'));
+		pinServer = await startStatic(join(WORK, 'pin-registry'));
+		process.env.COMPONENTS_REGISTRY_URL = pinServer.url;
+		report.registry = { source: 'pin', url: pinServer.url, items: pin.items };
+		report.steps.push('pin-registry');
+		log(`pin registry on ${pinServer.url} (${pin.items} items)`);
+	}
+
+	// 5. baseline components, proving `add` works before the adapter is involved
+	if (COMPONENTS.length > 0) {
+		const targets = await runCapture(
+			PNPM,
+			['dlx', 'shadcn-svelte@latest', 'add', ...COMPONENTS, '-y', '-o'],
+			APP
+		);
+		write(join(EVIDENCE, 'add-targets.log'), targets.output);
+		report.addTargetsExitCode = targets.code;
+		if (targets.code !== 0) {
+			throw new Error(`add of the targets failed, see ${join(EVIDENCE, 'add-targets.log')}`);
+		}
+		report.components = COMPONENTS;
+	} else {
+		run(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', 'button', '-y'], APP);
+	}
 	write(
 		join(APP, 'src', 'routes', '+page.svelte'),
 		`<script lang="ts">
@@ -252,7 +307,9 @@ export default defineConfig({
 		// cannot be composed from package.json. Take the one file the pack added.
 		const added = tarballs().filter((file) => !before.has(file));
 		if (added.length !== 1) {
-			throw new Error(`pnpm pack produced ${added.length} new *.tgz in ${APP}: ${added.join(', ')}`);
+			throw new Error(
+				`pnpm pack produced ${added.length} new *.tgz in ${APP}: ${added.join(', ')}`
+			);
 		}
 		report.tarball = added[0];
 		report.steps.push('package-tarball');
@@ -270,7 +327,11 @@ export default defineConfig({
 		const pkgBefore = readFileSync(join(APP, 'package.json'), 'utf8');
 		// -o is required: an item carrying css/cssVars prompts to overwrite the
 		// stylesheet, and -y alone leaves that prompt waiting with piped stdio.
-		const added = await runCapture(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', ADD_URL, '-y', '-o'], APP);
+		const added = await runCapture(
+			PNPM,
+			['dlx', 'shadcn-svelte@latest', 'add', ADD_URL, '-y', '-o'],
+			APP
+		);
 		write(join(EVIDENCE, 'add-install.log'), added.output);
 		report.addExitCode = added.code;
 		if (added.code !== 0) throw new Error(`add failed, see ${join(EVIDENCE, 'add-install.log')}`);
@@ -278,7 +339,10 @@ export default defineConfig({
 		write(join(EVIDENCE, 'css-before.css'), cssBefore);
 		write(join(EVIDENCE, 'css-after.css'), cssAfter);
 		write(join(EVIDENCE, 'package-json-before.json'), pkgBefore);
-		write(join(EVIDENCE, 'package-json-after.json'), readFileSync(join(APP, 'package.json'), 'utf8'));
+		write(
+			join(EVIDENCE, 'package-json-after.json'),
+			readFileSync(join(APP, 'package.json'), 'utf8')
+		);
 		write(join(EVIDENCE, 'src-listing.txt'), `${listPaths(join(APP, 'src')).join('\n')}\n`);
 		report.cssChanged = cssBefore !== cssAfter;
 		report.steps.push('adapter-add');
@@ -292,20 +356,21 @@ export default defineConfig({
 			join(EVIDENCE, `then-${n}.log`),
 			`$ pnpm ${command}\nexit ${result.code}\n${result.output}\n`
 		);
-		write(
-			join(EVIDENCE, `css-after-then-${n}.css`),
-			readFileSync(join(APP, cssFile), 'utf8')
-		);
+		write(join(EVIDENCE, `css-after-then-${n}.css`), readFileSync(join(APP, cssFile), 'utf8'));
 		report.then ??= [];
 		report.then.push({ command, code: result.code });
 		if (result.code !== 0) throw new Error(`--then ${n} failed, see then-${n}.log`);
 	}
 	if (THEN.length > 0) {
 		// The manifest after the step, not before it: the CLI's self-install is the thing under test.
-		write(join(EVIDENCE, 'package-json-after-then.json'), readFileSync(join(APP, 'package.json'), 'utf8'));
+		write(
+			join(EVIDENCE, 'package-json-after-then.json'),
+			readFileSync(join(APP, 'package.json'), 'utf8')
+		);
 		report.steps.push('then');
 	}
 
+	pinServer = stopRegistry(pinServer?.server);
 	server = stopRegistry(server);
 
 	// 7. build
@@ -335,11 +400,15 @@ export default defineConfig({
 	}
 
 	// 8. render, light and dark
-	const dev = spawn(PNPM, ['dev', '--port', String(DEV_PORT), '--strictPort', '--host', '127.0.0.1'], {
-		cwd: APP,
-		stdio: 'ignore',
-		shell: process.platform === 'win32'
-	});
+	const dev = spawn(
+		PNPM,
+		['dev', '--port', String(DEV_PORT), '--strictPort', '--host', '127.0.0.1'],
+		{
+			cwd: APP,
+			stdio: 'ignore',
+			shell: process.platform === 'win32'
+		}
+	);
 	const url = `http://127.0.0.1:${DEV_PORT}/`;
 	let ready = false;
 	for (let i = 0; i < 60 && !ready; i++) {
@@ -350,7 +419,8 @@ export default defineConfig({
 		} catch {}
 	}
 	if (!ready) throw new Error('dev server never answered');
-	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE, PROPS, SELECTORS], REPO);
+	const selectorList = SELECTORS || (CONTRAST ? MATRIX_SELECTORS : '');
+	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE, PROPS, selectorList], REPO);
 	write(join(EVIDENCE, 'render.json'), shot);
 	report.render = JSON.parse(shot);
 	report.steps.push('render');
@@ -363,12 +433,35 @@ export default defineConfig({
 		dev.kill();
 	}
 
+	const consoleErrors = report.render.consoleErrors ?? [];
+	if (consoleErrors.length > 0) {
+		throw new Error(
+			`the page logged ${consoleErrors.length} console error(s): ${consoleErrors.join(' | ')}`
+		);
+	}
+
+	if (CONTRAST) {
+		const contrast = await runCapture(
+			NODE,
+			[join(HARNESS, 'contrast.mjs'), join(EVIDENCE, 'render.json'), resolve(CONTRAST), EVIDENCE],
+			REPO
+		);
+		write(join(EVIDENCE, 'contrast.log'), `${contrast.output}\nexit ${contrast.code}\n`);
+		const matrix = JSON.parse(readFileSync(join(EVIDENCE, 'contrast.json'), 'utf8'));
+		report.contrast = { ok: matrix.ok, failures: matrix.failures };
+		if (contrast.code !== 0) {
+			throw new Error(`contrast failed, see ${join(EVIDENCE, 'contrast.md')}`);
+		}
+		report.steps.push('contrast');
+	}
+
 	report.ok = true;
 } catch (error) {
 	report.ok = false;
 	report.error = String(error.message ?? error);
 } finally {
 	write(join(EVIDENCE, 'run.json'), JSON.stringify(report, null, 2));
+	stopRegistry(pinServer?.server);
 	stopRegistry(server);
 	if (!KEEP) rmSync(WORK, { recursive: true, force: true });
 }

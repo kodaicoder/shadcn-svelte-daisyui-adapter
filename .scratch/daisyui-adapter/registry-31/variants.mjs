@@ -92,6 +92,7 @@ const cliResult = (dir, ...args) => {
 
 const digest = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const countOf = (text, needle) => text.split(needle).length - 1;
+const writtenKey = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);
 const lineWith = (out, id) => out.split(/\r?\n/).find((line) => line.includes(id)) ?? out.trim();
 
 const headerLines = (css) =>
@@ -200,7 +201,7 @@ const bubblePin = pinOf('bubble');
 
 const rowLinesMissing = (site, rows) =>
 	rows
-		.filter((row) => countOf(site.fixed, `${row.key}: "${row.class}",`) !== 1)
+		.filter((row) => countOf(site.fixed, `${writtenKey(row.key)}: "${row.class}",`) !== 1)
 		.map((row) => row.key)
 		.join(', ');
 
@@ -576,7 +577,8 @@ check(
 	])
 );
 
-const declaredKeys = (site) => [...site.fixed.matchAll(/^\t\t\t\t([\w-]+): "/gm)].map((m) => m[1]);
+const declaredKeys = (site) =>
+	[...site.fixed.matchAll(/^\t\t\t\t"?([\w-]+)"?: "/gm)].map((m) => m[1]);
 const extraAlertKeys = declaredKeys(alertSite).filter((key) =>
 	/^(?:outline|ghost|link)(?:-|$)/.test(key)
 );
@@ -637,7 +639,9 @@ const bubbleGhostRows = BUBBLE_VARIANTS.filter((row) => row.key.startsWith('ghos
 check(
 	'the bubble file keeps its four rounded-none ghost rows',
 	bubbleGhostRows.length === 4 &&
-		bubbleGhostRows.every((row) => countOf(appliedBubble, `${row.key}: "${row.class}",`) === 1),
+		bubbleGhostRows.every(
+			(row) => countOf(appliedBubble, `${writtenKey(row.key)}: "${row.class}",`) === 1
+		),
 	bubbleGhostRows.map((row) => row.key).join(', ')
 );
 

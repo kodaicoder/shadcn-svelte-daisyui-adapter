@@ -264,8 +264,10 @@ check(
 check('the stock block is not contained in the fixed block', !site.fixed.includes(site.stock));
 check('the stock and fixed blocks differ', site.stock !== site.fixed);
 
+const writtenKey = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);
+
 const missingRows = BUTTON_VARIANTS.filter(
-	(row) => countOf(site.fixed, `${row.key}: "${row.class}",`) !== 1
+	(row) => countOf(site.fixed, `${writtenKey(row.key)}: "${row.class}",`) !== 1
 ).map((row) => row.key);
 check(
 	'every row appears exactly once in the fixed block',
@@ -302,7 +304,9 @@ check(
 	].every((token) => byKey('destructive').class.includes(token))
 );
 
-const declaredKeys = [...site.fixed.matchAll(/^\t\t\t\t([\w-]+): "/gm)].map((match) => match[1]);
+const declaredKeys = [...site.fixed.matchAll(/^\t\t\t\t"?([\w-]+)"?: "/gm)].map(
+	(match) => match[1]
+);
 check(
 	'the fixed block declares twenty-one keys',
 	declaredKeys.length === 21 &&
@@ -336,10 +340,11 @@ check(
 );
 
 const newKeys = TICKET_KEYS.filter((key) => key !== 'destructive');
+const newKeyLines = (text) => newKeys.filter((key) => !text.includes(`${writtenKey(key)}: "`));
 check(
 	'the file carries the fifteen new keys',
-	newKeys.every((key) => appliedText.includes(`${key}: "`)),
-	newKeys.filter((key) => !appliedText.includes(`${key}: "`)).join(', ')
+	newKeyLines(appliedText).length === 0,
+	newKeyLines(appliedText).join(', ')
 );
 
 const appliedHeader = headerLines(readFileSync(cssPathOf(applied), 'utf8'));

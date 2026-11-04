@@ -1,0 +1,483 @@
+{
+  "ok": true,
+  "source": {
+    "render": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\evidence\\33-harness-proof\\render.json",
+    "theme": "D:\\Workspace\\DesignSystem\\New_Project\\src\\daisyui-theme.css"
+  },
+  "schemes": {
+    "light": {
+      "page": "rgb(255, 255, 255)",
+      "pairs": [
+        {
+          "id": "dialog-close",
+          "name": "dialog close",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(214, 243, 246)",
+          "compositedBackground": "rgb(214, 243, 246)",
+          "ratio": 15.22,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "sheet-close",
+          "name": "sheet close",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(214, 243, 246)",
+          "compositedBackground": "rgb(214, 243, 246)",
+          "ratio": 15.22,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "calendar-hover",
+          "name": "calendar hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-hover",
+          "name": "range hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-middle",
+          "name": "range middle",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "dropdown-destructive",
+          "name": "dropdown destructive",
+          "foreground": "rgb(63, 23, 109)",
+          "background": "rgba(186, 0, 0, 0.102)",
+          "compositedBackground": "rgb(248, 229, 229)",
+          "ratio": 11.15,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "context-destructive",
+          "name": "context destructive",
+          "foreground": "rgb(63, 23, 109)",
+          "background": "rgba(186, 0, 0, 0.102)",
+          "compositedBackground": "rgb(248, 229, 229)",
+          "ratio": 11.15,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "menubar-destructive",
+          "name": "menubar destructive",
+          "foreground": "rgb(63, 23, 109)",
+          "background": "rgba(186, 0, 0, 0.102)",
+          "compositedBackground": "rgb(248, 229, 229)",
+          "ratio": 11.15,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "chart-tooltip-label",
+          "name": "chart tooltip",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(255, 255, 255)",
+          "compositedBackground": "rgb(255, 255, 255)",
+          "ratio": 17.74,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "bubble-muted",
+          "name": "bubble muted",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(214, 243, 246)",
+          "compositedBackground": "rgb(214, 243, 246)",
+          "ratio": 15.22,
+          "threshold": 4.5,
+          "pass": true
+        }
+      ],
+      "tones": [
+        {
+          "tone": "success",
+          "text": {
+            "foreground": "rgb(0, 63, 87)",
+            "background": "rgb(255, 255, 255)",
+            "ratio": 11.36,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 126, 113)",
+            "fillVsPage": 4.97,
+            "fillKnownLimit": false,
+            "textOnFill": 4.73,
+            "border": "rgb(0, 63, 87)",
+            "borderVsPage": 11.36,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        },
+        {
+          "tone": "warning",
+          "text": {
+            "foreground": "rgb(0, 102, 83)",
+            "background": "rgb(255, 255, 255)",
+            "ratio": 6.94,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(238, 175, 0)",
+            "fillVsPage": 1.95,
+            "fillKnownLimit": true,
+            "textOnFill": 8.4,
+            "border": "rgb(0, 102, 83)",
+            "borderVsPage": 6.94,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        },
+        {
+          "tone": "info",
+          "text": {
+            "foreground": "rgb(0, 49, 117)",
+            "background": "rgb(255, 255, 255)",
+            "ratio": 12.38,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 87, 218)",
+            "fillVsPage": 6.22,
+            "fillKnownLimit": false,
+            "textOnFill": 5.72,
+            "border": "rgb(0, 49, 117)",
+            "borderVsPage": 12.38,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        },
+        {
+          "tone": "destructive",
+          "text": {
+            "foreground": "rgb(63, 23, 109)",
+            "background": "rgb(255, 255, 255)",
+            "ratio": 13.51,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(191, 0, 4)",
+            "fillVsPage": 6.53,
+            "fillKnownLimit": false,
+            "textOnFill": 5.97,
+            "border": "rgb(63, 23, 109)",
+            "borderVsPage": 13.51,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        }
+      ]
+    },
+    "dark": {
+      "page": "rgb(7, 17, 35)",
+      "pairs": [
+        {
+          "id": "dialog-close",
+          "name": "dialog close",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(1, 2, 17)",
+          "compositedBackground": "rgb(1, 2, 17)",
+          "ratio": 16.32,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "sheet-close",
+          "name": "sheet close",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(1, 2, 17)",
+          "compositedBackground": "rgb(1, 2, 17)",
+          "ratio": 16.32,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "calendar-hover",
+          "name": "calendar hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-hover",
+          "name": "range hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-middle",
+          "name": "range middle",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "dropdown-destructive",
+          "name": "dropdown destructive",
+          "foreground": "rgb(195, 158, 215)",
+          "background": "rgba(190, 0, 5, 0.200)",
+          "compositedBackground": "rgb(44, 14, 29)",
+          "ratio": 7.77,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "context-destructive",
+          "name": "context destructive",
+          "foreground": "rgb(195, 158, 215)",
+          "background": "rgba(190, 0, 5, 0.200)",
+          "compositedBackground": "rgb(44, 14, 29)",
+          "ratio": 7.77,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "menubar-destructive",
+          "name": "menubar destructive",
+          "foreground": "rgb(195, 158, 215)",
+          "background": "rgba(190, 0, 5, 0.200)",
+          "compositedBackground": "rgb(44, 14, 29)",
+          "ratio": 7.77,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "chart-tooltip-label",
+          "name": "chart tooltip",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(7, 17, 35)",
+          "compositedBackground": "rgb(7, 17, 35)",
+          "ratio": 14.92,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "bubble-muted",
+          "name": "bubble muted",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(1, 2, 17)",
+          "compositedBackground": "rgb(1, 2, 17)",
+          "ratio": 16.32,
+          "threshold": 4.5,
+          "pass": true
+        }
+      ],
+      "tones": [
+        {
+          "tone": "success",
+          "text": {
+            "foreground": "rgb(155, 194, 215)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 9.96,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 150, 137)",
+            "fillVsPage": 5.14,
+            "fillKnownLimit": false,
+            "textOnFill": 3.49,
+            "border": "rgb(155, 194, 215)",
+            "borderVsPage": 9.96,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        },
+        {
+          "tone": "warning",
+          "text": {
+            "foreground": "rgb(150, 228, 226)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 13.02,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(238, 175, 0)",
+            "fillVsPage": 9.67,
+            "fillKnownLimit": false,
+            "textOnFill": 1.85,
+            "border": "rgb(150, 228, 226)",
+            "borderVsPage": 13.02,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        },
+        {
+          "tone": "info",
+          "text": {
+            "foreground": "rgb(159, 190, 248)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 10.05,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(42, 126, 255)",
+            "fillVsPage": 4.96,
+            "fillKnownLimit": false,
+            "textOnFill": 3.49,
+            "border": "rgb(159, 190, 248)",
+            "borderVsPage": 10.05,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        },
+        {
+          "tone": "destructive",
+          "text": {
+            "foreground": "rgb(195, 158, 215)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 8.26,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(191, 0, 4)",
+            "fillVsPage": 2.89,
+            "fillKnownLimit": true,
+            "textOnFill": 5.97,
+            "border": "rgb(195, 158, 215)",
+            "borderVsPage": 8.26,
+            "borderThreshold": 3,
+            "borderPass": true
+          }
+        }
+      ]
+    }
+  },
+  "reference": {
+    "light": {
+      "success": {
+        "tone": "success",
+        "textVsPage": 8.3,
+        "borderVsPage": 8.3,
+        "fillVsPage": 2.52,
+        "fillKnownLimit": true,
+        "textOnFill": 6.05,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      },
+      "warning": {
+        "tone": "warning",
+        "textVsPage": 6.91,
+        "borderVsPage": 6.91,
+        "fillVsPage": 1.95,
+        "fillKnownLimit": true,
+        "textOnFill": 7.63,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      },
+      "info": {
+        "tone": "info",
+        "textVsPage": 8.24,
+        "borderVsPage": 8.24,
+        "fillVsPage": 2.22,
+        "fillKnownLimit": true,
+        "textOnFill": 6.31,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      },
+      "destructive": {
+        "tone": "destructive",
+        "textVsPage": 13.49,
+        "borderVsPage": 13.49,
+        "fillVsPage": 6.52,
+        "fillKnownLimit": false,
+        "textOnFill": 5.95,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      }
+    },
+    "dark": {
+      "success": {
+        "tone": "success",
+        "textVsPage": 11.28,
+        "borderVsPage": 11.28,
+        "fillVsPage": 7.49,
+        "fillKnownLimit": false,
+        "textOnFill": 6.05,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      },
+      "warning": {
+        "tone": "warning",
+        "textVsPage": 13,
+        "borderVsPage": 13,
+        "fillVsPage": 9.67,
+        "fillKnownLimit": false,
+        "textOnFill": 7.63,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      },
+      "info": {
+        "tone": "info",
+        "textVsPage": 11.88,
+        "borderVsPage": 11.88,
+        "fillVsPage": 8.47,
+        "fillKnownLimit": false,
+        "textOnFill": 6.31,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      },
+      "destructive": {
+        "tone": "destructive",
+        "textVsPage": 8.24,
+        "borderVsPage": 8.24,
+        "fillVsPage": 2.89,
+        "fillKnownLimit": true,
+        "textOnFill": 5.95,
+        "textPass": true,
+        "borderPass": true,
+        "textOnFillPass": true
+      }
+    }
+  },
+  "findings": [
+    "dark: success filled text is 3.49:1 against its fill; the theme's own success-content sets this pair",
+    "dark: warning filled text is 1.85:1 against its fill; the theme's own warning-content sets this pair",
+    "dark: info filled text is 3.49:1 against its fill; the theme's own info-content sets this pair"
+  ],
+  "failures": []
+}

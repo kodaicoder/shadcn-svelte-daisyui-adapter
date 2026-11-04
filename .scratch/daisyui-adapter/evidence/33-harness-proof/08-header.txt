@@ -1,0 +1,1 @@
+/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 58 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */

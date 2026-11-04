@@ -50,9 +50,8 @@ const snapshot = () =>
 				if (!element) return { selector, found: false };
 				const computed = getComputedStyle(element);
 				const shadowColours =
-					computed.boxShadow.match(
-						/(?:rgba?|oklch|oklab|color|hsla?)\([^)]*\)|#[0-9a-f]{3,8}/gi
-					) ?? [];
+					computed.boxShadow.match(/(?:rgba?|oklch|oklab|color|hsla?)\([^)]*\)|#[0-9a-f]{3,8}/gi) ??
+					[];
 				return {
 					selector,
 					found: true,
@@ -66,6 +65,8 @@ const snapshot = () =>
 					// calc() chain or a Tailwind theme key arrives in px, not as a token string.
 					borderRadius: computed.borderRadius,
 					borderTopLeftRadius: computed.borderTopLeftRadius,
+					borderTopColor: computed.borderTopColor,
+					borderTopColorRgb: resolve(computed.borderTopColor),
 					borderWidth: {
 						top: computed.borderTopWidth,
 						right: computed.borderRightWidth,

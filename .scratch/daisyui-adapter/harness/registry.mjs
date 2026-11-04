@@ -30,6 +30,25 @@ export const startRegistry = (dir, port = REGISTRY_PORT) =>
 		server.listen(port, '127.0.0.1', () => ready(server));
 	});
 
+// shadcn-svelte reads COMPONENTS_REGISTRY_URL as the registry base, so the pin's index.json and items
+// sit at the root of this server rather than under the harness's /r/ prefix.
+export const startStatic = (dir, port = 0) =>
+	new Promise((ready) => {
+		const root = resolve(dir);
+		const server = createServer((req, res) => {
+			const path = decodeURIComponent((req.url ?? '').split('?')[0]);
+			const file = resolve(root, path.startsWith('/') ? `.${path}` : `./${path}`);
+			if (!file.startsWith(root) || !existsSync(file) || extname(file) !== '.json') {
+				res.writeHead(404).end('not found');
+				return;
+			}
+			res.writeHead(200, { 'content-type': 'application/json' }).end(readFileSync(file));
+		});
+		server.listen(port, '127.0.0.1', () =>
+			ready({ server, url: `http://127.0.0.1:${server.address().port}` })
+		);
+	});
+
 export const stopRegistry = (server) => {
 	if (!server) return null;
 	server.closeAllConnections();

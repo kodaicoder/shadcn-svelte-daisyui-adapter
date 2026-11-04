@@ -1318,14 +1318,16 @@ const VARIANT_STOCK_CLASS = {
 		'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30'
 };
 
+const keyToken = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);
+
 const renderVariantBlock = (component, rows) => {
 	const { lead, trail, open } = VARIANT_LAYOUT[component];
 	const pinned = VARIANT_PINNED[component];
-	const line = (key) => `\t\t\t\t${key}: "${pinned[key]}",`;
+	const line = (key) => `\t\t\t\t${keyToken(key)}: "${pinned[key]}",`;
 	return [
 		...(open ? ['variant: {'] : []),
 		...lead.map(line),
-		...rows.map((row) => `\t\t\t\t${row.key}: "${row.class}",`),
+		...rows.map((row) => `\t\t\t\t${keyToken(row.key)}: "${row.class}",`),
 		...trail.map(line),
 		'\t\t\t}'
 	].join('\n');
