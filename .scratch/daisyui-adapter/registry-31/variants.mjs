@@ -407,13 +407,75 @@ check(
 	borderedFilled.join(', ')
 );
 
-const badgeBorder = VARIANT_ROWS.filter(
-	(row) => row.component === 'badge' && /(?:^|[\s"])border-/.test(row.class)
-).map((row) => row.key);
+const badgeOutline = BADGE_VARIANTS.filter((row) => row.key.startsWith('outline-'));
+const tokensOf = (row) => row.class.split(/\s+/);
+const baseOf = (token) => token.split(':').pop();
+const CHIP_PADDING = ['px-1.5', 'py-0.5'];
+const hasPadding = (tokens) => CHIP_PADDING.every((token) => tokens.includes(token));
+const outlineBroken = badgeOutline
+	.filter((row) => {
+		const tokens = tokensOf(row);
+		return (
+			!tokens.includes('border') ||
+			!tokens.includes(`border-${row.tone}-text`) ||
+			!hasPadding(tokens) ||
+			tokens.some((token) => baseOf(token).startsWith('bg-'))
+		);
+	})
+	.map((row) => row.key);
 check(
-	'badge writes no border, because its base pins border-0',
-	badgeBorder.length === 0,
-	badgeBorder.join(', ')
+	'every badge outline row is a border-only chip',
+	badgeOutline.length === 4 && outlineBroken.length === 0,
+	outlineBroken.join(', ')
+);
+
+const badgeFilled = BADGE_VARIANTS.filter((row) =>
+	['success', 'warning', 'info'].includes(row.key)
+);
+const filledBroken = badgeFilled
+	.filter((row) => {
+		const tokens = tokensOf(row);
+		const fills = tokens.filter((token) => baseOf(token).startsWith('bg-'));
+		return (
+			fills.filter((token) => token === `bg-${row.tone}`).length !== 1 ||
+			fills.some(
+				(token) =>
+					token !== `bg-${row.tone}` &&
+					!(token.startsWith('[a]:hover:') && baseOf(token).startsWith(`bg-${row.tone}`))
+			) ||
+			!tokens.includes('border') ||
+			!tokens.includes(`border-${row.tone}-text`) ||
+			!tokens.includes(`text-${row.tone}-foreground`) ||
+			!hasPadding(tokens)
+		);
+	})
+	.map((row) => row.key);
+check(
+	'every badge filled status row is a filled chip with the text-tone border',
+	badgeFilled.length === 3 && filledBroken.length === 0,
+	filledBroken.join(', ')
+);
+
+const badgeFlat = BADGE_VARIANTS.filter(
+	(row) => row.key.startsWith('ghost-') || row.key.startsWith('link-')
+);
+const FLAT_CLASS = /(?:^|\s)(?:border|p[xytrblse]?-)/;
+const flatBroken = badgeFlat.filter((row) => FLAT_CLASS.test(row.class)).map((row) => row.key);
+check(
+	'the badge ghost and link rows stay borderless and unpadded',
+	badgeFlat.length === 8 && flatBroken.length === 0,
+	flatBroken.join(', ')
+);
+
+const badgePinnedDestructive = BADGE_VARIANTS.find((row) => row.key === 'destructive');
+const pinnedDestructiveIsFlat =
+	badgePinnedDestructive !== undefined && !FLAT_CLASS.test(badgePinnedDestructive.class);
+check(
+	'the pinned badge destructive row is not a chip',
+	pinnedDestructiveIsFlat,
+	pinnedDestructiveIsFlat
+		? ''
+		: `badge:destructive :: ${badgePinnedDestructive?.class ?? 'missing'}`
 );
 
 check(

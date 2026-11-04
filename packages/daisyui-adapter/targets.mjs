@@ -1024,49 +1024,54 @@ export const VARIANT_ROWS = [
 		key: 'success',
 		tone: 'success',
 		presentation: 'solid',
-		class: 'bg-success text-success-foreground [a]:hover:bg-success/80'
+		class:
+			'border border-success-text bg-success text-success-foreground px-1.5 py-0.5 [a]:hover:bg-success/80'
 	},
 	{
 		component: 'badge',
 		key: 'warning',
 		tone: 'warning',
 		presentation: 'solid',
-		class: 'bg-warning text-warning-foreground [a]:hover:bg-warning/80'
+		class:
+			'border border-warning-text bg-warning text-warning-foreground px-1.5 py-0.5 [a]:hover:bg-warning/80'
 	},
 	{
 		component: 'badge',
 		key: 'info',
 		tone: 'info',
 		presentation: 'solid',
-		class: 'bg-info text-info-foreground [a]:hover:bg-info/80'
+		class: 'border border-info-text bg-info text-info-foreground px-1.5 py-0.5 [a]:hover:bg-info/80'
 	},
 	{
 		component: 'badge',
 		key: 'outline-destructive',
 		tone: 'destructive',
 		presentation: 'outline',
-		class: 'text-destructive-text [a]:hover:text-destructive-text/70'
+		class:
+			'border border-destructive-text text-destructive-text px-1.5 py-0.5 [a]:hover:text-destructive-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'outline-success',
 		tone: 'success',
 		presentation: 'outline',
-		class: 'text-success-text [a]:hover:text-success-text/70'
+		class:
+			'border border-success-text text-success-text px-1.5 py-0.5 [a]:hover:text-success-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'outline-warning',
 		tone: 'warning',
 		presentation: 'outline',
-		class: 'text-warning-text [a]:hover:text-warning-text/70'
+		class:
+			'border border-warning-text text-warning-text px-1.5 py-0.5 [a]:hover:text-warning-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
-		class: 'text-info-text [a]:hover:text-info-text/70'
+		class: 'border border-info-text text-info-text px-1.5 py-0.5 [a]:hover:text-info-text/70'
 	},
 	{
 		component: 'badge',
