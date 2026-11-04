@@ -300,5 +300,5 @@ git command and only `node`; the lead reads the diff from the worktree and runs 
   inside the anchor and reports `customized`. `ALL_SITES` is still duplicated between the fixer and
   drift, so the next table touches both. `TARGETS.variants` holds sites while `TARGETS.badgeVariants`
   holds rows, a naming asymmetry inherited from ticket 30 and pinned by its seam.
-- Commit: `feat(adapter): add the badge, alert and bubble variants`; the closeout SHA and the tag are
-  recorded in the ticket's `Closeout:` line.
+- Commit: `7213101` `feat(adapter): add the badge, alert and bubble variants`, annotated tag
+  `t31-badge-alert-bubble-variants` on that commit.
