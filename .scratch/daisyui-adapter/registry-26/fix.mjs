@@ -11,7 +11,7 @@ import {
 	SITES,
 	uiDirectory
 } from '../../../packages/daisyui-adapter/component-fix.mjs';
-import { SURFACES } from '../../../packages/daisyui-adapter/targets.mjs';
+import { SURFACES, VARIANTS } from '../../../packages/daisyui-adapter/targets.mjs';
 
 const HERE = import.meta.dirname;
 const REPO = resolve(HERE, '..', '..', '..');
@@ -55,7 +55,7 @@ const scaffold = (dir, { components = COMPONENTS, aliases } = {}) => {
 	// The fixer's guard reads the installed shadcn-svelte, so the fixture names the supported pin.
 	const shadcn = join(dir, 'node_modules', 'shadcn-svelte', 'package.json');
 	mkdirSync(dirname(shadcn), { recursive: true });
-	writeFileSync(shadcn, JSON.stringify({ name: 'shadcn-svelte', version: '1.7.1' }, null, '\t'));
+	writeFileSync(shadcn, JSON.stringify({ name: 'shadcn-svelte', version: '1.8.0' }, null, '\t'));
 	const ui = uiDirectory(json, dir);
 	if (components.length > 0) {
 		mkdirSync(ui, { recursive: true });
@@ -169,6 +169,14 @@ check(
 );
 
 const fresh = join(WORK, 'fresh');
+// The fixture installs COMPONENTS only, so its report covers the sites whose files those
+// components hold. A site whose 1.8 stock already holds the target step is reported fixed
+// without a write, so the expected split comes from the manifest rather than a copied total.
+const FIXTURE_SITES = [...SITES, ...SURFACES, ...VARIANTS].filter((site) =>
+	COMPONENTS.includes(site.component)
+);
+const ASSERTED = FIXTURE_SITES.filter((site) => site.stock === site.fixed).length;
+const CHANGED = FIXTURE_SITES.length - ASSERTED;
 scaffold(fresh);
 check(
 	'the scaffold copies into src/lib/components/ui',
@@ -178,15 +186,22 @@ const freshRun = cliResult(fresh);
 const freshSites = parseSites(freshRun.out);
 check('init with components present exits 0', freshRun.code === 0, `exit ${freshRun.code}`);
 check('init still writes 43 declarations per block', freshRun.out.includes('43 light, 43 dark'));
-check('init reports every site', freshSites.length === 39, `${freshSites.length}`);
 check(
-	'init finds every site stock and writes it',
-	freshSites.every((site) => site.state === 'stock' && site.written)
+	'init reports every site',
+	freshSites.length === FIXTURE_SITES.length,
+	`${freshSites.length}`
 );
 check(
-	'init totals thirty-nine stock',
+	'init finds every site stock or already at its step, and writes the stock ones',
+	freshSites.every((site) =>
+		site.state === 'fixed' ? !site.written : site.state === 'stock' && site.written
+	)
+);
+check(
+	'init totals the changed stock and the already-fixed sites',
 	TOTALS.test(freshRun.out) &&
-		freshRun.out.includes('fix: 39 stock, 0 fixed, 0 customized, 0 missing')
+		freshRun.out.includes(`fix: ${CHANGED} stock, ${ASSERTED} fixed, 0 customized, 0 missing`),
+	freshRun.out.trim().split('\n').at(-1)
 );
 check(
 	'the report path is forward-slash relative',
@@ -222,7 +237,8 @@ const secondSites = parseSites(secondRun.out);
 check('a second fix exits 0', secondRun.code === 0, `exit ${secondRun.code}`);
 check(
 	'a second fix finds every site fixed and writes nothing',
-	secondSites.length === 39 && secondSites.every((site) => site.state === 'fixed' && !site.written)
+	secondSites.length === FIXTURE_SITES.length &&
+		secondSites.every((site) => site.state === 'fixed' && !site.written)
 );
 check(
 	'a second fix totals thirty-nine fixed',
@@ -268,14 +284,19 @@ const dryRun = cliResult(dry, 'fix', '--dry-run');
 const drySites = parseSites(dryRun.out);
 check('a dry run exits 0', dryRun.code === 0, `exit ${dryRun.code}`);
 check(
-	'a dry run reports every site stock and unwritten',
-	drySites.length === 39 &&
-		drySites.every((site) => site.state === 'stock' && !site.written && site.dryRun)
+	'a dry run reports every site stock or already fixed, and unwritten',
+	drySites.length === FIXTURE_SITES.length &&
+		drySites.every(
+			(site) => !site.written && (site.state === 'fixed' || (site.state === 'stock' && site.dryRun))
+		)
 );
 check(
 	'a dry run totals with the dry-run note',
 	TOTALS.test(dryRun.out) &&
-		dryRun.out.includes('fix: 39 stock, 0 fixed, 0 customized, 0 missing; dry run, nothing written')
+		dryRun.out.includes(
+			`fix: ${CHANGED} stock, ${ASSERTED} fixed, 0 customized, 0 missing; dry run, nothing written`
+		),
+	dryRun.out.trim().split('\n').at(-1)
 );
 check(
 	'a dry run leaves every file byte-identical',
@@ -358,7 +379,7 @@ cli(over);
 cpSync(join(STOCK, 'dialog', 'dialog-content.svelte'), pathOf(over, SITES[0]));
 check(
 	'the stock file is back after an overwrite',
-	readSiteFile(over, SITES[0]).includes('bg-secondary')
+	readSiteFile(over, SITES[0]).includes(SITES[0].stock)
 );
 cliResult(over, 'fix', 'dialog');
 check(
@@ -424,7 +445,10 @@ const customRun = cliResult(custom, 'fix');
 const customSites = parseSites(customRun.out);
 check(
 	'every site is fixed under a custom alias',
-	customSites.length === 39 && customSites.every((site) => site.state === 'stock' && site.written)
+	customSites.length === FIXTURE_SITES.length &&
+		customSites.every((site) =>
+			site.state === 'fixed' ? !site.written : site.state === 'stock' && site.written
+		)
 );
 check(
 	'the custom alias is patched',
@@ -470,7 +494,8 @@ check(
 );
 check(
 	'a second init reports every site fixed',
-	twiceSites.length === 39 && twiceSites.every((site) => site.state === 'fixed' && !site.written)
+	twiceSites.length === FIXTURE_SITES.length &&
+		twiceSites.every((site) => site.state === 'fixed' && !site.written)
 );
 
 // WCAG 2.x relative luminance and sRGB transfer.

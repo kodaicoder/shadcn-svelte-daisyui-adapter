@@ -41,7 +41,7 @@ const check = (name, ok, detail) => {
 	console.log(`${ok ? 'ok  ' : 'FAIL'}  ${name}${detail ? ` :: ${detail}` : ''}`);
 };
 
-const scaffold = (dir, { components = INSTALLED, style = 'mira', shadcn = '1.7.1' } = {}) => {
+const scaffold = (dir, { components = INSTALLED, style = 'mira', shadcn = '1.8.0' } = {}) => {
 	rmSync(dir, { recursive: true, force: true });
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
 	cpSync(join(REPO, 'src', 'routes', 'layout.css'), join(dir, 'src', 'routes', 'layout.css'));
@@ -359,11 +359,8 @@ const rawText = VARIANT_ROWS.filter((row) => RAW_TEXT.test(row.class)).map(
 	(row) => `${row.component}:${row.key}`
 );
 check(
-	'no raw tone as text except the three pinned destructive rows',
-	rawText.length === 3 &&
-		rawText[0] === 'badge:destructive' &&
-		rawText[1] === 'alert:destructive' &&
-		rawText[2] === 'bubble:destructive',
+	'no raw tone as text except the two pinned destructive rows',
+	rawText.length === 2 && rawText[0] === 'alert:destructive' && rawText[1] === 'bubble:destructive',
 	rawText.join(', ')
 );
 
@@ -469,14 +466,15 @@ check(
 );
 
 const badgePinnedDestructive = BADGE_VARIANTS.find((row) => row.key === 'destructive');
-const pinnedDestructiveIsFlat =
-	badgePinnedDestructive !== undefined && !FLAT_CLASS.test(badgePinnedDestructive.class);
+const destructiveChip =
+	badgePinnedDestructive !== undefined &&
+	badgePinnedDestructive.class.includes('border-destructive-text') &&
+	badgePinnedDestructive.class.includes('bg-destructive/10') &&
+	badgePinnedDestructive.class.includes('text-destructive-text');
 check(
-	'the pinned badge destructive row is not a chip',
-	pinnedDestructiveIsFlat,
-	pinnedDestructiveIsFlat
-		? ''
-		: `badge:destructive :: ${badgePinnedDestructive?.class ?? 'missing'}`
+	'the badge destructive row is a bordered chip with the text tone',
+	destructiveChip,
+	destructiveChip ? '' : `badge:destructive :: ${badgePinnedDestructive?.class ?? 'missing'}`
 );
 
 check(
@@ -631,9 +629,10 @@ check('the badge file holds its fixed block', appliedBadge.includes(badgeSite.fi
 check('the alert file holds its fixed block', appliedAlert.includes(alertSite.fixed));
 check('the bubble file holds its fixed block', appliedBubble.includes(bubbleSite.fixed));
 check(
-	'the badge file keeps the pinned destructive text',
-	typeof pinnedClass('badge', 'destructive') === 'string' &&
-		appliedBadge.includes(`destructive: "${pinnedClass('badge', 'destructive')}",`)
+	'the badge destructive row keeps the 1.8 soft fill and the text tone',
+	pinnedClass('badge', 'destructive').includes('bg-destructive/10') &&
+		appliedBadge.includes('bg-destructive/10') &&
+		appliedBadge.includes('text-destructive-text')
 );
 const bubbleGhostRows = BUBBLE_VARIANTS.filter((row) => row.key.startsWith('ghost-'));
 check(

@@ -1,0 +1,591 @@
+﻿== registry-16 ==
+ok    parser reads one light and one dark block
+ok    bindings carry the daisy namespace :: 22 keys
+ok    bindings carry --daisy-radius
+ok    bindings carry --daisy-border
+ok    an absent theme reads as null
+ok    one block throws E2 :: [daisyui-adapter] src/daisyui-theme.css: holds 1 theme block(s). The file must h
+ok    a missing colour throws E3 naming it :: [daisyui-adapter] src/daisyui-theme.css: theme "daisy-light" is missing --color-
+ok    CLI writes the plugin line :: @plugin "@kodaicoder/shadcn-svelte-daisyui-adapter";
+ok    the plugin line is a bare specifier :: @plugin "@kodaicoder/shadcn-svelte-daisyui-adapter";
+ok    CLI writes no override import
+ok    CLI creates no override file
+ok    exactly one header line, naming the package and its version :: 1 header line(s)
+ok    CLI counts 43 declarations per block with a theme :: 43 light, 43 dark
+ok    CLI writes no raw --color-* name into :root or .dark
+ok    all five chart tokens are written in both blocks :: 2 chart-1 declarations
+ok    each chart row is the derived helper behind the project value :: --chart-1: var(--daisy-derived-chart-1, oklch(0.845 0.143 164.978))
+ok    CLI writes --default-border-width once
+ok    the stylesheet names no override file at all
+ok    sidebar follows base-200
+ok    sidebar-accent follows base-300
+ok    secondary follows the daisyUI brand
+ok    secondary-foreground follows secondary-content
+ok    accent follows the daisyUI brand
+ok    accent has no derived helper
+ok    accent-foreground follows accent-content
+ok    themed: the :root --success binding reads --daisy-color-success with the fixed fallback :: var(--daisy-color-success, oklch(69% 0.17 162.48))
+ok    themed: the .dark --success binding reads --daisy-color-success with the fixed fallback :: var(--daisy-color-success, oklch(69% 0.17 162.48))
+ok    themed: the :root --success-foreground binding reads --daisy-color-success-content with the fixed fallback :: var(--daisy-color-success-content, oklch(26% 0.051 172.552))
+ok    themed: the .dark --success-foreground binding reads --daisy-color-success-content with the fixed fallback :: var(--daisy-color-success-content, oklch(26% 0.051 172.552))
+ok    themed: the :root --warning binding reads --daisy-color-warning with the fixed fallback :: var(--daisy-color-warning, oklch(79% 0.184 86.047))
+ok    themed: the .dark --warning binding reads --daisy-color-warning with the fixed fallback :: var(--daisy-color-warning, oklch(79% 0.184 86.047))
+ok    themed: the :root --warning-foreground binding reads --daisy-color-warning-content with the fixed fallback :: var(--daisy-color-warning-content, oklch(28% 0.066 53.813))
+ok    themed: the .dark --warning-foreground binding reads --daisy-color-warning-content with the fixed fallback :: var(--daisy-color-warning-content, oklch(28% 0.066 53.813))
+ok    themed: the :root --info binding reads --daisy-color-info with the fixed fallback :: var(--daisy-color-info, oklch(74% 0.16 232.661))
+ok    themed: the .dark --info binding reads --daisy-color-info with the fixed fallback :: var(--daisy-color-info, oklch(74% 0.16 232.661))
+ok    themed: the :root --info-foreground binding reads --daisy-color-info-content with the fixed fallback :: var(--daisy-color-info-content, oklch(29% 0.066 243.157))
+ok    themed: the .dark --info-foreground binding reads --daisy-color-info-content with the fixed fallback :: var(--daisy-color-info-content, oklch(29% 0.066 243.157))
+ok    themed: the :root --destructive-foreground binding reads --daisy-color-error-content with the fixed fallback :: var(--daisy-color-error-content, oklch(97% 0.013 17.38))
+ok    themed: the .dark --destructive-foreground binding reads --daisy-color-error-content with the fixed fallback :: var(--daisy-color-error-content, oklch(97% 0.013 17.38))
+ok    themed: the @theme inline --color-success alias points at --success :: var(--success)
+ok    themed: the @theme inline --color-success-foreground alias points at --success-foreground :: var(--success-foreground)
+ok    themed: the @theme inline --color-warning alias points at --warning :: var(--warning)
+ok    themed: the @theme inline --color-warning-foreground alias points at --warning-foreground :: var(--warning-foreground)
+ok    themed: the @theme inline --color-info alias points at --info :: var(--info)
+ok    themed: the @theme inline --color-info-foreground alias points at --info-foreground :: var(--info-foreground)
+ok    themed: the @theme inline --color-destructive-foreground alias points at --destructive-foreground :: var(--destructive-foreground)
+ok    themed: the :root --success-text binding falls back to the 40/60 mix :: var(--daisy-derived-success-text, color-mix(in oklch, var(--success) 40%, var(--foreground) 60%))
+ok    themed: the :root --daisy-derived-success-text helper is the 40/60 mix :: color-mix(in oklch, var(--success) 40%, var(--foreground) 60%)
+ok    themed: the .dark --success-text binding falls back to the 40/60 mix :: var(--daisy-derived-success-text, color-mix(in oklch, var(--success) 40%, var(--foreground) 60%))
+ok    themed: the .dark --daisy-derived-success-text helper is the 40/60 mix :: color-mix(in oklch, var(--success) 40%, var(--foreground) 60%)
+ok    themed: the :root --warning-text binding falls back to the 40/60 mix :: var(--daisy-derived-warning-text, color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%))
+ok    themed: the :root --daisy-derived-warning-text helper is the 40/60 mix :: color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%)
+ok    themed: the .dark --warning-text binding falls back to the 40/60 mix :: var(--daisy-derived-warning-text, color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%))
+ok    themed: the .dark --daisy-derived-warning-text helper is the 40/60 mix :: color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%)
+ok    themed: the :root --info-text binding falls back to the 40/60 mix :: var(--daisy-derived-info-text, color-mix(in oklch, var(--info) 40%, var(--foreground) 60%))
+ok    themed: the :root --daisy-derived-info-text helper is the 40/60 mix :: color-mix(in oklch, var(--info) 40%, var(--foreground) 60%)
+ok    themed: the .dark --info-text binding falls back to the 40/60 mix :: var(--daisy-derived-info-text, color-mix(in oklch, var(--info) 40%, var(--foreground) 60%))
+ok    themed: the .dark --daisy-derived-info-text helper is the 40/60 mix :: color-mix(in oklch, var(--info) 40%, var(--foreground) 60%)
+ok    themed: the :root --destructive-text binding falls back to the 40/60 mix :: var(--daisy-derived-destructive-text, color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%))
+ok    themed: the :root --daisy-derived-destructive-text helper is the 40/60 mix :: color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%)
+ok    themed: the .dark --destructive-text binding falls back to the 40/60 mix :: var(--daisy-derived-destructive-text, color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%))
+ok    themed: the .dark --daisy-derived-destructive-text helper is the 40/60 mix :: color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%)
+ok    themed: the @theme inline --color-success-text alias points at --success-text :: var(--success-text)
+ok    themed: the @theme inline --color-warning-text alias points at --warning-text :: var(--warning-text)
+ok    themed: the @theme inline --color-info-text alias points at --info-text :: var(--info-text)
+ok    themed: the @theme inline --color-destructive-text alias points at --destructive-text :: var(--destructive-text)
+ok    themed: the text tones introduce no separate --success-border token :: none
+ok    themed: the text tones introduce no separate --warning-border token :: none
+ok    themed: the text tones introduce no separate --info-border token :: none
+ok    themed: the text tones introduce no separate --destructive-border token :: none
+ok    themed: :root carries 13 derived helpers :: 13
+ok    themed: .dark carries 13 derived helpers :: 13
+ok    a re-run is byte-identical
+[daisyui-adapter] theme ok: light + dark
+      [daisyui-adapter] wrote src/routes/layout.css
+      [daisyui-adapter] 43 light, 43 dark
+      [daisyui-adapter] no target components found; nothing to fix
+      [daisyui-adapter] already installed @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0
+      [daisyui-adapter] light chart L 0.6562 0.5662 0.4762 0.3862 0.2962 min adjacent 0.090
+      [daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+ok    an existing override import is kept
+ok    an existing override file is left byte-identical
+ok    a missing theme exits 0 :: exit 0
+ok    a missing theme counts 43 declarations per block :: 43 light, 43 dark
+ok    a missing theme writes the bindings for the build
+ok    a missing theme keeps the project fallback :: --background: var(--daisy-color-base-100, oklch(1 0 0))
+ok    a missing theme writes no plugin line
+ok    theme-less: the :root --success binding reads --daisy-color-success with the fixed fallback :: var(--daisy-color-success, oklch(69% 0.17 162.48))
+ok    theme-less: the .dark --success binding reads --daisy-color-success with the fixed fallback :: var(--daisy-color-success, oklch(69% 0.17 162.48))
+ok    theme-less: the :root --success-foreground binding reads --daisy-color-success-content with the fixed fallback :: var(--daisy-color-success-content, oklch(26% 0.051 172.552))
+ok    theme-less: the .dark --success-foreground binding reads --daisy-color-success-content with the fixed fallback :: var(--daisy-color-success-content, oklch(26% 0.051 172.552))
+ok    theme-less: the :root --warning binding reads --daisy-color-warning with the fixed fallback :: var(--daisy-color-warning, oklch(79% 0.184 86.047))
+ok    theme-less: the .dark --warning binding reads --daisy-color-warning with the fixed fallback :: var(--daisy-color-warning, oklch(79% 0.184 86.047))
+ok    theme-less: the :root --warning-foreground binding reads --daisy-color-warning-content with the fixed fallback :: var(--daisy-color-warning-content, oklch(28% 0.066 53.813))
+ok    theme-less: the .dark --warning-foreground binding reads --daisy-color-warning-content with the fixed fallback :: var(--daisy-color-warning-content, oklch(28% 0.066 53.813))
+ok    theme-less: the :root --info binding reads --daisy-color-info with the fixed fallback :: var(--daisy-color-info, oklch(74% 0.16 232.661))
+ok    theme-less: the .dark --info binding reads --daisy-color-info with the fixed fallback :: var(--daisy-color-info, oklch(74% 0.16 232.661))
+ok    theme-less: the :root --info-foreground binding reads --daisy-color-info-content with the fixed fallback :: var(--daisy-color-info-content, oklch(29% 0.066 243.157))
+ok    theme-less: the .dark --info-foreground binding reads --daisy-color-info-content with the fixed fallback :: var(--daisy-color-info-content, oklch(29% 0.066 243.157))
+ok    theme-less: the :root --destructive-foreground binding reads --daisy-color-error-content with the fixed fallback :: var(--daisy-color-error-content, oklch(97% 0.013 17.38))
+ok    theme-less: the .dark --destructive-foreground binding reads --daisy-color-error-content with the fixed fallback :: var(--daisy-color-error-content, oklch(97% 0.013 17.38))
+ok    theme-less: the @theme inline --color-success alias points at --success :: var(--success)
+ok    theme-less: the @theme inline --color-success-foreground alias points at --success-foreground :: var(--success-foreground)
+ok    theme-less: the @theme inline --color-warning alias points at --warning :: var(--warning)
+ok    theme-less: the @theme inline --color-warning-foreground alias points at --warning-foreground :: var(--warning-foreground)
+ok    theme-less: the @theme inline --color-info alias points at --info :: var(--info)
+ok    theme-less: the @theme inline --color-info-foreground alias points at --info-foreground :: var(--info-foreground)
+ok    theme-less: the @theme inline --color-destructive-foreground alias points at --destructive-foreground :: var(--destructive-foreground)
+ok    theme-less: the :root --success-text binding falls back to the 40/60 mix :: var(--daisy-derived-success-text, color-mix(in oklch, var(--success) 40%, var(--foreground) 60%))
+ok    theme-less: the :root --daisy-derived-success-text helper is the 40/60 mix :: color-mix(in oklch, var(--success) 40%, var(--foreground) 60%)
+ok    theme-less: the .dark --success-text binding falls back to the 40/60 mix :: var(--daisy-derived-success-text, color-mix(in oklch, var(--success) 40%, var(--foreground) 60%))
+ok    theme-less: the .dark --daisy-derived-success-text helper is the 40/60 mix :: color-mix(in oklch, var(--success) 40%, var(--foreground) 60%)
+ok    theme-less: the :root --warning-text binding falls back to the 40/60 mix :: var(--daisy-derived-warning-text, color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%))
+ok    theme-less: the :root --daisy-derived-warning-text helper is the 40/60 mix :: color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%)
+ok    theme-less: the .dark --warning-text binding falls back to the 40/60 mix :: var(--daisy-derived-warning-text, color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%))
+ok    theme-less: the .dark --daisy-derived-warning-text helper is the 40/60 mix :: color-mix(in oklch, var(--warning) 40%, var(--foreground) 60%)
+ok    theme-less: the :root --info-text binding falls back to the 40/60 mix :: var(--daisy-derived-info-text, color-mix(in oklch, var(--info) 40%, var(--foreground) 60%))
+ok    theme-less: the :root --daisy-derived-info-text helper is the 40/60 mix :: color-mix(in oklch, var(--info) 40%, var(--foreground) 60%)
+ok    theme-less: the .dark --info-text binding falls back to the 40/60 mix :: var(--daisy-derived-info-text, color-mix(in oklch, var(--info) 40%, var(--foreground) 60%))
+ok    theme-less: the .dark --daisy-derived-info-text helper is the 40/60 mix :: color-mix(in oklch, var(--info) 40%, var(--foreground) 60%)
+ok    theme-less: the :root --destructive-text binding falls back to the 40/60 mix :: var(--daisy-derived-destructive-text, color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%))
+ok    theme-less: the :root --daisy-derived-destructive-text helper is the 40/60 mix :: color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%)
+ok    theme-less: the .dark --destructive-text binding falls back to the 40/60 mix :: var(--daisy-derived-destructive-text, color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%))
+ok    theme-less: the .dark --daisy-derived-destructive-text helper is the 40/60 mix :: color-mix(in oklch, var(--destructive) 40%, var(--foreground) 60%)
+ok    theme-less: the @theme inline --color-success-text alias points at --success-text :: var(--success-text)
+ok    theme-less: the @theme inline --color-warning-text alias points at --warning-text :: var(--warning-text)
+ok    theme-less: the @theme inline --color-info-text alias points at --info-text :: var(--info-text)
+ok    theme-less: the @theme inline --color-destructive-text alias points at --destructive-text :: var(--destructive-text)
+ok    theme-less: the text tones introduce no separate --success-border token :: none
+ok    theme-less: the text tones introduce no separate --warning-border token :: none
+ok    theme-less: the text tones introduce no separate --info-border token :: none
+ok    theme-less: the text tones introduce no separate --destructive-border token :: none
+ok    theme-less: :root carries 8 derived helpers :: 8
+ok    theme-less: .dark carries 8 derived helpers :: 8
+ok    a project entry in @theme inline is neither duplicated nor overridden :: --color-success: oklch(0.5 0.2 150)
+ok    the theme-present rows carry the project value behind the derived helper :: var(--daisy-derived-chart-1, oklch(0.845 0.143 164.978))
+ok    a missing theme leaves the stock chart rows :: oklch(0.845 0.143 164.978)
+ok    the stock file keeps a declaration the adapter does not own
+ok    the theme returning after an absence does not nest a ramp in its own slot :: var(--daisy-derived-chart-1, oklch(0.845 0.143 164.978))
+ok    the theme-returned run is byte-identical on a re-run
+ok    an older header is replaced, not stacked :: 1 header line(s)
+ok    an older header prints the upgrade :: [daisyui-adapter] upgrading 0.0.9 -> 0.3.0
+ok    a newer header exits 1 :: exit 1
+ok    a newer header names E4 and writes nothing :: [daisyui-adapter] E4 src/routes/layout.css was written by @kodaicoder/shadcn-svelte-daisyui-adapter 
+ok    a bare ramp row from an older CLI is left as it is :: --chart-1: oklch(from var(--daisy-color-primary) 0.6562 min(c, 0.08) h)
+ok    a bare ramp warns once in total :: 1 warning(s)
+
+all smoke checks passed
+exit 0
+== registry-26 ==
+ok    the manifest names nine components :: 9
+ok    the manifest holds eleven replacement sites :: 11
+ok    the manifest holds ten contrast pairs :: 10
+ok    every pair site id exists
+ok    every pair threshold is 4.5
+ok    every site belongs to a named component
+ok    no fixed string is contained in its own stock string, so a stock file cannot report fixed
+ok    no alias resolves to src/lib/components/ui :: C:\Users\LENOVO\AppData\Local\Temp\adapter-26-fix\alias-root\src\lib\components\ui
+ok    aliases.components falls back to its ui child :: C:\Users\LENOVO\AppData\Local\Temp\adapter-26-fix\alias-root\src\lib\components\ui
+ok    $lib resolves under src/lib :: C:\Users\LENOVO\AppData\Local\Temp\adapter-26-fix\alias-root\src\lib\custom-ui
+ok    @/ resolves under src :: C:\Users\LENOVO\AppData\Local\Temp\adapter-26-fix\alias-root\src\lib\ui
+ok    a subpath import remapped in package.json wins over the #lib convention :: C:\Users\LENOVO\AppData\Local\Temp\adapter-26-fix\alias-imports\src\design\ui
+ok    the scaffold copies into src/lib/components/ui
+ok    init with components present exits 0 :: exit 0
+ok    init still writes 43 declarations per block
+ok    init reports every site :: 39
+ok    init finds every site stock or already at its step, and writes the stock ones
+ok    init totals the changed stock and the already-fixed sites :: [daisyui-adapter] dark chart L 0.5491 0.6391 0.7291 0.8191 0.9091 min adjacent 0.090
+ok    the report path is forward-slash relative :: dialog/dialog-content.svelte
+ok    dialog-close: the stock string is gone
+ok    dialog-close: the fixed string is present
+ok    sheet-close: the stock string is gone
+ok    sheet-close: the fixed string is present
+ok    calendar-hover: the stock string is gone
+ok    calendar-hover: the fixed string is present
+ok    range-hover: the stock string is gone
+ok    range-hover: the fixed string is present
+ok    range-middle: the stock string is gone
+ok    range-middle: the fixed string is present
+ok    range-middle-hover: the stock string is gone
+ok    range-middle-hover: the fixed string is present
+ok    dropdown-destructive: the stock string is gone
+ok    dropdown-destructive: the fixed string is present
+ok    context-destructive: the stock string is gone
+ok    context-destructive: the fixed string is present
+ok    menubar-destructive: the stock string is gone
+ok    menubar-destructive: the fixed string is present
+ok    chart-tooltip-label: the stock string is gone
+ok    chart-tooltip-label: the fixed string is present
+ok    bubble-muted: the stock string is gone
+ok    bubble-muted: the fixed string is present
+ok    dialog close holds bg-muted and no bg-secondary
+ok    chart tooltip label holds class="text-foreground"
+ok    bubble muted holds the explicit text token
+ok    a second fix exits 0 :: exit 0
+ok    a second fix finds every site fixed and writes nothing
+ok    a second fix totals thirty-nine fixed
+ok    a second fix is byte-identical
+ok    a hand-edited site reports customized :: customized
+ok    the other site in the same file still applies :: stock -> fixed
+ok    the hand edit survives the run
+ok    the stock hover string is gone
+ok    a dry run exits 0 :: exit 0
+ok    a dry run reports every site stock or already fixed, and unwritten
+ok    a dry run totals with the dry-run note :: [daisyui-adapter] fix: 32 stock, 7 fixed, 0 customized, 0 missing; dry run, nothing written
+ok    a dry run leaves every file byte-identical
+ok    fix dialog runs two sites :: dialog-close, dialog-content
+ok    fix dialog changes only the dialog file :: dialog/dialog-content.svelte
+ok    fix dialog leaves the other stock strings in place
+ok    fix dialog patches the close button
+ok    a deleted component reports missing
+ok    a missing component is not created
+ok    a missing component is not an error :: exit 0
+ok    a missing component named on the command line still prints its row :: [daisyui-adapter] dialog dialog-close (dialog/dialog-content.svelte): missing
+ok    init fixes the components present at init
+ok    init maps the stylesheet with one component present
+ok    fix picks up a component added after init
+ok    fix keeps the component fixed at init
+ok    the stock file is back after an overwrite
+ok    fix restores an overwritten file
+ok    init with no components exits 0 :: exit 0
+ok    init with no components says nothing to fix
+ok    init with no components still maps 43 declarations per block
+ok    init with no components creates no ui directory
+ok    an unknown command exits 1 and names both commands :: exit 1
+ok    an unknown flag exits 1 and names the flag :: exit 1
+ok    an unknown fix target exits 1 and lists the known targets :: exit 1
+ok    init refuses arguments :: exit 1
+ok    the $lib alias resolves under src/lib :: C:\Users\LENOVO\AppData\Local\Temp\adapter-26-fix\custom-alias\src\lib\custom-ui
+ok    every site is fixed under a custom alias
+ok    the custom alias is patched
+ok    the custom alias is reported with the site path
+ok    the sheet fixture starts with LF
+ok    a CRLF file exits 0 :: exit 0
+ok    a CRLF file is fixed
+ok    a CRLF file stays CRLF throughout
+ok    a second init exits 0 :: exit 0
+ok    a second init is byte-identical
+ok    a second init leaves every component byte-identical
+ok    a second init reports every site fixed
+ok    contrast dialog close: foreground on muted meets 4.5 :: light 16.74, dark 15.62
+ok    contrast sheet close: foreground on muted meets 4.5 :: light 16.74, dark 15.62
+ok    contrast calendar hover: accent-foreground on accent meets 4.5 :: light 5.08, dark 5.08
+ok    contrast range hover: accent-foreground on accent meets 4.5 :: light 5.08, dark 5.08
+ok    contrast range middle: accent-foreground on accent meets 4.5 :: light 5.08, dark 5.08
+ok    contrast dropdown destructive: destructive-text on destructive/10 meets 4.5 :: light 8.28, dark 7.73
+ok    contrast context destructive: destructive-text on destructive/10 meets 4.5 :: light 8.28, dark 7.73
+ok    contrast menubar destructive: destructive-text on destructive/10 meets 4.5 :: light 8.28, dark 7.73
+ok    contrast chart tooltip: foreground on background meets 4.5 :: light 17.73, dark 14.75
+ok    contrast bubble muted: foreground on muted meets 4.5 :: light 16.74, dark 15.62
+
+all fix checks passed
+exit 0
+== registry-27 ==
+ok    TARGETS.components holds the same nine names :: 9
+ok    TARGETS.sites holds the same eleven sites :: 11
+ok    TARGETS.pairs holds the same ten pairs :: 10
+ok    TARGETS.supported is the same object and holds no style gate :: ["version"]
+ok    TARGETS.supported pins major 1 minor 8 :: 1.8
+ok    component-fix re-exports the same arrays and supported object
+ok    init ignores the vega style :: exit 0
+ok    init fixes every site with the vega style
+ok    init ignores the default style :: exit 0
+ok    init fixes every site with the default style
+ok    init ignores the missing style :: exit 0
+ok    init fixes every site with the missing style
+ok    a close site shaped like the 1.7.x vega template reports customized, not blocked :: exit 0
+ok    the nine shared sites still fix around the customized close sites
+ok    a vega-shaped run counts twenty-nine fully fixed files :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 29 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    --check accepts the vega-shaped customized sites :: exit 0
+ok    --strict fails on the vega-shaped customized sites :: exit 1
+ok    an unsupported version exits 1 and names it :: exit 1
+ok    an unsupported version writes nothing
+ok    a version refusal beats a passing check :: exit 1
+ok    an unreadable version warns and exits 0 :: exit 0
+ok    an unreadable version still fixes the files
+ok    a supported dependency range with no node_modules entry exits 0 :: exit 0
+ok    init with no component present exits 0 even with another style :: exit 0
+ok    a map-only init still maps 43 declarations per block
+ok    a map-only init prints nothing to fix
+ok    --check with stock sites exits 1 :: exit 1
+ok    --check names the flag and the stock sites
+ok    --check with stock sites writes nothing
+ok    --check after init exits 0 :: exit 0
+ok    --check accepts a customized site :: exit 0
+ok    --check accepts a deleted component directory :: exit 0
+ok    --check with --dry-run still exits 1 on stock sites :: exit 1
+ok    --check with --dry-run writes nothing
+ok    --strict with a customized site exits 1 :: exit 1
+ok    --strict names the flag on a customized site
+ok    --strict with a customized site writes nothing
+ok    --strict with --dry-run still exits 1 on a customized site :: exit 1
+ok    --strict with --dry-run writes nothing
+ok    --strict dialog exits 1 when the named component is gone :: exit 1
+ok    --strict dialog names the component in the error :: [daisyui-adapter] --strict: "dialog" has no target files
+ok    --strict accepts an unnamed deleted target :: exit 0
+ok    --strict with no components at all exits 0 :: exit 0
+ok    --check --strict exits 1 with stock and customized sites present :: exit 1
+ok    a fresh init writes exactly one header line :: 1
+ok    a fresh init counts the thirty fully fixed files :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 30 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a write-mode fix counts twenty-nine fully fixed files after one site is customized :: exit 0 :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 29 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a header update leaves every other stylesheet byte intact
+ok    a customized site stays customized through a write-mode fix
+ok    a no-op fix keeps the header byte-identical
+ok    a no-op fix keeps every target file byte-identical
+ok    a no-op fix keeps the count unchanged :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 30 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    an old-format header is replaced, not stacked :: exit 0 :: 1 header line(s)
+ok    the replaced header is the current count :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 30 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    an init with no components records zero fully fixed files :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 0 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a write-mode fix after components arrive counts thirty :: exit 0 :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 30 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    --check still exits 1 here :: exit 1
+ok    --check never rewrites the header :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 0 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a dry run exits 0 with a stock site back :: exit 0
+ok    a dry run never rewrites a stale header :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 30 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a named fix still counts every fully fixed file :: exit 0 :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 29 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a named fix leaves the other stock file untouched
+ok    a write-mode fix refuses a newer header :: exit 1
+ok    a refused newer-header fix leaves every file byte-identical
+
+all safety checks passed
+exit 0
+== registry-28 ==
+ok    TARGETS.radius is the RADIUS table :: 25
+ok    TARGETS.radiusComponents is RADIUS_COMPONENTS :: 11
+ok    RADIUS_COMPONENTS is the eleven named components :: button, toggle, input, textarea, native-select, select, input-group, input-group-button, checkbox, radio-group, switch
+ok    every radius component is in RADIUS_COMPONENTS
+ok    every radius file sits under a named component directory
+ok    every radius stock string is present in the pinned file
+ok    no fixed string contains rounded-full
+ok    every step matches its role or size
+ok    every entry carries exactly one of role or size
+ok    every fixed string writes its step, with only the sm data-size as a smaller override
+ok    every step is sm, md or lg
+ok    every entry changes its stock string or already holds its step :: button-base, button-xs, button-icon-xs, toggle-base, input-field, textarea-field, select-content-box, select-item-field, input-group-field, input-group-block-end, input-group-block-start, input-group-textarea
+ok    no changed entry hides its fixed inside its own stock
+ok    no radius file is a calendar or range-calendar file
+ok    init over the form fixture exits 0 :: exit 0
+ok    every calendar file keeps its --cell-radius occurrences
+ok    button base keeps rounded-md
+ok    button has no rounded-none left
+ok    button xs, sm, icon-xs and icon-sm carry rounded-sm
+ok    button lg and icon-lg carry rounded-lg
+ok    toggle default, sm and lg carry md, sm and lg
+ok    input carries rounded-md in both branches :: 2
+ok    input has no bare h-10 border px-0
+ok    textarea carries rounded-md
+ok    native-select and select trigger carry md plus the sm data size
+ok    select content is lg and the item is md
+ok    input-group has no rounded-none left
+ok    input-group-button base and xs carry rounded-sm
+ok    addon keycap and checkbox carry rounded-sm
+ok    switch carries md and the sm data size
+ok    radio-group item keeps exactly two rounded-full :: 2
+ok    radio-group has no radius site
+ok    the rounded cell radius utility survives
+ok    the edge-joining cell radius utilities survive
+ok    the range-middle contrast sites are still fixed
+ok    a run leaves the seven scale rows byte-identical :: 7 -> 7
+ok    a second fix exits 0 and reports every site fixed :: exit 0
+ok    a second fix leaves every form file byte-identical
+ok    a second fix leaves the stylesheet byte-identical
+ok    a hand-edited radius site reports customized :: [daisyui-adapter] toggle toggle-base (toggle/toggle.svelte): customized
+ok    the hand edit survives the run
+ok    a restored stock radius site reports stock and is rewritten :: [daisyui-adapter] toggle toggle-sm (toggle/toggle.svelte): stock -> fixed
+ok    the other site in that file stays fixed
+ok    a radius file deleted while its directory remains reports missing and is not recreated :: exit 0
+ok    a missing radius file drops the count from nineteen to eighteen :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 18 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a project with only button installed reports no rows for the absent radius components :: exit 0
+ok    fix radio-group is a zero-row no-op that writes nothing :: exit 0
+ok    fix button exits 0 and fixes the named component :: exit 0
+ok    fix button leaves every other component byte-identical
+ok    init with the thirteen radius files records components 13 fixed :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 13 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    a no-op fix keeps the count and the bytes :: exit 0
+ok    --check exits 0 after init :: exit 0
+ok    --check with a stock radius site exits 1 :: exit 1
+ok    --check with a stock radius site writes nothing
+ok    --strict with a customized radius site exits 1 :: exit 1
+ok    --strict with a customized radius site writes nothing
+ok    the scale rows carry the linear coefficients :: {"sm":0.6,"md":0.8,"lg":1,"xl":1.4,"2xl":1.8,"3xl":2.2,"4xl":2.6}
+ok    at --radius: 0 every step is 0
+ok    at 2rem sm < md < lg :: 1.2 < 1.6 < 2
+ok    at 10rem sm < md < lg :: 6 < 8 < 10
+ok    no scale row uses clamp(), min() or max()
+ok    --radius-box: 0 exits 0 and does not warn :: exit 0
+ok    --radius-box: 0.5rem exits 0 and does not warn :: exit 0
+ok    --radius-box: 2rem (32px) is not above the edge and does not warn :: exit 0
+ok    --radius-box: 2.5rem warns with the raw and px values :: [daisyui-adapter] --radius 2.5rem (40px) is above 2rem (32px); the components become pill-like, so the theme's radius is likely wrong.
+ok    the written --radius binding has no clamp :: var(--daisy-radius, 0.625rem)
+ok    --radius-box: 33px warns with the raw and px values :: [daisyui-adapter] --radius 33px (33px) is above 2rem (32px); the components become pill-like, so the theme's radius is likely wrong.
+ok    a calc() radius is skipped rather than guessed :: exit 0
+ok    an unknown unit is skipped rather than guessed :: exit 0
+ok    without a theme the --radius fallback above 2rem warns with raw and px :: [daisyui-adapter] --radius 3rem (48px) is above 2rem (32px); the components become pill-like, so the theme's radius is likely wrong.
+ok    the binding still carries the fallback and no clamp after the warning
+
+all 71 radius checks passed
+exit 0
+== registry-29 ==
+ok    TARGETS.surfaces is the SURFACES table :: 42
+ok    TARGETS.surfaceComponents is SURFACE_COMPONENTS :: 14
+ok    SURFACE_COMPONENTS is the fourteen named components :: card, dialog, alert, popover, dropdown-menu, context-menu, menubar, sheet, drawer, navigation-menu, command, hover-card, table, calendar
+ok    the box role maps to lg :: lg
+ok    every surface entry is a box at the box step
+ok    every surface component is in SURFACE_COMPONENTS
+ok    every surface file sits under its component directory
+ok    no surface file is a range-calendar file
+ok    every surface stock string occurs exactly once in the pinned file
+ok    every fixed string writes rounded-lg
+ok    no fixed string writes rounded-none
+ok    no fixed string writes rounded-full
+ok    every entry changes its stock string or already holds the box step :: popover-content, dropdown-content, dropdown-sub-content, context-content, context-sub-content, menubar-root, menubar-content, menubar-sub-content, nav-trigger, hover-card-content
+ok    no changed entry hides its fixed inside its own stock
+ok    the chart tooltip already carries rounded-lg
+ok    the chart tooltip has no surface entry
+ok    the navigation menu indicator keeps its own stock radius
+ok    the navigation menu indicator has no surface entry
+ok    init over the surface fixture exits 0 :: exit 0
+ok    every calendar file keeps its --cell-radius occurrences
+ok    every surface fixed string is present in its file
+ok    no surface file keeps a rounded-none
+ok    every contrast site in a shared file still holds its fixed string
+ok    the calendar head cell, month and year selects carry their rounded-lg
+ok    the rounded cell radius utility survives
+ok    the edge-joining cell radius utilities survive
+ok    the header records forty-four fully fixed files :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 44 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    --check exits 0 after init :: exit 0
+ok    --strict exits 0 after init :: exit 0
+ok    a second fix exits 0 and reports every site fixed :: exit 0
+ok    a second fix leaves every surface file byte-identical
+ok    a second fix leaves the stylesheet byte-identical
+ok    --check with a stock surface site exits 1 :: exit 1
+ok    --check with a stock surface site writes nothing
+ok    a hand-edited surface site reports customized :: [daisyui-adapter] calendar calendar-month-select (calendar/calendar-month-select.svelte): customized
+ok    the hand edit survives the run
+ok    a restored stock surface site reports stock and is rewritten :: [daisyui-adapter] calendar calendar-year-select-label (calendar/calendar-year-select.svelte): stock -> fixed
+ok    the sibling site in the first file stays fixed
+ok    a surface file deleted while its directory remains reports missing and is not recreated :: exit 0
+ok    a missing surface file drops the header count by one :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 43 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    the scale rows carry the linear coefficients :: {"sm":0.6,"md":0.8,"lg":1,"xl":1.4,"2xl":1.8,"3xl":2.2,"4xl":2.6}
+ok    at --radius: 0 every step is 0
+ok    at 10rem sm < md < lg, now that lg applies to the surfaces :: 6 < 8 < 10
+ok    no scale row uses clamp(), min() or max()
+ok    the written --radius binding has no clamp, min or max :: var(--daisy-radius, 0.625rem)
+
+all 45 surfaces checks passed
+exit 0
+== registry-30 ==
+ok    TARGETS.variants is the VARIANTS table :: 4
+ok    TARGETS.variantComponents is VARIANT_COMPONENTS :: button, badge, alert, bubble
+ok    TARGETS.buttonVariants is BUTTON_VARIANTS :: 16
+ok    VARIANTS[0] is the pinned button site :: 4
+ok    BUTTON_VARIANTS holds sixteen rows :: 16
+ok    the keys are the four tones times the four presentations, with no duplicate :: destructive, success, warning, info, outline-destructive, outline-success, outline-warning, outline-info, ghost-destructive, ghost-success, ghost-warning, ghost-info, link-destructive, link-success, link-warning, link-info
+ok    a solid key is its tone and every other key is presentation-tone
+ok    each tone x presentation cell holds exactly one row
+ok    every class is a non-empty literal string
+ok    no variant class writes a radius
+ok    no variant class writes the raw tone as text
+ok    each solid row is filled, with the tone foreground and the text-tone border
+ok    each outline row carries the text-tone border and text
+ok    ghost and link use the text tone and carry no border
+ok    no resting border uses a tone other than its --<tone>-text token
+ok    no row mixes the text tone with the tone foreground
+ok    the stock block occurs exactly once in the pinned button :: 1
+ok    the stock block is not contained in the fixed block
+ok    the stock and fixed blocks differ
+ok    every row appears exactly once in the fixed block
+ok    the fixed block keeps the five pinned keys byte for byte
+ok    the fixed block drops the tinted destructive base
+ok    the destructive row keeps the pinned focus ring
+ok    the fixed block declares twenty-one keys :: default, outline, secondary, ghost, destructive, success, warning, info, outline-destructive, outline-success, outline-warning, outline-info, ghost-destructive, ghost-success, ghost-warning, ghost-info, link-destructive, link-success, link-warning, link-info, link
+ok    init over the button fixture exits 0 :: exit 0
+ok    init reports the variant site stock -> fixed :: [daisyui-adapter] button button-variants (button/button.svelte): stock -> fixed
+ok    the applied file holds the fixed block
+ok    the applied file drops the destructive tint
+ok    the radius table still applies in the same file
+ok    the file carries the fifteen new keys
+ok    the header records one fully fixed component :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 1 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    --check exits 0 after init :: exit 0
+ok    --strict exits 0 after init :: exit 0
+ok    a second fix exits 0 and reports every site fixed :: exit 0
+ok    a second fix leaves the button file byte-identical
+ok    a hand-edited variant row reports customized :: [daisyui-adapter] button button-variants (button/button.svelte): customized
+ok    the hand edit survives the run
+ok    a user-added key reports customized :: [daisyui-adapter] button button-variants (button/button.svelte): customized
+ok    a user-added key is kept and the fixer inserts nothing
+ok    --check with a stock variant site exits 1 and writes nothing :: exit 1
+ok    a restored stock block reports stock -> fixed and is written :: [daisyui-adapter] button button-variants (button/button.svelte): stock -> fixed
+ok    a deleted button file reports missing and is not recreated :: exit 0
+ok    --strict exits 1 on the customized fixture :: exit 1
+
+all 43 variants checks passed
+exit 0
+== registry-31 ==
+ok    TARGETS.variants is the VARIANTS table :: 4
+ok    TARGETS.variantRows is VARIANT_ROWS :: 48
+ok    TARGETS.variantComponents is VARIANT_COMPONENTS :: button, badge, alert, bubble
+ok    TARGETS.buttonVariants is BUTTON_VARIANTS :: 16
+ok    TARGETS.badgeVariants is BADGE_VARIANTS :: 16
+ok    TARGETS.alertVariants is ALERT_VARIANTS :: 4
+ok    TARGETS.bubbleVariants is BUBBLE_VARIANTS :: 12
+ok    VARIANTS holds four sites in component order :: button-variants, badge-variants, alert-variants, bubble-variants
+ok    each site names its own component and file :: button/button.svelte, badge/badge.svelte, alert/alert.svelte, bubble/bubble.svelte
+ok    VARIANTS[0] is the pinned button site :: button/button.svelte
+ok    VARIANT_ROWS holds forty-eight rows :: 48
+ok    button holds sixteen rows :: 16
+ok    badge holds sixteen rows :: 16
+ok    alert holds four rows :: 4
+ok    bubble holds twelve rows :: 12
+ok    the button keys are the literal sixteen, with no duplicate :: destructive, success, warning, info, outline-destructive, outline-success, outline-warning, outline-info, ghost-destructive, ghost-success, ghost-warning, ghost-info, link-destructive, link-success, link-warning, link-info
+ok    the badge keys are the literal sixteen, with no duplicate :: destructive, success, warning, info, outline-destructive, outline-success, outline-warning, outline-info, ghost-destructive, ghost-success, ghost-warning, ghost-info, link-destructive, link-success, link-warning, link-info
+ok    the alert keys are the literal four, with no duplicate :: destructive, success, warning, info
+ok    the bubble keys are the literal twelve, with no duplicate :: destructive, success, warning, info, outline-destructive, outline-success, outline-warning, outline-info, ghost-destructive, ghost-success, ghost-warning, ghost-info
+ok    each button tone x presentation cell holds one row
+ok    each badge tone x presentation cell holds one row
+ok    each alert tone x solid cell holds one row
+ok    each bubble tone x presentation cell holds one row
+ok    every class is a non-empty literal string
+ok    no row writes rounded- except the four bubble ghost rows
+ok    the rounded-none reset sits on exactly the four bubble ghost rows :: ghost-destructive, ghost-success, ghost-warning, ghost-info
+ok    no raw tone as text except the two pinned destructive rows :: alert:destructive, bubble:destructive
+ok    no row mixes the text tone with the tone foreground
+ok    no resting border uses a tone other than its --<tone>-text token
+ok    every row names its own tone and no other
+ok    every filled status row on a bordered component carries the text-tone border
+ok    every badge outline row is a border-only chip
+ok    every badge filled status row is a filled chip with the text-tone border
+ok    the badge ghost and link rows stay borderless and unpadded
+ok    the badge destructive row is a bordered chip with the text tone
+ok    button: the stock block occurs exactly once in the pin :: 1
+ok    button: the stock block is not contained in the fixed block
+ok    button: the stock and fixed blocks differ
+ok    button: every row appears exactly once in the fixed block
+ok    button: the fixed block keeps the five pinned keys byte for byte
+ok    badge: the stock block occurs exactly once in the pin :: 1
+ok    badge: the stock block is not contained in the fixed block
+ok    badge: the stock and fixed blocks differ
+ok    badge: every row appears exactly once in the fixed block
+ok    badge: the fixed block keeps the five pinned keys byte for byte
+ok    alert: the stock block occurs exactly once in the pin :: 1
+ok    alert: the stock block is not contained in the fixed block
+ok    alert: the stock and fixed blocks differ
+ok    alert: every row appears exactly once in the fixed block
+ok    alert: the fixed block keeps the pinned key byte for byte
+ok    bubble: the stock block occurs exactly once in the pin :: 1
+ok    bubble: the stock block is not contained in the fixed block
+ok    bubble: the stock and fixed blocks differ
+ok    bubble: every row appears exactly once in the fixed block
+ok    bubble: every pinned key line survives verbatim, inside or before the fixed block
+ok    alert: the fixed block adds no outline, ghost or link key
+ok    bubble: the fixed block adds no link key
+ok    init over the badge, alert and bubble fixture exits 0 :: exit 0
+ok    init fixes the badge, alert and bubble variant sites :: [daisyui-adapter] badge badge-variants (badge/badge.svelte): stock -> fixed | [daisyui-adapter] alert alert-variants (alert/alert.svelte): stock -> fixed | [daisyui-adapter] bubble bubble-variants (bubble/bubble.svelte): stock -> fixed
+ok    bubble-muted reports stock -> fixed in the same run :: [daisyui-adapter] bubble bubble-muted (bubble/bubble.svelte): stock -> fixed
+ok    alert-base reports stock -> fixed in the same run :: [daisyui-adapter] alert alert-base (alert/alert.svelte): stock -> fixed
+ok    the badge file holds its fixed block
+ok    the alert file holds its fixed block
+ok    the bubble file holds its fixed block
+ok    the badge destructive row keeps the 1.8 soft fill and the text tone
+ok    the bubble file keeps its four rounded-none ghost rows :: ghost-destructive, ghost-success, ghost-warning, ghost-info
+ok    the header records three fully fixed components :: /* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 3 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+ok    --check exits 0 after init :: exit 0
+ok    --strict exits 0 after init :: exit 0
+ok    a second fix exits 0 and reports no stock site :: exit 0
+ok    a second fix leaves the three files byte-identical
+ok    a hand edit inside the badge block reports customized :: [daisyui-adapter] badge badge-variants (badge/badge.svelte): customized
+ok    the hand edit survives the run
+ok    a key appended inside the bubble anchor reports customized :: [daisyui-adapter] bubble bubble-variants (bubble/bubble.svelte): customized
+ok    nothing is inserted into the customized bubble block
+ok    a restored alert stock block reports stock -> fixed :: [daisyui-adapter] alert alert-variants (alert/alert.svelte): stock -> fixed
+ok    the restored alert block is written back to fixed
+ok    a deleted badge file reports missing and is not recreated :: exit 0
+ok    --strict exits 1 on the customized fixture :: exit 1
+ok    one run fixes both stock bubble sites :: [daisyui-adapter] bubble bubble-muted (bubble/bubble.svelte): stock -> fixed | [daisyui-adapter] bubble bubble-variants (bubble/bubble.svelte): stock -> fixed
+ok    the bubble file holds both fixed strings
+ok    a second run reports both bubble sites fixed :: [daisyui-adapter] bubble bubble-muted (bubble/bubble.svelte): fixed | [daisyui-adapter] bubble bubble-variants (bubble/bubble.svelte): fixed
+
+all 82 variants checks passed
+exit 0
+== drift ==
+ok    the manifest names nine components :: 9
+ok    the manifest holds eleven sites :: 11
+ok    the manifest holds ten pairs :: 10
+ok    every pair site id exists
+ok    every site belongs to a named component of its own table
+ok    every component directory exists under the pinned ui directory
+ok    every site file still holds its stock string
+ok    the installed shadcn-svelte is 1.8.x :: 1.8.0
+
+all drift checks passed
+exit 0

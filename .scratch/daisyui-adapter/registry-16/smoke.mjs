@@ -1,4 +1,4 @@
-﻿// Cheap unit check of the CLI and the plugin, before any harness run. It builds the exact input the
+// Cheap unit check of the CLI and the plugin, before any harness run. It builds the exact input the
 // CLI sees on a fresh project: a stylesheet at shadcn step 4, a components.json, and the theme.
 import { execFileSync, spawnSync } from 'node:child_process';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync } from 'node:fs';
@@ -43,7 +43,7 @@ const scaffold = (dir, { theme = true } = {}) => {
 	// The fixer's guard reads the installed shadcn-svelte, so the fixture names the supported pin.
 	const shadcn = join(dir, 'node_modules', 'shadcn-svelte', 'package.json');
 	mkdirSync(dirname(shadcn), { recursive: true });
-	writeFileSync(shadcn, JSON.stringify({ name: 'shadcn-svelte', version: '1.7.1' }, null, '\t'));
+	writeFileSync(shadcn, JSON.stringify({ name: 'shadcn-svelte', version: '1.8.0' }, null, '\t'));
 };
 
 const cli = (dir) =>

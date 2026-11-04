@@ -1,8 +1,11 @@
 // The one target manifest: the stock the fixer patches and the shadcn-svelte version it patches. The
-// `stock` strings come from the pinned `src/lib/components/ui` snapshot; nine of the eleven sites
-// match every 1.7.x style, so the style label is not part of the guard.
+// `stock` strings come from the pinned `src/lib/components/ui` snapshot at 1.8; nine of the eleven
+// contrast sites match every style, so the style label is not part of the guard.
+// A radius or surface entry whose 1.8 stock already holds the role step repeats the string as its
+// own `fixed`: the fixer reports it `fixed` and writes nothing, and `--check` still fails when a
+// hand edit moves it off the step.
 // `packages/daisyui-adapter/test/drift.mjs` fails when the pin moves without this list.
-export const SUPPORTED = { version: { major: 1, minor: 7 } };
+export const SUPPORTED = { version: { major: 1, minor: 8 } };
 
 export const COMPONENTS = [
 	'dialog',
@@ -21,14 +24,14 @@ export const SITES = [
 		id: 'dialog-close',
 		component: 'dialog',
 		file: 'dialog/dialog-content.svelte',
-		stock: 'class="absolute top-5 right-5 bg-secondary"',
-		fixed: 'class="absolute top-5 right-5 bg-muted"'
+		stock: 'class="absolute top-2 right-2"',
+		fixed: 'class="absolute top-2 right-2 bg-muted"'
 	},
 	{
 		id: 'sheet-close',
 		component: 'sheet',
 		file: 'sheet/sheet-content.svelte',
-		stock: 'class="absolute top-4 right-4 bg-secondary"',
+		stock: 'class="absolute top-4 right-4"',
 		fixed: 'class="absolute top-4 right-4 bg-muted"'
 	},
 	{
@@ -244,7 +247,7 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'default',
 		step: 'md',
-		stock: 'dark:aria-invalid:border-destructive/50 rounded-none border border-transparent',
+		stock: 'dark:aria-invalid:border-destructive/50 rounded-md border border-transparent',
 		fixed: 'dark:aria-invalid:border-destructive/50 rounded-md border border-transparent'
 	},
 	{
@@ -253,8 +256,8 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'xs',
 		step: 'sm',
-		stock: 'xs: "h-7 gap-1 px-3',
-		fixed: 'xs: "rounded-sm h-7 gap-1 px-3'
+		stock: 'xs: "h-5 gap-1 rounded-sm px-2',
+		fixed: 'xs: "h-5 gap-1 rounded-sm px-2'
 	},
 	{
 		id: 'button-sm',
@@ -262,8 +265,8 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'sm',
 		step: 'sm',
-		stock: 'sm: "h-9 gap-1 px-4',
-		fixed: 'sm: "rounded-sm h-9 gap-1 px-4'
+		stock: 'sm: "h-6 gap-1 px-2',
+		fixed: 'sm: "rounded-sm h-6 gap-1 px-2'
 	},
 	{
 		id: 'button-lg',
@@ -271,8 +274,8 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'lg',
 		step: 'lg',
-		stock: 'lg: "h-11 gap-1.5 px-8',
-		fixed: 'lg: "rounded-lg h-11 gap-1.5 px-8'
+		stock: 'lg: "h-8 gap-1 px-2.5',
+		fixed: 'lg: "rounded-lg h-8 gap-1 px-2.5'
 	},
 	{
 		id: 'button-icon-xs',
@@ -280,8 +283,8 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'icon-xs',
 		step: 'sm',
-		stock: `"icon-xs": "size-7 [&_svg:not([class*='size-'])]:size-3"`,
-		fixed: `"icon-xs": "rounded-sm size-7 [&_svg:not([class*='size-'])]:size-3"`
+		stock: '"icon-xs": "size-5 rounded-sm',
+		fixed: '"icon-xs": "size-5 rounded-sm'
 	},
 	{
 		id: 'button-icon-sm',
@@ -289,8 +292,8 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'icon-sm',
 		step: 'sm',
-		stock: '"icon-sm": "size-9"',
-		fixed: '"icon-sm": "rounded-sm size-9"'
+		stock: '"icon-sm": "size-6',
+		fixed: '"icon-sm": "rounded-sm size-6'
 	},
 	{
 		id: 'button-icon-lg',
@@ -298,8 +301,8 @@ export const RADIUS = [
 		file: 'button/button.svelte',
 		size: 'icon-lg',
 		step: 'lg',
-		stock: '"icon-lg": "size-11"',
-		fixed: '"icon-lg": "rounded-lg size-11"'
+		stock: '"icon-lg": "size-8',
+		fixed: '"icon-lg": "rounded-lg size-8'
 	},
 	{
 		id: 'toggle-base',
@@ -307,8 +310,8 @@ export const RADIUS = [
 		file: 'toggle/toggle.svelte',
 		size: 'default',
 		step: 'md',
-		stock: 'gap-1.5 rounded-none text-xs font-semibold uppercase',
-		fixed: 'gap-1.5 rounded-md text-xs font-semibold uppercase'
+		stock: 'gap-1 rounded-md text-xs font-medium',
+		fixed: 'gap-1 rounded-md text-xs font-medium'
 	},
 	{
 		id: 'toggle-sm',
@@ -316,8 +319,8 @@ export const RADIUS = [
 		file: 'toggle/toggle.svelte',
 		size: 'sm',
 		step: 'sm',
-		stock: 'sm: "h-9 min-w-9 px-4',
-		fixed: 'sm: "rounded-sm h-9 min-w-9 px-4'
+		stock: 'sm: "h-6 min-w-6 rounded-[min(var(--radius-md),8px)] px-2',
+		fixed: 'sm: "h-6 min-w-6 rounded-sm px-2'
 	},
 	{
 		id: 'toggle-lg',
@@ -325,8 +328,8 @@ export const RADIUS = [
 		file: 'toggle/toggle.svelte',
 		size: 'lg',
 		step: 'lg',
-		stock: 'lg: "h-11 min-w-11 px-8',
-		fixed: 'lg: "rounded-lg h-11 min-w-11 px-8'
+		stock: 'lg: "h-8 min-w-8 px-2.5',
+		fixed: 'lg: "rounded-lg h-8 min-w-8 px-2.5'
 	},
 	{
 		id: 'input-field',
@@ -334,8 +337,8 @@ export const RADIUS = [
 		file: 'input/input.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'h-10 border px-0 py-1 text-base',
-		fixed: 'h-10 rounded-md border px-0 py-1 text-base'
+		stock: 'h-7 rounded-md border px-2 py-0.5',
+		fixed: 'h-7 rounded-md border px-2 py-0.5'
 	},
 	{
 		id: 'textarea-field',
@@ -343,8 +346,8 @@ export const RADIUS = [
 		file: 'textarea/textarea.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'resize-none rounded-none border px-0 py-3 text-base',
-		fixed: 'resize-none rounded-md border px-0 py-3 text-base'
+		stock: 'resize-none rounded-md border px-2 py-2',
+		fixed: 'resize-none rounded-md border px-2 py-2'
 	},
 	{
 		id: 'native-select-field',
@@ -352,8 +355,8 @@ export const RADIUS = [
 		file: 'native-select/native-select.svelte',
 		size: 'default',
 		step: 'md',
-		stock: 'appearance-none rounded-none border py-2 pr-8 pl-0 text-sm',
-		fixed: 'appearance-none rounded-md data-[size=sm]:rounded-sm border py-2 pr-8 pl-0 text-sm'
+		stock: 'appearance-none rounded-md border py-0.5 pr-6 pl-2',
+		fixed: 'appearance-none rounded-md data-[size=sm]:rounded-sm border py-0.5 pr-6 pl-2'
 	},
 	{
 		id: 'select-trigger-base',
@@ -361,8 +364,8 @@ export const RADIUS = [
 		file: 'select/select-trigger.svelte',
 		size: 'default',
 		step: 'md',
-		stock: 'gap-1.5 rounded-none border py-2 px-0 text-sm',
-		fixed: 'gap-1.5 rounded-md data-[size=sm]:rounded-sm border py-2 px-0 text-sm'
+		stock: 'gap-1.5 rounded-md border px-2 py-1.5',
+		fixed: 'gap-1.5 rounded-md data-[size=sm]:rounded-sm border px-2 py-1.5'
 	},
 	{
 		id: 'select-content-box',
@@ -370,8 +373,8 @@ export const RADIUS = [
 		file: 'select/select-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-36 rounded-none shadow-md',
-		fixed: 'min-w-36 rounded-lg shadow-md'
+		stock: 'min-w-32 rounded-lg shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg shadow-md ring-1'
 	},
 	{
 		id: 'select-item-field',
@@ -379,8 +382,8 @@ export const RADIUS = [
 		file: 'select/select-item.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3 text-sm',
-		fixed: 'gap-2.5 rounded-md py-2 pr-8 pl-3 text-sm'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1',
+		fixed: 'min-h-7 gap-2 rounded-md px-2 py-1'
 	},
 	{
 		id: 'input-group-field',
@@ -388,8 +391,8 @@ export const RADIUS = [
 		file: 'input-group/input-group.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'h-10 rounded-none border',
-		fixed: 'h-10 rounded-md border'
+		stock: 'h-7 rounded-md border transition-colors',
+		fixed: 'h-7 rounded-md border transition-colors'
 	},
 	{
 		id: 'input-group-block-end',
@@ -397,7 +400,7 @@ export const RADIUS = [
 		file: 'input-group/input-group.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'has-data-[align=block-end]:rounded-none',
+		stock: 'has-data-[align=block-end]:rounded-md',
 		fixed: 'has-data-[align=block-end]:rounded-md'
 	},
 	{
@@ -406,7 +409,7 @@ export const RADIUS = [
 		file: 'input-group/input-group.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'has-data-[align=block-start]:rounded-none',
+		stock: 'has-data-[align=block-start]:rounded-md',
 		fixed: 'has-data-[align=block-start]:rounded-md'
 	},
 	{
@@ -415,7 +418,7 @@ export const RADIUS = [
 		file: 'input-group/input-group.svelte',
 		role: 'field',
 		step: 'md',
-		stock: 'has-[textarea]:rounded-none',
+		stock: 'has-[textarea]:rounded-md',
 		fixed: 'has-[textarea]:rounded-md'
 	},
 	{
@@ -424,8 +427,8 @@ export const RADIUS = [
 		file: 'input-group/input-group-button.svelte',
 		size: 'xs',
 		step: 'sm',
-		stock: 'gap-2 rounded-none text-sm flex',
-		fixed: 'gap-2 rounded-sm text-sm flex'
+		stock: 'gap-2 rounded-md text-xs/relaxed flex',
+		fixed: 'gap-2 rounded-sm text-xs/relaxed flex'
 	},
 	{
 		id: 'input-group-button-xs',
@@ -433,8 +436,8 @@ export const RADIUS = [
 		file: 'input-group/input-group-button.svelte',
 		size: 'xs',
 		step: 'sm',
-		stock: 'xs: "h-6 gap-1 rounded-none px-1.5',
-		fixed: 'xs: "h-6 gap-1 rounded-sm px-1.5'
+		stock: 'h-5 gap-1 rounded-[calc(var(--radius-sm)_-_2px)] px-1',
+		fixed: 'h-5 gap-1 rounded-sm px-1'
 	},
 	{
 		id: 'input-group-addon-keycap',
@@ -442,7 +445,7 @@ export const RADIUS = [
 		file: 'input-group/input-group-addon.svelte',
 		role: 'selector',
 		step: 'sm',
-		stock: '**:data-[slot=kbd]:rounded-none',
+		stock: '**:data-[slot=kbd]:rounded-[calc(var(--radius-sm)_-_2px)]',
 		fixed: '**:data-[slot=kbd]:rounded-sm'
 	},
 	{
@@ -451,7 +454,7 @@ export const RADIUS = [
 		file: 'checkbox/checkbox.svelte',
 		role: 'selector',
 		step: 'sm',
-		stock: 'justify-center rounded-none border transition-shadow',
+		stock: 'justify-center rounded-[4px] border transition-shadow',
 		fixed: 'justify-center rounded-sm border transition-shadow'
 	},
 	{
@@ -460,8 +463,8 @@ export const RADIUS = [
 		file: 'switch/switch.svelte',
 		size: 'default',
 		step: 'md',
-		stock: 'shrink-0 rounded-none focus-visible:ring-2',
-		fixed: 'shrink-0 rounded-md data-[size=sm]:rounded-sm focus-visible:ring-2'
+		stock: 'shrink-0 rounded-full border border-transparent',
+		fixed: 'shrink-0 rounded-md border border-transparent'
 	}
 ];
 
@@ -494,7 +497,7 @@ export const SURFACES = [
 		file: 'card/card.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: '*:[img:first-child]:rounded-none *:[img:last-child]:rounded-none',
+		stock: '*:[img:first-child]:rounded-t-lg *:[img:last-child]:rounded-b-lg',
 		fixed: '*:[img:first-child]:rounded-lg *:[img:last-child]:rounded-lg'
 	},
 	{
@@ -503,8 +506,8 @@ export const SURFACES = [
 		file: 'card/card-header.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-1.5 rounded-none px-(--card-spacing)',
-		fixed: 'gap-1.5 rounded-lg px-(--card-spacing)'
+		stock: 'gap-1 rounded-t-lg px-(--card-spacing)',
+		fixed: 'gap-1 rounded-lg px-(--card-spacing)'
 	},
 	{
 		id: 'dialog-content',
@@ -512,8 +515,8 @@ export const SURFACES = [
 		file: 'dialog/dialog-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-6 rounded-none p-6',
-		fixed: 'gap-6 rounded-lg p-6'
+		stock: 'gap-4 rounded-xl p-4',
+		fixed: 'gap-4 rounded-lg p-4'
 	},
 	{
 		id: 'alert-base',
@@ -521,8 +524,9 @@ export const SURFACES = [
 		file: 'alert/alert.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'grid gap-1 bg-background border',
-		fixed: 'grid gap-1 rounded-lg bg-background border'
+		stock: 'grid gap-0.5 rounded-lg border px-2 py-1.5',
+		fixed:
+			'grid gap-0.5 rounded-lg border px-2 py-1.5 after:absolute after:-inset-y-px after:-left-px after:w-0.5'
 	},
 	{
 		id: 'popover-content',
@@ -530,8 +534,8 @@ export const SURFACES = [
 		file: 'popover/popover-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'flex flex-col gap-4 rounded-none p-4',
-		fixed: 'flex flex-col gap-4 rounded-lg p-4'
+		stock: 'flex flex-col gap-4 rounded-lg p-2.5',
+		fixed: 'flex flex-col gap-4 rounded-lg p-2.5'
 	},
 	{
 		id: 'dropdown-content',
@@ -539,8 +543,8 @@ export const SURFACES = [
 		file: 'dropdown-menu/dropdown-menu-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-48 rounded-none p-1.5',
-		fixed: 'min-w-48 rounded-lg p-1.5'
+		stock: 'min-w-32 rounded-lg p-1 shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg p-1 shadow-md ring-1'
 	},
 	{
 		id: 'dropdown-sub-content',
@@ -548,8 +552,8 @@ export const SURFACES = [
 		file: 'dropdown-menu/dropdown-menu-sub-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-36 rounded-none p-1.5',
-		fixed: 'min-w-36 rounded-lg p-1.5'
+		stock: 'min-w-32 rounded-lg p-1 shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg p-1 shadow-md ring-1'
 	},
 	{
 		id: 'dropdown-item',
@@ -557,8 +561,8 @@ export const SURFACES = [
 		file: 'dropdown-menu/dropdown-menu-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none px-3 py-2',
-		fixed: 'gap-2.5 rounded-lg px-3 py-2'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1',
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1'
 	},
 	{
 		id: 'dropdown-checkbox-item',
@@ -566,8 +570,8 @@ export const SURFACES = [
 		file: 'dropdown-menu/dropdown-menu-checkbox-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
-		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+		stock: 'min-h-7 gap-2 rounded-md py-1.5 pr-8 pl-2',
+		fixed: 'min-h-7 gap-2 rounded-lg py-1.5 pr-8 pl-2'
 	},
 	{
 		id: 'dropdown-radio-item',
@@ -575,8 +579,8 @@ export const SURFACES = [
 		file: 'dropdown-menu/dropdown-menu-radio-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
-		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+		stock: 'min-h-7 gap-2 rounded-md py-1.5 pr-8 pl-2',
+		fixed: 'min-h-7 gap-2 rounded-lg py-1.5 pr-8 pl-2'
 	},
 	{
 		id: 'dropdown-sub-trigger',
@@ -584,8 +588,8 @@ export const SURFACES = [
 		file: 'dropdown-menu/dropdown-menu-sub-trigger.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2 rounded-none px-3 py-2',
-		fixed: 'gap-2 rounded-lg px-3 py-2'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs',
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs'
 	},
 	{
 		id: 'context-content',
@@ -593,8 +597,8 @@ export const SURFACES = [
 		file: 'context-menu/context-menu-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-48 rounded-none p-1.5',
-		fixed: 'min-w-48 rounded-lg p-1.5'
+		stock: 'min-w-32 rounded-lg p-1 shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg p-1 shadow-md ring-1'
 	},
 	{
 		id: 'context-sub-content',
@@ -602,8 +606,8 @@ export const SURFACES = [
 		file: 'context-menu/context-menu-sub-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-32 rounded-none p-1.5',
-		fixed: 'min-w-32 rounded-lg p-1.5'
+		stock: 'min-w-32 rounded-lg p-1 shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg p-1 shadow-md ring-1'
 	},
 	{
 		id: 'context-item',
@@ -611,8 +615,8 @@ export const SURFACES = [
 		file: 'context-menu/context-menu-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none px-3 py-2',
-		fixed: 'gap-2.5 rounded-lg px-3 py-2'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1',
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1'
 	},
 	{
 		id: 'context-checkbox-item',
@@ -620,8 +624,8 @@ export const SURFACES = [
 		file: 'context-menu/context-menu-checkbox-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
-		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+		stock: 'min-h-7 gap-2 rounded-md py-1.5 pr-8 pl-2',
+		fixed: 'min-h-7 gap-2 rounded-lg py-1.5 pr-8 pl-2'
 	},
 	{
 		id: 'context-radio-item',
@@ -629,8 +633,8 @@ export const SURFACES = [
 		file: 'context-menu/context-menu-radio-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
-		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+		stock: 'min-h-7 gap-2 rounded-md py-1.5 pr-8 pl-2',
+		fixed: 'min-h-7 gap-2 rounded-lg py-1.5 pr-8 pl-2'
 	},
 	{
 		id: 'context-sub-trigger',
@@ -638,8 +642,8 @@ export const SURFACES = [
 		file: 'context-menu/context-menu-sub-trigger.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'rounded-none px-3 py-2 text-xs',
-		fixed: 'rounded-lg px-3 py-2 text-xs'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs',
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs'
 	},
 	{
 		id: 'menubar-root',
@@ -647,8 +651,8 @@ export const SURFACES = [
 		file: 'menubar/menubar.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'h-10 rounded-none border p-1',
-		fixed: 'h-10 rounded-lg border p-1'
+		stock: 'h-9 rounded-lg border p-1',
+		fixed: 'h-9 rounded-lg border p-1'
 	},
 	{
 		id: 'menubar-trigger',
@@ -656,8 +660,9 @@ export const SURFACES = [
 		file: 'menubar/menubar-trigger.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'aria-expanded:bg-muted rounded-none px-2 py-0.75',
-		fixed: 'aria-expanded:bg-muted rounded-lg px-2 py-0.75'
+		stock:
+			'aria-expanded:bg-muted rounded-[calc(var(--radius-md)_-_2px)] px-2 py-[calc(--spacing(0.85))]',
+		fixed: 'aria-expanded:bg-muted rounded-lg px-2 py-[calc(--spacing(0.85))]'
 	},
 	{
 		id: 'menubar-content',
@@ -665,8 +670,8 @@ export const SURFACES = [
 		file: 'menubar/menubar-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-48 rounded-none p-1.5',
-		fixed: 'min-w-48 rounded-lg p-1.5'
+		stock: 'min-w-32 rounded-lg p-1 shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg p-1 shadow-md ring-1'
 	},
 	{
 		id: 'menubar-sub-content',
@@ -674,8 +679,8 @@ export const SURFACES = [
 		file: 'menubar/menubar-sub-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'min-w-32 rounded-none p-1.5',
-		fixed: 'min-w-32 rounded-lg p-1.5'
+		stock: 'min-w-32 rounded-lg p-1 shadow-md ring-1',
+		fixed: 'min-w-32 rounded-lg p-1 shadow-md ring-1'
 	},
 	{
 		id: 'menubar-item',
@@ -683,8 +688,8 @@ export const SURFACES = [
 		file: 'menubar/menubar-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none px-3 py-2',
-		fixed: 'gap-2.5 rounded-lg px-3 py-2'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs/relaxed',
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs/relaxed'
 	},
 	{
 		id: 'menubar-checkbox-item',
@@ -692,8 +697,8 @@ export const SURFACES = [
 		file: 'menubar/menubar-checkbox-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none py-2 pr-3 pl-9.5',
-		fixed: 'gap-2.5 rounded-lg py-2 pr-3 pl-9.5'
+		stock: 'min-h-7 gap-2 rounded-md py-1.5 pr-2 pl-7.5',
+		fixed: 'min-h-7 gap-2 rounded-lg py-1.5 pr-2 pl-7.5'
 	},
 	{
 		id: 'menubar-radio-item',
@@ -701,8 +706,8 @@ export const SURFACES = [
 		file: 'menubar/menubar-radio-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2.5 rounded-none py-2 pr-3 pl-9.5',
-		fixed: 'gap-2.5 rounded-lg py-2 pr-3 pl-9.5'
+		stock: 'min-h-7 gap-2 rounded-md py-1.5 pr-2 pl-7.5',
+		fixed: 'min-h-7 gap-2 rounded-lg py-1.5 pr-2 pl-7.5'
 	},
 	{
 		id: 'menubar-sub-trigger',
@@ -710,8 +715,8 @@ export const SURFACES = [
 		file: 'menubar/menubar-sub-trigger.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'gap-2 rounded-none px-3 py-2',
-		fixed: 'gap-2 rounded-lg px-3 py-2'
+		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs',
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs'
 	},
 	{
 		id: 'sheet-content',
@@ -723,40 +728,13 @@ export const SURFACES = [
 		fixed: 'bg-popover text-popover-foreground rounded-lg fixed z-50'
 	},
 	{
-		id: 'drawer-bottom',
+		id: 'drawer-surface',
 		component: 'drawer',
 		file: 'drawer/drawer-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'data-[vaul-drawer-direction=bottom]:rounded-none',
-		fixed: 'data-[vaul-drawer-direction=bottom]:rounded-lg'
-	},
-	{
-		id: 'drawer-left',
-		component: 'drawer',
-		file: 'drawer/drawer-content.svelte',
-		role: 'box',
-		step: 'lg',
-		stock: 'data-[vaul-drawer-direction=left]:rounded-none',
-		fixed: 'data-[vaul-drawer-direction=left]:rounded-lg'
-	},
-	{
-		id: 'drawer-right',
-		component: 'drawer',
-		file: 'drawer/drawer-content.svelte',
-		role: 'box',
-		step: 'lg',
-		stock: 'data-[vaul-drawer-direction=right]:rounded-none',
-		fixed: 'data-[vaul-drawer-direction=right]:rounded-lg'
-	},
-	{
-		id: 'drawer-top',
-		component: 'drawer',
-		file: 'drawer/drawer-content.svelte',
-		role: 'box',
-		step: 'lg',
-		stock: 'data-[vaul-drawer-direction=top]:rounded-none',
-		fixed: 'data-[vaul-drawer-direction=top]:rounded-lg'
+		stock: 'before:absolute before:inset-2 before:-z-10 before:rounded-xl before:border',
+		fixed: 'before:absolute before:inset-2 before:-z-10 before:rounded-lg before:border'
 	},
 	{
 		id: 'drawer-handle',
@@ -764,8 +742,8 @@ export const SURFACES = [
 		file: 'drawer/drawer-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'shrink-0 rounded-none mx-auto hidden shrink-0',
-		fixed: 'shrink-0 rounded-lg mx-auto hidden shrink-0'
+		stock: 'mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-full',
+		fixed: 'mx-auto mt-4 hidden h-1.5 w-[100px] shrink-0 rounded-lg'
 	},
 	{
 		id: 'nav-content',
@@ -773,7 +751,7 @@ export const SURFACES = [
 		file: 'navigation-menu/navigation-menu-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'group-data-[viewport=false]/navigation-menu:rounded-none',
+		stock: 'group-data-[viewport=false]/navigation-menu:rounded-xl',
 		fixed: 'group-data-[viewport=false]/navigation-menu:rounded-lg'
 	},
 	{
@@ -782,7 +760,7 @@ export const SURFACES = [
 		file: 'navigation-menu/navigation-menu-viewport.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'ring-foreground/10 rounded-none shadow-md ring-1',
+		stock: 'ring-foreground/10 rounded-xl shadow-md ring-1',
 		fixed: 'ring-foreground/10 rounded-lg shadow-md ring-1'
 	},
 	{
@@ -791,8 +769,8 @@ export const SURFACES = [
 		file: 'navigation-menu/navigation-menu-link.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: `rounded-none p-3 text-sm transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-3.5 in-data-[slot=navigation-menu-content]:rounded-none`,
-		fixed: `rounded-lg p-3 text-sm transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-3.5 in-data-[slot=navigation-menu-content]:rounded-lg`
+		stock: `rounded-lg p-2 text-xs/relaxed transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 in-data-[slot=navigation-menu-content]:rounded-md`,
+		fixed: `rounded-lg p-2 text-xs/relaxed transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 in-data-[slot=navigation-menu-content]:rounded-lg`
 	},
 	{
 		id: 'nav-trigger',
@@ -800,8 +778,8 @@ export const SURFACES = [
 		file: 'navigation-menu/navigation-menu-trigger.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'data-popup-open:hover:bg-muted rounded-none px-4.5 py-2.5',
-		fixed: 'data-popup-open:hover:bg-muted rounded-lg px-4.5 py-2.5'
+		stock: 'data-popup-open:hover:bg-muted rounded-lg px-2.5 py-1.5',
+		fixed: 'data-popup-open:hover:bg-muted rounded-lg px-2.5 py-1.5'
 	},
 	{
 		id: 'command-root',
@@ -809,8 +787,10 @@ export const SURFACES = [
 		file: 'command/command.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'bg-popover text-popover-foreground flex size-full flex-col overflow-hidden',
-		fixed: 'bg-popover text-popover-foreground rounded-lg flex size-full flex-col overflow-hidden'
+		stock:
+			'bg-popover text-popover-foreground rounded-xl p-1 flex size-full flex-col overflow-hidden',
+		fixed:
+			'bg-popover text-popover-foreground rounded-lg p-1 flex size-full flex-col overflow-hidden'
 	},
 	{
 		id: 'command-item',
@@ -818,8 +798,10 @@ export const SURFACES = [
 		file: 'command/command-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: `gap-2 rounded-none px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-none`,
-		fixed: `gap-2 rounded-lg px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg`
+		stock:
+			'gap-2 rounded-md px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-md',
+		fixed:
+			'gap-2 rounded-lg px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg'
 	},
 	{
 		id: 'command-link-item',
@@ -827,8 +809,10 @@ export const SURFACES = [
 		file: 'command/command-link-item.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: `gap-2 rounded-none px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-none`,
-		fixed: `gap-2 rounded-lg px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg`
+		stock:
+			'gap-2 rounded-md px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-md',
+		fixed:
+			'gap-2 rounded-lg px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg'
 	},
 	{
 		id: 'hover-card-content',
@@ -836,8 +820,8 @@ export const SURFACES = [
 		file: 'hover-card/hover-card-content.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'ring-foreground/10 bg-popover text-popover-foreground w-72',
-		fixed: 'ring-foreground/10 bg-popover text-popover-foreground rounded-lg w-72'
+		stock: 'ring-foreground/10 bg-popover text-popover-foreground w-72 rounded-lg p-2.5',
+		fixed: 'ring-foreground/10 bg-popover text-popover-foreground w-72 rounded-lg p-2.5'
 	},
 	{
 		id: 'table-surface',
@@ -845,8 +829,8 @@ export const SURFACES = [
 		file: 'table/table.svelte',
 		role: 'box',
 		step: 'lg',
-		stock: 'cn("w-full caption-bottom text-sm"',
-		fixed: 'cn("w-full rounded-lg caption-bottom text-sm"'
+		stock: 'cn("w-full caption-bottom text-xs"',
+		fixed: 'cn("w-full rounded-lg caption-bottom text-xs"'
 	},
 	{
 		id: 'calendar-head-cell',
@@ -1017,7 +1001,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'text-destructive [a]:hover:text-destructive/70 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
+			'border border-destructive-text bg-destructive/10 text-destructive-text px-1.5 py-0.5 [a]:hover:bg-destructive/20 dark:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
 	},
 	{
 		component: 'badge',
@@ -1277,22 +1261,23 @@ const VARIANT_PINNED = {
 	button: {
 		default: 'bg-primary text-primary-foreground hover:bg-primary/80',
 		outline:
-			'border-border bg-transparent hover:bg-muted hover:text-foreground dark:hover:bg-input/30 aria-expanded:bg-muted aria-expanded:text-foreground',
+			'border-border dark:bg-input/30 hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground',
 		secondary:
 			'bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
 		ghost:
 			'hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground',
-		link: 'text-primary underline-offset-4 hover:underline underline'
+		link: 'text-primary underline-offset-4 hover:underline'
 	},
 	badge: {
-		default: 'text-foreground [a]:hover:text-foreground/70',
-		secondary: 'text-muted-foreground [a]:hover:text-foreground',
-		outline: 'text-foreground [a]:hover:text-foreground/70',
-		ghost: 'text-muted-foreground hover:text-foreground',
-		link: 'text-foreground underline-offset-4 hover:underline'
+		default: 'bg-primary text-primary-foreground [a]:hover:bg-primary/80',
+		secondary: 'bg-secondary text-secondary-foreground [a]:hover:bg-secondary/80',
+		outline:
+			'border-border text-foreground [a]:hover:bg-muted [a]:hover:text-muted-foreground bg-input/20 dark:bg-input/30',
+		ghost: 'hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50',
+		link: 'text-primary underline-offset-4 hover:underline'
 	},
 	alert: {
-		default: 'bg-card text-card-foreground after:bg-foreground'
+		default: 'bg-card text-card-foreground'
 	},
 	bubble: {
 		tinted:
@@ -1315,7 +1300,11 @@ const VARIANT_LAYOUT = {
 
 const VARIANT_STOCK_CLASS = {
 	button:
-		'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30'
+		'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/20 text-destructive focus-visible:border-destructive/40 dark:hover:bg-destructive/30',
+	badge:
+		'bg-destructive/10 [a]:hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive dark:bg-destructive/20',
+	alert:
+		'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current'
 };
 
 const keyToken = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);

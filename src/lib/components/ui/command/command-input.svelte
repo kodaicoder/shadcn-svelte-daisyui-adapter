@@ -12,13 +12,13 @@
 	}: CommandPrimitive.InputProps = $props();
 </script>
 
-<div data-slot="command-input-wrapper" class="p-1">
-	<InputGroup.Root class="bg-transparent border-transparent border-b-input px-3">
+<div data-slot="command-input-wrapper" class="p-1 pb-0">
+	<InputGroup.Root class="bg-input/20 dark:bg-input/30 h-8!">
 		<CommandPrimitive.Input
 			{value}
 			data-slot="command-input"
 			class={cn(
-				"w-full text-sm px-2 outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+				"w-full text-xs/relaxed outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
 				className
 			)}
 			{...restProps}

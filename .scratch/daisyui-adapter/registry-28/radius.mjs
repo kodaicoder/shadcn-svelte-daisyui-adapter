@@ -47,7 +47,7 @@ const RADIUS_DIRS = [...new Set(RADIUS.map((site) => site.file.split('/')[0]))];
 const FIXTURE = [...RADIUS_DIRS, 'radio-group', 'calendar', 'range-calendar'];
 const RADIUS_FILES = [...new Set(RADIUS.map((site) => site.file))];
 
-const scaffold = (dir, { components = FIXTURE, style = 'mira', shadcn = '1.7.1' } = {}) => {
+const scaffold = (dir, { components = FIXTURE, style = 'mira', shadcn = '1.8.0' } = {}) => {
 	rmSync(dir, { recursive: true, force: true });
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
 	cpSync(join(REPO, 'src', 'routes', 'layout.css'), join(dir, 'src', 'routes', 'layout.css'));
@@ -213,17 +213,19 @@ check(
 	'every step is sm, md or lg',
 	RADIUS.every((site) => ['sm', 'md', 'lg'].includes(site.step))
 );
+// A 1.8 stock that already holds the step is an assertion: the fixer reports it fixed and writes
+// nothing, so its stock and fixed are the same string on purpose.
+const unchanged = RADIUS.filter((site) => site.stock === site.fixed);
 check(
-	'every entry changes its stock string',
-	RADIUS.every((site) => site.stock !== site.fixed),
-	RADIUS.filter((site) => site.stock === site.fixed)
-		.map((site) => site.id)
-		.join(', ')
+	'every entry changes its stock string or already holds its step',
+	unchanged.every((site) => new RegExp(`rounded-${site.step}(?![\\w-])`).test(site.fixed)) &&
+		RADIUS.filter((site) => site.stock !== site.fixed).every((site) => site.stock.length > 0),
+	unchanged.map((site) => site.id).join(', ')
 );
 check(
-	'no fixed string is contained in its own stock string',
-	RADIUS.every((site) => !site.stock.includes(site.fixed)),
-	RADIUS.filter((site) => site.stock.includes(site.fixed))
+	'no changed entry hides its fixed inside its own stock',
+	RADIUS.every((site) => site.stock === site.fixed || !site.stock.includes(site.fixed)),
+	RADIUS.filter((site) => site.stock !== site.fixed && site.stock.includes(site.fixed))
 		.map((site) => site.id)
 		.join(', ')
 );

@@ -79,7 +79,7 @@
 		"prettier-plugin-svelte": "^4.1.0",
 		"prettier-plugin-tailwindcss": "^0.8.0",
 		"publint": "^0.3.21",
-		"shadcn-svelte": "^1.7.1",
+		"shadcn-svelte": "^1.8.0",
 		"shiki": "^3.23.0",
 		"storybook": "^10.6.4",
 		"svelte": "^5.57.1",

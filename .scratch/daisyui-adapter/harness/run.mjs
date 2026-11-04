@@ -103,6 +103,9 @@ const EVIDENCE = EVIDENCE_OPTION
 	: join(REPO, '.scratch', 'daisyui-adapter', 'harness', 'runs', STAMP);
 const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 const NODE = process.execPath;
+// Use the CLI version the repo pins, not a stale dlx cache of `latest`: the registry serves 1.8
+// content, and the 1.7 CLI cannot resolve the 1.8 icon placeholders.
+const SHADCN = `shadcn-svelte@${JSON.parse(readFileSync(join(REPO, 'node_modules', 'shadcn-svelte', 'package.json'), 'utf8')).version}`;
 
 const log = (msg) => console.log(`[harness] ${msg}`);
 const execOptions = (cmd, cwd) => ({
@@ -194,7 +197,7 @@ try {
 			'@tailwindcss/vite',
 			'@sveltejs/adapter-node',
 			'tw-animate-css',
-			'shadcn-svelte',
+			SHADCN,
 			'cn',
 			...fonts
 		],
@@ -256,11 +259,7 @@ export default defineConfig({
 
 	// 5. baseline components, proving `add` works before the adapter is involved
 	if (COMPONENTS.length > 0) {
-		const targets = await runCapture(
-			PNPM,
-			['dlx', 'shadcn-svelte@latest', 'add', ...COMPONENTS, '-y', '-o'],
-			APP
-		);
+		const targets = await runCapture(PNPM, ['dlx', SHADCN, 'add', ...COMPONENTS, '-y', '-o'], APP);
 		write(join(EVIDENCE, 'add-targets.log'), targets.output);
 		report.addTargetsExitCode = targets.code;
 		if (targets.code !== 0) {
@@ -268,7 +267,7 @@ export default defineConfig({
 		}
 		report.components = COMPONENTS;
 	} else {
-		run(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', 'button', '-y'], APP);
+		run(PNPM, ['dlx', SHADCN, 'add', 'button', '-y'], APP);
 	}
 	write(
 		join(APP, 'src', 'routes', '+page.svelte'),
@@ -327,11 +326,7 @@ export default defineConfig({
 		const pkgBefore = readFileSync(join(APP, 'package.json'), 'utf8');
 		// -o is required: an item carrying css/cssVars prompts to overwrite the
 		// stylesheet, and -y alone leaves that prompt waiting with piped stdio.
-		const added = await runCapture(
-			PNPM,
-			['dlx', 'shadcn-svelte@latest', 'add', ADD_URL, '-y', '-o'],
-			APP
-		);
+		const added = await runCapture(PNPM, ['dlx', SHADCN, 'add', ADD_URL, '-y', '-o'], APP);
 		write(join(EVIDENCE, 'add-install.log'), added.output);
 		report.addExitCode = added.code;
 		if (added.code !== 0) throw new Error(`add failed, see ${join(EVIDENCE, 'add-install.log')}`);

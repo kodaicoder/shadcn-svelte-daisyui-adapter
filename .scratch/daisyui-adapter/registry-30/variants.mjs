@@ -30,7 +30,7 @@ const check = (name, ok, detail) => {
 	console.log(`${ok ? 'ok  ' : 'FAIL'}  ${name}${detail ? ` :: ${detail}` : ''}`);
 };
 
-const scaffold = (dir, { components = ['button'], style = 'mira', shadcn = '1.7.1' } = {}) => {
+const scaffold = (dir, { components = ['button'], style = 'mira', shadcn = '1.8.0' } = {}) => {
 	rmSync(dir, { recursive: true, force: true });
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
 	cpSync(join(REPO, 'src', 'routes', 'layout.css'), join(dir, 'src', 'routes', 'layout.css'));

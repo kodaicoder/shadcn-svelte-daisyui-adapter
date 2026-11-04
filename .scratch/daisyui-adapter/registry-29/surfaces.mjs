@@ -46,7 +46,7 @@ const check = (name, ok, detail) => {
 const SURFACE_FILES = [...new Set(SURFACES.map((site) => site.file))];
 const FIXTURE = [...new Set([...SURFACE_COMPONENTS, ...COMPONENTS])];
 
-const scaffold = (dir, { components = FIXTURE, style = 'mira', shadcn = '1.7.1' } = {}) => {
+const scaffold = (dir, { components = FIXTURE, style = 'mira', shadcn = '1.8.0' } = {}) => {
 	rmSync(dir, { recursive: true, force: true });
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
 	cpSync(join(REPO, 'src', 'routes', 'layout.css'), join(dir, 'src', 'routes', 'layout.css'));
@@ -208,17 +208,18 @@ const none = SURFACES.filter((site) => site.fixed.includes('rounded-none')).map(
 check('no fixed string writes rounded-none', none.length === 0, none.join(', '));
 const full = SURFACES.filter((site) => site.fixed.includes('rounded-full')).map((site) => site.id);
 check('no fixed string writes rounded-full', full.length === 0, full.join(', '));
+// A 1.8 stock that already holds the box step is an assertion: the fixer reports it fixed and
+// writes nothing, so its stock and fixed are the same string on purpose.
+const unchanged = SURFACES.filter((site) => site.stock === site.fixed);
 check(
-	'every entry changes its stock string',
-	SURFACES.every((site) => site.stock !== site.fixed),
-	SURFACES.filter((site) => site.stock === site.fixed)
-		.map((site) => site.id)
-		.join(', ')
+	'every entry changes its stock string or already holds the box step',
+	unchanged.every((site) => site.fixed.includes('rounded-lg')),
+	unchanged.map((site) => site.id).join(', ')
 );
 check(
-	'no fixed string is contained in its own stock string',
-	SURFACES.every((site) => !site.stock.includes(site.fixed)),
-	SURFACES.filter((site) => site.stock.includes(site.fixed))
+	'no changed entry hides its fixed inside its own stock',
+	SURFACES.every((site) => site.stock === site.fixed || !site.stock.includes(site.fixed)),
+	SURFACES.filter((site) => site.stock !== site.fixed && site.stock.includes(site.fixed))
 		.map((site) => site.id)
 		.join(', ')
 );
@@ -236,7 +237,12 @@ const pinnedIndicator = readFileSync(
 	join(STOCK, 'navigation-menu', 'navigation-menu-indicator.svelte'),
 	'utf8'
 );
-check('the navigation menu indicator stays rounded-none', pinnedIndicator.includes('rounded-none'));
+// 1.8 moved the pointer to rounded-tl-sm; the table still excludes it, so the adapter leaves the
+// stock radius alone instead of forcing the box step onto the arrow.
+check(
+	'the navigation menu indicator keeps its own stock radius',
+	pinnedIndicator.includes('rounded-tl-sm')
+);
 check(
 	'the navigation menu indicator has no surface entry',
 	!SURFACES.some((site) => site.file.endsWith('navigation-menu-indicator.svelte')),

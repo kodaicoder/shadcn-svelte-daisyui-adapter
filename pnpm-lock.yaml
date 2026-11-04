@@ -43,7 +43,7 @@ importers:
         version: 10.6.4(@types/react@19.3.0)(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))
       '@storybook/addon-svelte-csf':
         specifier: latest
-        version: 5.1.5(@storybook/svelte@10.6.4(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
+        version: 5.1.6(@storybook/svelte@10.6.4(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))
       '@storybook/addon-vitest':
         specifier: ^10.6.4
         version: 10.6.4(@vitest/browser-playwright@4.1.12)(@vitest/browser@4.1.12)(react@19.3.1)(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(vitest@4.1.12)
@@ -129,8 +129,8 @@ importers:
         specifier: ^0.3.21
         version: 0.3.25
       shadcn-svelte:
-        specifier: ^1.7.1
-        version: 1.7.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))
+        specifier: ^1.8.0
+        version: 1.8.0(svelte@5.57.2(@typescript-eslint/types@8.72.0))
       shiki:
         specifier: ^3.23.0
         version: 3.23.0
@@ -176,6 +176,8 @@ importers:
       vitest-browser-svelte:
         specifier: ^2.1.1
         version: 2.2.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vitest@4.1.12)
+
+  packages/daisyui-adapter: {}
 
 packages:
 
@@ -1138,8 +1140,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@storybook/addon-svelte-csf@5.1.5':
-    resolution: {integrity: sha512-lYc9tyFIowXtd/hlapngtGhw6YUZMSU5KezHqJl84lRkahsNtmtqHl/mJjRRJG2ZQIWgw6xBUi4PvVvTxPwqzQ==}
+  '@storybook/addon-svelte-csf@5.1.6':
+    resolution: {integrity: sha512-Pzzfr9Lqx0p6a2IBVRlR3zIhA8usl46ADcSSHoe2cU1hICB2HqpDyukqXFSK1NFuTP53yDH99LBbl7drii9l4Q==}
     peerDependencies:
       '@storybook/svelte': ^0.0.0-0 || ^8.2.0 || ^9.0.0 || ^9.1.0-0 || ^10.0.0-0 || ^10.1.0-0 || ^10.2.0-0 || ^10.3.0-0 || ^10.4.0-0 || ^10.5.0-0 || ^10.6.0-0 || ^11.0.0-0
       '@sveltejs/vite-plugin-svelte': ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0
@@ -2889,8 +2891,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  shadcn-svelte@1.7.1:
-    resolution: {integrity: sha512-tkUavVtc+6E2snOd7CmHZYq5hi1v9oM3KT0ks6cgN5G4IykbIbt+1xDrSWb9ENUh8PWqeses4xJPqRgCzkzcMQ==}
+  shadcn-svelte@1.8.0:
+    resolution: {integrity: sha512-B9EEH85xYUdLP12Dyf6raqMbtOGLeg47wnSd7+dTCmWibO6jHZg85alBo0pQsJkAiQ8IolNU/5RBjyOxNl//HQ==}
     hasBin: true
     peerDependencies:
       svelte: ^5.0.0
@@ -4115,7 +4117,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react-dom'
 
-  '@storybook/addon-svelte-csf@5.1.5(@storybook/svelte@10.6.4(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))':
+  '@storybook/addon-svelte-csf@5.1.6(@storybook/svelte@10.6.4(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0)))(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(vite@8.3.5(@types/node@24.19.2)(esbuild@0.28.2)(jiti@2.7.0))':
     dependencies:
       '@storybook/csf': 0.1.13
       '@storybook/svelte': 10.6.4(storybook@10.6.4(@types/react@19.3.0)(prettier@3.9.10)(react@19.3.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))
@@ -5879,7 +5881,7 @@ snapshots:
 
   semver@7.8.5: {}
 
-  shadcn-svelte@1.7.1(svelte@5.57.2(@typescript-eslint/types@8.72.0)):
+  shadcn-svelte@1.8.0(svelte@5.57.2(@typescript-eslint/types@8.72.0)):
     dependencies:
       cn: 0.3.3
       commander: 14.0.3

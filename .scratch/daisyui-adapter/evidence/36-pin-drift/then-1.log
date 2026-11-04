@@ -1,0 +1,33 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/harness/prove.mjs D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/evidence/36-pin-drift
+exit 0
+{
+  "ok": true,
+  "init": {
+    "runs": 2,
+    "identical": true,
+    "sha": "eefddaf1771359e502339d137589a0d8a316f341032a3f261c6ad0a12611396d",
+    "sheetMissing": true,
+    "header": "/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 58 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */",
+    "counts": {
+      "stock": 58,
+      "fixed": 22,
+      "customized": 0,
+      "missing": 1
+    }
+  },
+  "lateAdd": {
+    "component": "sheet",
+    "file": "src/lib/components/ui/sheet/sheet-content.svelte",
+    "stockBefore": true,
+    "fixedAfter": true
+  },
+  "fix": {
+    "runs": 2,
+    "identical": true,
+    "sha": "21a97417923f79c71536d85187e82aa3d60805aff42e04dbcda2e0848bdbd6d0",
+    "checkExit": 0
+  }
+}
+
+(node:57748) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

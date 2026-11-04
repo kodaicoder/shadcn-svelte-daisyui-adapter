@@ -10,7 +10,7 @@ This package is not affiliated with shadcn-svelte or daisyUI. Both names are use
 
 ## Prerequisites
 
-- A SvelteKit project with `shadcn-svelte` 1.7.x set up through step 4 of its guide.
+- A SvelteKit project with `shadcn-svelte` 1.8.x set up through step 4 of its guide.
 - `components.json` at the project root, with `tailwind.css` pointing at the project's global stylesheet (`src/routes/layout.css` on SvelteKit 3, `src/app.css` on older projects). The CLI reads that path on every run and never hardcodes it.
 - That stylesheet imported by the root layout.
 - `src/daisyui-theme.css` holding one light and one dark block from the [daisyUI theme generator](https://daisyui.com/theme-generator/). Copy the blocks as they are, including the `@plugin "daisyui/theme"` prelude.
@@ -71,9 +71,9 @@ pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 fix dialog
 
 The fixer reads four states per replacement site: `missing`, `stock`, `fixed` and `customized`. It patches a `stock` site, leaves a `fixed` site, reports a `customized` site, and still applies the other sites in the same file. A second run is byte-identical.
 
-`--dry-run` reports without writing. `--check` exits 1 only while a stock site remains. A fixed, customized or never-added component does not fail it. `--strict` exits 1 on a customized site or on a component you named that has no files. A target you never added is not an error.
+`--dry-run` reports without writing. `--check` exits 1 only while a stock site remains. A fixed, customized or never-added component does not fail it. `--strict` exits 1 on a customized site or on a component you named that has no files. A target you never added is not an error. A radius or surface site whose 1.8 stock already holds the role step is reported `fixed` without a write, so `--check` still fails if a hand edit moves it off the step.
 
-The fixer reads the installed shadcn-svelte version and refuses one outside 1.7.x with a clear message, exiting 1 before the report. An unreadable version warns and continues, because `dlx` often leaves no dependency entry. The style label is not checked. An unmatched style only reports `customized`.
+The fixer reads the installed shadcn-svelte version and refuses one outside 1.8.x with a clear message, exiting 1 before the report. An unreadable version warns and continues, because `dlx` often leaves no dependency entry. The style label is not checked. An unmatched style only reports `customized`.
 
 An unknown target name exits non-zero and lists the known targets. With no target component present, `init` maps the stylesheet, prints `no target components found; nothing to fix` and exits 0.
 
@@ -119,7 +119,7 @@ The components keep one `variant` prop. Every combined value is a literal key.
 
 Button gains `success`, `warning` and `info` as filled buttons with the text-tone border, `destructive` as a filled button with the same border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys paint the text tone as text and border.
 
-Badge gains `success`, `warning` and `info` as filled chips with the text-tone border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys are border-only chips. The destructive badge stays the stock text badge.
+Badge gains `success`, `warning` and `info` as filled chips with the text-tone border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys are border-only chips. The destructive badge is a `bg-destructive/10` chip with the text-tone border and text.
 
 Bubble gains `success`, `warning` and `info` as filled bubbles with the text-tone border, plus `outline-*` and `ghost-*` for the four tones. It has no link presentation. The destructive bubble stays the stock tint.
 
@@ -138,7 +138,7 @@ The CLI does not create `daisyui-adapter.overrides.css` and does not write its i
 To use overrides, create `daisyui-adapter.overrides.css` beside the global stylesheet, then add this line after the other `@import` lines and before the generated `:root` and `.dark` blocks:
 
 ```css
-@import "./daisyui-adapter.overrides.css";
+@import './daisyui-adapter.overrides.css';
 ```
 
 The CLI never writes or deletes the file. If the project installed 0.1.0, the file and the import already exist. Keep them if you use them, or delete both if you do not.

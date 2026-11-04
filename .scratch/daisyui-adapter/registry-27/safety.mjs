@@ -42,7 +42,7 @@ const check = (name, ok, detail) => {
 
 const scaffold = (
 	dir,
-	{ components = COMPONENTS, style = 'mira', shadcn = '1.7.1', stub = true, dependency } = {}
+	{ components = COMPONENTS, style = 'mira', shadcn = '1.8.0', stub = true, dependency } = {}
 ) => {
 	rmSync(dir, { recursive: true, force: true });
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
@@ -146,8 +146,8 @@ check(
 	JSON.stringify(Object.keys(SUPPORTED))
 );
 check(
-	'TARGETS.supported pins major 1 minor 7',
-	SUPPORTED.version.major === 1 && SUPPORTED.version.minor === 7,
+	'TARGETS.supported pins major 1 minor 8',
+	SUPPORTED.version.major === 1 && SUPPORTED.version.minor === 8,
 	`${SUPPORTED.version.major}.${SUPPORTED.version.minor}`
 );
 check(
@@ -192,8 +192,8 @@ check(
 		readSiteFile(vegaShaped, SITES[10]).includes(SITES[10].fixed)
 );
 check(
-	'a vega-shaped run counts twenty-eight fully fixed files',
-	headerLines(vegaShapedCss)[0]?.startsWith(headerFor(28)),
+	'a vega-shaped run counts twenty-nine fully fixed files',
+	headerLines(vegaShapedCss)[0]?.startsWith(headerFor(29)),
 	headerLines(vegaShapedCss)[0]
 );
 const vegaShapedCheck = cliResult(vegaShaped, 'fix', '--check');
@@ -210,14 +210,14 @@ check(
 );
 
 const future = join(WORK, 'future-version');
-scaffold(future, { shadcn: '1.8.0' });
+scaffold(future, { shadcn: '1.9.0' });
 const futureBefore = snapshot(future);
 const futureRun = cliResult(future, 'fix');
 check(
 	'an unsupported version exits 1 and names it',
 	futureRun.code === 1 &&
-		futureRun.out.includes('unsupported shadcn-svelte version 1.8.0') &&
-		futureRun.out.includes('1.7.x'),
+		futureRun.out.includes('unsupported shadcn-svelte version 1.9.0') &&
+		futureRun.out.includes('1.8.x'),
 	`exit ${futureRun.code}`
 );
 check(
@@ -230,13 +230,13 @@ scaffold(futureFixed);
 cli(futureFixed);
 writeFileSync(
 	join(futureFixed, 'node_modules', 'shadcn-svelte', 'package.json'),
-	JSON.stringify({ name: 'shadcn-svelte', version: '1.8.0' }, null, '\t')
+	JSON.stringify({ name: 'shadcn-svelte', version: '1.9.0' }, null, '\t')
 );
 const futureFixedCheck = cliResult(futureFixed, 'fix', '--check');
 check(
 	'a version refusal beats a passing check',
 	futureFixedCheck.code === 1 &&
-		futureFixedCheck.out.includes('unsupported shadcn-svelte version 1.8.0'),
+		futureFixedCheck.out.includes('unsupported shadcn-svelte version 1.9.0'),
 	`exit ${futureFixedCheck.code}`
 );
 
@@ -255,7 +255,7 @@ check(
 );
 
 const rangeVersion = join(WORK, 'range-version');
-scaffold(rangeVersion, { stub: false, dependency: '^1.7.1' });
+scaffold(rangeVersion, { stub: false, dependency: '^1.8.0' });
 const rangeVersionRun = cliResult(rangeVersion, 'fix');
 check(
 	'a supported dependency range with no node_modules entry exits 0',

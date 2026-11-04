@@ -13,8 +13,11 @@ if (!process.argv[2]) throw new Error('usage: node prove.mjs <evidence dir>');
 const APP = process.cwd();
 const EVIDENCE = resolve(process.argv[2]);
 const HARNESS = import.meta.dirname;
+const REPO = resolve(HARNESS, '..', '..', '..');
 const CLI = resolve(HARNESS, '..', '..', '..', 'packages', 'daisyui-adapter', 'cli', 'init.mjs');
 const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+// The same CLI version the harness installs, read from the repo's pin.
+const SHADCN = `shadcn-svelte@${JSON.parse(readFileSync(join(REPO, 'node_modules', 'shadcn-svelte', 'package.json'), 'utf8')).version}`;
 
 const report = { ok: false };
 
@@ -51,15 +54,12 @@ if (tarballs.length !== 1) {
 	throw new Error(`expected one *.tgz in ${APP}, found ${tarballs.length}: ${tarballs.join(', ')}`);
 }
 const SPEC = `./${tarballs[0]}`;
-if (!process.env.COMPONENTS_REGISTRY_URL) {
-	throw new Error('prove.mjs needs COMPONENTS_REGISTRY_URL pointing at the pin registry');
-}
 
 const components = readComponents();
 if (!components.tailwind?.css) throw new Error('components.json has no tailwind.css path');
 const STYLESHEET = resolve(APP, components.tailwind.css);
 const SHEET = join(APP, 'src', 'lib', 'components', 'ui', 'sheet', 'sheet-content.svelte');
-const STOCK_SHEET = 'class="absolute top-4 right-4 bg-secondary"';
+const STOCK_SHEET = 'class="absolute top-4 right-4"';
 const FIXED_SHEET = 'class="absolute top-4 right-4 bg-muted"';
 
 const walk = (dir) =>
@@ -125,7 +125,7 @@ try {
 		counts: counts(init1.output)
 	};
 
-	const add = execute(PNPM, ['dlx', 'shadcn-svelte@latest', 'add', 'sheet', '-y', '-o'], {
+	const add = execute(PNPM, ['dlx', SHADCN, 'add', 'sheet', '-y', '-o'], {
 		...process.env
 	});
 	write('05-late-add.log', `${add.stdout ?? ''}${add.stderr ?? ''}`.trim());
