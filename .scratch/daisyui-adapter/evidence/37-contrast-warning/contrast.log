@@ -1,0 +1,10 @@
+{
+  "ok": true,
+  "findings": [
+    "dark: success filled text is 3.49:1 against its fill; the theme's own success-content sets this pair",
+    "dark: warning filled text is 1.85:1 against its fill; the theme's own warning-content sets this pair",
+    "dark: info filled text is 3.49:1 against its fill; the theme's own info-content sets this pair"
+  ],
+  "failures": []
+}
+exit 0

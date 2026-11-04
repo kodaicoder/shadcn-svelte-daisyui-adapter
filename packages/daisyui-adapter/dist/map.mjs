@@ -66,7 +66,7 @@ export const SINGLE = {
 
 // A text tone is a status tone mixed toward the page foreground, because the raw tone reads below AA as
 // text and stays the fill.
-const TEXT_TONE = {
+export const TEXT_TONE = {
 	'success-text': ['success', 40, 'foreground', 60],
 	'warning-text': ['warning', 40, 'foreground', 60],
 	'info-text': ['info', 40, 'foreground', 60],

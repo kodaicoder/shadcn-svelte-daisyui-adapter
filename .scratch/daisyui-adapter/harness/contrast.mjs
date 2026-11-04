@@ -10,7 +10,6 @@ import { TOKEN_FALLBACKS } from '../../../packages/daisyui-adapter/dist/map.mjs'
 import { parseTheme } from '../../../packages/daisyui-adapter/dist/index.mjs';
 import {
 	BORDER_THRESHOLD,
-	REFERENCE,
 	SELECTORS,
 	TEXT_THRESHOLD,
 	TONES,
@@ -20,7 +19,20 @@ import {
 	over,
 	parseOklch,
 	parseRgb
-} from './matrix.mjs';
+} from '../../../packages/daisyui-adapter/dist/contrast.mjs';
+
+// The published 0.01 values stay on unrounded oklchToSrgb, so the reference rows pin the theme's
+// own numbers rather than the bytes a painted snapshot rounds them to.
+const REFERENCE = {
+	light: {
+		text: { success: 8.3, warning: 6.91, info: 8.24, destructive: 13.49 },
+		fill: { success: 2.52, warning: 1.95, info: 2.22 }
+	},
+	dark: {
+		text: { success: 11.28, warning: 13.0, info: 11.88, destructive: 8.24 },
+		fill: { destructive: 2.89 }
+	}
+};
 
 const [renderPath, themePath, evidenceDir] = process.argv.slice(2);
 if (!renderPath || !themePath || !evidenceDir) {

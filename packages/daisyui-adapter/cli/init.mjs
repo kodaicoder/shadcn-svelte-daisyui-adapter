@@ -26,6 +26,14 @@ import {
 	textToneValue
 } from '../dist/map.mjs';
 import { chartTokens, solveScheme } from '../dist/ramp.mjs';
+import {
+	BORDER_THRESHOLD,
+	TEXT_THRESHOLD,
+	WARNING_KIND,
+	contrastKnownLimits,
+	contrastMatrix,
+	contrastWarnings
+} from '../dist/contrast.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
 import { fix, scan } from '../component-fix.mjs';
 
@@ -308,6 +316,68 @@ const updateHeader = (cssPath, report) => {
 	if (next !== raw) writeFileSync(cssPath, next);
 };
 
+const warningSuffix = (warning) => {
+	if (warning.kind === WARNING_KIND.fillText) {
+		return `; the theme's own ${warning.tone}-content sets this pair`;
+	}
+	if (warning.kind === WARNING_KIND.border) {
+		return '; the text-tone border is the component boundary';
+	}
+	return '';
+};
+
+const printContrast = (matrix) => {
+	for (const scheme of ['light', 'dark']) {
+		const rows = matrix[scheme];
+		console.log(
+			`[daisyui-adapter] contrast ${scheme} ` +
+				`(text ${TEXT_THRESHOLD.toFixed(2)}, border ${BORDER_THRESHOLD.toFixed(2)})`
+		);
+		console.log(
+			`[daisyui-adapter]   pairs: ${rows.pairs
+				.map((row) => `${row.name} ${row.ratio.toFixed(2)}`)
+				.join(', ')}`
+		);
+		console.log(
+			`[daisyui-adapter]   text tones: ${rows.textTones
+				.map((row) => `${row.tone} ${row.ratio.toFixed(2)}`)
+				.join(', ')}`
+		);
+		console.log(
+			`[daisyui-adapter]   filled: ${rows.filled
+				.map(
+					(row) =>
+						`${row.tone} text ${row.text.toFixed(2)} border ${row.border.toFixed(2)} ` +
+						`fill ${row.fill.toFixed(2)}${row.fillKnownLimit ? ' known limit' : ''}`
+				)
+				.join(', ')}`
+		);
+	}
+	for (const limit of contrastKnownLimits(matrix)) {
+		console.warn(
+			`[daisyui-adapter] known limit: ${limit.scheme} ${limit.name} is ` +
+				`${limit.ratio.toFixed(2)}:1 against the page, below ${BORDER_THRESHOLD.toFixed(2)}:1; ` +
+				'the text-tone border is the component boundary'
+		);
+	}
+	for (const warning of contrastWarnings(matrix)) {
+		console.warn(
+			`[daisyui-adapter] warning: ${warning.scheme} ${warning.name} is ` +
+				`${warning.ratio.toFixed(2)}:1, below ${warning.threshold.toFixed(2)}:1${warningSuffix(warning)}`
+		);
+	}
+};
+
+const measureContrast = (themes) => {
+	try {
+		return { matrix: contrastMatrix(themes) };
+	} catch (error) {
+		const message = String(error.message ?? error);
+		if (!message.includes('is not an oklch() colour')) throw error;
+		return { error: message.replace(/^\[daisyui-adapter\]\s*/, '') };
+	}
+};
+
 const init = () => {
 	const components = readComponents();
 	if (!components.tailwind?.css) {
@@ -345,6 +415,9 @@ const init = () => {
 	const chart = themes
 		? { light: solveScheme(themes.light), dark: solveScheme(themes.dark) }
 		: null;
+	// Measured before the write. A theme value the math cannot read is a warning, not a failure,
+	// because the mapping still writes and the project still renders.
+	const contrast = themes ? measureContrast(themes) : null;
 
 	css = replaceBlock(
 		css,
@@ -398,6 +471,11 @@ const init = () => {
 			);
 		}
 	}
+
+	if (contrast?.matrix) printContrast(contrast.matrix);
+	else if (contrast?.error) {
+		console.warn(`[daisyui-adapter] warning: ${contrast.error}; matrix not measured`);
+	} else console.log('[daisyui-adapter] contrast: no theme, matrix not measured');
 };
 
 const FLAGS = new Set(['--dry-run', '--check', '--strict']);

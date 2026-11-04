@@ -1,0 +1,16 @@
+┌  [48;2;255;85;0m[30m shadcn-svelte [39m[49m[90m v1.8.0 [39m
+│
+◇  Components to install:
+│  [90msheet[39m
+[?25l│
+◇  [1m[36msheet[39m[22m installed at [90msrc\lib\components\ui\sheet[39m
+[?25h[?25l│
+◇  [1m[36mbutton[39m[22m installed at [90msrc\lib\components\ui\button[39m
+[?25h│
+◇  Installing dependencies with pnpm...
+[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[G[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[1A[2K[G│
+◆  Successfully installed dependencies
+│
+└  [32mSuccess![39m Components added.
+
+Done in 1s using pnpm v12.9.1

@@ -24,7 +24,7 @@ The header marker now records the fixer state:
 
 `n` is the number of component files whose every replacement site is `fixed`, not the files changed in the run. A mixed file is reported and not counted, and a map-only run records `components 0 fixed`. A no-op `fix` keeps `n`, so the re-run stays byte-identical.
 
-Ten contrast pairs are repaired: the dialog and sheet close buttons, the calendar and range hover, the range middle, the three destructive menu shortcuts, the chart tooltip and the muted bubble. The filled status and destructive button rows use the text-tone border as the component boundary, because the fill alone is below 3:1 against the page.
+Ten contrast pairs are repaired: the dialog and sheet close buttons, the calendar and range hover, the range middle, the three destructive menu shortcuts, the chart tooltip and the muted bubble. The filled status and destructive button rows use the text-tone border as the component boundary, because the fill alone is below 3:1 against the page. `init` now measures the matrix from the parsed theme and prints every pair, text tone and filled row for both schemes. A text pair below 4.5:1 or a component boundary below 3:1 warns without failing the run, and a fill below 3:1 against the page is reported as a known limit.
 
 The visual check uses the repo harness screenshots in light and dark plus a short checklist: the ten repaired pairs, the four tones in every presentation, the filled border, the radius on the button, card and input, and the destructive base. Storybook is not part of this release.
 

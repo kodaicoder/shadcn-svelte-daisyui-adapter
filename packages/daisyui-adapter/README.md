@@ -58,6 +58,8 @@ The ten sites the project never added each print a `missing` line above the summ
 
 The count above the fix report is read back from the written file, so a missing row shows a number below 43. A second run prints `already installed` instead of installing again. A run on a stylesheet from an older version prints `upgrading <old> -> 0.3.0` before the rest. With a theme, two chart lines follow the install line and report the solved lightness ramp and the minimum adjacent difference.
 
+With a theme, `init` also measures the contrast matrix from the parsed theme and prints it: the ten repaired pairs, the four text tones and the four filled rows for each scheme. A text pair below 4.5:1, or a component boundary below 3:1, prints a warning that names the pair and the ratio, and the exit code stays 0. A fill below 3:1 against the page prints as a known limit, because the text-tone border is the component boundary.
+
 A missing theme file is a warning, not a failure. The CLI prints `E1`, writes the bindings with your own values as fallbacks, and the build renders the project's palette. A malformed theme file exits non-zero with `E2` or `E3`, because a wrong pair would render wrong colours silently. When the header names a newer version than the CLI, the CLI prints `E4`, exits non-zero and writes nothing, because an older CLI would undo bindings a newer one wrote.
 
 ## Fixing components after the first run

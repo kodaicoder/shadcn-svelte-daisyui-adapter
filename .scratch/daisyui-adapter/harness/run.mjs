@@ -44,7 +44,7 @@ import {
 import { join, relative, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { startRegistry, startStatic, stopRegistry, REGISTRY_PORT } from './registry.mjs';
-import { SELECTORS as MATRIX_SELECTORS } from './matrix.mjs';
+import { SELECTORS as CONTRAST_SELECTORS } from '../../../packages/daisyui-adapter/dist/contrast.mjs';
 import { buildPinRegistry } from './pin-registry.mjs';
 
 const execFileAsync = promisify(execFile);
@@ -414,7 +414,7 @@ export default defineConfig({
 		} catch {}
 	}
 	if (!ready) throw new Error('dev server never answered');
-	const selectorList = SELECTORS || (CONTRAST ? MATRIX_SELECTORS : '');
+	const selectorList = SELECTORS || (CONTRAST ? CONTRAST_SELECTORS : '');
 	const shot = run(NODE, [join(HARNESS, 'shot.mjs'), url, EVIDENCE, PROPS, selectorList], REPO);
 	write(join(EVIDENCE, 'render.json'), shot);
 	report.render = JSON.parse(shot);
