@@ -123,5 +123,5 @@ not measured.
   a browser, and the operator's visual check follows it.
 - Open: the pinned `destructive` and the neutral `outline` stay text-only. Restyling them needs a badge site
   layout that does not share bytes with the block anchor, which is its own ticket.
-- Commit: `fix(adapter): give the badge status variants their border`, annotated tag
+- Commit: `2bd8ce1` `fix(adapter): give the badge status variants their border`, annotated tag
   `t35-badge-status-borders` on that commit.

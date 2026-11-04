@@ -2,7 +2,7 @@
 Session IDs: ses_e5b9347ceffesVUlciF14SLLUW
 Lesson: An "outline" presentation was modelled as a text colour on a `border-0` base, so the shape the name promises was absent and the tests asserted tokens instead of the shape.
 Check: code - `.scratch/daisyui-adapter/registry-31/variants.mjs`: 82 checks, including four badge chip checks that tokenise the class, strip variant prefixes, and require `border`, `border-<tone>-text` and `px-1.5 py-0.5` on the four outline rows and the three filled status rows, and no border or padding on the ghost, link and pinned destructive rows; `registry-16` stays at 139 checks, `registry-26` at 100, `registry-27` at 64, `registry-28` at 71, `registry-29` at 45, `registry-30` at 43 and the drift test at 8.
-Closeout:
+Closeout: 2bd8ce1 (tag t35-badge-status-borders)
 
 **What to build:** The badge status keys read as chips. `outline-<tone>` is a border-only chip in the tone border, and the filled status keys carry the fill plus the tone border, so the presentation matches spec L21 and L71 on the one badge base that can hold a box.
 
