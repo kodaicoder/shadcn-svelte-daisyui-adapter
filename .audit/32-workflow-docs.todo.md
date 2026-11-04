@@ -89,6 +89,6 @@ Stays 0.3.0. The README examples, the pack filename and the install command move
 - Version check: `package.json` 0.3.0; the generated `headerFor(0)` string is in the README; the install command in the README names `@kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0`. No 0.2.0 remains in the README.
 - Seams: `registry-16` 139, `registry-26` 100, `registry-27` 64, `registry-28` 71, `registry-29` 45, `registry-30` 43, `registry-31` 82, drift 8. No expectation moved, because no seam reads the README or the CHANGELOG.
 - Scope: no dependency added, no `src/lib/components/ui` edit, no `PAIRS` change, no version bump, no change to `cli/init.mjs` or its marker and flag behavior.
-- Commit: `docs(adapter): document the 0.3.0 workflow` (SHA recorded after the commit).
-- Tag: annotated `t32-workflow-docs` on that commit.
+- Commit: `40086db` `docs(adapter): document the 0.3.0 workflow`.
+- Tag: annotated `t32-workflow-docs` on `40086db`.
 - Not merged to `develop`.

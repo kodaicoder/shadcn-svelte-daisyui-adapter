@@ -2,7 +2,7 @@
 Session IDs: ses_e5b5cfdebffeqGqeFL989VZU7q
 Lesson: Documentation sits outside every seam, so a release that changes behavior and counts leaves the shipped install contract at the previous version until a reader follows it.
 Check: process - ticket 34's release DoD verifies the changelog and version match, and `.audit/32-workflow-docs.todo.md` records the header/version check and the eight seam counts.
-Closeout:
+Closeout: 40086db (tag t32-workflow-docs)
 
 **What to build:** The install contract and the docs describe the `add` prerequisite and the `init`/`fix` order, and the version and header marker are 0.3.0.
 
