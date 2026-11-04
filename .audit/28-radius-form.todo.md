@@ -175,4 +175,6 @@ release. The delegate runs no git command; it writes `git diff` output to
   `comment-sicko` was not spawned because it hung in ticket 27.
 - Verification: registry-28 71 checks, registry-26 100, registry-27 64, registry-16 139, drift 8,
   all exit 0. Prettier clean on the five source files.
-- Commit: `feat(adapter): round the form controls`, annotated tag `t28-radius-form`.
+- Commit: `293d69f` `feat(adapter): round the form controls`, annotated tag `t28-radius-form` on that
+  commit, branch and tag pushed to `origin`. Temp fixtures, the mutation copies and the review diff
+  were removed after the close.
