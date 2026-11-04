@@ -3,11 +3,19 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { isAbsolute, join, resolve } from 'node:path';
 
-import { COMPONENTS, KNOWN_COMPONENTS, PAIRS, RADIUS, SITES, SUPPORTED } from './targets.mjs';
+import {
+	COMPONENTS,
+	KNOWN_COMPONENTS,
+	PAIRS,
+	RADIUS,
+	SITES,
+	SUPPORTED,
+	SURFACES
+} from './targets.mjs';
 
 export { COMPONENTS, PAIRS, SITES, SUPPORTED };
 
-const ALL_SITES = [...SITES, ...RADIUS];
+const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES];
 
 // A `#` alias is a package.json subpath import and can point anywhere, so the project's own
 // `imports` map wins over the convention below. `$lib` is SvelteKit's fixed lib alias; `@/` and

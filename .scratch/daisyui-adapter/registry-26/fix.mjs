@@ -11,6 +11,7 @@ import {
 	SITES,
 	uiDirectory
 } from '../../../packages/daisyui-adapter/component-fix.mjs';
+import { SURFACES } from '../../../packages/daisyui-adapter/targets.mjs';
 
 const HERE = import.meta.dirname;
 const REPO = resolve(HERE, '..', '..', '..');
@@ -70,10 +71,13 @@ const uiOf = (dir) =>
 const pathOf = (dir, site) => join(uiOf(dir), ...site.file.split('/'));
 const readSiteFile = (dir, site) => readFileSync(pathOf(dir, site), 'utf8');
 
-const FILES = [...new Set(SITES.map((site) => site.file))];
+const FILES = [...new Set([...SITES, ...SURFACES].map((site) => site.file))];
 const digest = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const snapshot = (dir) =>
-	FILES.map((file) => `${file}:${digest(join(uiOf(dir), ...file.split('/')))}`);
+	FILES.map((file) => {
+		const path = join(uiOf(dir), ...file.split('/'));
+		return `${file}:${existsSync(path) ? digest(path) : 'absent'}`;
+	});
 
 const cli = (dir, ...args) =>
 	execFileSync(process.execPath, [CLI, ...args], { cwd: dir, encoding: 'utf8', stdio: 'pipe' });
@@ -174,15 +178,15 @@ const freshRun = cliResult(fresh);
 const freshSites = parseSites(freshRun.out);
 check('init with components present exits 0', freshRun.code === 0, `exit ${freshRun.code}`);
 check('init still writes 43 declarations per block', freshRun.out.includes('43 light, 43 dark'));
-check('init reports every site', freshSites.length === 11, `${freshSites.length}`);
+check('init reports every site', freshSites.length === 38, `${freshSites.length}`);
 check(
 	'init finds every site stock and writes it',
 	freshSites.every((site) => site.state === 'stock' && site.written)
 );
 check(
-	'init totals eleven stock',
+	'init totals thirty-eight stock',
 	TOTALS.test(freshRun.out) &&
-		freshRun.out.includes('fix: 11 stock, 0 fixed, 0 customized, 0 missing')
+		freshRun.out.includes('fix: 38 stock, 0 fixed, 0 customized, 0 missing')
 );
 check(
 	'the report path is forward-slash relative',
@@ -218,12 +222,12 @@ const secondSites = parseSites(secondRun.out);
 check('a second fix exits 0', secondRun.code === 0, `exit ${secondRun.code}`);
 check(
 	'a second fix finds every site fixed and writes nothing',
-	secondSites.length === 11 && secondSites.every((site) => site.state === 'fixed' && !site.written)
+	secondSites.length === 38 && secondSites.every((site) => site.state === 'fixed' && !site.written)
 );
 check(
-	'a second fix totals eleven fixed',
+	'a second fix totals thirty-eight fixed',
 	TOTALS.test(secondRun.out) &&
-		secondRun.out.includes('fix: 0 stock, 11 fixed, 0 customized, 0 missing')
+		secondRun.out.includes('fix: 0 stock, 38 fixed, 0 customized, 0 missing')
 );
 check('a second fix is byte-identical', snapshot(fresh).join('\n') === fixedSnapshot.join('\n'));
 
@@ -265,13 +269,13 @@ const drySites = parseSites(dryRun.out);
 check('a dry run exits 0', dryRun.code === 0, `exit ${dryRun.code}`);
 check(
 	'a dry run reports every site stock and unwritten',
-	drySites.length === 11 &&
+	drySites.length === 38 &&
 		drySites.every((site) => site.state === 'stock' && !site.written && site.dryRun)
 );
 check(
 	'a dry run totals with the dry-run note',
 	TOTALS.test(dryRun.out) &&
-		dryRun.out.includes('fix: 11 stock, 0 fixed, 0 customized, 0 missing; dry run, nothing written')
+		dryRun.out.includes('fix: 38 stock, 0 fixed, 0 customized, 0 missing; dry run, nothing written')
 );
 check(
 	'a dry run leaves every file byte-identical',
@@ -284,8 +288,8 @@ const oneBefore = snapshot(one);
 const oneRun = cliResult(one, 'fix', 'dialog');
 const oneSites = parseSites(oneRun.out);
 check(
-	'fix dialog runs one site',
-	oneSites.length === 1 && oneSites[0].id === 'dialog-close' && oneSites[0].written,
+	'fix dialog runs two sites',
+	oneSites.length === 2 && oneSites[0].id === 'dialog-close' && oneSites[0].written,
 	oneSites.map((site) => site.id).join(', ')
 );
 const oneAfter = snapshot(one);
@@ -299,7 +303,10 @@ check(
 	'fix dialog leaves the other stock strings in place',
 	SITES.filter((site) => site.component !== 'dialog').every((site) =>
 		readSiteFile(one, site).includes(site.stock)
-	)
+	) &&
+		SURFACES.filter(
+			(site) => site.component !== 'dialog' && COMPONENTS.includes(site.component)
+		).every((site) => readSiteFile(one, site).includes(site.stock))
 );
 check(
 	'fix dialog patches the close button',
@@ -417,7 +424,7 @@ const customRun = cliResult(custom, 'fix');
 const customSites = parseSites(customRun.out);
 check(
 	'every site is fixed under a custom alias',
-	customSites.length === 11 && customSites.every((site) => site.state === 'stock' && site.written)
+	customSites.length === 38 && customSites.every((site) => site.state === 'stock' && site.written)
 );
 check(
 	'the custom alias is patched',
@@ -463,7 +470,7 @@ check(
 );
 check(
 	'a second init reports every site fixed',
-	twiceSites.length === 11 && twiceSites.every((site) => site.state === 'fixed' && !site.written)
+	twiceSites.length === 38 && twiceSites.every((site) => site.state === 'fixed' && !site.written)
 );
 
 // WCAG 2.x relative luminance and sRGB transfer.

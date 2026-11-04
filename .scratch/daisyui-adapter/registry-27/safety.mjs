@@ -18,6 +18,7 @@ import {
 	PAIRS,
 	SITES,
 	SUPPORTED,
+	SURFACES,
 	TARGETS
 } from '../../../packages/daisyui-adapter/targets.mjs';
 
@@ -93,7 +94,7 @@ const readSiteFile = (dir, site) => readFileSync(pathOf(dir, site), 'utf8');
 const replaceIn = (path, from, to) =>
 	writeFileSync(path, readFileSync(path, 'utf8').replace(from, to));
 
-const FILES = [...new Set(SITES.map((site) => site.file))];
+const FILES = [...new Set([...SITES, ...SURFACES].map((site) => site.file))];
 const digest = (path) => createHash('sha256').update(readFileSync(path)).digest('hex');
 const snapshot = (dir) => [
 	...FILES.map((file) => {
@@ -191,8 +192,8 @@ check(
 		readSiteFile(vegaShaped, SITES[10]).includes(SITES[10].fixed)
 );
 check(
-	'a vega-shaped run counts eight fully fixed files',
-	headerLines(vegaShapedCss)[0]?.startsWith(headerFor(8)),
+	'a vega-shaped run counts twenty-eight fully fixed files',
+	headerLines(vegaShapedCss)[0]?.startsWith(headerFor(28)),
 	headerLines(vegaShapedCss)[0]
 );
 const vegaShapedCheck = cliResult(vegaShaped, 'fix', '--check');
@@ -425,8 +426,8 @@ check(
 	`${freshHeaders.length}`
 );
 check(
-	'a fresh init counts the ten fully fixed files',
-	freshHeaders[0]?.startsWith(headerFor(10)) && freshHeaders[0].endsWith('*/'),
+	'a fresh init counts the thirty fully fixed files',
+	freshHeaders[0]?.startsWith(headerFor(30)) && freshHeaders[0].endsWith('*/'),
 	freshHeaders[0]
 );
 
@@ -439,8 +440,8 @@ const mixedRun = cliResult(mixed, 'fix');
 const mixedCss = readFileSync(cssPathOf(mixed), 'utf8');
 const mixedHeaders = headerLines(mixedCss);
 check(
-	'a write-mode fix counts nine fully fixed files after one site is customized',
-	mixedRun.code === 0 && mixedHeaders.length === 1 && mixedHeaders[0].startsWith(headerFor(9)),
+	'a write-mode fix counts twenty-nine fully fixed files after one site is customized',
+	mixedRun.code === 0 && mixedHeaders.length === 1 && mixedHeaders[0].startsWith(headerFor(29)),
 	`exit ${mixedRun.code} :: ${mixedHeaders[0]}`
 );
 check(
@@ -470,7 +471,7 @@ check(
 );
 check(
 	'a no-op fix keeps the count unchanged',
-	noopHeaders.length === 1 && noopHeaders[0].startsWith(headerFor(10)),
+	noopHeaders.length === 1 && noopHeaders[0].startsWith(headerFor(30)),
 	noopHeaders[0]
 );
 
@@ -492,7 +493,7 @@ check(
 );
 check(
 	'the replaced header is the current count',
-	oldHeaderAfter[0]?.startsWith(headerFor(10)),
+	oldHeaderAfter[0]?.startsWith(headerFor(30)),
 	oldHeaderAfter[0]
 );
 
@@ -511,8 +512,8 @@ for (const component of COMPONENTS)
 const lateRun = cliResult(late, 'fix');
 const lateHeader = headerLines(readFileSync(cssPathOf(late), 'utf8'));
 check(
-	'a write-mode fix after components arrive counts ten',
-	lateRun.code === 0 && lateHeader.length === 1 && lateHeader[0].startsWith(headerFor(10)),
+	'a write-mode fix after components arrive counts thirty',
+	lateRun.code === 0 && lateHeader.length === 1 && lateHeader[0].startsWith(headerFor(30)),
 	`exit ${lateRun.code} :: ${lateHeader[0]}`
 );
 
@@ -549,7 +550,7 @@ check(
 check(
 	'a dry run never rewrites a stale header',
 	dryHeaderAfter.length === 1 &&
-		dryHeaderAfter[0].startsWith(headerFor(10)) &&
+		dryHeaderAfter[0].startsWith(headerFor(30)) &&
 		snapshot(dryHeader).join('\n') === dryHeaderBefore.join('\n'),
 	dryHeaderAfter[0]
 );
@@ -562,7 +563,7 @@ const namedRun = cliResult(named, 'fix', 'dialog');
 const namedHeader = headerLines(readFileSync(cssPathOf(named), 'utf8'));
 check(
 	'a named fix still counts every fully fixed file',
-	namedRun.code === 0 && namedHeader.length === 1 && namedHeader[0].startsWith(headerFor(9)),
+	namedRun.code === 0 && namedHeader.length === 1 && namedHeader[0].startsWith(headerFor(29)),
 	`exit ${namedRun.code} :: ${namedHeader[0]}`
 );
 check(

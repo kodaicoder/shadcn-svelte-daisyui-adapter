@@ -465,7 +465,439 @@ export const RADIUS = [
 	}
 ];
 
-export const KNOWN_COMPONENTS = [...new Set([...COMPONENTS, ...RADIUS_COMPONENTS])];
+// The surface table: every box that holds content, so it takes the box step (`lg`). Each entry is a
+// `rounded-none` replacement, an insertion where the stock class is absent, or the calendar
+// head/select alignment. `navigation-menu-indicator` is the edge-joining pointer and stays
+// `rounded-none`; the `range-calendar` mirrors are out of scope; the calendar `--cell-radius` day
+// cells are not surface sites.
+export const SURFACE_COMPONENTS = [
+	'card',
+	'dialog',
+	'alert',
+	'popover',
+	'dropdown-menu',
+	'context-menu',
+	'menubar',
+	'sheet',
+	'drawer',
+	'navigation-menu',
+	'command',
+	'hover-card',
+	'table',
+	'calendar'
+];
+
+export const SURFACES = [
+	{
+		id: 'card-image',
+		component: 'card',
+		file: 'card/card.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: '*:[img:first-child]:rounded-none *:[img:last-child]:rounded-none',
+		fixed: '*:[img:first-child]:rounded-lg *:[img:last-child]:rounded-lg'
+	},
+	{
+		id: 'card-header',
+		component: 'card',
+		file: 'card/card-header.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-1.5 rounded-none px-(--card-spacing)',
+		fixed: 'gap-1.5 rounded-lg px-(--card-spacing)'
+	},
+	{
+		id: 'dialog-content',
+		component: 'dialog',
+		file: 'dialog/dialog-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-6 rounded-none p-6',
+		fixed: 'gap-6 rounded-lg p-6'
+	},
+	{
+		id: 'alert-base',
+		component: 'alert',
+		file: 'alert/alert.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'grid gap-1 bg-background border',
+		fixed: 'grid gap-1 rounded-lg bg-background border'
+	},
+	{
+		id: 'popover-content',
+		component: 'popover',
+		file: 'popover/popover-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'flex flex-col gap-4 rounded-none p-4',
+		fixed: 'flex flex-col gap-4 rounded-lg p-4'
+	},
+	{
+		id: 'dropdown-content',
+		component: 'dropdown-menu',
+		file: 'dropdown-menu/dropdown-menu-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'min-w-48 rounded-none p-1.5',
+		fixed: 'min-w-48 rounded-lg p-1.5'
+	},
+	{
+		id: 'dropdown-sub-content',
+		component: 'dropdown-menu',
+		file: 'dropdown-menu/dropdown-menu-sub-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'min-w-36 rounded-none p-1.5',
+		fixed: 'min-w-36 rounded-lg p-1.5'
+	},
+	{
+		id: 'dropdown-item',
+		component: 'dropdown-menu',
+		file: 'dropdown-menu/dropdown-menu-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none px-3 py-2',
+		fixed: 'gap-2.5 rounded-lg px-3 py-2'
+	},
+	{
+		id: 'dropdown-checkbox-item',
+		component: 'dropdown-menu',
+		file: 'dropdown-menu/dropdown-menu-checkbox-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
+		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+	},
+	{
+		id: 'dropdown-radio-item',
+		component: 'dropdown-menu',
+		file: 'dropdown-menu/dropdown-menu-radio-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
+		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+	},
+	{
+		id: 'dropdown-sub-trigger',
+		component: 'dropdown-menu',
+		file: 'dropdown-menu/dropdown-menu-sub-trigger.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2 rounded-none px-3 py-2',
+		fixed: 'gap-2 rounded-lg px-3 py-2'
+	},
+	{
+		id: 'context-content',
+		component: 'context-menu',
+		file: 'context-menu/context-menu-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'min-w-48 rounded-none p-1.5',
+		fixed: 'min-w-48 rounded-lg p-1.5'
+	},
+	{
+		id: 'context-sub-content',
+		component: 'context-menu',
+		file: 'context-menu/context-menu-sub-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'min-w-32 rounded-none p-1.5',
+		fixed: 'min-w-32 rounded-lg p-1.5'
+	},
+	{
+		id: 'context-item',
+		component: 'context-menu',
+		file: 'context-menu/context-menu-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none px-3 py-2',
+		fixed: 'gap-2.5 rounded-lg px-3 py-2'
+	},
+	{
+		id: 'context-checkbox-item',
+		component: 'context-menu',
+		file: 'context-menu/context-menu-checkbox-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
+		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+	},
+	{
+		id: 'context-radio-item',
+		component: 'context-menu',
+		file: 'context-menu/context-menu-radio-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none py-2 pr-8 pl-3',
+		fixed: 'gap-2.5 rounded-lg py-2 pr-8 pl-3'
+	},
+	{
+		id: 'context-sub-trigger',
+		component: 'context-menu',
+		file: 'context-menu/context-menu-sub-trigger.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'rounded-none px-3 py-2 text-xs',
+		fixed: 'rounded-lg px-3 py-2 text-xs'
+	},
+	{
+		id: 'menubar-root',
+		component: 'menubar',
+		file: 'menubar/menubar.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'h-10 rounded-none border p-1',
+		fixed: 'h-10 rounded-lg border p-1'
+	},
+	{
+		id: 'menubar-trigger',
+		component: 'menubar',
+		file: 'menubar/menubar-trigger.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'aria-expanded:bg-muted rounded-none px-2 py-0.75',
+		fixed: 'aria-expanded:bg-muted rounded-lg px-2 py-0.75'
+	},
+	{
+		id: 'menubar-content',
+		component: 'menubar',
+		file: 'menubar/menubar-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'min-w-48 rounded-none p-1.5',
+		fixed: 'min-w-48 rounded-lg p-1.5'
+	},
+	{
+		id: 'menubar-sub-content',
+		component: 'menubar',
+		file: 'menubar/menubar-sub-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'min-w-32 rounded-none p-1.5',
+		fixed: 'min-w-32 rounded-lg p-1.5'
+	},
+	{
+		id: 'menubar-item',
+		component: 'menubar',
+		file: 'menubar/menubar-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none px-3 py-2',
+		fixed: 'gap-2.5 rounded-lg px-3 py-2'
+	},
+	{
+		id: 'menubar-checkbox-item',
+		component: 'menubar',
+		file: 'menubar/menubar-checkbox-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none py-2 pr-3 pl-9.5',
+		fixed: 'gap-2.5 rounded-lg py-2 pr-3 pl-9.5'
+	},
+	{
+		id: 'menubar-radio-item',
+		component: 'menubar',
+		file: 'menubar/menubar-radio-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2.5 rounded-none py-2 pr-3 pl-9.5',
+		fixed: 'gap-2.5 rounded-lg py-2 pr-3 pl-9.5'
+	},
+	{
+		id: 'menubar-sub-trigger',
+		component: 'menubar',
+		file: 'menubar/menubar-sub-trigger.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'gap-2 rounded-none px-3 py-2',
+		fixed: 'gap-2 rounded-lg px-3 py-2'
+	},
+	{
+		id: 'sheet-content',
+		component: 'sheet',
+		file: 'sheet/sheet-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'bg-popover text-popover-foreground fixed z-50',
+		fixed: 'bg-popover text-popover-foreground rounded-lg fixed z-50'
+	},
+	{
+		id: 'drawer-bottom',
+		component: 'drawer',
+		file: 'drawer/drawer-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'data-[vaul-drawer-direction=bottom]:rounded-none',
+		fixed: 'data-[vaul-drawer-direction=bottom]:rounded-lg'
+	},
+	{
+		id: 'drawer-left',
+		component: 'drawer',
+		file: 'drawer/drawer-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'data-[vaul-drawer-direction=left]:rounded-none',
+		fixed: 'data-[vaul-drawer-direction=left]:rounded-lg'
+	},
+	{
+		id: 'drawer-right',
+		component: 'drawer',
+		file: 'drawer/drawer-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'data-[vaul-drawer-direction=right]:rounded-none',
+		fixed: 'data-[vaul-drawer-direction=right]:rounded-lg'
+	},
+	{
+		id: 'drawer-top',
+		component: 'drawer',
+		file: 'drawer/drawer-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'data-[vaul-drawer-direction=top]:rounded-none',
+		fixed: 'data-[vaul-drawer-direction=top]:rounded-lg'
+	},
+	{
+		id: 'drawer-handle',
+		component: 'drawer',
+		file: 'drawer/drawer-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'shrink-0 rounded-none mx-auto hidden shrink-0',
+		fixed: 'shrink-0 rounded-lg mx-auto hidden shrink-0'
+	},
+	{
+		id: 'nav-content',
+		component: 'navigation-menu',
+		file: 'navigation-menu/navigation-menu-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'group-data-[viewport=false]/navigation-menu:rounded-none',
+		fixed: 'group-data-[viewport=false]/navigation-menu:rounded-lg'
+	},
+	{
+		id: 'nav-viewport',
+		component: 'navigation-menu',
+		file: 'navigation-menu/navigation-menu-viewport.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'ring-foreground/10 rounded-none shadow-md ring-1',
+		fixed: 'ring-foreground/10 rounded-lg shadow-md ring-1'
+	},
+	{
+		id: 'nav-link',
+		component: 'navigation-menu',
+		file: 'navigation-menu/navigation-menu-link.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: `rounded-none p-3 text-sm transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-3.5 in-data-[slot=navigation-menu-content]:rounded-none`,
+		fixed: `rounded-lg p-3 text-sm transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-3.5 in-data-[slot=navigation-menu-content]:rounded-lg`
+	},
+	{
+		id: 'nav-trigger',
+		component: 'navigation-menu',
+		file: 'navigation-menu/navigation-menu-trigger.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'data-popup-open:hover:bg-muted rounded-none px-4.5 py-2.5',
+		fixed: 'data-popup-open:hover:bg-muted rounded-lg px-4.5 py-2.5'
+	},
+	{
+		id: 'command-root',
+		component: 'command',
+		file: 'command/command.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'bg-popover text-popover-foreground flex size-full flex-col overflow-hidden',
+		fixed: 'bg-popover text-popover-foreground rounded-lg flex size-full flex-col overflow-hidden'
+	},
+	{
+		id: 'command-item',
+		component: 'command',
+		file: 'command/command-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: `gap-2 rounded-none px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-none`,
+		fixed: `gap-2 rounded-lg px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg`
+	},
+	{
+		id: 'command-link-item',
+		component: 'command',
+		file: 'command/command-link-item.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: `gap-2 rounded-none px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-none`,
+		fixed: `gap-2 rounded-lg px-3 py-2 text-sm outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg`
+	},
+	{
+		id: 'hover-card-content',
+		component: 'hover-card',
+		file: 'hover-card/hover-card-content.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'ring-foreground/10 bg-popover text-popover-foreground w-72',
+		fixed: 'ring-foreground/10 bg-popover text-popover-foreground rounded-lg w-72'
+	},
+	{
+		id: 'table-surface',
+		component: 'table',
+		file: 'table/table.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'cn("w-full caption-bottom text-sm"',
+		fixed: 'cn("w-full rounded-lg caption-bottom text-sm"'
+	},
+	{
+		id: 'calendar-head-cell',
+		component: 'calendar',
+		file: 'calendar/calendar-head-cell.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'w-(--cell-size) rounded-md text-[0.8rem]',
+		fixed: 'w-(--cell-size) rounded-lg text-[0.8rem]'
+	},
+	{
+		id: 'calendar-month-select',
+		component: 'calendar',
+		file: 'calendar/calendar-month-select.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'relative flex rounded-md border border-input shadow-xs',
+		fixed: 'relative flex rounded-lg border border-input shadow-xs'
+	},
+	{
+		id: 'calendar-month-select-label',
+		component: 'calendar',
+		file: 'calendar/calendar-month-select.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'items-center gap-1 rounded-md ps-2 pe-1',
+		fixed: 'items-center gap-1 rounded-lg ps-2 pe-1'
+	},
+	{
+		id: 'calendar-year-select',
+		component: 'calendar',
+		file: 'calendar/calendar-year-select.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'relative flex rounded-md border border-input shadow-xs',
+		fixed: 'relative flex rounded-lg border border-input shadow-xs'
+	},
+	{
+		id: 'calendar-year-select-label',
+		component: 'calendar',
+		file: 'calendar/calendar-year-select.svelte',
+		role: 'box',
+		step: 'lg',
+		stock: 'items-center gap-1 rounded-md ps-2 pe-1',
+		fixed: 'items-center gap-1 rounded-lg ps-2 pe-1'
+	}
+];
+
+export const KNOWN_COMPONENTS = [
+	...new Set([...COMPONENTS, ...RADIUS_COMPONENTS, ...SURFACE_COMPONENTS])
+];
 
 export const TARGETS = {
 	supported: SUPPORTED,
@@ -473,5 +905,7 @@ export const TARGETS = {
 	sites: SITES,
 	pairs: PAIRS,
 	radius: RADIUS,
-	radiusComponents: RADIUS_COMPONENTS
+	radiusComponents: RADIUS_COMPONENTS,
+	surfaces: SURFACES,
+	surfaceComponents: SURFACE_COMPONENTS
 };

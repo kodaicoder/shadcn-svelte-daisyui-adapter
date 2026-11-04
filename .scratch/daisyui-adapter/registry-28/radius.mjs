@@ -431,10 +431,10 @@ check(
 	`exit ${missingRun.code}`
 );
 // This fixture also installs calendar and range-calendar for the excluded-class checks, so its three
-// contrast files count too: 16 before the delete (13 radius and 3 contrast), 15 after.
+// contrast files count too: 19 before the delete (13 radius, 3 contrast and 3 surface), 18 after.
 check(
-	'a missing radius file drops the count from sixteen to fifteen',
-	missingHeader[0]?.startsWith(headerFor(15)),
+	'a missing radius file drops the count from nineteen to eighteen',
+	missingHeader[0]?.startsWith(headerFor(18)),
 	missingHeader[0]
 );
 
