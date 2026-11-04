@@ -105,6 +105,8 @@ fallback: rg + read over the files above
 
 ## Results
 
+Closeout: `a66ecf4` (tag `t33-harness-proof`).
+
 - Harness: `harness-run.log` exits 0. `run.json` records `ok: true`, `build: true`, steps `scaffold` through `contrast`, and `consoleErrors: []`. The add source is the pin registry (`pin-registry.mjs`, 28 items), because the live registry has moved past the pin (see `registry-drift.md`).
 - Prerequisite: `prove.json` records `init.runs 2`, `init.identical true`, `sheetMissing true`, `lateAdd.stockBefore true`, `lateAdd.fixedAfter true`, `fix.runs 2`, `fix.identical true`, `fix.checkExit 0`. The header reads `components 58 fixed`.
 - Matrix: `contrast.json` records `ok: true` and no failures. All ten pairs and all four text tones are at or above 4.5 in both schemes; all four borders are at or above 3. Fill-vs-page is recorded, with light warning 1.95 and dark destructive 2.89 as known limits. The reference block reproduces the published numbers: light text 8.30 / 6.91 / 8.24 / 13.49, dark text 11.28 / 13.00 / 11.88 / 8.24, light fills 2.52 / 1.95 / 2.22 and dark destructive 2.89.
