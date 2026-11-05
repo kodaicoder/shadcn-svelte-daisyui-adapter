@@ -179,8 +179,14 @@ check(
 	missingStock.length === 0,
 	missingStock.join(', ')
 );
-const circles = RADIUS.filter((site) => site.fixed.includes('rounded-full')).map((site) => site.id);
-check('no fixed string contains rounded-full', circles.length === 0, circles.join(', '));
+const circles = RADIUS.filter(
+	(site) => site.id !== 'switch-base' && site.fixed.includes('rounded-full')
+).map((site) => site.id);
+check(
+	'no fixed string contains rounded-full except the switch',
+	circles.length === 0,
+	circles.join(', ')
+);
 const wrongStep = RADIUS.filter((site) => {
 	const step = site.role ? ROLE_STEPS[site.role] : SIZE_STEPS[site.size];
 	return site.step !== step;
@@ -194,16 +200,19 @@ check(
 	bothOrNeither.length === 0,
 	bothOrNeither.join(', ')
 );
-const wrongClass = RADIUS.filter((site) => {
-	const rungs = [...site.fixed.matchAll(/(?:(\S+):)?rounded-(sm|md|lg)(?![\w-])/g)].map(
-		(match) => ({ modifier: match[1], rung: match[2] })
-	);
-	if (rungs.length === 0) return true;
-	return rungs.some(
-		({ modifier, rung }) =>
-			rung !== site.step && !(modifier === 'data-[size=sm]' && rung === 'sm' && site.step === 'md')
-	);
-}).map((site) => site.id);
+const wrongClass = RADIUS.filter((site) => site.id !== 'switch-base')
+	.filter((site) => {
+		const rungs = [...site.fixed.matchAll(/(?:(\S+):)?rounded-(sm|md|lg)(?![\w-])/g)].map(
+			(match) => ({ modifier: match[1], rung: match[2] })
+		);
+		if (rungs.length === 0) return true;
+		return rungs.some(
+			({ modifier, rung }) =>
+				rung !== site.step &&
+				!(modifier === 'data-[size=sm]' && rung === 'sm' && site.step === 'md')
+		);
+	})
+	.map((site) => site.id);
 check(
 	'every fixed string writes its step, with only the sm data-size as a smaller override',
 	wrongClass.length === 0,

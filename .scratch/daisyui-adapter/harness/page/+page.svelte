@@ -167,6 +167,25 @@
 
 	<section class="mb-4">
 		<h2 class="mb-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
+			Interactive states
+		</h2>
+		<p class="mb-1.5 text-xs text-muted-foreground">
+			Hover each one, then Tab through them. The ring is `focus-visible`, so a mouse click does not
+			draw it.
+		</p>
+		<div class="flex flex-wrap items-center gap-1.5">
+			<Button variant="success">hover filled</Button>
+			<Button variant="outline-success">hover outline</Button>
+			<Button variant="ghost-success">hover ghost</Button>
+			<Button variant="link-success">hover link</Button>
+			<Button variant="success" disabled>disabled filled</Button>
+			<Button variant="outline-success" disabled>disabled outline</Button>
+			<Button variant="success" aria-expanded="true">expanded filled</Button>
+		</div>
+	</section>
+
+	<section class="mb-4">
+		<h2 class="mb-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
 			Controls
 		</h2>
 		<div class="grid gap-4 md:grid-cols-2">

@@ -20,4 +20,5 @@ Check each item in light and then in dark.
   of this check.
 - The destructive base button paints a solid destructive fill with no border.
 - No console error in either scheme; `run.json` records an empty `consoleErrors` array.
+- Hover, focus-visible and disabled are checked on the live page and in `states-*.png`: the outline rows are transparent at rest, the ghost and outline rows take the tone fill and foreground on hover, and the link rows underline only on hover.
 - `contrast.json` reports no failures; its `findings` list is reviewed, because a filled label's contrast comes from the theme's own `<tone>-content`.

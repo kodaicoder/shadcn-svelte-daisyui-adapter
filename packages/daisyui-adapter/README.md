@@ -124,7 +124,7 @@ A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. 
 
 The role picks the step: selector to `--radius-sm`, field to `--radius-md`, box to `--radius-lg`. The component size shifts the step: `xs`, `sm`, `icon-xs` and `icon-sm` to `sm`; `default`, `md` and `icon` to `md`; `lg` and `icon-lg` to `lg`.
 
-The scale is linear in `--radius`, with no clamp, so at zero every step is zero. `init` warns above 2rem, because the components become pill-like. Circles, edge-joining utilities and the calendar cell property stay unchanged.
+The scale is linear in `--radius`, with no clamp, so at zero every step is zero. The switch track is the exception: it stays `rounded-full`. `init` warns above 2rem, because the components become pill-like. Circles, edge-joining utilities and the calendar cell property stay unchanged.
 
 ### Variants
 

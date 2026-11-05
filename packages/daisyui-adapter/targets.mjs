@@ -464,7 +464,7 @@ export const RADIUS = [
 		size: 'default',
 		step: 'md',
 		stock: 'shrink-0 rounded-full border border-transparent',
-		fixed: 'shrink-0 rounded-md border border-transparent'
+		fixed: 'shrink-0 border border-transparent rounded-full'
 	}
 ];
 

@@ -27,13 +27,18 @@
 	{#snippet children({ checked, indeterminate })}
 		<div
 			data-slot="checkbox-indicator"
-			class="[&>svg]:size-3.5 grid place-content-center text-current transition-none"
+			class="[&>svg]:size-3.5 grid place-content-center text-current"
 		>
-			{#if checked}
-				<CheckIcon  />
-			{:else if indeterminate}
-				<MinusIcon  />
-			{/if}
+			<CheckIcon
+				class="col-start-1 row-start-1 transition-all duration-150 {checked && !indeterminate
+					? 'scale-100 opacity-100'
+					: 'scale-0 opacity-0'}"
+			/>
+			<MinusIcon
+				class="col-start-1 row-start-1 transition-all duration-150 {indeterminate
+					? 'scale-100 opacity-100'
+					: 'scale-0 opacity-0'}"
+			/>
 		</div>
 	{/snippet}
 </CheckboxPrimitive.Root>
