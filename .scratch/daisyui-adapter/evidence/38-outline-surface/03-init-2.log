@@ -1,0 +1,100 @@
+[daisyui-adapter] theme ok: light + dark
+[daisyui-adapter] wrote src/routes/layout.css
+[daisyui-adapter] 45 light, 45 dark
+[daisyui-adapter] dialog dialog-close (dialog/dialog-content.svelte): fixed
+[daisyui-adapter] dialog dialog-content (dialog/dialog-content.svelte): fixed
+[daisyui-adapter] sheet sheet-close (sheet/sheet-content.svelte): missing
+[daisyui-adapter] calendar calendar-hover (calendar/calendar-day.svelte): fixed
+[daisyui-adapter] range-calendar range-hover (range-calendar/range-calendar-day.svelte): fixed
+[daisyui-adapter] range-calendar range-middle (range-calendar/range-calendar-cell.svelte): fixed
+[daisyui-adapter] range-calendar range-middle-hover (range-calendar/range-calendar-cell.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-destructive (dropdown-menu/dropdown-menu-item.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-item (dropdown-menu/dropdown-menu-item.svelte): fixed
+[daisyui-adapter] context-menu context-destructive (context-menu/context-menu-item.svelte): fixed
+[daisyui-adapter] context-menu context-item (context-menu/context-menu-item.svelte): fixed
+[daisyui-adapter] menubar menubar-destructive (menubar/menubar-item.svelte): fixed
+[daisyui-adapter] menubar menubar-item (menubar/menubar-item.svelte): fixed
+[daisyui-adapter] chart chart-tooltip-label (chart/chart-tooltip.svelte): fixed
+[daisyui-adapter] bubble bubble-muted (bubble/bubble.svelte): fixed
+[daisyui-adapter] bubble bubble-variants (bubble/bubble.svelte): fixed
+[daisyui-adapter] button button-base (button/button.svelte): fixed
+[daisyui-adapter] button button-xs (button/button.svelte): fixed
+[daisyui-adapter] button button-sm (button/button.svelte): fixed
+[daisyui-adapter] button button-lg (button/button.svelte): fixed
+[daisyui-adapter] button button-icon-xs (button/button.svelte): fixed
+[daisyui-adapter] button button-icon-sm (button/button.svelte): fixed
+[daisyui-adapter] button button-icon-lg (button/button.svelte): fixed
+[daisyui-adapter] button button-variants (button/button.svelte): fixed
+[daisyui-adapter] toggle toggle-base (toggle/toggle.svelte): fixed
+[daisyui-adapter] toggle toggle-sm (toggle/toggle.svelte): fixed
+[daisyui-adapter] toggle toggle-lg (toggle/toggle.svelte): fixed
+[daisyui-adapter] input input-field (input/input.svelte): fixed
+[daisyui-adapter] textarea textarea-field (textarea/textarea.svelte): fixed
+[daisyui-adapter] native-select native-select-field (native-select/native-select.svelte): fixed
+[daisyui-adapter] select select-trigger-base (select/select-trigger.svelte): fixed
+[daisyui-adapter] select select-content-box (select/select-content.svelte): fixed
+[daisyui-adapter] select select-item-field (select/select-item.svelte): fixed
+[daisyui-adapter] input-group input-group-field (input-group/input-group.svelte): fixed
+[daisyui-adapter] input-group input-group-block-end (input-group/input-group.svelte): fixed
+[daisyui-adapter] input-group input-group-block-start (input-group/input-group.svelte): fixed
+[daisyui-adapter] input-group input-group-textarea (input-group/input-group.svelte): fixed
+[daisyui-adapter] input-group-button input-group-button-base (input-group/input-group-button.svelte): fixed
+[daisyui-adapter] input-group-button input-group-button-xs (input-group/input-group-button.svelte): fixed
+[daisyui-adapter] input-group input-group-addon-keycap (input-group/input-group-addon.svelte): fixed
+[daisyui-adapter] checkbox checkbox-selector (checkbox/checkbox.svelte): fixed
+[daisyui-adapter] switch switch-base (switch/switch.svelte): fixed
+[daisyui-adapter] card card-image (card/card.svelte): fixed
+[daisyui-adapter] card card-header (card/card-header.svelte): fixed
+[daisyui-adapter] alert alert-base (alert/alert.svelte): fixed
+[daisyui-adapter] alert alert-variants (alert/alert.svelte): fixed
+[daisyui-adapter] popover popover-content (popover/popover-content.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-content (dropdown-menu/dropdown-menu-content.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-sub-content (dropdown-menu/dropdown-menu-sub-content.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-checkbox-item (dropdown-menu/dropdown-menu-checkbox-item.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-radio-item (dropdown-menu/dropdown-menu-radio-item.svelte): fixed
+[daisyui-adapter] dropdown-menu dropdown-sub-trigger (dropdown-menu/dropdown-menu-sub-trigger.svelte): fixed
+[daisyui-adapter] context-menu context-content (context-menu/context-menu-content.svelte): fixed
+[daisyui-adapter] context-menu context-sub-content (context-menu/context-menu-sub-content.svelte): fixed
+[daisyui-adapter] context-menu context-checkbox-item (context-menu/context-menu-checkbox-item.svelte): fixed
+[daisyui-adapter] context-menu context-radio-item (context-menu/context-menu-radio-item.svelte): fixed
+[daisyui-adapter] context-menu context-sub-trigger (context-menu/context-menu-sub-trigger.svelte): fixed
+[daisyui-adapter] menubar menubar-root (menubar/menubar.svelte): fixed
+[daisyui-adapter] menubar menubar-trigger (menubar/menubar-trigger.svelte): fixed
+[daisyui-adapter] menubar menubar-content (menubar/menubar-content.svelte): fixed
+[daisyui-adapter] menubar menubar-sub-content (menubar/menubar-sub-content.svelte): fixed
+[daisyui-adapter] menubar menubar-checkbox-item (menubar/menubar-checkbox-item.svelte): fixed
+[daisyui-adapter] menubar menubar-radio-item (menubar/menubar-radio-item.svelte): fixed
+[daisyui-adapter] menubar menubar-sub-trigger (menubar/menubar-sub-trigger.svelte): fixed
+[daisyui-adapter] drawer drawer-surface (drawer/drawer-content.svelte): fixed
+[daisyui-adapter] drawer drawer-handle (drawer/drawer-content.svelte): fixed
+[daisyui-adapter] navigation-menu nav-content (navigation-menu/navigation-menu-content.svelte): fixed
+[daisyui-adapter] navigation-menu nav-viewport (navigation-menu/navigation-menu-viewport.svelte): fixed
+[daisyui-adapter] navigation-menu nav-link (navigation-menu/navigation-menu-link.svelte): fixed
+[daisyui-adapter] navigation-menu nav-trigger (navigation-menu/navigation-menu-trigger.svelte): fixed
+[daisyui-adapter] command command-root (command/command.svelte): fixed
+[daisyui-adapter] command command-item (command/command-item.svelte): fixed
+[daisyui-adapter] command command-link-item (command/command-link-item.svelte): fixed
+[daisyui-adapter] hover-card hover-card-content (hover-card/hover-card-content.svelte): fixed
+[daisyui-adapter] table table-surface (table/table.svelte): fixed
+[daisyui-adapter] calendar calendar-head-cell (calendar/calendar-head-cell.svelte): fixed
+[daisyui-adapter] calendar calendar-month-select (calendar/calendar-month-select.svelte): fixed
+[daisyui-adapter] calendar calendar-month-select-label (calendar/calendar-month-select.svelte): fixed
+[daisyui-adapter] calendar calendar-year-select (calendar/calendar-year-select.svelte): fixed
+[daisyui-adapter] calendar calendar-year-select-label (calendar/calendar-year-select.svelte): fixed
+[daisyui-adapter] badge badge-variants (badge/badge.svelte): fixed
+[daisyui-adapter] fix: 0 stock, 80 fixed, 0 customized, 1 missing
+[daisyui-adapter] already installed @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0
+[daisyui-adapter] light chart L 0.6386 0.5486 0.4586 0.3686 0.2786 min adjacent 0.090
+[daisyui-adapter] dark chart L 0.5017 0.5917 0.6817 0.7717 0.8617 min adjacent 0.090
+[daisyui-adapter] contrast light (text 4.50, border 3.00)
+[daisyui-adapter]   pairs: dialog close 15.22, sheet close 15.22, calendar hover 4.50, range hover 4.50, range middle 4.50, dropdown destructive 10.71, context destructive 10.71, menubar destructive 10.71, chart tooltip 17.00, bubble muted 15.22
+[daisyui-adapter]   text tones: success 7.06, warning 6.30, info 7.94, destructive 12.94
+[daisyui-adapter]   filled: success text 5.12 fill 1.88 known limit, warning text 5.24 fill 1.69 known limit, info text 6.34 fill 2.13 known limit, destructive text 5.97 fill 6.25
+[daisyui-adapter] contrast dark (text 4.50, border 3.00)
+[daisyui-adapter]   pairs: dialog close 16.32, sheet close 16.32, calendar hover 4.50, range hover 4.50, range middle 4.50, dropdown destructive 7.76, context destructive 7.76, menubar destructive 7.76, chart tooltip 14.92, bubble muted 16.32
+[daisyui-adapter]   text tones: success 12.41, warning 12.72, info 11.91, destructive 8.26
+[daisyui-adapter]   filled: success text 5.12 fill 9.63, warning text 5.24 fill 10.70, info text 6.34 fill 8.49, destructive text 5.97 fill 2.89 known limit
+[daisyui-adapter] known limit: light success fill is 1.88:1 against the page, below 3.00:1; the text-tone border is the component boundary
+[daisyui-adapter] known limit: light warning fill is 1.69:1 against the page, below 3.00:1; the text-tone border is the component boundary
+[daisyui-adapter] known limit: light info fill is 2.13:1 against the page, below 3.00:1; the text-tone border is the component boundary
+[daisyui-adapter] known limit: dark destructive fill is 2.89:1 against the page, below 3.00:1; the text-tone border is the component boundary

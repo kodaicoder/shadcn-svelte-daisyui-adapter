@@ -1,0 +1,34 @@
+{
+  "ok": true,
+  "init": {
+    "runs": 2,
+    "identical": true,
+    "sha": "bf50741984e80f7690352f2ade7154fdbb2018d40dcddb6ce8cdecc890fba264",
+    "sheetMissing": true,
+    "header": "/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 58 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */",
+    "counts": {
+      "stock": 55,
+      "fixed": 25,
+      "customized": 0,
+      "missing": 1
+    }
+  },
+  "lateAdd": {
+    "component": "sheet",
+    "file": "src/lib/components/ui/sheet/sheet-content.svelte",
+    "stockBefore": true,
+    "fixedAfter": true
+  },
+  "fix": {
+    "runs": 2,
+    "identical": true,
+    "sha": "c19257a3451c76f795b3fa5702e9d5806ae71539d1245020c29a560985a93cc4",
+    "checkExit": 0,
+    "checkCounts": {
+      "stock": 0,
+      "fixed": 82,
+      "customized": 0,
+      "missing": 0
+    }
+  }
+}

@@ -1,21 +1,30 @@
 // The add-then-fix prerequisite, proved on a freshly packed project.
 //
-// Usage: node prove.mjs <evidence dir>
+// Usage: node prove.mjs <evidence dir> [--registry]
 // Runs with cwd = the app root the harness just built, so `components.json`, the stylesheet and
 // `src/lib/components/ui` are the app's own copies.
+//
+// --registry runs the published `pnpm dlx <pkg>@<version> init` and the self-installed bin, so the
+// release proof names the artifact a stranger gets rather than the tarball in the app root.
 
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { copyFileSync, existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
 
-if (!process.argv[2]) throw new Error('usage: node prove.mjs <evidence dir>');
+if (!process.argv[2]) throw new Error('usage: node prove.mjs <evidence dir> [--registry]');
 const APP = process.cwd();
 const EVIDENCE = resolve(process.argv[2]);
+const REGISTRY = process.argv.slice(3).includes('--registry');
 const HARNESS = import.meta.dirname;
 const REPO = resolve(HARNESS, '..', '..', '..');
 const CLI = resolve(HARNESS, '..', '..', '..', 'packages', 'daisyui-adapter', 'cli', 'init.mjs');
 const PNPM = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
+const MANIFEST = JSON.parse(
+	readFileSync(join(REPO, 'packages', 'daisyui-adapter', 'package.json'), 'utf8')
+);
+const INSTALL = `${MANIFEST.name}@${MANIFEST.version}`;
+const BIN = Object.keys(MANIFEST.bin)[0];
 // The same CLI version the harness installs, read from the repo's pin.
 const SHADCN = `shadcn-svelte@${JSON.parse(readFileSync(join(REPO, 'node_modules', 'shadcn-svelte', 'package.json'), 'utf8')).version}`;
 
@@ -37,10 +46,16 @@ const execute = (command, args, env) =>
 	});
 
 const cli = (args) => {
-	const result = execute(process.execPath, [CLI, ...args], {
-		...process.env,
-		DAISYUI_ADAPTER_INSTALL_SPEC: SPEC
-	});
+	const result = REGISTRY
+		? execute(
+				PNPM,
+				args[0] === 'init' ? ['dlx', INSTALL, ...args] : ['exec', BIN, ...args],
+				process.env
+			)
+		: execute(process.execPath, [CLI, ...args], {
+				...process.env,
+				DAISYUI_ADAPTER_INSTALL_SPEC: SPEC
+			});
 	return {
 		code: result.status ?? 1,
 		output: `${result.stdout ?? ''}${result.stderr ?? ''}`.trim()
@@ -49,11 +64,18 @@ const cli = (args) => {
 
 const readComponents = () => JSON.parse(readFileSync(join(APP, 'components.json'), 'utf8'));
 
-const tarballs = readdirSync(APP).filter((file) => file.endsWith('.tgz'));
-if (tarballs.length !== 1) {
-	throw new Error(`expected one *.tgz in ${APP}, found ${tarballs.length}: ${tarballs.join(', ')}`);
+let SPEC;
+if (REGISTRY) {
+	console.log(`[prove] install spec ${INSTALL} from the registry`);
+} else {
+	const tarballs = readdirSync(APP).filter((file) => file.endsWith('.tgz'));
+	if (tarballs.length !== 1) {
+		throw new Error(
+			`expected one *.tgz in ${APP}, found ${tarballs.length}: ${tarballs.join(', ')}`
+		);
+	}
+	SPEC = `./${tarballs[0]}`;
 }
-const SPEC = `./${tarballs[0]}`;
 
 const components = readComponents();
 if (!components.tailwind?.css) throw new Error('components.json has no tailwind.css path');
@@ -129,6 +151,13 @@ try {
 		header: header(),
 		counts: counts(init1.output)
 	};
+	if (REGISTRY) {
+		report.init.installSpec = INSTALL;
+		assert(
+			header().startsWith(`/* ${MANIFEST.name} ${MANIFEST.version} `),
+			`the header does not name ${INSTALL}: ${header()}`
+		);
+	}
 
 	const add = execute(PNPM, ['dlx', SHADCN, 'add', 'sheet', '-y', '-o'], {
 		...process.env

@@ -1,0 +1,431 @@
+{
+  "ok": true,
+  "source": {
+    "render": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\evidence\\38-outline-surface\\render.json",
+    "theme": "D:\\Workspace\\DesignSystem\\New_Project\\src\\daisyui-theme.css"
+  },
+  "schemes": {
+    "light": {
+      "page": "rgb(250, 250, 250)",
+      "pairs": [
+        {
+          "id": "dialog-close",
+          "name": "dialog close",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(214, 243, 246)",
+          "compositedBackground": "rgb(214, 243, 246)",
+          "ratio": 15.22,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "sheet-close",
+          "name": "sheet close",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(214, 243, 246)",
+          "compositedBackground": "rgb(214, 243, 246)",
+          "ratio": 15.22,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "calendar-hover",
+          "name": "calendar hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-hover",
+          "name": "range hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-middle",
+          "name": "range middle",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "dropdown-destructive",
+          "name": "dropdown destructive",
+          "foreground": "rgb(63, 23, 109)",
+          "background": "rgba(186, 0, 0, 0.102)",
+          "compositedBackground": "rgb(243, 225, 225)",
+          "ratio": 10.69,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "context-destructive",
+          "name": "context destructive",
+          "foreground": "rgb(63, 23, 109)",
+          "background": "rgba(186, 0, 0, 0.102)",
+          "compositedBackground": "rgb(243, 225, 225)",
+          "ratio": 10.69,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "menubar-destructive",
+          "name": "menubar destructive",
+          "foreground": "rgb(63, 23, 109)",
+          "background": "rgba(186, 0, 0, 0.102)",
+          "compositedBackground": "rgb(243, 225, 225)",
+          "ratio": 10.69,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "chart-tooltip-label",
+          "name": "chart tooltip",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(250, 250, 250)",
+          "compositedBackground": "rgb(250, 250, 250)",
+          "ratio": 17,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "bubble-muted",
+          "name": "bubble muted",
+          "foreground": "rgb(0, 23, 58)",
+          "background": "rgb(214, 243, 246)",
+          "compositedBackground": "rgb(214, 243, 246)",
+          "ratio": 15.22,
+          "threshold": 4.5,
+          "pass": true
+        }
+      ],
+      "tones": [
+        {
+          "tone": "success",
+          "text": {
+            "foreground": "rgb(0, 94, 115)",
+            "background": "rgb(250, 250, 250)",
+            "ratio": 7.06,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 211, 144)",
+            "fillVsPage": 1.88,
+            "fillKnownLimit": true,
+            "textOnFill": 5.12
+          }
+        },
+        {
+          "tone": "warning",
+          "text": {
+            "foreground": "rgb(0, 106, 85)",
+            "background": "rgb(250, 250, 250)",
+            "ratio": 6.3,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(252, 183, 0)",
+            "fillVsPage": 1.69,
+            "fillKnownLimit": true,
+            "textOnFill": 5.24
+          }
+        },
+        {
+          "tone": "info",
+          "text": {
+            "foreground": "rgb(0, 82, 132)",
+            "background": "rgb(250, 250, 250)",
+            "ratio": 7.92,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 186, 254)",
+            "fillVsPage": 2.13,
+            "fillKnownLimit": true,
+            "textOnFill": 6.34
+          }
+        },
+        {
+          "tone": "destructive",
+          "text": {
+            "foreground": "rgb(63, 23, 109)",
+            "background": "rgb(250, 250, 250)",
+            "ratio": 12.94,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(191, 0, 4)",
+            "fillVsPage": 6.25,
+            "fillKnownLimit": false,
+            "textOnFill": 5.97
+          }
+        }
+      ]
+    },
+    "dark": {
+      "page": "rgb(7, 17, 35)",
+      "pairs": [
+        {
+          "id": "dialog-close",
+          "name": "dialog close",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(1, 2, 17)",
+          "compositedBackground": "rgb(1, 2, 17)",
+          "ratio": 16.32,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "sheet-close",
+          "name": "sheet close",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(1, 2, 17)",
+          "compositedBackground": "rgb(1, 2, 17)",
+          "ratio": 16.32,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "calendar-hover",
+          "name": "calendar hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-hover",
+          "name": "range hover",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "range-middle",
+          "name": "range middle",
+          "foreground": "rgb(237, 241, 254)",
+          "background": "rgb(0, 128, 51)",
+          "compositedBackground": "rgb(0, 128, 51)",
+          "ratio": 4.5,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "dropdown-destructive",
+          "name": "dropdown destructive",
+          "foreground": "rgb(195, 158, 215)",
+          "background": "rgba(190, 0, 5, 0.200)",
+          "compositedBackground": "rgb(44, 14, 29)",
+          "ratio": 7.77,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "context-destructive",
+          "name": "context destructive",
+          "foreground": "rgb(195, 158, 215)",
+          "background": "rgba(190, 0, 5, 0.200)",
+          "compositedBackground": "rgb(44, 14, 29)",
+          "ratio": 7.77,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "menubar-destructive",
+          "name": "menubar destructive",
+          "foreground": "rgb(195, 158, 215)",
+          "background": "rgba(190, 0, 5, 0.200)",
+          "compositedBackground": "rgb(44, 14, 29)",
+          "ratio": 7.77,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "chart-tooltip-label",
+          "name": "chart tooltip",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(7, 17, 35)",
+          "compositedBackground": "rgb(7, 17, 35)",
+          "ratio": 14.92,
+          "threshold": 4.5,
+          "pass": true
+        },
+        {
+          "id": "bubble-muted",
+          "name": "bubble muted",
+          "foreground": "rgb(226, 229, 233)",
+          "background": "rgb(1, 2, 17)",
+          "compositedBackground": "rgb(1, 2, 17)",
+          "ratio": 16.32,
+          "threshold": 4.5,
+          "pass": true
+        }
+      ],
+      "tones": [
+        {
+          "tone": "success",
+          "text": {
+            "foreground": "rgb(154, 219, 244)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 12.41,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 211, 144)",
+            "fillVsPage": 9.63,
+            "fillKnownLimit": false,
+            "textOnFill": 5.12
+          }
+        },
+        {
+          "tone": "warning",
+          "text": {
+            "foreground": "rgb(250, 196, 235)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 12.72,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(252, 183, 0)",
+            "fillVsPage": 10.7,
+            "fillKnownLimit": false,
+            "textOnFill": 5.24
+          }
+        },
+        {
+          "tone": "info",
+          "text": {
+            "foreground": "rgb(173, 209, 249)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 11.91,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(0, 186, 254)",
+            "fillVsPage": 8.49,
+            "fillKnownLimit": false,
+            "textOnFill": 6.34
+          }
+        },
+        {
+          "tone": "destructive",
+          "text": {
+            "foreground": "rgb(195, 158, 215)",
+            "background": "rgb(7, 17, 35)",
+            "ratio": 8.26,
+            "threshold": 4.5,
+            "pass": true
+          },
+          "filled": {
+            "fill": "rgb(191, 0, 4)",
+            "fillVsPage": 2.89,
+            "fillKnownLimit": true,
+            "textOnFill": 5.97
+          }
+        }
+      ]
+    }
+  },
+  "reference": {
+    "light": {
+      "success": {
+        "tone": "success",
+        "textVsPage": 7.95,
+        "fillVsPage": 2.41,
+        "fillKnownLimit": true,
+        "textOnFill": 6.05,
+        "textPass": true,
+        "textOnFillPass": true
+      },
+      "warning": {
+        "tone": "warning",
+        "textVsPage": 6.62,
+        "fillVsPage": 1.86,
+        "fillKnownLimit": true,
+        "textOnFill": 7.63,
+        "textPass": true,
+        "textOnFillPass": true
+      },
+      "info": {
+        "tone": "info",
+        "textVsPage": 7.89,
+        "fillVsPage": 2.13,
+        "fillKnownLimit": true,
+        "textOnFill": 6.31,
+        "textPass": true,
+        "textOnFillPass": true
+      },
+      "destructive": {
+        "tone": "destructive",
+        "textVsPage": 12.92,
+        "fillVsPage": 6.24,
+        "fillKnownLimit": false,
+        "textOnFill": 5.95,
+        "textPass": true,
+        "textOnFillPass": true
+      }
+    },
+    "dark": {
+      "success": {
+        "tone": "success",
+        "textVsPage": 11.28,
+        "fillVsPage": 7.49,
+        "fillKnownLimit": false,
+        "textOnFill": 6.05,
+        "textPass": true,
+        "textOnFillPass": true
+      },
+      "warning": {
+        "tone": "warning",
+        "textVsPage": 13,
+        "fillVsPage": 9.67,
+        "fillKnownLimit": false,
+        "textOnFill": 7.63,
+        "textPass": true,
+        "textOnFillPass": true
+      },
+      "info": {
+        "tone": "info",
+        "textVsPage": 11.88,
+        "fillVsPage": 8.47,
+        "fillKnownLimit": false,
+        "textOnFill": 6.31,
+        "textPass": true,
+        "textOnFillPass": true
+      },
+      "destructive": {
+        "tone": "destructive",
+        "textVsPage": 8.24,
+        "fillVsPage": 2.89,
+        "fillKnownLimit": true,
+        "textOnFill": 5.95,
+        "textPass": true,
+        "textOnFillPass": true
+      }
+    }
+  },
+  "findings": [],
+  "failures": []
+}
