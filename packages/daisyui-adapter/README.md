@@ -118,7 +118,7 @@ Each block holds 43 non-derived declarations: 38 binding keys plus 5 chart rows.
 
 0.3.0 adds eleven bindings. The seven status tokens are `success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground` and `destructive-foreground`. The four text tones are `success-text`, `warning-text`, `info-text` and `destructive-text`. Each has a `--color-*` alias.
 
-A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. The raw tone stays the fill and is never the text. The status fallbacks are fixed, so a project with no theme is still readable.
+A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. The raw tone is the fill on the filled keys, and the quiet button presentations use it as text, which measures below AA in light for success, warning, info and secondary. The text tone is the mixed pair the badge presentations use. The status fallbacks are fixed, so a project with no theme is still readable.
 
 ### Radius
 
@@ -130,11 +130,11 @@ The scale is linear in `--radius`, with no clamp, so at zero every step is zero.
 
 The components keep one `variant` prop. Every combined value is a literal key.
 
-Button gains `success`, `warning` and `info` as filled buttons with the text-tone border, `destructive` as a filled button with the same border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys paint the text tone as text and border, and the tone at 10 percent as their surface, moving to 30 percent on hover.
+Button gains `success`, `warning` and `info` as filled buttons, `destructive` as a filled button, and `outline-*`, `ghost-*` and `link-*` for the four tones, plus the same three presentations for `primary` and `secondary`. The filled keys carry no border. The `outline-*` keys are transparent with the tone as border and text, and fill with the tone and its foreground on hover. The `ghost-*` keys take the same tone fill and foreground on hover, and the `link-*` keys underline on hover.
 
-Badge gains `success`, `warning` and `info` as filled chips with the text-tone border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys carry the text-tone border and text, with the tone at 10 percent as their surface. The destructive badge is a `bg-destructive/10` chip with the text-tone border and text.
+Badge gains `success`, `warning` and `info` as filled chips, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys are `bg-<tone>/10` chips with the text-tone border and text. The destructive badge is a `bg-destructive/10` chip with the text tone and no border.
 
-Bubble gains `success`, `warning` and `info` as filled bubbles with the text-tone border, plus `outline-*` and `ghost-*` for the four tones. The `outline-*` keys paint the tone at 10 percent as the content surface, moving to 30 percent on hover. It has no link presentation. The destructive bubble stays the stock tint.
+Bubble gains `success`, `warning` and `info` as filled bubbles, plus `outline-*` and `ghost-*` for the four tones. The `outline-*` keys paint the tone at 10 percent as the content surface, moving to 30 percent on hover. It has no link presentation. The destructive bubble stays the stock tint.
 
 Alert gains `success`, `warning` and `info` as filled alerts, `bg-<tone>` with `text-<tone>-foreground`, so the surface and the text are the theme's own tone and tone content. The destructive alert is filled with the theme's error pair.
 

@@ -123,7 +123,13 @@ const BUTTON_KEYS = [
 	'link-destructive',
 	'link-success',
 	'link-warning',
-	'link-info'
+	'link-info',
+	'outline-primary',
+	'ghost-primary',
+	'link-primary',
+	'outline-secondary',
+	'ghost-secondary',
+	'link-secondary'
 ];
 const BADGE_KEYS = [
 	'destructive',
@@ -276,14 +282,14 @@ check(
 	VARIANTS[0].file
 );
 
-check('VARIANT_ROWS holds forty-eight rows', VARIANT_ROWS.length === 48, `${VARIANT_ROWS.length}`);
-check('button holds sixteen rows', BUTTON_VARIANTS.length === 16, `${BUTTON_VARIANTS.length}`);
+check('VARIANT_ROWS holds fifty-four rows', VARIANT_ROWS.length === 54, `${VARIANT_ROWS.length}`);
+check('button holds twenty-two rows', BUTTON_VARIANTS.length === 22, `${BUTTON_VARIANTS.length}`);
 check('badge holds sixteen rows', BADGE_VARIANTS.length === 16, `${BADGE_VARIANTS.length}`);
 check('alert holds four rows', ALERT_VARIANTS.length === 4, `${ALERT_VARIANTS.length}`);
 check('bubble holds twelve rows', BUBBLE_VARIANTS.length === 12, `${BUBBLE_VARIANTS.length}`);
 
 check(
-	'the button keys are the literal sixteen, with no duplicate',
+	'the button keys are the literal twenty-two, with no duplicate',
 	keySet(BUTTON_VARIANTS, BUTTON_KEYS),
 	keyList(BUTTON_VARIANTS)
 );
@@ -356,10 +362,13 @@ check(
 
 const RAW_TEXT = /(?<![-\w])text-(destructive|success|warning|info)(?![-\w])/;
 const rawText = VARIANT_ROWS.filter(
-	(row) => RAW_TEXT.test(row.class) && `${row.component}:${row.key}` !== 'bubble:destructive'
+	(row) =>
+		row.presentation === 'solid' &&
+		RAW_TEXT.test(row.class) &&
+		`${row.component}:${row.key}` !== 'bubble:destructive'
 ).map((row) => `${row.component}:${row.key}`);
 check(
-	'no raw tone as text except the pinned destructive bubble row',
+	'no solid row writes the raw tone as text except the bubble destructive tint',
 	rawText.length === 0,
 	rawText.join(', ')
 );
@@ -376,11 +385,13 @@ check(
 	mixedText.join(', ')
 );
 
-const wrongBorder = VARIANT_ROWS.filter((row) =>
-	TONES.some((tone) => new RegExp(`(?:^|\\s)border-${tone}(?!-text)`).test(row.class))
+const wrongBorder = VARIANT_ROWS.filter(
+	(row) =>
+		row.presentation !== 'outline' &&
+		TONES.some((tone) => new RegExp(`(?:^|\\s)border-${tone}(?!-text)`).test(row.class))
 ).map((row) => `${row.component}:${row.key}`);
 check(
-	'no resting border uses a tone other than its --<tone>-text token',
+	'no resting border outside the outline rows uses a tone',
 	wrongBorder.length === 0,
 	wrongBorder.join(', ')
 );

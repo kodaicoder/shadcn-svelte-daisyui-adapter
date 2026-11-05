@@ -915,84 +915,132 @@ export const VARIANT_ROWS = [
 		key: 'outline-destructive',
 		tone: 'destructive',
 		presentation: 'outline',
-		class: 'border-destructive-text bg-destructive/10 text-destructive-text hover:bg-destructive/30'
+		class: 'border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground'
 	},
 	{
 		component: 'button',
 		key: 'outline-success',
 		tone: 'success',
 		presentation: 'outline',
-		class: 'border-success-text bg-success/10 text-success-text hover:bg-success/30'
+		class: 'border-success bg-transparent text-success hover:bg-success hover:text-success-foreground'
 	},
 	{
 		component: 'button',
 		key: 'outline-warning',
 		tone: 'warning',
 		presentation: 'outline',
-		class: 'border-warning-text bg-warning/10 text-warning-text hover:bg-warning/30'
+		class: 'border-warning bg-transparent text-warning hover:bg-warning hover:text-warning-foreground'
 	},
 	{
 		component: 'button',
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
-		class: 'border-info-text bg-info/10 text-info-text hover:bg-info/30'
+		class: 'border-info bg-transparent text-info hover:bg-info hover:text-info-foreground'
 	},
 	{
 		component: 'button',
 		key: 'ghost-destructive',
 		tone: 'destructive',
 		presentation: 'ghost',
-		class: 'text-destructive-text hover:bg-destructive/10'
+		class: 'text-destructive hover:bg-destructive hover:text-destructive-foreground'
 	},
 	{
 		component: 'button',
 		key: 'ghost-success',
 		tone: 'success',
 		presentation: 'ghost',
-		class: 'text-success-text hover:bg-success/10'
+		class: 'text-success hover:bg-success hover:text-success-foreground'
 	},
 	{
 		component: 'button',
 		key: 'ghost-warning',
 		tone: 'warning',
 		presentation: 'ghost',
-		class: 'text-warning-text hover:bg-warning/10'
+		class: 'text-warning hover:bg-warning hover:text-warning-foreground'
 	},
 	{
 		component: 'button',
 		key: 'ghost-info',
 		tone: 'info',
 		presentation: 'ghost',
-		class: 'text-info-text hover:bg-info/10'
+		class: 'text-info hover:bg-info hover:text-info-foreground'
 	},
 	{
 		component: 'button',
 		key: 'link-destructive',
 		tone: 'destructive',
 		presentation: 'link',
-		class: 'text-destructive-text underline underline-offset-4 hover:underline'
+		class: 'text-destructive underline-offset-4 hover:underline'
 	},
 	{
 		component: 'button',
 		key: 'link-success',
 		tone: 'success',
 		presentation: 'link',
-		class: 'text-success-text underline underline-offset-4 hover:underline'
+		class: 'text-success underline-offset-4 hover:underline'
 	},
 	{
 		component: 'button',
 		key: 'link-warning',
 		tone: 'warning',
 		presentation: 'link',
-		class: 'text-warning-text underline underline-offset-4 hover:underline'
+		class: 'text-warning underline-offset-4 hover:underline'
 	},
 	{
 		component: 'button',
 		key: 'link-info',
 		tone: 'info',
 		presentation: 'link',
-		class: 'text-info-text underline underline-offset-4 hover:underline'
+		class: 'text-info underline-offset-4 hover:underline'
+	},
+	{
+		component: 'button',
+		key: 'outline-primary',
+		tone: 'primary',
+		presentation: 'outline',
+		class:
+			'border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground'
+	},
+	{
+		component: 'button',
+		key: 'ghost-primary',
+		tone: 'primary',
+		presentation: 'ghost',
+		class:
+			'text-primary hover:bg-primary hover:text-primary-foreground'
+	},
+	{
+		component: 'button',
+		key: 'link-primary',
+		tone: 'primary',
+		presentation: 'link',
+		class:
+			'text-primary underline-offset-4 hover:underline'
+	},
+	{
+		component: 'button',
+		key: 'outline-secondary',
+		tone: 'secondary',
+		presentation: 'outline',
+		class:
+			'border-secondary bg-transparent text-secondary hover:bg-secondary hover:text-secondary-foreground'
+	},
+	{
+		component: 'button',
+		key: 'ghost-secondary',
+		tone: 'secondary',
+		presentation: 'ghost',
+		class:
+			'text-secondary hover:bg-secondary hover:text-secondary-foreground'
+	},
+	{
+		component: 'button',
+		key: 'link-secondary',
+		tone: 'secondary',
+		presentation: 'link',
+		class:
+			'text-secondary underline-offset-4 hover:underline'
 	},
 	{
 		component: 'badge',

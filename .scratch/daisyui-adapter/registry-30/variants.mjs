@@ -105,7 +105,13 @@ const TICKET_KEYS = [
 	'link-destructive',
 	'link-success',
 	'link-warning',
-	'link-info'
+	'link-info',
+	'outline-primary',
+	'ghost-primary',
+	'link-primary',
+	'outline-secondary',
+	'ghost-secondary',
+	'link-secondary'
 ];
 
 const site = VARIANTS[0];
@@ -138,8 +144,8 @@ check(
 	`${VARIANTS.length}`
 );
 check(
-	'BUTTON_VARIANTS holds sixteen rows',
-	BUTTON_VARIANTS.length === 16,
+	'BUTTON_VARIANTS holds twenty-two rows',
+	BUTTON_VARIANTS.length === 22,
 	`${BUTTON_VARIANTS.length}`
 );
 
@@ -191,8 +197,10 @@ const rounded = BUTTON_VARIANTS.filter((row) => row.class.includes('rounded-')).
 check('no variant class writes a radius', rounded.length === 0, rounded.join(', '));
 
 const RAW_TEXT = /(?:^|\s)text-(destructive|success|warning|info)(?![-\w])/;
-const rawText = BUTTON_VARIANTS.filter((row) => RAW_TEXT.test(row.class)).map((row) => row.key);
-check('no variant class writes the raw tone as text', rawText.length === 0, rawText.join(', '));
+const rawText = BUTTON_VARIANTS.filter(
+	(row) => row.presentation === 'solid' && RAW_TEXT.test(row.class)
+).map((row) => row.key);
+check('no solid row writes the raw tone as text', rawText.length === 0, rawText.join(', '));
 
 const solidPairs = TONES.filter((tone) => {
 	const row = byKey(tone);
@@ -212,14 +220,15 @@ check(
 const outlinePairs = TONES.filter((tone) => {
 	const tokens = byKey(`outline-${tone}`).class.split(/\s+/);
 	return !(
-		tokens.includes(`border-${tone}-text`) &&
-		tokens.includes(`bg-${tone}/10`) &&
-		tokens.includes(`hover:bg-${tone}/30`) &&
-		tokens.includes(`text-${tone}-text`)
+		tokens.includes(`border-${tone}`) &&
+		tokens.includes(`text-${tone}`) &&
+		tokens.includes('bg-transparent') &&
+		tokens.includes(`hover:bg-${tone}`) &&
+		tokens.includes(`hover:text-${tone}-foreground`)
 	);
 });
 check(
-	'each outline row carries the text-tone border and text, with the tone at 10 percent as surface',
+	'each outline row is a transparent chip with the raw tone, filled on hover',
 	outlinePairs.length === 0,
 	outlinePairs.join(', ')
 );
@@ -228,23 +237,25 @@ const quietPairs = TONES.filter((tone) => {
 	const ghost = byKey(`ghost-${tone}`);
 	const link = byKey(`link-${tone}`);
 	return !(
-		ghost.class.includes(`text-${tone}-text`) &&
-		link.class.includes(`text-${tone}-text`) &&
+		ghost.class.split(/\s+/).includes(`text-${tone}`) &&
+		link.class.split(/\s+/).includes(`text-${tone}`) &&
 		!ghost.class.includes('border-') &&
 		!link.class.includes('border-')
 	);
 });
 check(
-	'ghost and link use the text tone and carry no border',
+	'ghost and link use the raw tone text and carry no border',
 	quietPairs.length === 0,
 	quietPairs.join(', ')
 );
 
-const wrongBorder = BUTTON_VARIANTS.filter((row) =>
-	TONES.some((tone) => new RegExp(`(?:^|\\s)border-${tone}(?!-text)`).test(row.class))
+const wrongBorder = BUTTON_VARIANTS.filter(
+	(row) =>
+		row.presentation !== 'outline' &&
+		TONES.some((tone) => new RegExp(`(?:^|\\s)border-${tone}(?!-text)`).test(row.class))
 ).map((row) => row.key);
 check(
-	'no resting border uses a tone other than its --<tone>-text token',
+	'no resting border outside the outline rows uses a tone',
 	wrongBorder.length === 0,
 	wrongBorder.join(', ')
 );
@@ -319,9 +330,9 @@ const declaredKeys = [...site.fixed.matchAll(/^\t\t\t\t"?([\w-]+)"?: "/gm)].map(
 	(match) => match[1]
 );
 check(
-	'the fixed block declares twenty-one keys',
-	declaredKeys.length === 21 &&
-		new Set(declaredKeys).size === 21 &&
+	'the fixed block declares twenty-seven keys',
+	declaredKeys.length === 27 &&
+		new Set(declaredKeys).size === 27 &&
 		[...['default', 'outline', 'secondary', 'ghost', 'link'], ...keys].every((key) =>
 			declaredKeys.includes(key)
 		),
