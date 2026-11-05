@@ -16,7 +16,17 @@ page.on('console', (m) => {
 });
 page.on('pageerror', (e) => consoleErrors.push(String(e)));
 
-const response = await page.goto(url, { waitUntil: 'networkidle' });
+let response = await page.goto(url, { waitUntil: 'networkidle' });
+// The dependency optimizer can invalidate the page module graph on the first load after a component
+// set changes. That 504 is a dev-server race, not a page error, so reload once before trusting the run.
+// Only the optimizer lines are dropped: a real error from the first load has to survive the reload.
+if (consoleErrors.some((error) => error.includes('Outdated Optimize Dep'))) {
+	for (let i = consoleErrors.length - 1; i >= 0; i -= 1) {
+		if (consoleErrors[i].includes('Outdated Optimize Dep')) consoleErrors.splice(i, 1);
+	}
+	await page.waitForTimeout(1500);
+	response = await page.goto(url, { waitUntil: 'networkidle' });
+}
 await page.screenshot({ path: join(out, 'light.png'), fullPage: true });
 
 const snapshot = () =>

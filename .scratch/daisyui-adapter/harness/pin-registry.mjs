@@ -11,7 +11,12 @@ const MANIFEST = JSON.parse(readFileSync(join(REPO, 'package.json'), 'utf8'));
 const RANGES = { ...MANIFEST.dependencies, ...MANIFEST.devDependencies };
 
 // A file inside another item, not a registry item of its own.
-export const REGISTRY_ITEMS = KNOWN_COMPONENTS.filter((name) => name !== 'input-group-button');
+// The fixer's targets plus the components the evidence page needs but the fixer does not touch.
+export const REGISTRY_ITEMS = [
+	...KNOWN_COMPONENTS.filter((name) => name !== 'input-group-button'),
+	'tooltip',
+	'label'
+];
 
 const walk = (dir) =>
 	readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

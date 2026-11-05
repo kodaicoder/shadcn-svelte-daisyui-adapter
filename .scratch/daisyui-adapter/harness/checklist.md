@@ -16,7 +16,8 @@ Check each item in light and then in dark.
 - Alert: `default`, `destructive`, `success`, `warning` and `info`.
 - Only the `outline` and `outline-*` rows carry a border. A filled status key has no visible edge; in light its fill sits below 3:1 against the page, which is the recorded known limit.
 - Radius on the button, the card and the input follows the theme's field and box steps, not a square
-  corner.
+  corner. The paired colour swatches at the top are samples, not controls, so their radius is not part
+  of this check.
 - The destructive base button paints a solid destructive fill with no border.
 - No console error in either scheme; `run.json` records an empty `consoleErrors` array.
 - `contrast.json` reports no failures; its `findings` list is reviewed, because a filled label's contrast comes from the theme's own `<tone>-content`.
