@@ -94,6 +94,20 @@ export const TOKEN_FALLBACKS = {
 	...Object.fromEntries(TEXT_TONE_KEYS.map((key) => [key, textToneValue(key)]))
 };
 
+// A tone with no daisyUI source: the pair is fixed per scheme, so the CLI writes the literal rather
+// than a `var(--daisy-color-*)` reference. The names are part of the theme contract, like the other
+// `--<tone>` keys.
+export const STATIC_TOKENS = {
+	light: {
+		blackwhite: 'oklch(20% 0.042 265.755)',
+		'blackwhite-foreground': 'oklch(96% 0.007 247.896)'
+	},
+	dark: {
+		blackwhite: 'oklch(98% 0.002 247.839)',
+		'blackwhite-foreground': 'oklch(13% 0.028 261.692)'
+	}
+};
+
 // A mix row is a derivation over two sources. Values stay opaque: Tailwind's opacity modifiers
 // multiply alpha, so any alpha baked in here would be wrong at every use site.
 const MIX = {

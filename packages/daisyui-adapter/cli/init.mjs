@@ -20,6 +20,7 @@ import { resolve } from 'node:path';
 import {
 	BINDING_KEYS,
 	SINGLE,
+	STATIC_TOKENS,
 	TOKEN_FALLBACKS,
 	isMix,
 	mixValue,
@@ -166,12 +167,16 @@ const warnBareRamp = (key) => {
 	);
 };
 
-const rebuild = (current, fallback, scheme) => {
+const rebuild = (current, fallback, scheme, name) => {
 	const lines = [];
+	const staticKeys = new Set([
+		...Object.keys(STATIC_TOKENS.light),
+		...Object.keys(STATIC_TOKENS.dark)
+	]);
 	for (const { prop, value } of current) {
 		if (prop.startsWith('--daisy-derived-')) continue;
 		const key = prop.slice(2);
-		if (BINDING_KEYS.includes(key) || key.startsWith('chart-')) continue;
+		if (BINDING_KEYS.includes(key) || staticKeys.has(key) || key.startsWith('chart-')) continue;
 		lines.push(`\t${prop}: ${value};`);
 	}
 	for (const key of BINDING_KEYS) {
@@ -188,6 +193,9 @@ const rebuild = (current, fallback, scheme) => {
 			lines.push(`\t--${key}: var(--daisy-derived-${key}, ${old});`);
 			lines.push(`\t--daisy-derived-${key}: ${helper};`);
 		}
+	}
+	for (const [key, value] of Object.entries(STATIC_TOKENS[name] ?? {})) {
+		lines.push(`\t--${key}: ${value};`);
 	}
 	if (scheme) {
 		for (const [i, value] of chartTokens(scheme).entries()) {
@@ -421,17 +429,19 @@ const init = ({ withFix = true } = {}) => {
 	css = replaceBlock(
 		css,
 		'.dark',
-		rebuild(readBlock(css, '.dark', where), stockLight, chart?.dark ?? null)
+		rebuild(readBlock(css, '.dark', where), stockLight, chart?.dark ?? null, 'dark')
 	);
 	if (!css) throw new Error(`[daisyui-adapter] ${where} has no .dark block`);
 	css = replaceBlock(
 		css,
 		':root',
-		rebuild(readBlock(css, ':root', where), stockLight, chart?.light ?? null)
+		rebuild(readBlock(css, ':root', where), stockLight, chart?.light ?? null, 'light')
 	);
 	if (!css) throw new Error(`[daisyui-adapter] ${where} has no :root block`);
 
-	const aliases = Object.keys(TOKEN_FALLBACKS).map((key) => `--color-${key}: var(--${key});`);
+	const aliases = [...Object.keys(TOKEN_FALLBACKS), ...Object.keys(STATIC_TOKENS.light)].map(
+		(key) => `--color-${key}: var(--${key});`
+	);
 	if (themes) css = insertAfterLastImport(css, PLUGIN);
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
 
@@ -444,7 +454,7 @@ const init = ({ withFix = true } = {}) => {
 	writeFileSync(cssPath, css);
 
 	// Read back what was written: a block the CLI matched but could not fill has to show a count
-	// below 43 rather than a number from the data it meant to write.
+	// below 45 rather than a number from the data it meant to write.
 	const written = readFileSync(cssPath, 'utf8');
 	const count = (selector) =>
 		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-'))

@@ -147,6 +147,10 @@
 			Badge
 		</h2>
 		<div class="grid grid-cols-4 gap-1.5">
+			<Badge>default</Badge>
+			<Badge variant="blackwhite">blackwhite</Badge>
+			<Badge variant="outline-blackwhite">outline</Badge>
+			<Badge variant="ghost-blackwhite">ghost</Badge>
 			<Badge variant="success">success</Badge>
 			<Badge variant="outline-success">outline</Badge>
 			<Badge variant="ghost-success">ghost</Badge>
@@ -164,6 +168,13 @@
 			<Badge variant="ghost-destructive">ghost</Badge>
 			<Badge variant="link-destructive">link</Badge>
 		</div>
+		<div class="mt-1.5 flex flex-wrap items-center gap-1.5">
+			<span class="text-xs text-muted-foreground">with href:</span>
+			<Badge variant="success" href="#badge">success</Badge>
+			<Badge variant="outline-success" href="#badge">outline</Badge>
+			<Badge variant="ghost-success" href="#badge">ghost</Badge>
+			<Badge variant="link-success" href="#badge">link</Badge>
+		</div>
 	</section>
 
 	<section class="mb-4">
@@ -171,6 +182,10 @@
 			Bubble
 		</h2>
 		<div class="grid grid-cols-3 gap-1.5">
+			<Bubble><BubbleContent>default</BubbleContent></Bubble>
+			<Bubble variant="blackwhite"><BubbleContent>blackwhite</BubbleContent></Bubble>
+			<Bubble variant="outline-blackwhite"><BubbleContent>outline</BubbleContent></Bubble>
+			<Bubble variant="ghost-blackwhite"><BubbleContent>ghost</BubbleContent></Bubble>
 			<Bubble variant="success"><BubbleContent>success</BubbleContent></Bubble>
 			<Bubble variant="outline-success"><BubbleContent>outline</BubbleContent></Bubble>
 			<Bubble variant="ghost-success"><BubbleContent>ghost</BubbleContent></Bubble>

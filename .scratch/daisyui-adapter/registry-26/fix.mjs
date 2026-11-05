@@ -183,7 +183,7 @@ check(
 const freshRun = cliResult(fresh);
 const freshSites = parseSites(freshRun.out);
 check('init with components present exits 0', freshRun.code === 0, `exit ${freshRun.code}`);
-check('init still writes 43 declarations per block', freshRun.out.includes('43 light, 43 dark'));
+check('init still writes 45 declarations per block', freshRun.out.includes('45 light, 45 dark'));
 check('init reports every site', freshSites.length === FIXTURE_COUNT, `${freshSites.length}`);
 check(
 	'init finds every site stock or already at its step, and writes the stock ones',
@@ -359,7 +359,7 @@ check(
 );
 check(
 	'init maps the stylesheet with one component present',
-	addRun.out.includes('43 light, 43 dark')
+	addRun.out.includes('45 light, 45 dark')
 );
 cpSync(join(STOCK, 'bubble'), join(addUi, 'bubble'), { recursive: true });
 cliResult(add, 'fix');
@@ -393,8 +393,8 @@ check(
 	noneRun.out.includes('[daisyui-adapter] no target components found; nothing to fix')
 );
 check(
-	'init with no components still maps 43 declarations per block',
-	noneRun.out.includes('43 light, 43 dark')
+	'init with no components still maps 45 declarations per block',
+	noneRun.out.includes('45 light, 45 dark')
 );
 check('init with no components creates no ui directory', !existsSync(join(none, 'src', 'lib')));
 

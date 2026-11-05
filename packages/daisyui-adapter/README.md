@@ -58,7 +58,7 @@ A first run on a project that added `dialog` only starts like this:
 ```
 [daisyui-adapter] theme ok: light + dark
 [daisyui-adapter] wrote src/routes/layout.css
-[daisyui-adapter] 43 light, 43 dark
+[daisyui-adapter] 45 light, 45 dark
 [daisyui-adapter] dialog dialog-close (dialog/dialog-content.svelte): stock -> fixed
 [daisyui-adapter] dialog dialog-content (dialog/dialog-content.svelte): stock -> fixed
 [daisyui-adapter] fix: 2 stock, 0 fixed, 0 customized, 10 missing
@@ -67,9 +67,9 @@ A first run on a project that added `dialog` only starts like this:
 
 The ten sites the project never added each print a `missing` line above the summary, omitted here. The CLI prints one line per replacement site. A site this run patches prints `stock -> fixed`, and the summary counts it as `stock` because the states are read before the write. A site already fixed prints `fixed`. A site it leaves alone prints `customized`, and a target with no file prints `missing`.
 
-The count above the fix report is read back from the written file, so a missing row shows a number below 43. A second run prints `already installed` instead of installing again. A run on a stylesheet from an older version prints `upgrading <old> -> 0.3.0` before the rest. With a theme, two chart lines follow the install line and report the solved lightness ramp and the minimum adjacent difference.
+The count above the fix report is read back from the written file, so a missing row shows a number below 45. A second run prints `already installed` instead of installing again. A run on a stylesheet from an older version prints `upgrading <old> -> 0.3.0` before the rest. With a theme, two chart lines follow the install line and report the solved lightness ramp and the minimum adjacent difference.
 
-With a theme, `init` also measures the contrast matrix from the parsed theme and prints it: the ten repaired pairs, the four text tones and the four filled rows for each scheme. A text pair below 4.5:1, or a component boundary below 3:1, prints a warning that names the pair and the ratio, and the exit code stays 0. A fill below 3:1 against the page prints as a known limit.
+With a theme, `init` also measures the contrast matrix from the parsed theme and prints it: the ten repaired pairs, the four text tones and the four filled rows for each scheme. A text pair below 4.5:1 prints a warning that names the pair and the ratio, and the exit code stays 0. A fill below 3:1 against the page prints as a known limit.
 
 A missing theme file is a warning, not a failure. The CLI prints `E1`, writes the bindings with your own values as fallbacks, and the build renders the project's palette. A malformed theme file exits non-zero with `E2` or `E3`, because a wrong pair would render wrong colours silently. When the header names a newer version than the CLI, the CLI prints `E4`, exits non-zero and writes nothing, because an older CLI would undo bindings a newer one wrote.
 
@@ -114,9 +114,9 @@ A run that writes refuses when the header names a newer version than the CLI. It
 
 ### Tokens
 
-Each block holds 43 non-derived declarations: 38 binding keys plus 5 chart rows. Thirteen derived helpers sit beside them: nine from the four mix keys and the five chart rows, and four from the text tones.
+Each block holds 45 non-derived declarations: 38 binding keys, 2 static tokens and 5 chart rows. Thirteen derived helpers sit beside them: nine from the four mix keys and the five chart rows, and four from the text tones.
 
-0.3.0 adds eleven bindings. The seven status tokens are `success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground` and `destructive-foreground`. The four text tones are `success-text`, `warning-text`, `info-text` and `destructive-text`. Each has a `--color-*` alias.
+0.3.0 adds eleven bindings. The seven status tokens are `success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground` and `destructive-foreground`. The four text tones are `success-text`, `warning-text`, `info-text` and `destructive-text`. Each has a `--color-*` alias. `blackwhite` and `blackwhite-foreground` are a static pair the CLI writes per scheme, `oklch(20% 0.042 265.755)` with `oklch(96% 0.007 247.896)` in light, and `oklch(98% 0.002 247.839)` with `oklch(13% 0.028 261.692)` in dark, with the same aliases. They have no daisyUI source, so the value is written literally.
 
 A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. The raw tone is the fill on the filled keys, and the quiet button presentations use it as text, which measures below AA in light for success, warning, info and secondary. The text tone is the mixed pair the badge presentations use. The status fallbacks are fixed, so a project with no theme is still readable.
 

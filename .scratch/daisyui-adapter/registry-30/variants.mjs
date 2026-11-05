@@ -111,7 +111,11 @@ const TICKET_KEYS = [
 	'link-primary',
 	'outline-secondary',
 	'ghost-secondary',
-	'link-secondary'
+	'link-secondary',
+	'blackwhite',
+	'outline-blackwhite',
+	'ghost-blackwhite',
+	'link-blackwhite'
 ];
 
 const site = VARIANTS[0];
@@ -144,8 +148,8 @@ check(
 	`${VARIANTS.length}`
 );
 check(
-	'BUTTON_VARIANTS holds twenty-two rows',
-	BUTTON_VARIANTS.length === 22,
+	'BUTTON_VARIANTS holds twenty-six rows',
+	BUTTON_VARIANTS.length === 26,
 	`${BUTTON_VARIANTS.length}`
 );
 
@@ -218,7 +222,8 @@ check(
 );
 
 const outlinePairs = TONES.filter((tone) => {
-	const tokens = byKey(`outline-${tone}`).class.split(/\s+/);
+	const row = byKey(`outline-${tone}`);
+	const tokens = row.class.split(/\s+/);
 	return !(
 		tokens.includes(`border-${tone}`) &&
 		tokens.includes(`text-${tone}`) &&
@@ -263,11 +268,13 @@ check(
 const mixedText = BUTTON_VARIANTS.filter((row) =>
 	TONES.some(
 		(tone) =>
-			row.class.includes(`text-${tone}-text`) && row.class.includes(`text-${tone}-foreground`)
+			row.class.includes(`text-${tone}-text`) &&
+			row.class.includes(`text-${tone}-foreground`) &&
+			!row.class.includes(`hover:text-${tone}-foreground`)
 	)
 ).map((row) => row.key);
 check(
-	'no row mixes the text tone with the tone foreground',
+	'no row mixes the text tone with the tone foreground at rest',
 	mixedText.length === 0,
 	mixedText.join(', ')
 );
@@ -302,20 +309,21 @@ check(
 	mismatchedPin.join(', ')
 );
 
-// A bare bg-destructive/10 is the deleted stock base; the outline rows carry it as their surface.
-const TINTED_BASE = /(?:^|[\s"])bg-destructive\/10(?=[\s"])/;
-const withoutOutline = (text) =>
-	text
-		.split('\n')
-		.filter((line) => !/^\s*"outline-/.test(line))
-		.join('\n');
-const forbidden = ['text-destructive"'].filter((needle) => site.fixed.includes(needle));
+// The destructive base row is the one that must stop being the stock tint; the outline rows keep the
+// 10 percent tone surface on purpose, so a block-wide string search would read them as a regression.
+const destructiveRow = (text) => /(?:^|\n)\s*"?destructive"?: "([^"]*)"/.exec(text)?.[1] ?? '';
+const baseIsFilled = (text) => {
+	const row = destructiveRow(text);
+	return (
+		row.includes('bg-destructive ') &&
+		!row.includes('bg-destructive/10') &&
+		!/(?:^|\s)text-destructive(?:\s|$)/.test(row)
+	);
+};
 check(
-	'the fixed block drops the tinted destructive base',
-	!TINTED_BASE.test(withoutOutline(site.fixed)) && forbidden.length === 0,
-	[TINTED_BASE.test(withoutOutline(site.fixed)) ? 'bg-destructive/10' : null, ...forbidden]
-		.filter(Boolean)
-		.join(', ')
+	'the fixed destructive base drops the tint',
+	baseIsFilled(site.fixed),
+	destructiveRow(site.fixed)
 );
 check(
 	'the destructive row keeps the pinned focus ring',
@@ -330,9 +338,9 @@ const declaredKeys = [...site.fixed.matchAll(/^\t\t\t\t"?([\w-]+)"?: "/gm)].map(
 	(match) => match[1]
 );
 check(
-	'the fixed block declares twenty-seven keys',
-	declaredKeys.length === 27 &&
-		new Set(declaredKeys).size === 27 &&
+	'the fixed block declares thirty-one keys',
+	declaredKeys.length === 31 &&
+		new Set(declaredKeys).size === 31 &&
 		[...['default', 'outline', 'secondary', 'ghost', 'link'], ...keys].every((key) =>
 			declaredKeys.includes(key)
 		),
@@ -351,10 +359,7 @@ check(
 
 const appliedText = textOf(applied, FILENAME);
 check('the applied file holds the fixed block', appliedText.includes(site.fixed));
-check(
-	'the applied file drops the destructive tint',
-	!TINTED_BASE.test(withoutOutline(appliedText)) && !appliedText.includes('text-destructive"')
-);
+check('the applied file drops the destructive tint', baseIsFilled(appliedText));
 check(
 	'the radius table still applies in the same file',
 	!appliedText.includes('rounded-none') &&
@@ -364,7 +369,7 @@ check(
 const newKeys = TICKET_KEYS.filter((key) => key !== 'destructive');
 const newKeyLines = (text) => newKeys.filter((key) => !text.includes(`${writtenKey(key)}: "`));
 check(
-	'the file carries the fifteen new keys',
+	'the file carries every new key',
 	newKeyLines(appliedText).length === 0,
 	newKeyLines(appliedText).join(', ')
 );

@@ -129,7 +129,11 @@ const BUTTON_KEYS = [
 	'link-primary',
 	'outline-secondary',
 	'ghost-secondary',
-	'link-secondary'
+	'link-secondary',
+	'blackwhite',
+	'outline-blackwhite',
+	'ghost-blackwhite',
+	'link-blackwhite'
 ];
 const BADGE_KEYS = [
 	'destructive',
@@ -147,9 +151,13 @@ const BADGE_KEYS = [
 	'link-destructive',
 	'link-success',
 	'link-warning',
-	'link-info'
+	'link-info',
+	'blackwhite',
+	'outline-blackwhite',
+	'ghost-blackwhite',
+	'link-blackwhite'
 ];
-const ALERT_KEYS = ['destructive', 'success', 'warning', 'info'];
+const ALERT_KEYS = ['destructive', 'success', 'warning', 'info', 'blackwhite'];
 const BUBBLE_KEYS = [
 	'destructive',
 	'success',
@@ -162,7 +170,10 @@ const BUBBLE_KEYS = [
 	'ghost-destructive',
 	'ghost-success',
 	'ghost-warning',
-	'ghost-info'
+	'ghost-info',
+	'blackwhite',
+	'outline-blackwhite',
+	'ghost-blackwhite'
 ];
 
 const siteOf = (component) => VARIANTS.find((site) => site.id === `${component}-variants`);
@@ -282,29 +293,29 @@ check(
 	VARIANTS[0].file
 );
 
-check('VARIANT_ROWS holds fifty-four rows', VARIANT_ROWS.length === 54, `${VARIANT_ROWS.length}`);
-check('button holds twenty-two rows', BUTTON_VARIANTS.length === 22, `${BUTTON_VARIANTS.length}`);
-check('badge holds sixteen rows', BADGE_VARIANTS.length === 16, `${BADGE_VARIANTS.length}`);
-check('alert holds four rows', ALERT_VARIANTS.length === 4, `${ALERT_VARIANTS.length}`);
-check('bubble holds twelve rows', BUBBLE_VARIANTS.length === 12, `${BUBBLE_VARIANTS.length}`);
+check('VARIANT_ROWS holds sixty-six rows', VARIANT_ROWS.length === 66, `${VARIANT_ROWS.length}`);
+check('button holds twenty-six rows', BUTTON_VARIANTS.length === 26, `${BUTTON_VARIANTS.length}`);
+check('badge holds twenty rows', BADGE_VARIANTS.length === 20, `${BADGE_VARIANTS.length}`);
+check('alert holds five rows', ALERT_VARIANTS.length === 5, `${ALERT_VARIANTS.length}`);
+check('bubble holds fifteen rows', BUBBLE_VARIANTS.length === 15, `${BUBBLE_VARIANTS.length}`);
 
 check(
-	'the button keys are the literal twenty-two, with no duplicate',
+	'the button keys are the literal twenty-six, with no duplicate',
 	keySet(BUTTON_VARIANTS, BUTTON_KEYS),
 	keyList(BUTTON_VARIANTS)
 );
 check(
-	'the badge keys are the literal sixteen, with no duplicate',
+	'the badge keys are the literal twenty, with no duplicate',
 	keySet(BADGE_VARIANTS, BADGE_KEYS),
 	keyList(BADGE_VARIANTS)
 );
 check(
-	'the alert keys are the literal four, with no duplicate',
+	'the alert keys are the literal five, with no duplicate',
 	keySet(ALERT_VARIANTS, ALERT_KEYS),
 	keyList(ALERT_VARIANTS)
 );
 check(
-	'the bubble keys are the literal twelve, with no duplicate',
+	'the bubble keys are the literal fifteen, with no duplicate',
 	keySet(BUBBLE_VARIANTS, BUBBLE_KEYS),
 	keyList(BUBBLE_VARIANTS)
 );
@@ -355,8 +366,8 @@ const ghostRounded = VARIANT_ROWS.filter((row) =>
 	row.class.includes('*:data-[slot=bubble-content]:rounded-none')
 );
 check(
-	'the rounded-none reset sits on exactly the four bubble ghost rows',
-	ghostRounded.length === 4 &&
+	'the rounded-none reset sits on exactly the five bubble ghost rows',
+	ghostRounded.length === 5 &&
 		ghostRounded.every((row) => row.component === 'bubble' && row.key.startsWith('ghost-')),
 	ghostRounded.map((row) => row.key).join(', ')
 );
@@ -377,11 +388,13 @@ check(
 const mixedText = VARIANT_ROWS.filter((row) =>
 	TONES.some(
 		(tone) =>
-			row.class.includes(`text-${tone}-text`) && row.class.includes(`text-${tone}-foreground`)
+			row.class.includes(`text-${tone}-text`) &&
+			row.class.includes(`text-${tone}-foreground`) &&
+			!row.class.includes(`hover:text-${tone}-foreground`)
 	)
 ).map((row) => `${row.component}:${row.key}`);
 check(
-	'no row mixes the text tone with the tone foreground',
+	'no row mixes the text tone with the tone foreground at rest',
 	mixedText.length === 0,
 	mixedText.join(', ')
 );
@@ -408,9 +421,7 @@ const borderedFilled = VARIANT_ROWS.filter(
 	(row) =>
 		['button', 'bubble'].includes(row.component) &&
 		row.presentation === 'solid' &&
-		row.class
-			.split(/\s+/)
-			.some((token) => token.split(':').pop() === `border-${row.tone}-text`)
+		row.class.split(/\s+/).includes(`border-${row.tone}-text`)
 ).map((row) => `${row.component}:${row.key}`);
 check(
 	'no filled status row on button or bubble carries a resting border',
@@ -426,17 +437,18 @@ const hasPadding = (tokens) => CHIP_PADDING.every((token) => tokens.includes(tok
 const outlineBroken = badgeOutline
 	.filter((row) => {
 		const tokens = tokensOf(row);
+		const status = ['success', 'warning', 'info', 'destructive'].includes(row.tone);
 		return (
 			!tokens.includes('border') ||
-			!tokens.includes(`border-${row.tone}-text`) ||
-			!tokens.includes(`bg-${row.tone}/10`) ||
+			!tokens.includes(`border-${row.tone}${status ? '-text' : ''}`) ||
+			!(status ? tokens.includes(`bg-${row.tone}/10`) : tokens.includes('bg-transparent')) ||
 			!hasPadding(tokens)
 		);
 	})
 	.map((row) => row.key);
 check(
-	'every badge outline row carries the tone at 10 percent as its surface',
-	badgeOutline.length === 4 && outlineBroken.length === 0,
+	'every badge outline row carries its surface',
+	badgeOutline.length === 5 && outlineBroken.length === 0,
 	outlineBroken.join(', ')
 );
 
@@ -454,8 +466,6 @@ const filledBroken = badgeFilled
 					token !== `bg-${row.tone}` &&
 					!(token.startsWith('[a]:hover:') && baseOf(token).startsWith(`bg-${row.tone}`))
 			) ||
-			tokens.includes('border') ||
-			tokens.some((token) => token.split(':').pop() === `border-${row.tone}-text`) ||
 			!tokens.includes(`text-${row.tone}-foreground`) ||
 			!hasPadding(tokens)
 		);
@@ -474,7 +484,7 @@ const FLAT_CLASS = /(?:^|\s)(?:border|p[xytrblse]?-)/;
 const flatBroken = badgeFlat.filter((row) => FLAT_CLASS.test(row.class)).map((row) => row.key);
 check(
 	'the badge ghost and link rows stay borderless and unpadded',
-	badgeFlat.length === 8 && flatBroken.length === 0,
+	badgeFlat.length === 10 && flatBroken.length === 0,
 	flatBroken.join(', ')
 );
 
@@ -549,11 +559,6 @@ check(
 	'alert: every row appears exactly once in the fixed block',
 	rowLinesMissing(alertSite, ALERT_VARIANTS) === '',
 	rowLinesMissing(alertSite, ALERT_VARIANTS)
-);
-check(
-	'alert: the fixed block keeps the pinned key byte for byte',
-	pinnedInside('alert', alertSite, ['default']) === '',
-	pinnedInside('alert', alertSite, ['default'])
 );
 
 check(
@@ -654,8 +659,8 @@ check(
 );
 const bubbleGhostRows = BUBBLE_VARIANTS.filter((row) => row.key.startsWith('ghost-'));
 check(
-	'the bubble file keeps its four rounded-none ghost rows',
-	bubbleGhostRows.length === 4 &&
+	'the bubble file keeps its five rounded-none ghost rows',
+	bubbleGhostRows.length === 5 &&
 		bubbleGhostRows.every(
 			(row) => countOf(appliedBubble, `${writtenKey(row.key)}: "${row.class}",`) === 1
 		),

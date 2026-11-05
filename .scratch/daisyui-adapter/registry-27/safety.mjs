@@ -272,8 +272,8 @@ check(
 	`exit ${mapOnlyRun.code}`
 );
 check(
-	'a map-only init still maps 43 declarations per block',
-	mapOnlyRun.out.includes('43 light, 43 dark')
+	'a map-only init still maps 45 declarations per block',
+	mapOnlyRun.out.includes('45 light, 45 dark')
 );
 check(
 	'a map-only init prints nothing to fix',

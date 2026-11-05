@@ -258,8 +258,8 @@ check(
 	`${headerLines(css1).length} header line(s)`
 );
 check(
-	'CLI counts 43 declarations per block with a theme',
-	first.includes('43 light, 43 dark'),
+	'CLI counts 45 declarations per block with a theme',
+	first.includes('45 light, 45 dark'),
 	(first.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
 );
 check(
@@ -367,8 +367,8 @@ const bareRun = cliResult(bare);
 const bareCss = readFileSync(barePath, 'utf8');
 check('a missing theme exits 0', bareRun.code === 0, `exit ${bareRun.code}`);
 check(
-	'a missing theme counts 43 declarations per block',
-	bareRun.out.includes('43 light, 43 dark'),
+	'a missing theme counts 45 declarations per block',
+	bareRun.out.includes('45 light, 45 dark'),
 	(bareRun.out.match(/\d+ light, \d+ dark/) ?? ['none'])[0]
 );
 check(

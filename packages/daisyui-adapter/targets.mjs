@@ -1043,6 +1043,35 @@ export const VARIANT_ROWS = [
 			'text-secondary underline-offset-4 hover:underline'
 	},
 	{
+		component: 'button',
+		key: 'blackwhite',
+		tone: 'blackwhite',
+		presentation: 'solid',
+		class: 'bg-blackwhite text-blackwhite-foreground hover:bg-blackwhite/80'
+	},
+	{
+		component: 'button',
+		key: 'outline-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'outline',
+		class:
+			'border-blackwhite bg-transparent text-blackwhite hover:bg-blackwhite hover:text-blackwhite-foreground'
+	},
+	{
+		component: 'button',
+		key: 'ghost-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'ghost',
+		class: 'text-blackwhite hover:bg-blackwhite hover:text-blackwhite-foreground'
+	},
+	{
+		component: 'button',
+		key: 'link-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'link',
+		class: 'text-blackwhite underline-offset-4 hover:underline'
+	},
+	{
 		component: 'badge',
 		key: 'destructive',
 		tone: 'destructive',
@@ -1161,6 +1190,35 @@ export const VARIANT_ROWS = [
 		class: 'text-info-text underline-offset-4 hover:underline'
 	},
 	{
+		component: 'badge',
+		key: 'blackwhite',
+		tone: 'blackwhite',
+		presentation: 'solid',
+		class: 'bg-blackwhite text-blackwhite-foreground px-1.5 py-0.5 [a]:hover:bg-blackwhite/80'
+	},
+	{
+		component: 'badge',
+		key: 'outline-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'outline',
+		class:
+			'border border-blackwhite bg-transparent text-blackwhite px-1.5 py-0.5 [a]:hover:text-blackwhite/70'
+	},
+	{
+		component: 'badge',
+		key: 'ghost-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'ghost',
+		class: 'text-blackwhite hover:text-blackwhite/70'
+	},
+	{
+		component: 'badge',
+		key: 'link-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'link',
+		class: 'text-blackwhite underline-offset-4 hover:underline'
+	},
+	{
 		component: 'alert',
 		key: 'destructive',
 		tone: 'destructive',
@@ -1191,6 +1249,14 @@ export const VARIANT_ROWS = [
 		presentation: 'solid',
 		class:
 			'bg-info text-info-foreground *:data-[slot=alert-description]:text-info-foreground *:[svg]:text-current'
+	},
+	{
+		component: 'alert',
+		key: 'blackwhite',
+		tone: 'blackwhite',
+		presentation: 'solid',
+		class:
+			'bg-blackwhite text-blackwhite-foreground *:data-[slot=alert-description]:text-blackwhite-foreground *:[svg]:text-current'
 	},
 	{
 		component: 'bubble',
@@ -1287,6 +1353,30 @@ export const VARIANT_ROWS = [
 		presentation: 'ghost',
 		class:
 			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 *:data-[slot=bubble-content]:text-info-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/10 border-none'
+	},
+	{
+		component: 'bubble',
+		key: 'blackwhite',
+		tone: 'blackwhite',
+		presentation: 'solid',
+		class:
+			'*:data-[slot=bubble-content]:bg-blackwhite *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-blackwhite-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-blackwhite/80'
+	},
+	{
+		component: 'bubble',
+		key: 'outline-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'outline',
+		class:
+			'*:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:border-blackwhite *:data-[slot=bubble-content]:text-blackwhite [&>[data-slot=bubble-content]:is(button,a):hover]:bg-blackwhite [&>[data-slot=bubble-content]:is(button,a):hover]:text-blackwhite-foreground'
+	},
+	{
+		component: 'bubble',
+		key: 'ghost-blackwhite',
+		tone: 'blackwhite',
+		presentation: 'ghost',
+		class:
+			'*:data-[slot=bubble-content]:rounded-none *:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:p-0 *:data-[slot=bubble-content]:text-blackwhite [&>[data-slot=bubble-content]:is(button,a):hover]:bg-blackwhite/10 border-none'
 	}
 ];
 
