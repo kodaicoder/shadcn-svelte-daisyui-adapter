@@ -915,21 +915,24 @@ export const VARIANT_ROWS = [
 		key: 'outline-destructive',
 		tone: 'destructive',
 		presentation: 'outline',
-		class: 'border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground'
+		class:
+			'border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-destructive-foreground'
 	},
 	{
 		component: 'button',
 		key: 'outline-success',
 		tone: 'success',
 		presentation: 'outline',
-		class: 'border-success bg-transparent text-success hover:bg-success hover:text-success-foreground'
+		class:
+			'border-success bg-transparent text-success hover:bg-success hover:text-success-foreground'
 	},
 	{
 		component: 'button',
 		key: 'outline-warning',
 		tone: 'warning',
 		presentation: 'outline',
-		class: 'border-warning bg-transparent text-warning hover:bg-warning hover:text-warning-foreground'
+		class:
+			'border-warning bg-transparent text-warning hover:bg-warning hover:text-warning-foreground'
 	},
 	{
 		component: 'button',
@@ -1007,16 +1010,14 @@ export const VARIANT_ROWS = [
 		key: 'ghost-primary',
 		tone: 'primary',
 		presentation: 'ghost',
-		class:
-			'text-primary hover:bg-primary hover:text-primary-foreground'
+		class: 'text-primary hover:bg-primary hover:text-primary-foreground'
 	},
 	{
 		component: 'button',
 		key: 'link-primary',
 		tone: 'primary',
 		presentation: 'link',
-		class:
-			'text-primary underline-offset-4 hover:underline'
+		class: 'text-primary underline-offset-4 hover:underline'
 	},
 	{
 		component: 'button',
@@ -1031,16 +1032,14 @@ export const VARIANT_ROWS = [
 		key: 'ghost-secondary',
 		tone: 'secondary',
 		presentation: 'ghost',
-		class:
-			'text-secondary hover:bg-secondary hover:text-secondary-foreground'
+		class: 'text-secondary hover:bg-secondary hover:text-secondary-foreground'
 	},
 	{
 		component: 'button',
 		key: 'link-secondary',
 		tone: 'secondary',
 		presentation: 'link',
-		class:
-			'text-secondary underline-offset-4 hover:underline'
+		class: 'text-secondary underline-offset-4 hover:underline'
 	},
 	{
 		component: 'button',
@@ -1084,16 +1083,14 @@ export const VARIANT_ROWS = [
 		key: 'success',
 		tone: 'success',
 		presentation: 'solid',
-		class:
-			'bg-success text-success-foreground px-1.5 py-0.5 [a]:hover:bg-success/80'
+		class: 'bg-success text-success-foreground px-1.5 py-0.5 [a]:hover:bg-success/80'
 	},
 	{
 		component: 'badge',
 		key: 'warning',
 		tone: 'warning',
 		presentation: 'solid',
-		class:
-			'bg-warning text-warning-foreground px-1.5 py-0.5 [a]:hover:bg-warning/80'
+		class: 'bg-warning text-warning-foreground px-1.5 py-0.5 [a]:hover:bg-warning/80'
 	},
 	{
 		component: 'badge',
@@ -1131,7 +1128,8 @@ export const VARIANT_ROWS = [
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
-		class: 'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 [a]:hover:text-info-text/70'
+		class:
+			'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 [a]:hover:text-info-text/70'
 	},
 	{
 		component: 'badge',
@@ -1448,10 +1446,19 @@ const VARIANT_STOCK_CLASS = {
 
 const keyToken = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);
 
-const renderVariantBlock = (component, rows) => {
+// A lead key the fixer keeps byte-for-byte in the stock block but replaces in the fixed block.
+const VARIANT_FIXED = {
+	alert: {
+		default:
+			'bg-primary text-primary-foreground *:data-[slot=alert-description]:text-primary-foreground'
+	}
+};
+
+const renderVariantBlock = (component, rows, fixed = false) => {
 	const { lead, trail, open } = VARIANT_LAYOUT[component];
 	const pinned = VARIANT_PINNED[component];
-	const line = (key) => `\t\t\t\t${keyToken(key)}: "${pinned[key]}",`;
+	const line = (key) =>
+		`\t\t\t\t${keyToken(key)}: "${(fixed && VARIANT_FIXED[component]?.[key]) || pinned[key]}",`;
 	return [
 		...(open ? ['variant: {'] : []),
 		...lead.map(line),
@@ -1471,7 +1478,7 @@ export const VARIANTS = VARIANT_COMPONENTS.map((component) => ({
 	component,
 	file: VARIANT_FILES[component],
 	stock: renderVariantBlock(component, stockRowsOf(component)),
-	fixed: renderVariantBlock(component, rowsOf(component))
+	fixed: renderVariantBlock(component, rowsOf(component), true)
 }));
 
 export const KNOWN_COMPONENTS = [

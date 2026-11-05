@@ -69,7 +69,7 @@ The ten sites the project never added each print a `missing` line above the summ
 
 The count above the fix report is read back from the written file, so a missing row shows a number below 45. A second run prints `already installed` instead of installing again. A run on a stylesheet from an older version prints `upgrading <old> -> 0.3.0` before the rest. With a theme, two chart lines follow the install line and report the solved lightness ramp and the minimum adjacent difference.
 
-With a theme, `init` also measures the contrast matrix from the parsed theme and prints it: the ten repaired pairs, the four text tones and the four filled rows for each scheme. A text pair below 4.5:1 prints a warning that names the pair and the ratio, and the exit code stays 0. A fill below 3:1 against the page prints as a known limit.
+With a theme, `init` also measures the contrast matrix from the parsed theme and prints it: the ten repaired pairs, the four text tones and the four filled rows for each scheme. A text pair below 4.5:1 prints a warning that names the pair and the ratio, and the exit code stays 0. A fill below 3:1 against the page prints as a known limit, because the text-tone border is the component boundary.
 
 A missing theme file is a warning, not a failure. The CLI prints `E1`, writes the bindings with your own values as fallbacks, and the build renders the project's palette. A malformed theme file exits non-zero with `E2` or `E3`, because a wrong pair would render wrong colours silently. When the header names a newer version than the CLI, the CLI prints `E4`, exits non-zero and writes nothing, because an older CLI would undo bindings a newer one wrote.
 
@@ -116,9 +116,9 @@ A run that writes refuses when the header names a newer version than the CLI. It
 
 Each block holds 45 non-derived declarations: 38 binding keys, 2 static tokens and 5 chart rows. Thirteen derived helpers sit beside them: nine from the four mix keys and the five chart rows, and four from the text tones.
 
-0.3.0 adds eleven bindings. The seven status tokens are `success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground` and `destructive-foreground`. The four text tones are `success-text`, `warning-text`, `info-text` and `destructive-text`. Each has a `--color-*` alias. `blackwhite` and `blackwhite-foreground` are a static pair the CLI writes per scheme, `oklch(20% 0.042 265.755)` with `oklch(96% 0.007 247.896)` in light, and `oklch(98% 0.002 247.839)` with `oklch(13% 0.028 261.692)` in dark, with the same aliases. They have no daisyUI source, so the value is written literally.
+0.3.0 adds eleven bindings. The seven status tokens are `success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground` and `destructive-foreground`. The four text tones are `success-text`, `warning-text`, `info-text` and `destructive-text`. Each has a `--color-*` alias. `blackwhite` and `blackwhite-foreground` are a static pair the CLI writes per scheme, `oklch(20% 0.042 265.755)` with `oklch(96% 0.007 247.896)` in light and `oklch(98% 0.002 247.839)` with `oklch(13% 0.028 261.692)` in dark, with the same aliases. They have no daisyUI source, so the value is written literally.
 
-A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. The raw tone is the fill on the filled keys, and the quiet button presentations use it as text, which measures below AA in light for success, warning, info and secondary. The text tone is the mixed pair the badge presentations use. The status fallbacks are fixed, so a project with no theme is still readable.
+A text tone is `color-mix(in oklch, var(--<tone>) 40%, var(--foreground) 60%)`. The raw tone stays the fill and is never the text. The status fallbacks are fixed, so a project with no theme is still readable.
 
 ### Radius
 
@@ -136,13 +136,13 @@ Badge gains `success`, `warning` and `info` as filled chips, and `outline-*`, `g
 
 Bubble gains `success`, `warning`, `info` and `destructive` as filled bubbles, plus `outline-*` and `ghost-*` for the four tones. Every bubble content is `rounded-full` except the ghost rows, which stay square and bare. The `outline-*` keys are transparent with the tone as border and text, and fill with the tone and its foreground on hover. It has no link presentation.
 
-Alert gains `success`, `warning` and `info` as filled alerts, `bg-<tone>` with `text-<tone>-foreground`, so the surface and the text are the theme's own tone and tone content. The destructive alert is filled with the theme's error pair.
+Alert gains `success`, `warning`, `info` and `destructive` as filled alerts, `bg-<tone>` with `text-<tone>-foreground`, so the surface and the text are the theme's own tone and tone content. The `default` alert is the primary pair, `bg-primary` with `text-primary-foreground`.
 
 Only the `outline` and `outline-*` keys carry a border. A filled status key's fill can stay below 3:1 against the page, which is recorded as a known limit, and its text stays at or above 4.5:1.
 
 ## Visual check
 
-Check light and dark. Check the ten repaired pairs: dialog and sheet close, calendar and range hover, range middle, destructive menu shortcuts, chart tooltip and muted bubble. Check the four tones in each presentation the component supports, the border on the outline rows only, the radius on the button, card and input, and the destructive base. The adapter's own release check uses the repo harness for light and dark screenshots, plus this checklist. Storybook is not part of 0.3.0.
+Check light and dark. Check the ten repaired pairs: dialog and sheet close, calendar and range hover, range middle, destructive menu shortcuts, chart tooltip and muted bubble. Check the four tones in each presentation the component supports, the filled border, the radius on the button, card and input, and the destructive base. The adapter's own release check uses the repo harness for light and dark screenshots, plus this checklist. Storybook is not part of 0.3.0.
 
 ## Overrides (optional)
 

@@ -560,6 +560,13 @@ check(
 	rowLinesMissing(alertSite, ALERT_VARIANTS) === '',
 	rowLinesMissing(alertSite, ALERT_VARIANTS)
 );
+check(
+	'alert: the fixed default uses the primary pair',
+	alertSite.fixed.includes(
+		'default: "bg-primary text-primary-foreground *:data-[slot=alert-description]:text-primary-foreground"'
+	),
+	alertSite.fixed
+);
 
 check(
 	'bubble: the stock block occurs exactly once in the pin',
