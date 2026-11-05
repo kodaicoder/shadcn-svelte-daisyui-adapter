@@ -104,7 +104,7 @@ export const SITES = [
 		stock:
 			'*:data-[slot=bubble-content]:bg-muted [&>[data-slot=bubble-content]:is(button,a):hover]',
 		fixed:
-			'*:data-[slot=bubble-content]:bg-muted *:data-[slot=bubble-content]:text-foreground [&>[data-slot=bubble-content]:is(button,a):hover]'
+			'*:data-[slot=bubble-content]:bg-muted *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-foreground [&>[data-slot=bubble-content]:is(button,a):hover]'
 	}
 ];
 
@@ -1198,7 +1198,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-destructive/10 dark:*:data-[slot=bubble-content]:bg-destructive/20 *:data-[slot=bubble-content]:text-destructive [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/20 dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30'
+			'*:data-[slot=bubble-content]:bg-destructive *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-destructive-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/80'
 	},
 	{
 		component: 'bubble',
@@ -1206,7 +1206,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-success *:data-[slot=bubble-content]:text-success-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/80'
+			'*:data-[slot=bubble-content]:bg-success *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-success-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/80'
 	},
 	{
 		component: 'bubble',
@@ -1214,7 +1214,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-warning *:data-[slot=bubble-content]:text-warning-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/80'
+			'*:data-[slot=bubble-content]:bg-warning *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-warning-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/80'
 	},
 	{
 		component: 'bubble',
@@ -1222,7 +1222,7 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-info *:data-[slot=bubble-content]:text-info-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/80'
+			'*:data-[slot=bubble-content]:bg-info *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-info-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/80'
 	},
 	{
 		component: 'bubble',
@@ -1230,7 +1230,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-destructive/10 *:data-[slot=bubble-content]:border-destructive-text *:data-[slot=bubble-content]:text-destructive-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30'
+			'*:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:border-destructive *:data-[slot=bubble-content]:text-destructive [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive [&>[data-slot=bubble-content]:is(button,a):hover]:text-destructive-foreground'
 	},
 	{
 		component: 'bubble',
@@ -1238,7 +1238,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-success/10 *:data-[slot=bubble-content]:border-success-text *:data-[slot=bubble-content]:text-success-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/30'
+			'*:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:border-success *:data-[slot=bubble-content]:text-success [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success [&>[data-slot=bubble-content]:is(button,a):hover]:text-success-foreground'
 	},
 	{
 		component: 'bubble',
@@ -1246,7 +1246,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-warning/10 *:data-[slot=bubble-content]:border-warning-text *:data-[slot=bubble-content]:text-warning-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/30'
+			'*:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:border-warning *:data-[slot=bubble-content]:text-warning [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning [&>[data-slot=bubble-content]:is(button,a):hover]:text-warning-foreground'
 	},
 	{
 		component: 'bubble',
@@ -1254,7 +1254,7 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-info/10 *:data-[slot=bubble-content]:border-info-text *:data-[slot=bubble-content]:text-info-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/30'
+			'*:data-[slot=bubble-content]:bg-transparent *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:border-info *:data-[slot=bubble-content]:text-info [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info [&>[data-slot=bubble-content]:is(button,a):hover]:text-info-foreground'
 	},
 	{
 		component: 'bubble',
@@ -1351,7 +1351,9 @@ const VARIANT_STOCK_CLASS = {
 	badge:
 		'bg-destructive/10 [a]:hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive dark:bg-destructive/20',
 	alert:
-		'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current'
+		'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current',
+	bubble:
+		'*:data-[slot=bubble-content]:bg-destructive/10 dark:*:data-[slot=bubble-content]:bg-destructive/20 *:data-[slot=bubble-content]:text-destructive [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/20 dark:[&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30'
 };
 
 const keyToken = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);

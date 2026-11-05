@@ -22,15 +22,15 @@ import {
 } from '../../../packages/daisyui-adapter/dist/contrast.mjs';
 
 // The published 0.01 values stay on unrounded oklchToSrgb, so the reference rows pin the theme's
-// own numbers rather than the bytes a painted snapshot rounds them to.
+// own numbers rather than the bytes a painted snapshot rounds them to. `destructive` has no fixed
+// fallback: its fill and content come from the theme, so that row is read and not pinned.
 const REFERENCE = {
 	light: {
-		text: { success: 8.3, warning: 6.91, info: 8.24, destructive: 13.49 },
-		fill: { success: 2.52, warning: 1.95, info: 2.22 }
+		text: { success: 7.95, warning: 6.62, info: 7.89 },
+		fill: { success: 2.41, warning: 1.86, info: 2.13 }
 	},
 	dark: {
-		text: { success: 11.28, warning: 13.0, info: 11.88, destructive: 8.24 },
-		fill: { destructive: 2.89 }
+		text: { success: 11.28, warning: 13.0, info: 11.88 }
 	}
 };
 
@@ -141,7 +141,7 @@ for (const scheme of SCHEMES) {
 		success: TOKEN_FALLBACKS['success-foreground'],
 		warning: TOKEN_FALLBACKS['warning-foreground'],
 		info: TOKEN_FALLBACKS['info-foreground'],
-		destructive: TOKEN_FALLBACKS['destructive-foreground']
+		destructive: schemeTheme['--color-error-content']
 	};
 	reference[scheme] = {};
 	for (const tone of TONES) {

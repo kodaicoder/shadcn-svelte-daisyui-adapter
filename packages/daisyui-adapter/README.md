@@ -134,7 +134,7 @@ Button gains `success`, `warning` and `info` as filled buttons, `destructive` as
 
 Badge gains `success`, `warning` and `info` as filled chips, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys are `bg-<tone>/10` chips with the text-tone border and text. The destructive badge is a `bg-destructive/10` chip with the text tone and no border.
 
-Bubble gains `success`, `warning` and `info` as filled bubbles, plus `outline-*` and `ghost-*` for the four tones. The `outline-*` keys paint the tone at 10 percent as the content surface, moving to 30 percent on hover. It has no link presentation. The destructive bubble stays the stock tint.
+Bubble gains `success`, `warning`, `info` and `destructive` as filled bubbles, plus `outline-*` and `ghost-*` for the four tones. Every bubble content is `rounded-full` except the ghost rows, which stay square and bare. The `outline-*` keys are transparent with the tone as border and text, and fill with the tone and its foreground on hover. It has no link presentation.
 
 Alert gains `success`, `warning` and `info` as filled alerts, `bg-<tone>` with `text-<tone>-foreground`, so the surface and the text are the theme's own tone and tone content. The destructive alert is filled with the theme's error pair.
 

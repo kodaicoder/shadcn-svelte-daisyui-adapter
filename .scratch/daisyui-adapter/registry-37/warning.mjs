@@ -70,7 +70,7 @@ for (const scheme of ['light', 'dark']) {
 
 const toneRatios = (scheme) => matrix[scheme].textTones.map((row) => row.ratio);
 const EXPECTED_TONES = {
-	light: [7.37, 6.58, 8.29, 13.51],
+	light: [7.06, 6.3, 7.94, 12.94],
 	dark: [12.41, 12.72, 11.91, 8.26]
 };
 for (const scheme of ['light', 'dark']) {
@@ -93,9 +93,9 @@ check(
 
 const limits = contrastKnownLimits(matrix).map((row) => `${row.scheme} ${row.name} ${row.ratio}`);
 const EXPECTED_LIMITS = [
-	'light success fill 1.96',
-	'light warning fill 1.76',
-	'light info fill 2.22',
+	'light success fill 1.88',
+	'light warning fill 1.69',
+	'light info fill 2.13',
 	'dark destructive fill 2.89'
 ];
 check(
