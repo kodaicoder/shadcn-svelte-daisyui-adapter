@@ -915,28 +915,28 @@ export const VARIANT_ROWS = [
 		key: 'outline-destructive',
 		tone: 'destructive',
 		presentation: 'outline',
-		class: 'border-destructive-text bg-transparent text-destructive-text hover:bg-destructive/10'
+		class: 'border-destructive-text bg-destructive/10 text-destructive-text hover:bg-destructive/30'
 	},
 	{
 		component: 'button',
 		key: 'outline-success',
 		tone: 'success',
 		presentation: 'outline',
-		class: 'border-success-text bg-transparent text-success-text hover:bg-success/10'
+		class: 'border-success-text bg-success/10 text-success-text hover:bg-success/30'
 	},
 	{
 		component: 'button',
 		key: 'outline-warning',
 		tone: 'warning',
 		presentation: 'outline',
-		class: 'border-warning-text bg-transparent text-warning-text hover:bg-warning/10'
+		class: 'border-warning-text bg-warning/10 text-warning-text hover:bg-warning/30'
 	},
 	{
 		component: 'button',
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
-		class: 'border-info-text bg-transparent text-info-text hover:bg-info/10'
+		class: 'border-info-text bg-info/10 text-info-text hover:bg-info/30'
 	},
 	{
 		component: 'button',
@@ -1031,7 +1031,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'outline',
 		class:
-			'border border-destructive-text text-destructive-text px-1.5 py-0.5 [a]:hover:text-destructive-text/70'
+			'border border-destructive-text bg-destructive/10 text-destructive-text px-1.5 py-0.5 [a]:hover:text-destructive-text/70'
 	},
 	{
 		component: 'badge',
@@ -1039,7 +1039,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'outline',
 		class:
-			'border border-success-text text-success-text px-1.5 py-0.5 [a]:hover:text-success-text/70'
+			'border border-success-text bg-success/10 text-success-text px-1.5 py-0.5 [a]:hover:text-success-text/70'
 	},
 	{
 		component: 'badge',
@@ -1047,14 +1047,14 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'outline',
 		class:
-			'border border-warning-text text-warning-text px-1.5 py-0.5 [a]:hover:text-warning-text/70'
+			'border border-warning-text bg-warning/10 text-warning-text px-1.5 py-0.5 [a]:hover:text-warning-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
-		class: 'border border-info-text text-info-text px-1.5 py-0.5 [a]:hover:text-info-text/70'
+		class: 'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 [a]:hover:text-info-text/70'
 	},
 	{
 		component: 'badge',
@@ -1182,7 +1182,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-destructive-text *:data-[slot=bubble-content]:text-destructive-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/10'
+			'*:data-[slot=bubble-content]:bg-destructive/10 *:data-[slot=bubble-content]:border-destructive-text *:data-[slot=bubble-content]:text-destructive-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-destructive/30'
 	},
 	{
 		component: 'bubble',
@@ -1190,7 +1190,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-success-text *:data-[slot=bubble-content]:text-success-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/10'
+			'*:data-[slot=bubble-content]:bg-success/10 *:data-[slot=bubble-content]:border-success-text *:data-[slot=bubble-content]:text-success-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/30'
 	},
 	{
 		component: 'bubble',
@@ -1198,7 +1198,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-warning-text *:data-[slot=bubble-content]:text-warning-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/10'
+			'*:data-[slot=bubble-content]:bg-warning/10 *:data-[slot=bubble-content]:border-warning-text *:data-[slot=bubble-content]:text-warning-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/30'
 	},
 	{
 		component: 'bubble',
@@ -1206,7 +1206,7 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'outline',
 		class:
-			'*:data-[slot=bubble-content]:bg-background *:data-[slot=bubble-content]:border-info-text *:data-[slot=bubble-content]:text-info-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/10'
+			'*:data-[slot=bubble-content]:bg-info/10 *:data-[slot=bubble-content]:border-info-text *:data-[slot=bubble-content]:text-info-text [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/30'
 	},
 	{
 		component: 'bubble',

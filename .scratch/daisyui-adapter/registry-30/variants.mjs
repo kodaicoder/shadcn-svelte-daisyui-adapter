@@ -209,11 +209,16 @@ check(
 );
 
 const outlinePairs = TONES.filter((tone) => {
-	const row = byKey(`outline-${tone}`);
-	return !(row.class.includes(`border-${tone}-text`) && row.class.includes(`text-${tone}-text`));
+	const tokens = byKey(`outline-${tone}`).class.split(/\s+/);
+	return !(
+		tokens.includes(`border-${tone}-text`) &&
+		tokens.includes(`bg-${tone}/10`) &&
+		tokens.includes(`hover:bg-${tone}/30`) &&
+		tokens.includes(`text-${tone}-text`)
+	);
 });
 check(
-	'each outline row carries the text-tone border and text',
+	'each outline row carries the text-tone border and text, with the tone at 10 percent as surface',
 	outlinePairs.length === 0,
 	outlinePairs.join(', ')
 );
@@ -285,13 +290,18 @@ check(
 	mismatchedPin.join(', ')
 );
 
-// A bare bg-destructive/10 is the deleted stock base; the outline rows keep it only as a hover tint.
+// A bare bg-destructive/10 is the deleted stock base; the outline rows carry it as their surface.
 const TINTED_BASE = /(?:^|[\s"])bg-destructive\/10(?=[\s"])/;
+const withoutOutline = (text) =>
+	text
+		.split('\n')
+		.filter((line) => !/^\s*"outline-/.test(line))
+		.join('\n');
 const forbidden = ['text-destructive"'].filter((needle) => site.fixed.includes(needle));
 check(
 	'the fixed block drops the tinted destructive base',
-	!TINTED_BASE.test(site.fixed) && forbidden.length === 0,
-	[TINTED_BASE.test(site.fixed) ? 'bg-destructive/10' : null, ...forbidden]
+	!TINTED_BASE.test(withoutOutline(site.fixed)) && forbidden.length === 0,
+	[TINTED_BASE.test(withoutOutline(site.fixed)) ? 'bg-destructive/10' : null, ...forbidden]
 		.filter(Boolean)
 		.join(', ')
 );
@@ -331,7 +341,7 @@ const appliedText = textOf(applied, FILENAME);
 check('the applied file holds the fixed block', appliedText.includes(site.fixed));
 check(
 	'the applied file drops the destructive tint',
-	!TINTED_BASE.test(appliedText) && !appliedText.includes('text-destructive"')
+	!TINTED_BASE.test(withoutOutline(appliedText)) && !appliedText.includes('text-destructive"')
 );
 check(
 	'the radius table still applies in the same file',

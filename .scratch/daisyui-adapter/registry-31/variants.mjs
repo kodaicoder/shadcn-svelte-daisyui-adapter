@@ -416,15 +416,33 @@ const outlineBroken = badgeOutline
 		return (
 			!tokens.includes('border') ||
 			!tokens.includes(`border-${row.tone}-text`) ||
-			!hasPadding(tokens) ||
-			tokens.some((token) => baseOf(token).startsWith('bg-'))
+			!tokens.includes(`bg-${row.tone}/10`) ||
+			!hasPadding(tokens)
 		);
 	})
 	.map((row) => row.key);
 check(
-	'every badge outline row is a border-only chip',
+	'every badge outline row carries the tone at 10 percent as its surface',
 	badgeOutline.length === 4 && outlineBroken.length === 0,
 	outlineBroken.join(', ')
+);
+
+const bubbleOutline = BUBBLE_VARIANTS.filter((row) => row.key.startsWith('outline-'));
+const bubbleSurfaceBroken = bubbleOutline
+	.filter((row) => {
+		const tokens = tokensOf(row);
+		return (
+			!tokens.includes(`*:data-[slot=bubble-content]:bg-${row.tone}/10`) ||
+			!tokens.includes(
+				`[&>[data-slot=bubble-content]:is(button,a):hover]:bg-${row.tone}/30`
+			)
+		);
+	})
+	.map((row) => row.key);
+check(
+	'every bubble outline row paints the tone at 10 percent and moves to 30 on hover',
+	bubbleOutline.length === 4 && bubbleSurfaceBroken.length === 0,
+	bubbleSurfaceBroken.join(', ')
 );
 
 const badgeFilled = BADGE_VARIANTS.filter((row) =>

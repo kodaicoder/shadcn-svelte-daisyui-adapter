@@ -119,11 +119,11 @@ The scale is linear in `--radius`, with no clamp, so at zero every step is zero.
 
 The components keep one `variant` prop. Every combined value is a literal key.
 
-Button gains `success`, `warning` and `info` as filled buttons with the text-tone border, `destructive` as a filled button with the same border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys paint the text tone as text and border.
+Button gains `success`, `warning` and `info` as filled buttons with the text-tone border, `destructive` as a filled button with the same border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys paint the text tone as text and border, and the tone at 10 percent as their surface, moving to 30 percent on hover.
 
-Badge gains `success`, `warning` and `info` as filled chips with the text-tone border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys are border-only chips. The destructive badge is a `bg-destructive/10` chip with the text-tone border and text.
+Badge gains `success`, `warning` and `info` as filled chips with the text-tone border, and `outline-*`, `ghost-*` and `link-*` for the four tones. The `outline-*` keys carry the text-tone border and text, with the tone at 10 percent as their surface. The destructive badge is a `bg-destructive/10` chip with the text-tone border and text.
 
-Bubble gains `success`, `warning` and `info` as filled bubbles with the text-tone border, plus `outline-*` and `ghost-*` for the four tones. It has no link presentation. The destructive bubble stays the stock tint.
+Bubble gains `success`, `warning` and `info` as filled bubbles with the text-tone border, plus `outline-*` and `ghost-*` for the four tones. The `outline-*` keys paint the tone at 10 percent as the content surface, moving to 30 percent on hover. It has no link presentation. The destructive bubble stays the stock tint.
 
 Alert gains `success`, `warning` and `info` as card-backed alerts. The destructive alert stays the stock text treatment.
 
