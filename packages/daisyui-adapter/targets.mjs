@@ -887,28 +887,28 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'bg-destructive text-destructive-foreground border-destructive-text hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 focus-visible:border-destructive/40'
+			'bg-destructive text-destructive-foreground hover:bg-destructive/80 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 focus-visible:border-destructive/40'
 	},
 	{
 		component: 'button',
 		key: 'success',
 		tone: 'success',
 		presentation: 'solid',
-		class: 'bg-success text-success-foreground border-success-text hover:bg-success/80'
+		class: 'bg-success text-success-foreground hover:bg-success/80'
 	},
 	{
 		component: 'button',
 		key: 'warning',
 		tone: 'warning',
 		presentation: 'solid',
-		class: 'bg-warning text-warning-foreground border-warning-text hover:bg-warning/80'
+		class: 'bg-warning text-warning-foreground hover:bg-warning/80'
 	},
 	{
 		component: 'button',
 		key: 'info',
 		tone: 'info',
 		presentation: 'solid',
-		class: 'bg-info text-info-foreground border-info-text hover:bg-info/80'
+		class: 'bg-info text-info-foreground hover:bg-info/80'
 	},
 	{
 		component: 'button',
@@ -1000,7 +1000,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'border border-destructive-text bg-destructive/10 text-destructive-text px-1.5 py-0.5 [a]:hover:bg-destructive/20 dark:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
+			'bg-destructive/10 text-destructive-text px-1.5 py-0.5 [a]:hover:bg-destructive/20 dark:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
 	},
 	{
 		component: 'badge',
@@ -1008,7 +1008,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'solid',
 		class:
-			'border border-success-text bg-success text-success-foreground px-1.5 py-0.5 [a]:hover:bg-success/80'
+			'bg-success text-success-foreground px-1.5 py-0.5 [a]:hover:bg-success/80'
 	},
 	{
 		component: 'badge',
@@ -1016,14 +1016,14 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'solid',
 		class:
-			'border border-warning-text bg-warning text-warning-foreground px-1.5 py-0.5 [a]:hover:bg-warning/80'
+			'bg-warning text-warning-foreground px-1.5 py-0.5 [a]:hover:bg-warning/80'
 	},
 	{
 		component: 'badge',
 		key: 'info',
 		tone: 'info',
 		presentation: 'solid',
-		class: 'border border-info-text bg-info text-info-foreground px-1.5 py-0.5 [a]:hover:bg-info/80'
+		class: 'bg-info text-info-foreground px-1.5 py-0.5 [a]:hover:bg-info/80'
 	},
 	{
 		component: 'badge',
@@ -1158,7 +1158,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-success *:data-[slot=bubble-content]:border-success-text *:data-[slot=bubble-content]:text-success-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/80'
+			'*:data-[slot=bubble-content]:bg-success *:data-[slot=bubble-content]:text-success-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-success/80'
 	},
 	{
 		component: 'bubble',
@@ -1166,7 +1166,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-warning *:data-[slot=bubble-content]:border-warning-text *:data-[slot=bubble-content]:text-warning-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/80'
+			'*:data-[slot=bubble-content]:bg-warning *:data-[slot=bubble-content]:text-warning-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-warning/80'
 	},
 	{
 		component: 'bubble',
@@ -1174,7 +1174,7 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'solid',
 		class:
-			'*:data-[slot=bubble-content]:bg-info *:data-[slot=bubble-content]:border-info-text *:data-[slot=bubble-content]:text-info-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/80'
+			'*:data-[slot=bubble-content]:bg-info *:data-[slot=bubble-content]:text-info-foreground [&>[data-slot=bubble-content]:is(button,a):hover]:bg-info/80'
 	},
 	{
 		component: 'bubble',

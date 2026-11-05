@@ -196,14 +196,15 @@ check('no variant class writes the raw tone as text', rawText.length === 0, rawT
 
 const solidPairs = TONES.filter((tone) => {
 	const row = byKey(tone);
+	const tokens = row.class.split(/\s+/);
 	return !(
 		row.class.includes(`bg-${tone} `) &&
 		row.class.includes(`text-${tone}-foreground`) &&
-		row.class.includes(`border-${tone}-text`)
+		!tokens.includes(`border-${tone}-text`)
 	);
 });
 check(
-	'each solid row is filled, with the tone foreground and the text-tone border',
+	'each solid row is filled, with the tone foreground and no resting border',
 	solidPairs.length === 0,
 	solidPairs.join(', ')
 );

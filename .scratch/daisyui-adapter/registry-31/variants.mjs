@@ -396,11 +396,12 @@ const borderedFilled = VARIANT_ROWS.filter(
 	(row) =>
 		['button', 'bubble'].includes(row.component) &&
 		row.presentation === 'solid' &&
-		row.key !== 'destructive' &&
-		!row.class.includes(`border-${row.tone}-text`)
+		row.class
+			.split(/\s+/)
+			.some((token) => token.split(':').pop() === `border-${row.tone}-text`)
 ).map((row) => `${row.component}:${row.key}`);
 check(
-	'every filled status row on a bordered component carries the text-tone border',
+	'no filled status row on button or bubble carries a resting border',
 	borderedFilled.length === 0,
 	borderedFilled.join(', ')
 );
@@ -459,15 +460,15 @@ const filledBroken = badgeFilled
 					token !== `bg-${row.tone}` &&
 					!(token.startsWith('[a]:hover:') && baseOf(token).startsWith(`bg-${row.tone}`))
 			) ||
-			!tokens.includes('border') ||
-			!tokens.includes(`border-${row.tone}-text`) ||
+			tokens.includes('border') ||
+			tokens.some((token) => token.split(':').pop() === `border-${row.tone}-text`) ||
 			!tokens.includes(`text-${row.tone}-foreground`) ||
 			!hasPadding(tokens)
 		);
 	})
 	.map((row) => row.key);
 check(
-	'every badge filled status row is a filled chip with the text-tone border',
+	'every badge filled status row is a filled chip with the tone foreground and no border',
 	badgeFilled.length === 3 && filledBroken.length === 0,
 	filledBroken.join(', ')
 );
@@ -489,11 +490,11 @@ const destructiveChip =
 	typeof pinnedBadgeDestructive === 'string' &&
 	pinnedBadgeDestructive.includes('bg-destructive/10') &&
 	badgePinnedDestructive !== undefined &&
-	badgePinnedDestructive.class.includes('border-destructive-text') &&
+	!badgePinnedDestructive.class.includes('border-') &&
 	badgePinnedDestructive.class.includes('bg-destructive/10') &&
 	badgePinnedDestructive.class.includes('text-destructive-text');
 check(
-	'the badge destructive row is a bordered chip with the text tone on the 1.8 fill',
+	'the badge destructive row is the tinted chip with the text tone on the 1.8 fill and no border',
 	destructiveChip,
 	destructiveChip ? '' : `badge:destructive :: ${badgePinnedDestructive?.class ?? 'missing'}`
 );

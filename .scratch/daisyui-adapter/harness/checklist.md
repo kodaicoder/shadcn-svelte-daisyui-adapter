@@ -14,10 +14,9 @@ Check each item in light and then in dark.
 - Badge: the four tones in filled, outline, ghost and link.
 - Bubble: the four tones in filled, outline and ghost.
 - Alert: `default`, `destructive`, `success`, `warning` and `info`.
-- The filled button carries a visible 1px border in the text tone, and the fill is lighter than that
-  border against the page.
+- Only the `outline` and `outline-*` rows carry a border. A filled status key has no visible edge; in light its fill sits below 3:1 against the page, which is the recorded known limit.
 - Radius on the button, the card and the input follows the theme's field and box steps, not a square
   corner.
-- The destructive base button paints a solid destructive fill with the text-tone border.
+- The destructive base button paints a solid destructive fill with no border.
 - No console error in either scheme; `run.json` records an empty `consoleErrors` array.
 - `contrast.json` reports no failures; its `findings` list is reviewed, because a filled label's contrast comes from the theme's own `<tone>-content`.

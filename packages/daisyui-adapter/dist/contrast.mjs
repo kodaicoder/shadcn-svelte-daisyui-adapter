@@ -5,7 +5,7 @@ import { parseOklch as parseOklchValue } from './ramp.mjs';
 export const TONES = ['success', 'warning', 'info', 'destructive'];
 export const TEXT_THRESHOLD = 4.5;
 export const BORDER_THRESHOLD = 3;
-export const WARNING_KIND = { text: 'text', fillText: 'fill-text', border: 'border' };
+export const WARNING_KIND = { text: 'text', fillText: 'fill-text' };
 
 export const SELECTORS = [
 	...PAIRS.map((pair) => `[data-pair="${pair.id}"]`),
@@ -184,16 +184,12 @@ export const contrastMatrix = (themes) => {
 		const filled = TONES.map((tone) => {
 			const fill = tokenColour(tone, theme);
 			const textRatio = round(contrastRatio(tokenColour(`${tone}-foreground`, theme), fill));
-			const borderRatio = round(contrastRatio(tokenColour(`${tone}-text`, theme), page));
 			const fillRatio = round(contrastRatio(fill, page));
 			return {
 				tone,
 				text: textRatio,
 				textThreshold: TEXT_THRESHOLD,
 				textPass: textRatio >= TEXT_THRESHOLD,
-				border: borderRatio,
-				borderThreshold: BORDER_THRESHOLD,
-				borderPass: borderRatio >= BORDER_THRESHOLD,
 				fill: fillRatio,
 				fillKnownLimit: fillRatio < BORDER_THRESHOLD
 			};
@@ -235,16 +231,6 @@ export const contrastWarnings = (matrix) =>
 					ratio: row.text,
 					threshold: TEXT_THRESHOLD,
 					kind: WARNING_KIND.fillText
-				})),
-			...rows.filled
-				.filter((row) => !row.borderPass)
-				.map((row) => ({
-					scheme,
-					tone: row.tone,
-					name: `${row.tone} border`,
-					ratio: row.border,
-					threshold: BORDER_THRESHOLD,
-					kind: WARNING_KIND.border
 				}))
 		];
 	});

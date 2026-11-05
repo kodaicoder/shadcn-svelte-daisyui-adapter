@@ -105,15 +105,6 @@ for (const scheme of SCHEMES) {
 				`${scheme}: ${tone} filled text is ${round(textOnFill)}:1 against its fill; the theme's own ${tone}-content sets this pair`
 			);
 		}
-		const border = composite(parseRgb(filledElement.borderTopColorRgb), page);
-		const borderVsPage = contrastRatio(border, page);
-		const borderPass = borderVsPage >= BORDER_THRESHOLD;
-		if (!borderPass) {
-			failures.push(
-				`${scheme}: ${tone} border is ${round(borderVsPage)}:1, below ${BORDER_THRESHOLD}:1`
-			);
-		}
-
 		return {
 			tone,
 			text: {
@@ -127,11 +118,7 @@ for (const scheme of SCHEMES) {
 				fill: filledElement.backgroundRgb,
 				fillVsPage: round(fillVsPage),
 				fillKnownLimit: fillVsPage < BORDER_THRESHOLD,
-				textOnFill: round(textOnFill),
-				border: filledElement.borderTopColorRgb,
-				borderVsPage: round(borderVsPage),
-				borderThreshold: BORDER_THRESHOLD,
-				borderPass
+				textOnFill: round(textOnFill)
 			}
 		};
 	});
@@ -166,22 +153,15 @@ for (const scheme of SCHEMES) {
 		const row = {
 			tone,
 			textVsPage: round(textVsPage),
-			borderVsPage: round(textVsPage),
 			fillVsPage: round(fillVsPage),
 			fillKnownLimit: fillVsPage < BORDER_THRESHOLD,
 			textOnFill: round(textOnFill),
 			textPass: textVsPage >= TEXT_THRESHOLD,
-			borderPass: textVsPage >= BORDER_THRESHOLD,
 			textOnFillPass: textOnFill >= TEXT_THRESHOLD
 		};
 		if (!row.textPass) {
 			failures.push(
 				`${scheme} reference: ${tone} text is ${row.textVsPage}:1, below ${TEXT_THRESHOLD}:1`
-			);
-		}
-		if (!row.borderPass) {
-			failures.push(
-				`${scheme} reference: ${tone} border is ${row.borderVsPage}:1, below ${BORDER_THRESHOLD}:1`
 			);
 		}
 		if (!row.textOnFillPass) {
@@ -236,13 +216,11 @@ const toneTable = (scheme) =>
 	[
 		`### ${scheme} tones`,
 		'',
-		'| tone | text | text vs page | fill | fill vs page | known limit | text on fill | border | border vs page | pass |',
-		'| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+		'| tone | text | text vs page | fill | fill vs page | known limit | text on fill | pass |',
+		'| --- | --- | --- | --- | --- | --- | --- | --- |',
 		...live[scheme].tones.map(
 			(row) =>
-				`| ${row.tone} | ${row.text.foreground} | ${row.text.ratio} | ${row.filled.fill} | ${row.filled.fillVsPage} | ${row.filled.fillKnownLimit ? 'yes' : 'no'} | ${row.filled.textOnFill} | ${row.filled.border} | ${row.filled.borderVsPage} | ${
-					row.text.pass && row.filled.borderPass ? 'yes' : 'NO'
-				} |`
+				`| ${row.tone} | ${row.text.foreground} | ${row.text.ratio} | ${row.filled.fill} | ${row.filled.fillVsPage} | ${row.filled.fillKnownLimit ? 'yes' : 'no'} | ${row.filled.textOnFill} | ${row.text.pass ? 'yes' : 'NO'} |`
 		)
 	].join('\n');
 
@@ -271,7 +249,7 @@ ${referenceTable}
 
 ## Known limit
 
-The filled status and destructive variants stay below 3:1 against the page (dark destructive is the 2.89 row); the component boundary is the text-tone border, which is held at or above 3:1.
+A filled status variant whose fill measures below 3:1 against the page is a known limit. The filled variants carry no border; the tone is still held at 4.5:1 as text on the page for the outline, ghost and link presentations.
 
 ## Findings
 

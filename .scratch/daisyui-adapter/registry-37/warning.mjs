@@ -159,12 +159,31 @@ borderBlocks[0] = borderBlocks[0].replace(
 writeFileSync(join(border, 'src', 'daisyui-theme.css'), borderBlocks.join(''));
 const borderRun = cliResult(border);
 check(
-	'a text tone below 3 warns on the component boundary and still exits 0',
+	'a text tone below 4.5 warns and still exits 0',
 	borderRun.code === 0 &&
-		/\[daisyui-adapter\] warning: light success border is \d+\.\d+:1, below 3\.00:1; the text-tone border is the component boundary/.test(
+		/\[daisyui-adapter\] warning: light success text is \d+\.\d+:1, below 4\.50:1/.test(
 			borderRun.stderr
 		),
-	`exit ${borderRun.code}, ${(borderRun.stderr.match(/border is/g) ?? []).length} border warning(s)`
+	`exit ${borderRun.code}, ${(borderRun.stderr.match(/text is/g) ?? []).length} text warning(s)`
+);
+
+const content = join(WORK, 'content');
+scaffold(content);
+const contentBlocks = readFileSync(THEME, 'utf8').split(/(?=@plugin 'daisyui\/theme')/);
+const contentPage = /--color-base-100:\s*([^;]+);/.exec(contentBlocks[0])[1].trim();
+contentBlocks[0] = contentBlocks[0].replace(
+	/--color-warning-content:\s*[^;]+;/,
+	`--color-warning-content: ${contentPage};`
+);
+writeFileSync(join(content, 'src', 'daisyui-theme.css'), contentBlocks.join(''));
+const contentRun = cliResult(content);
+check(
+	'a tone content that fails its own fill warns and still exits 0',
+	contentRun.code === 0 &&
+		/\[daisyui-adapter\] warning: light warning fill text is \d+\.\d+:1, below 4\.50:1; the theme's own warning-content sets this pair/.test(
+			contentRun.stderr
+		),
+	`exit ${contentRun.code}, ${(contentRun.stderr.match(/fill text is/g) ?? []).length} fill-text warning(s)`
 );
 
 const unreadable = join(WORK, 'unreadable');

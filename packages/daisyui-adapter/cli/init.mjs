@@ -323,9 +323,6 @@ const warningSuffix = (warning) => {
 	if (warning.kind === WARNING_KIND.fillText) {
 		return `; the theme's own ${warning.tone}-content sets this pair`;
 	}
-	if (warning.kind === WARNING_KIND.border) {
-		return '; the text-tone border is the component boundary';
-	}
 	return '';
 };
 
@@ -333,8 +330,7 @@ const printContrast = (matrix) => {
 	for (const scheme of ['light', 'dark']) {
 		const rows = matrix[scheme];
 		console.log(
-			`[daisyui-adapter] contrast ${scheme} ` +
-				`(text ${TEXT_THRESHOLD.toFixed(2)}, border ${BORDER_THRESHOLD.toFixed(2)})`
+			`[daisyui-adapter] contrast ${scheme} (text ${TEXT_THRESHOLD.toFixed(2)})`
 		);
 		console.log(
 			`[daisyui-adapter]   pairs: ${rows.pairs
@@ -350,7 +346,7 @@ const printContrast = (matrix) => {
 			`[daisyui-adapter]   filled: ${rows.filled
 				.map(
 					(row) =>
-						`${row.tone} text ${row.text.toFixed(2)} border ${row.border.toFixed(2)} ` +
+						`${row.tone} text ${row.text.toFixed(2)} ` +
 						`fill ${row.fill.toFixed(2)}${row.fillKnownLimit ? ' known limit' : ''}`
 				)
 				.join(', ')}`
@@ -360,7 +356,7 @@ const printContrast = (matrix) => {
 		console.warn(
 			`[daisyui-adapter] known limit: ${limit.scheme} ${limit.name} is ` +
 				`${limit.ratio.toFixed(2)}:1 against the page, below ${BORDER_THRESHOLD.toFixed(2)}:1; ` +
-				'the text-tone border is the component boundary'
+				'the fill is the recorded limit'
 		);
 	}
 	for (const warning of contrastWarnings(matrix)) {
