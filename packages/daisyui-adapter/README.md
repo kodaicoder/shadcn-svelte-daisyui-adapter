@@ -125,7 +125,7 @@ Badge gains `success`, `warning` and `info` as filled chips with the text-tone b
 
 Bubble gains `success`, `warning` and `info` as filled bubbles with the text-tone border, plus `outline-*` and `ghost-*` for the four tones. The `outline-*` keys paint the tone at 10 percent as the content surface, moving to 30 percent on hover. It has no link presentation. The destructive bubble stays the stock tint.
 
-Alert gains `success`, `warning` and `info` as card-backed alerts. The destructive alert stays the stock text treatment.
+Alert gains `success`, `warning` and `info` as filled alerts, `bg-<tone>` with `text-<tone>-foreground`, so the surface and the text are the theme's own tone and tone content. The destructive alert is filled with the theme's error pair.
 
 The filled status keys and the filled destructive button carry the text-tone border, so the component boundary clears 3:1. The fill against the page can stay below 3:1. The border is the boundary.
 

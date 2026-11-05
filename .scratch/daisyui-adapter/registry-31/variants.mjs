@@ -355,12 +355,12 @@ check(
 );
 
 const RAW_TEXT = /(?<![-\w])text-(destructive|success|warning|info)(?![-\w])/;
-const rawText = VARIANT_ROWS.filter((row) => RAW_TEXT.test(row.class)).map(
-	(row) => `${row.component}:${row.key}`
-);
+const rawText = VARIANT_ROWS.filter(
+	(row) => RAW_TEXT.test(row.class) && `${row.component}:${row.key}` !== 'bubble:destructive'
+).map((row) => `${row.component}:${row.key}`);
 check(
-	'no raw tone as text except the two pinned destructive rows',
-	rawText.length === 2 && rawText[0] === 'alert:destructive' && rawText[1] === 'bubble:destructive',
+	'no raw tone as text except the pinned destructive bubble row',
+	rawText.length === 0,
 	rawText.join(', ')
 );
 

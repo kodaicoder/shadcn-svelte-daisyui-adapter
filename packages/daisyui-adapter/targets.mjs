@@ -1118,7 +1118,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current'
+			'bg-destructive text-destructive-foreground *:data-[slot=alert-description]:text-destructive-foreground *:[svg]:text-current'
 	},
 	{
 		component: 'alert',
@@ -1126,7 +1126,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'solid',
 		class:
-			'text-success-text bg-card *:data-[slot=alert-description]:text-success-text/90 *:[svg]:text-current'
+			'bg-success text-success-foreground *:data-[slot=alert-description]:text-success-foreground *:[svg]:text-current'
 	},
 	{
 		component: 'alert',
@@ -1134,7 +1134,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'solid',
 		class:
-			'text-warning-text bg-card *:data-[slot=alert-description]:text-warning-text/90 *:[svg]:text-current'
+			'bg-warning text-warning-foreground *:data-[slot=alert-description]:text-warning-foreground *:[svg]:text-current'
 	},
 	{
 		component: 'alert',
@@ -1142,7 +1142,7 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'solid',
 		class:
-			'text-info-text bg-card *:data-[slot=alert-description]:text-info-text/90 *:[svg]:text-current'
+			'bg-info text-info-foreground *:data-[slot=alert-description]:text-info-foreground *:[svg]:text-current'
 	},
 	{
 		component: 'bubble',

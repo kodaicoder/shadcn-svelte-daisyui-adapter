@@ -70,8 +70,8 @@ for (const scheme of ['light', 'dark']) {
 
 const toneRatios = (scheme) => matrix[scheme].textTones.map((row) => row.ratio);
 const EXPECTED_TONES = {
-	light: [11.36, 6.94, 12.38, 13.51],
-	dark: [9.96, 13.02, 10.05, 8.26]
+	light: [7.37, 6.58, 8.29, 13.51],
+	dark: [12.41, 12.72, 11.91, 8.26]
 };
 for (const scheme of ['light', 'dark']) {
 	check(
@@ -85,21 +85,21 @@ for (const scheme of ['light', 'dark']) {
 const warnings = contrastWarnings(matrix).map(
 	(row) => `${row.scheme} ${row.name} ${row.ratio} ${row.threshold}`
 );
-const EXPECTED_WARNINGS = [
-	'dark success fill text 3.49 4.5',
-	'dark warning fill text 1.85 4.5',
-	'dark info fill text 3.49 4.5'
-];
 check(
-	'exactly three fill-text warnings, naming the tone and the measured ratio',
-	JSON.stringify(warnings) === JSON.stringify(EXPECTED_WARNINGS),
+	'the delivered theme raises no fill-text warning',
+	warnings.length === 0,
 	warnings.join(' | ') || 'none'
 );
 
 const limits = contrastKnownLimits(matrix).map((row) => `${row.scheme} ${row.name} ${row.ratio}`);
-const EXPECTED_LIMITS = ['light warning fill 1.95', 'dark destructive fill 2.89'];
+const EXPECTED_LIMITS = [
+	'light success fill 1.96',
+	'light warning fill 1.76',
+	'light info fill 2.22',
+	'dark destructive fill 2.89'
+];
 check(
-	'exactly two known limits, naming the tone and the fill ratio',
+	'exactly four known limits, naming the tone and the fill ratio',
 	JSON.stringify(limits) === JSON.stringify(EXPECTED_LIMITS),
 	limits.join(' | ') || 'none'
 );
@@ -107,7 +107,7 @@ check(
 const project = join(WORK, 'app');
 scaffold(project);
 const run = cliResult(project);
-check('the CLI exits 0 with a theme that warns', run.code === 0, `exit ${run.code}`);
+check('the CLI exits 0 with a theme that reports limits', run.code === 0, `exit ${run.code}`);
 
 const reportNames =
 	matrix.light.pairs.every((row) => run.stdout.includes(row.name)) &&
@@ -126,8 +126,8 @@ check(
 
 const warningLines = (run.stderr.match(/^\[daisyui-adapter\] warning:/gm) ?? []).length;
 const limitLines = (run.stderr.match(/^\[daisyui-adapter\] known limit:/gm) ?? []).length;
-check('stderr holds exactly three warning lines', warningLines === 3, `${warningLines}`);
-check('stderr holds exactly two known-limit lines', limitLines === 2, `${limitLines}`);
+check('stderr holds no warning lines', warningLines === 0, `${warningLines}`);
+check('stderr holds exactly four known-limit lines', limitLines === 4, `${limitLines}`);
 
 const low = join(WORK, 'low');
 scaffold(low);
