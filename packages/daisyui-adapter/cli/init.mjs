@@ -269,9 +269,12 @@ const installLine = (spec) => {
 };
 
 const USAGE =
-	`usage: ${BIN} init\n` +
+	`usage: ${BIN} init [--no-fix]\n` +
+	`       ${BIN} map\n` +
 	`       ${BIN} fix [component...] [--dry-run] [--check] [--strict]\n` +
 	'  init maps the theme into the stylesheet, then fixes the components you added\n' +
+	'       --no-fix stops after the mapping, like `map`\n' +
+	'  map  maps the theme into the stylesheet and leaves every component file alone\n' +
 	'  fix  patches the stock component classes; --dry-run reports without writing\n' +
 	'       --check exits 1 while a stock site remains\n' +
 	'       --strict exits 1 on a customized site or on a named component with no files';
@@ -378,7 +381,7 @@ const measureContrast = (themes) => {
 	}
 };
 
-const init = () => {
+const init = ({ withFix = true } = {}) => {
 	const components = readComponents();
 	if (!components.tailwind?.css) {
 		throw new Error('[daisyui-adapter] components.json has no tailwind.css path');
@@ -437,9 +440,10 @@ const init = () => {
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
 
 	// The fixer runs before the stylesheet is written: a refused version must leave the
-	// project untouched, so the map waits in memory until the guard has passed.
-	const report = fix({ components });
-	css = `${headerFor(report.fullyFixed)}\n${css}`;
+	// project untouched, so the map waits in memory until the guard has passed. A map-only run
+	// writes no component file and records zero, so the header still says what the file holds.
+	const report = withFix ? fix({ components }) : null;
+	css = `${headerFor(report ? report.fullyFixed : 0)}\n${css}`;
 
 	writeFileSync(cssPath, css);
 
@@ -455,7 +459,8 @@ const init = () => {
 	if (themes) console.log('[daisyui-adapter] theme ok: light + dark');
 	console.log(`[daisyui-adapter] wrote ${where}`);
 	console.log(`[daisyui-adapter] ${lightCount} light, ${darkCount} dark`);
-	printFix(report);
+	if (report) printFix(report);
+	else console.log('[daisyui-adapter] map only: components untouched');
 
 	// The install is last, after the lines that describe what was written, so a failed install
 	// still tells the user the stylesheet is in place.
@@ -527,10 +532,18 @@ const fixCommand = (args) => {
 const [command = 'init', ...rest] = process.argv.slice(2);
 try {
 	if (command === 'init') {
-		if (rest.length > 0) {
-			throw new Error(`[daisyui-adapter] init takes no arguments, got "${rest[0]}".\n${USAGE}`);
+		const unknown = rest.filter((arg) => arg !== '--no-fix');
+		if (unknown.length > 0) {
+			throw new Error(
+				`[daisyui-adapter] init takes no arguments besides --no-fix, got "${unknown[0]}".\n${USAGE}`
+			);
 		}
-		init();
+		init({ withFix: !rest.includes('--no-fix') });
+	} else if (command === 'map') {
+		if (rest.length > 0) {
+			throw new Error(`[daisyui-adapter] map takes no arguments, got "${rest[0]}".\n${USAGE}`);
+		}
+		init({ withFix: false });
 	} else if (command === 'fix') {
 		fixCommand(rest);
 	} else {

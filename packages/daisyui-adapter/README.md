@@ -2,7 +2,7 @@
 
 Generate a shadcn-svelte token set from a daisyUI v5 theme, at build time, with no daisyUI runtime dependency.
 
-The CLI reads your stylesheet and your `src/daisyui-theme.css`, then rewrites each `:root` and `.dark` block so every shadcn token reads a daisyUI value, with the value that was already in the file as the fallback. It also writes the `@plugin` line and the chart ramp. `init` maps the stylesheet and then patches the target component classes on disk, and `fix` re-runs the patch step.
+The CLI reads your stylesheet and your `src/daisyui-theme.css`, then rewrites each `:root` and `.dark` block so every shadcn token reads a daisyUI value, with the value that was already in the file as the fallback. It also writes the `@plugin` line and the chart ramp. `init` maps the stylesheet and then patches the target component classes on disk, `map` and `init --no-fix` stop after the mapping, and `fix` re-runs the patch step.
 
 The plugin then emits `--daisy-color-*` and `--daisy-radius` from the theme while Tailwind builds, so a theme change takes one rebuild and no re-run.
 
@@ -35,6 +35,17 @@ pnpm build
 ```
 
 Step 3 comes before step 4 because `init` fixes the components already on disk. A component you add later needs `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 fix <component>`. `shadcn-svelte add -a` can overwrite a fixed file, and the next `fix` restores it.
+
+## Commands
+
+| command              | what it does                                                                  |
+| -------------------- | ----------------------------------------------------------------------------- |
+| `init`               | maps the theme into the stylesheet, then fixes every target component on disk |
+| `init --no-fix`      | maps only; no component file is read or written                               |
+| `map`                | the same as `init --no-fix`                                                   |
+| `fix [component...]` | patches the stock component classes; takes `--dry-run`, `--check`, `--strict` |
+
+`map` and `init --no-fix` write `components 0 fixed` in the header, and because they never read a component they do not run the supported shadcn-svelte version guard. Use them when you want the token layer and you keep the components yourself.
 
 The fixer covers the form controls (`button`, `toggle`, `input`, `textarea`, `native-select`, `select`, `input-group`, `input-group-button`, `checkbox`, `radio-group`, `switch`), the surfaces (`card`, `dialog`, `sheet`, `alert`, `popover`, `drawer`, `navigation-menu`, `command`, `hover-card`, `table`, `calendar`, `range-calendar`, `dropdown-menu`, `context-menu`, `menubar`), the chart, and the four variant components (`button`, `badge`, `alert`, `bubble`). Add the ones you use; the rest are left untouched.
 
