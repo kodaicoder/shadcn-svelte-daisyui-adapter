@@ -1076,28 +1076,28 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'solid',
 		class:
-			'bg-destructive/10 text-destructive-text px-1.5 py-0.5 [a]:hover:bg-destructive/20 dark:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
+			'bg-destructive/10 text-destructive-text px-1.5 py-0.5 hover:bg-destructive/20 dark:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40'
 	},
 	{
 		component: 'badge',
 		key: 'success',
 		tone: 'success',
 		presentation: 'solid',
-		class: 'bg-success text-success-foreground px-1.5 py-0.5 [a]:hover:bg-success/80'
+		class: 'bg-success text-success-foreground px-1.5 py-0.5 hover:bg-success/80'
 	},
 	{
 		component: 'badge',
 		key: 'warning',
 		tone: 'warning',
 		presentation: 'solid',
-		class: 'bg-warning text-warning-foreground px-1.5 py-0.5 [a]:hover:bg-warning/80'
+		class: 'bg-warning text-warning-foreground px-1.5 py-0.5 hover:bg-warning/80'
 	},
 	{
 		component: 'badge',
 		key: 'info',
 		tone: 'info',
 		presentation: 'solid',
-		class: 'bg-info text-info-foreground px-1.5 py-0.5 [a]:hover:bg-info/80'
+		class: 'bg-info text-info-foreground px-1.5 py-0.5 hover:bg-info/80'
 	},
 	{
 		component: 'badge',
@@ -1105,7 +1105,7 @@ export const VARIANT_ROWS = [
 		tone: 'destructive',
 		presentation: 'outline',
 		class:
-			'border border-destructive-text bg-destructive/10 text-destructive-text px-1.5 py-0.5 [a]:hover:text-destructive-text/70'
+			'border border-destructive-text bg-destructive/10 text-destructive-text px-1.5 py-0.5 hover:text-destructive-text/70'
 	},
 	{
 		component: 'badge',
@@ -1113,7 +1113,7 @@ export const VARIANT_ROWS = [
 		tone: 'success',
 		presentation: 'outline',
 		class:
-			'border border-success-text bg-success/10 text-success-text px-1.5 py-0.5 [a]:hover:text-success-text/70'
+			'border border-success-text bg-success/10 text-success-text px-1.5 py-0.5 hover:text-success-text/70'
 	},
 	{
 		component: 'badge',
@@ -1121,7 +1121,7 @@ export const VARIANT_ROWS = [
 		tone: 'warning',
 		presentation: 'outline',
 		class:
-			'border border-warning-text bg-warning/10 text-warning-text px-1.5 py-0.5 [a]:hover:text-warning-text/70'
+			'border border-warning-text bg-warning/10 text-warning-text px-1.5 py-0.5 hover:text-warning-text/70'
 	},
 	{
 		component: 'badge',
@@ -1129,35 +1129,35 @@ export const VARIANT_ROWS = [
 		tone: 'info',
 		presentation: 'outline',
 		class:
-			'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 [a]:hover:text-info-text/70'
+			'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 hover:text-info-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'ghost-destructive',
 		tone: 'destructive',
 		presentation: 'ghost',
-		class: 'text-destructive-text hover:text-destructive-text/70'
+		class: 'text-destructive-text hover:bg-destructive/10 hover:text-destructive-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'ghost-success',
 		tone: 'success',
 		presentation: 'ghost',
-		class: 'text-success-text hover:text-success-text/70'
+		class: 'text-success-text hover:bg-success/10 hover:text-success-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'ghost-warning',
 		tone: 'warning',
 		presentation: 'ghost',
-		class: 'text-warning-text hover:text-warning-text/70'
+		class: 'text-warning-text hover:bg-warning/10 hover:text-warning-text/70'
 	},
 	{
 		component: 'badge',
 		key: 'ghost-info',
 		tone: 'info',
 		presentation: 'ghost',
-		class: 'text-info-text hover:text-info-text/70'
+		class: 'text-info-text hover:bg-info/10 hover:text-info-text/70'
 	},
 	{
 		component: 'badge',
@@ -1192,7 +1192,7 @@ export const VARIANT_ROWS = [
 		key: 'blackwhite',
 		tone: 'blackwhite',
 		presentation: 'solid',
-		class: 'bg-blackwhite text-blackwhite-foreground px-1.5 py-0.5 [a]:hover:bg-blackwhite/80'
+		class: 'bg-blackwhite text-blackwhite-foreground px-1.5 py-0.5 hover:bg-blackwhite/80'
 	},
 	{
 		component: 'badge',
@@ -1200,14 +1200,14 @@ export const VARIANT_ROWS = [
 		tone: 'blackwhite',
 		presentation: 'outline',
 		class:
-			'border border-blackwhite bg-transparent text-blackwhite px-1.5 py-0.5 [a]:hover:text-blackwhite/70'
+			'border border-blackwhite bg-transparent text-blackwhite px-1.5 py-0.5 hover:text-blackwhite/70'
 	},
 	{
 		component: 'badge',
 		key: 'ghost-blackwhite',
 		tone: 'blackwhite',
 		presentation: 'ghost',
-		class: 'text-blackwhite hover:text-blackwhite/70'
+		class: 'text-blackwhite hover:bg-blackwhite/10 hover:text-blackwhite/70'
 	},
 	{
 		component: 'badge',
@@ -1451,6 +1451,19 @@ const VARIANT_FIXED = {
 	alert: {
 		default:
 			'bg-primary text-primary-foreground *:data-[slot=alert-description]:text-primary-foreground'
+	},
+	button: {
+		outline:
+			'border-primary bg-transparent text-primary hover:bg-primary hover:text-primary-foreground',
+		ghost: 'text-primary hover:bg-primary hover:text-primary-foreground'
+	},
+	badge: {
+		default: 'bg-primary text-primary-foreground hover:bg-primary/80',
+		secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+		destructive:
+			'bg-destructive/10 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 text-destructive-text dark:bg-destructive/20',
+		outline: 'border border-primary bg-primary/10 text-primary hover:text-primary/70',
+		ghost: 'text-primary hover:bg-primary/10 hover:text-primary/70'
 	}
 };
 

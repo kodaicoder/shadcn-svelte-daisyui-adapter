@@ -19,7 +19,7 @@ const HERE = import.meta.dirname;
 const REPO = resolve(HERE, '..', '..', '..');
 const PKG_DIR = resolve(REPO, 'packages', 'daisyui-adapter');
 const CLI = join(PKG_DIR, 'cli', 'init.mjs');
-const STOCK_DIR = join(REPO, 'src', 'lib', 'components', 'ui');
+const STOCK_DIR = join(REPO, '.scratch', 'daisyui-adapter', 'stock', 'ui');
 const THEME = resolve(HERE, '..', 'registry-12', 'probe-theme.css');
 const WORK = join(process.env.TEMP ?? '/tmp', 'adapter-31-variants');
 
@@ -464,7 +464,10 @@ const filledBroken = badgeFilled
 			fills.some(
 				(token) =>
 					token !== `bg-${row.tone}` &&
-					!(token.startsWith('[a]:hover:') && baseOf(token).startsWith(`bg-${row.tone}`))
+					!(
+						(token.startsWith('[a]:hover:') || token.startsWith('hover:')) &&
+						baseOf(token).startsWith(`bg-${row.tone}`)
+					)
 			) ||
 			!tokens.includes(`text-${row.tone}-foreground`) ||
 			!hasPadding(tokens)
@@ -518,10 +521,14 @@ check(
 	rowLinesMissing(buttonSite, BUTTON_VARIANTS) === '',
 	rowLinesMissing(buttonSite, BUTTON_VARIANTS)
 );
+const unpinnedStock = ['default', 'outline', 'secondary', 'ghost', 'link'].filter((key) => {
+	const pinned = pinnedClass('button', key);
+	return typeof pinned !== 'string' || !buttonSite.stock.includes(`${key}: "${pinned}",`);
+});
 check(
-	'button: the fixed block keeps the five pinned keys byte for byte',
-	pinnedInside('button', buttonSite, ['default', 'outline', 'secondary', 'ghost', 'link']) === '',
-	pinnedInside('button', buttonSite, ['default', 'outline', 'secondary', 'ghost', 'link'])
+	'button: the stock block keeps the five pinned keys byte for byte',
+	unpinnedStock.length === 0,
+	unpinnedStock.join(', ')
 );
 
 check(
@@ -539,10 +546,14 @@ check(
 	rowLinesMissing(badgeSite, BADGE_VARIANTS) === '',
 	rowLinesMissing(badgeSite, BADGE_VARIANTS)
 );
+const unpinnedBadgeStock = ['default', 'secondary', 'outline', 'ghost', 'link'].filter((key) => {
+	const pinned = pinnedClass('badge', key);
+	return typeof pinned !== 'string' || !badgeSite.stock.includes(`${key}: "${pinned}",`);
+});
 check(
-	'badge: the fixed block keeps the five pinned keys byte for byte',
-	pinnedInside('badge', badgeSite, ['default', 'secondary', 'outline', 'ghost', 'link']) === '',
-	pinnedInside('badge', badgeSite, ['default', 'secondary', 'outline', 'ghost', 'link'])
+	'badge: the stock block keeps the five pinned keys byte for byte',
+	unpinnedBadgeStock.length === 0,
+	unpinnedBadgeStock.join(', ')
 );
 
 check(

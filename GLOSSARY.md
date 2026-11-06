@@ -33,15 +33,15 @@ A semantic color pair (`success`, `warning`, `info`, `destructive`) with a foreg
 _Avoid_: Semantic color, state color
 
 **Tone**:
-The semantic color of a control, independent of how it is painted.
+One of `default` (the theme's primary pair), `secondary`, `success`, `warning`, `info`, `destructive` or `blackwhite`. The tone names the meaning, independent of how it is painted.
 _Avoid_: Color, variant
 
-**Presentation**:
-How a control paints its tone: solid, outline, ghost or link.
-_Avoid_: Style
+**Appearance**:
+How a control paints its tone: `outline`, `ghost`, `link`, or any other presentation the component supports in shadcn-svelte. A bare appearance resolves to the `default` tone. A paired appearance such as `outline-info` resolves to that tone instead.
+_Avoid_: Style, presentation (the older name still used in the table and audits)
 
 **Variant**:
-The component prop value that selects one tone and presentation pair, such as `outline-success`.
+The component prop value that selects one appearance, optionally paired with a tone, such as `outline` or `outline-info`.
 _Avoid_: Style, color
 
 **Role radius**:

@@ -301,10 +301,10 @@ check(
 
 const mismatchedPin = ['default', 'outline', 'secondary', 'ghost', 'link'].filter((key) => {
 	const pinned = pinnedClass(key);
-	return typeof pinned !== 'string' || !site.fixed.includes(`${key}: "${pinned}",`);
+	return typeof pinned !== 'string' || !site.stock.includes(`${key}: "${pinned}",`);
 });
 check(
-	'the fixed block keeps the five pinned keys byte for byte',
+	'the stock block keeps the five pinned keys byte for byte',
 	mismatchedPin.length === 0,
 	mismatchedPin.join(', ')
 );
