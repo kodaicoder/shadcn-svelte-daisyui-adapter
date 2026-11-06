@@ -141,3 +141,50 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 ## Further Notes
 
 The audit found 63 installed component directories; the docs catalog lists 67 entries, the extra four being the Combobox, Data Table and Date Picker compositions and Typography. The `mira` style has 90 `rounded-none` occurrences across 82 files, so the radius change is a deliberate visual shift. The ADRs record the brand mapping, the radius direction and the fixer boundary. The 0.3.0 package is on `develop` and unpublished; the release follows the visual check. The header marker, the target manifest, the text tones, the four fixer states, the drift test and the corrected declaration count were added after the specification reviews on 2026-11-03.
+
+## Amendment 2026-11-06: tone variants for the binary controls
+
+### Problem
+
+The component review confirmed that checkbox, switch, toggle and radio-group carry one tone: primary. daisyUI exposes colour modifiers for each of them, and every other component already expresses a tone through one `variant` prop. A project cannot ask for a success checkbox or a warning switch without hand-writing `data-checked:` classes, and hand-written classes do not survive the next adapter run.
+
+### Outcome
+
+All four controls accept the seven tones through the same single `variant` prop the rest of the system uses:
+
+- `<Checkbox variant="success" checked />`
+- `<Switch variant="warning" checked />`
+- `<RadioGroupItem variant="info" value="a" />`
+- `<Toggle variant="outline-success" pressed />`
+
+The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive` and `blackwhite`. Toggle already has an appearance axis, so its keys stay combined: the seven filled tones plus `outline` and the six `outline-<tone>` pairs.
+
+### Decisions
+
+- One `variant` prop, not a second `tone` prop. A separate prop splits one selection into two and breaks the contract that button, badge, alert and bubble already use.
+- The tone map is a literal string table inside each fixed component. Tailwind emits only classes it can read as literals in application source; a table inside `node_modules` is never scanned, so the colours would silently disappear.
+- Fill, border and foreground follow the pair rules already in this spec: the fill is the tone, the foreground is the tone foreground, and the border is the tone text token for the status tones, so the control boundary clears 3:1 while the fill itself stays below it.
+- The redundant `dark:data-checked:bg-primary` twin is removed rather than overridden. That keeps the tone row winning without `!`, so a caller's `class` still wins.
+- The dark unchecked surface `dark:bg-input/30` is scoped to `data-unchecked`. Left as is, it wins the fill over a tone in dark, which the prototype measured before the change.
+- Checkbox, switch and radio-group get two replacement sites each: the props destructure plus the tone map, and the class expression. Toggle gets three: its variant block, the pressed paint, and the class that reads the variant. All anchors live in `targets.mjs`.
+- Stock files under `src/lib/components/ui` keep their stock strings. The review copies under `src/lib/components/*-fixed` follow the existing regeneration flow: fix in `ui`, copy the directory, revert `ui`, normalize to LF.
+
+### Out of scope
+
+- Focus-ring weight, currently 2px at 30 percent on the button and 3px at 50 percent on the radio group. Open question, not part of this amendment.
+- The stock switch thumb's RTL rule uses `data-[state=checked]` while every other rule uses `data-checked`. Upstream defect, not fixed here.
+- The badge secondary quiet rows, the bubble bare appearances and the button ghost hover from ticket 43's follow-up list.
+
+### Acceptance
+
+- Each control renders the seven tones in both schemes: the checked fill equals the tone token, the border equals the tone-text token for the status tones, and the foreground equals the tone foreground.
+- Focus, invalid and disabled keep working on every tone.
+- `variant` is typed, and an unknown key is a type error where the component has a cva table.
+- The four reviewer pages show every tone, their journeys pass, and `drift.mjs` stays green.
+- A new harness script covers the binary tone rows, in the shape registry-30 and registry-31 already use.
+
+### Version
+
+Folds into 0.3.0. The package is unpublished, since npm still serves 0.2.0 and `npm whoami` returns 401,
+so the release record between `eb99aab` and `27d607b` is amended rather than superseded: README and
+CHANGELOG gain the binary tones, and the candidate is re-verified before publish.

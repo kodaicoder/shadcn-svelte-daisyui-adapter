@@ -13,7 +13,7 @@ const PORT = 5199;
 const BASE = `http://127.0.0.1:${PORT}/`;
 const RUN_DIR = path.join(ROOT, '.verify', 'run');
 const RUN_FILE = path.join(RUN_DIR, 'dev.json');
-const HANDLE = 'data-slot="button"';
+const HANDLE = 'data-slot="radio-group"';
 const READY_TIMEOUT_MS = 60_000;
 const IS_WINDOWS = process.platform === 'win32';
 
@@ -107,7 +107,7 @@ async function status() {
 		['pid file', Boolean(state), state ? `.verify/run/dev.json (pid ${state.pid})` : 'missing'],
 		['process alive', running, running ? `pid ${state.pid}` : 'no'],
 		['port answers 200', page.status === 200, page.up ? `http ${page.status}` : 'no response'],
-		['page has buttons', page.hasHandle, page.hasHandle ? HANDLE : 'not found']
+		['page has the showcase', page.hasHandle, page.hasHandle ? HANDLE : 'not found']
 	];
 
 	for (const [name, ok, detail] of checks) {

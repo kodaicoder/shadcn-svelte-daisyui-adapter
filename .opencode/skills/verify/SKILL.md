@@ -14,7 +14,7 @@ export what it claims.
 
 | Surface      | What a user touches                                  | Entry                       |
 | ------------ | ---------------------------------------------------- | --------------------------- |
-| Showcase app | the single route `/`, a Button variant and size demo | `pnpm dev`, port 5199       |
+| Showcase app | the single route `/`, the current component showcase | `pnpm dev`, port 5199       |
 | Storybook    | Button, Header and Page stories                      | `pnpm storybook`, port 6007 |
 | Package      | `dist/` consumed by another project                  | `pnpm build`                |
 
@@ -107,7 +107,8 @@ are already in the repo's devDependencies and browser cache.
 ## Gotchas
 
 - The showcase has no `h1`. The inherited spec `src/routes/page.svelte.e2e.ts` asserts one and will
-  fail; do not copy that assertion into a journey. Anchor on `data-slot="button"`.
+  fail; do not copy that assertion into a journey. Anchor on the showcase's `data-slot` handle. The
+  `buttons`, `aspect-ratio` and `avatar` journeys each target a page that has since been replaced.
 - `pnpm dev` is Vite. Use `--strictPort` or the port check in `session.mjs` becomes meaningless.
 - Playwright's own `webServer` in `playwright.config.ts` builds and previews on 4173. This skill does
   not use it: a dev server is faster and does not mask type errors behind a stale build.
