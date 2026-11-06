@@ -1,138 +1,240 @@
 <script lang="ts">
-	import { RadioGroup, RadioGroupItem } from '#lib/components/ui/radio-group/index.js';
-	import { Label } from '#lib/components/ui/label/index.js';
+	import { Checkbox } from '#lib/components/checkbox-fixed/index.js';
+	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
+	import { Switch } from '#lib/components/switch-fixed/index.js';
+	import { Toggle } from '#lib/components/toggle-fixed/index.js';
 
-	let live = $state('one');
+	const tones = [
+		'default',
+		'secondary',
+		'success',
+		'warning',
+		'info',
+		'destructive',
+		'blackwhite'
+	] as const;
+
+	const outlineTones = [
+		'outline',
+		'outline-secondary',
+		'outline-success',
+		'outline-warning',
+		'outline-info',
+		'outline-destructive',
+		'outline-blackwhite'
+	] as const;
+
+	const outlineTone: Record<(typeof outlineTones)[number], (typeof tones)[number]> = {
+		outline: 'default',
+		'outline-secondary': 'secondary',
+		'outline-success': 'success',
+		'outline-warning': 'warning',
+		'outline-info': 'info',
+		'outline-destructive': 'destructive',
+		'outline-blackwhite': 'blackwhite'
+	};
+
+	const fillClasses = {
+		default: 'bg-primary',
+		secondary: 'bg-secondary',
+		success: 'bg-success',
+		warning: 'bg-warning',
+		info: 'bg-info',
+		destructive: 'bg-destructive',
+		blackwhite: 'bg-blackwhite'
+	};
+
+	const foregroundClasses = {
+		default: 'text-primary-foreground',
+		secondary: 'text-secondary-foreground',
+		success: 'text-success-foreground',
+		warning: 'text-warning-foreground',
+		info: 'text-info-foreground',
+		destructive: 'text-destructive-foreground',
+		blackwhite: 'text-blackwhite-foreground'
+	};
+
+	const borderClasses = {
+		default: 'border-primary',
+		secondary: 'border-secondary',
+		success: 'border-success-text',
+		warning: 'border-warning-text',
+		info: 'border-info-text',
+		destructive: 'border-destructive-text',
+		blackwhite: 'border-blackwhite'
+	};
+
+	const schemes = ['light', 'dark'] as const;
 </script>
 
+{#snippet swatches()}
+	<div class="flex flex-wrap items-center gap-3 text-[0.625rem] text-muted-foreground">
+		{#each tones as tone}
+			<span class="flex items-center gap-1">
+				<span data-fill-swatch={tone} class="size-4 rounded-sm {fillClasses[tone]}"></span>
+				<span data-foreground-swatch={tone} class="{foregroundClasses[tone]}">Aa</span>
+				<span
+					data-border-swatch={tone}
+					class="size-4 rounded-sm border-2 {borderClasses[tone]}"
+				></span>
+				{tone}
+			</span>
+		{/each}
+	</div>
+{/snippet}
+
 <div class="space-y-10 p-6">
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			States
-		</h2>
-		<RadioGroup value="comfortable" aria-label="Density">
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="compact" id="density-compact" />
-				<Label for="density-compact">Compact</Label>
+	<h1 class="text-lg font-semibold">Binary control tones</h1>
+
+	<section id="checkbox" data-control="checkbox" class="space-y-4">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Checkbox</h2>
+		{#each schemes as scheme}
+			<div
+				data-scheme={scheme}
+				class="space-y-4 rounded-lg border p-4 {scheme === 'dark'
+					? 'dark bg-background text-foreground'
+					: ''}"
+			>
+				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+				<div class="flex flex-wrap items-center gap-4">
+					{#each tones as tone}
+						<label class="flex items-center gap-2 text-xs">
+							<Checkbox variant={tone} checked data-tone={tone} />
+							{tone}
+						</label>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-4">
+					<label class="flex items-center gap-2 text-xs">
+						<Checkbox data-case="focus" aria-label="Focus tone" />
+						focus
+					</label>
+					<label class="flex items-center gap-2 text-xs">
+						<Checkbox data-case="invalid" aria-invalid="true" aria-label="Invalid tone" />
+						invalid
+					</label>
+					<label class="flex items-center gap-2 text-xs">
+						<Checkbox data-case="disabled" disabled aria-label="Disabled tone" />
+						disabled
+					</label>
+				</div>
+				{@render swatches()}
 			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="comfortable" id="density-comfortable" />
-				<Label for="density-comfortable">Comfortable</Label>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="spacious" id="density-spacious" />
-				<Label for="density-spacious">Spacious</Label>
-			</div>
-		</RadioGroup>
+		{/each}
 	</section>
 
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			Nothing selected
-		</h2>
-		<RadioGroup aria-label="Empty group">
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="alpha" id="empty-alpha" />
-				<Label for="empty-alpha">Alpha</Label>
+	<section id="switch" data-control="switch" class="space-y-4">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Switch</h2>
+		{#each schemes as scheme}
+			<div
+				data-scheme={scheme}
+				class="space-y-4 rounded-lg border p-4 {scheme === 'dark'
+					? 'dark bg-background text-foreground'
+					: ''}"
+			>
+				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+				<div class="flex flex-wrap items-center gap-4">
+					{#each tones as tone}
+						<label class="flex items-center gap-2 text-xs">
+							<Switch variant={tone} checked data-tone={tone} />
+							{tone}
+						</label>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-4">
+					<label class="flex items-center gap-2 text-xs">
+						<Switch data-case="focus" aria-label="Focus tone" />
+						focus
+					</label>
+					<label class="flex items-center gap-2 text-xs">
+						<Switch data-case="invalid" aria-invalid="true" aria-label="Invalid tone" />
+						invalid
+					</label>
+					<label class="flex items-center gap-2 text-xs">
+						<Switch data-case="disabled" disabled aria-label="Disabled tone" />
+						disabled
+					</label>
+				</div>
+				{@render swatches()}
 			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="beta" id="empty-beta" />
-				<Label for="empty-beta">Beta</Label>
-			</div>
-		</RadioGroup>
+		{/each}
 	</section>
 
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			Disabled item
-		</h2>
-		<RadioGroup value="b" aria-label="Disabled item">
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="a" id="item-a" />
-				<Label for="item-a">Available</Label>
+	<section id="radio-group" data-control="radio-group" class="space-y-4">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Radio group</h2>
+		{#each schemes as scheme}
+			<div
+				data-scheme={scheme}
+				class="space-y-4 rounded-lg border p-4 {scheme === 'dark'
+					? 'dark bg-background text-foreground'
+					: ''}"
+			>
+				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+				<div class="flex flex-wrap items-center gap-4">
+					{#each tones as tone}
+						<span class="flex items-center gap-2 text-xs">
+							<RadioGroup value="on" aria-label="Radio {tone}">
+								<RadioGroupItem value="on" variant={tone} data-tone={tone} />
+							</RadioGroup>
+							{tone}
+						</span>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-4">
+					<span class="flex items-center gap-2 text-xs">
+						<RadioGroup value="on" aria-label="Radio focus">
+							<RadioGroupItem value="on" data-case="focus" />
+						</RadioGroup>
+						focus
+					</span>
+					<span class="flex items-center gap-2 text-xs">
+						<RadioGroup value="off" aria-label="Radio invalid">
+							<RadioGroupItem value="on" aria-invalid="true" data-case="invalid" />
+						</RadioGroup>
+						invalid
+					</span>
+					<span class="flex items-center gap-2 text-xs">
+						<RadioGroup value="off" aria-label="Radio disabled">
+							<RadioGroupItem value="on" disabled data-case="disabled" />
+						</RadioGroup>
+						disabled
+					</span>
+				</div>
+				{@render swatches()}
 			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="b" id="item-b" disabled />
-				<Label for="item-b">Disabled but selected</Label>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="c" id="item-c" />
-				<Label for="item-c">Available too</Label>
-			</div>
-		</RadioGroup>
+		{/each}
 	</section>
 
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			Disabled group
-		</h2>
-		<RadioGroup value="x" disabled aria-label="Disabled group">
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="x" id="group-x" />
-				<Label for="group-x">Selected</Label>
+	<section id="toggle" data-control="toggle" class="space-y-4">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Toggle</h2>
+		{#each schemes as scheme}
+			<div
+				data-scheme={scheme}
+				class="space-y-4 rounded-lg border p-4 {scheme === 'dark'
+					? 'dark bg-background text-foreground'
+					: ''}"
+			>
+				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+				<div class="flex flex-wrap items-center gap-4">
+					{#each tones as tone}
+						<Toggle variant={tone} pressed data-tone={tone}>{tone}</Toggle>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-4">
+					{#each outlineTones as key}
+						<Toggle variant={key} data-outline={key}>{key}</Toggle>
+						<Toggle variant={key} pressed data-outline-pressed={key}>{key}</Toggle>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-4">
+					<Toggle data-case="focus" aria-label="Focus tone">focus</Toggle>
+					<Toggle data-case="invalid" aria-invalid="true" aria-label="Invalid tone">
+						invalid
+					</Toggle>
+					<Toggle data-case="disabled" disabled aria-label="Disabled tone">disabled</Toggle>
+				</div>
+				{@render swatches()}
 			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="y" id="group-y" />
-				<Label for="group-y">Not selected</Label>
-			</div>
-		</RadioGroup>
-	</section>
-
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			Invalid
-		</h2>
-		<RadioGroup value="one" aria-label="Invalid group">
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="one" id="invalid-one" aria-invalid="true" />
-				<Label for="invalid-one">Selected</Label>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="two" id="invalid-two" aria-invalid="true" />
-				<Label for="invalid-two">Not selected</Label>
-			</div>
-		</RadioGroup>
-	</section>
-
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			Horizontal
-		</h2>
-		<RadioGroup
-			value="left"
-			orientation="horizontal"
-			class="flex w-auto items-center gap-4"
-			aria-label="Alignment"
-		>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="left" id="align-left" />
-				<Label for="align-left">Left</Label>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="center" id="align-center" />
-				<Label for="align-center">Center</Label>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="right" id="align-right" />
-				<Label for="align-right">Right</Label>
-			</div>
-		</RadioGroup>
-	</section>
-
-	<section>
-		<h2 class="mb-3 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
-			Controlled
-		</h2>
-		<RadioGroup bind:value={live} class="w-auto" aria-label="Controlled">
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="one" id="live-one" />
-				<Label for="live-one">One</Label>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroupItem value="two" id="live-two" />
-				<Label for="live-two">Two</Label>
-			</div>
-		</RadioGroup>
-		<p class="mt-2 text-sm">value: {live}</p>
+		{/each}
 	</section>
 </div>

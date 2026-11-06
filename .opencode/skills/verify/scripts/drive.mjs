@@ -10,6 +10,138 @@ const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
 const PORT = 5199;
 const BASE = `http://127.0.0.1:${PORT}/`;
 
+const TONES = ['default', 'secondary', 'success', 'warning', 'info', 'destructive', 'blackwhite'];
+const OUTLINE_TONES = [
+	['outline', 'default'],
+	['outline-secondary', 'secondary'],
+	['outline-success', 'success'],
+	['outline-warning', 'warning'],
+	['outline-info', 'info'],
+	['outline-destructive', 'destructive'],
+	['outline-blackwhite', 'blackwhite']
+];
+
+const computed = (locator, property) =>
+	locator.evaluate((node, prop) => getComputedStyle(node)[prop], property);
+
+const checkTones = async (record, scope, label) => {
+	const rows = await scope.locator('[data-slot][data-tone]').evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			tone: node.dataset.tone,
+			fill: getComputedStyle(node).backgroundColor,
+			border: getComputedStyle(node).borderTopColor,
+			text: getComputedStyle(node).color
+		}))
+	);
+	const parts = await scope.locator('[data-slot][data-tone]').evaluateAll((nodes) =>
+		nodes.map((node) => {
+			const part = node.querySelector(
+				'[data-slot="switch-thumb"], [data-slot="radio-group-indicator"] > svg'
+			);
+			return { tone: node.dataset.tone, paint: part ? getComputedStyle(part).backgroundColor : null };
+		})
+	);
+	record(`${label}: seven tones`, rows.length === TONES.length, `${rows.length} of 7`);
+	record(
+		`${label}: seven distinct fills`,
+		new Set(rows.map((row) => row.fill)).size === TONES.length,
+		rows.map((row) => `${row.tone}=${row.fill}`).join(', ')
+	);
+
+	for (const row of rows) {
+		const fill = await computed(scope.locator(`[data-fill-swatch="${row.tone}"]`), 'backgroundColor');
+		const border = await computed(
+			scope.locator(`[data-border-swatch="${row.tone}"]`),
+			'borderTopColor'
+		);
+		const text = await computed(
+			scope.locator(`[data-foreground-swatch="${row.tone}"]`),
+			'color'
+		);
+		record(
+			`${label}: ${row.tone} paints the tone pair`,
+			row.fill === fill && row.border === border && row.text === text,
+			`fill ${row.fill} / border ${row.border} / text ${row.text}`
+		);
+		const part = parts.find((entry) => entry.tone === row.tone);
+		if (part?.paint) {
+			record(
+				`${label}: ${row.tone} child follows the foreground`,
+				part.paint === text,
+				`${part.paint} vs ${text}`
+			);
+		}
+	}
+};
+
+const checkOutlinePairs = async (record, scope, label) => {
+	const pairs = await scope.locator('[data-outline]').evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			key: node.dataset.outline,
+			border: getComputedStyle(node).borderTopColor,
+			width: getComputedStyle(node).borderTopWidth
+		}))
+	);
+	record(`${label}: seven outline pairs`, pairs.length === 7, `${pairs.length} of 7`);
+	record(
+		`${label}: every outline pair carries a border`,
+		pairs.every((pair) => pair.width === '1px'),
+		pairs.map((pair) => `${pair.key}=${pair.width}`).join(', ')
+	);
+	record(
+		`${label}: seven distinct outline borders`,
+		new Set(pairs.map((pair) => pair.border)).size === 7,
+		pairs.map((pair) => `${pair.key}=${pair.border}`).join(', ')
+	);
+
+	for (const [key, tone] of OUTLINE_TONES) {
+		const pressed = await computed(
+			scope.locator(`[data-outline-pressed="${key}"]`),
+			'backgroundColor'
+		);
+		const fill = await computed(scope.locator(`[data-tone="${tone}"]`), 'backgroundColor');
+		record(`${label}: ${key} fills with ${tone}`, pressed === fill, `${pressed} vs ${fill}`);
+	}
+};
+
+const checkStates = async (page, record, scope, label, invalidKind) => {
+	await page.keyboard.press('Tab');
+	const focus = scope.locator('[data-case="focus"]');
+	await focus.focus();
+	await page.waitForTimeout(300);
+	const focusState = await focus.evaluate((node) => ({
+		focusVisible: node.matches(':focus-visible'),
+		shadow: getComputedStyle(node).boxShadow
+	}));
+	const ring = focusState.shadow
+		.split(/,(?![^(]*\))/)
+		.map((layer) => layer.trim())
+		.find((layer) => /\s[1-9][\d.]*px$/.test(layer));
+	record(
+		`${label}: focus shows a ring`,
+		focusState.focusVisible && Boolean(ring),
+		`${focusState.focusVisible} ${ring ?? focusState.shadow}`
+	);
+
+	const invalid = scope.locator('[data-case="invalid"]');
+	if (invalidKind === 'ring') {
+		const shadow = await computed(invalid, 'boxShadow');
+		record(`${label}: invalid paints a ring`, shadow !== 'none', shadow);
+	} else {
+		const invalidBorder = await computed(invalid, 'borderTopColor');
+		const idleBorder = await computed(scope.locator('[data-case="disabled"]'), 'borderTopColor');
+		record(
+			`${label}: invalid paints a destructive border`,
+			invalidBorder !== idleBorder,
+			`${invalidBorder} vs ${idleBorder}`
+		);
+	}
+
+	const disabled = scope.locator('[data-case="disabled"]');
+	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
+};
+
+
 const EXPECTED_LABELS = ['Extra Small', 'Small', 'Default', 'Large', 'Destructive'];
 const EXPECTED_ICON_COUNT = 4;
 const EXPECTED_BUTTON_COUNT = 9;
@@ -343,259 +475,65 @@ const journeys = {
 		const iconOnly = page.getByRole('button', { name: 'Add', exact: true });
 		record('icon-only button has a name', await iconOnly.isVisible(), 'Add');
 	},
-	'radio-group': async (page, record) => {
-		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
-		record('http 200', response?.status() === 200, `got ${response?.status()}`);
-
-		const groups = page.locator('[data-slot="radio-group"]');
-		await groups.first().waitFor({ state: 'visible', timeout: 10_000 });
-		record('seven groups', (await groups.count()) === 7, `${await groups.count()} of 7`);
-
-		const items = page.locator('[data-slot="radio-group-item"]');
-		record('seventeen items', (await items.count()) === 17, `${await items.count()} of 17`);
-
-		const checked = page.locator('[data-slot="radio-group-item"][aria-checked="true"]');
-		record('six checked', (await checked.count()) === 6, `${await checked.count()}`);
-
-		const state = (id) => page.locator(`#${id}`).getAttribute('aria-checked');
-
-		await page.keyboard.press('Tab');
-		await page.waitForTimeout(250);
-		const focused = await page.evaluate(() => document.activeElement?.id ?? '');
-		record('tab lands on the checked item', focused === 'density-comfortable', focused);
-
-		const ring = await page.evaluate(() => {
-			const layers = getComputedStyle(document.activeElement).boxShadow.split(/,(?![^(]*\))/);
-			const layer =
-				layers.find(
-					(value) => value.trim() !== 'none' && !/rgba\(0, 0, 0, 0\)|oklab\(0 0 0 \/ 0\)/.test(value)
-				) ?? '';
-			return layer.trim();
-		});
-		record('focused item shows a 3px ring', /\s3px$/.test(ring), ring);
-
-		await page.keyboard.press('ArrowDown');
-		await page.waitForTimeout(150);
-		record('arrow selects the next item', (await state('density-spacious')) === 'true', 'spacious');
-		record(
-			'arrow clears the previous item',
-			(await state('density-comfortable')) === 'false',
-			'comfortable'
-		);
-
-		await page.locator('#density-compact').click();
-		record('click selects', (await state('density-compact')) === 'true', 'compact');
-		record('click clears the other', (await state('density-spacious')) === 'false', 'spacious');
-
-		const invalidBorder = await page
-			.locator('#invalid-two')
-			.evaluate((node) => getComputedStyle(node).borderTopColor);
-		const validBorder = await page
-			.locator('#density-comfortable')
-			.evaluate((node) => getComputedStyle(node).borderTopColor);
-		record(
-			'invalid paints a destructive border',
-			invalidBorder !== validBorder,
-			`${invalidBorder} vs ${validBorder}`
-		);
-
-		record('disabled item carries disabled', await page.locator('#item-b').isDisabled(), 'item-b');
-		await page.locator('#group-y').click({ force: true });
-		record(
-			'disabled group does not select',
-			(await state('group-y')) === 'false',
-			'group-y'
-		);
-
-		await page.locator('#live-two').click();
-		record('controlled shows the value', await page.getByText('value: two').isVisible(), 'two');
-	},
 	checkbox: async (page, record) => {
 		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
 		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
-		const boxes = page.locator('[data-slot="checkbox"]');
-		await boxes.first().waitFor({ state: 'visible', timeout: 10_000 });
-		const count = await boxes.count();
-		record('thirteen checkboxes', count === 13, `${count} of 13`);
+		const section = page.locator('#checkbox');
+		await section.locator('[data-slot="checkbox"]').first().waitFor({ state: 'visible', timeout: 10_000 });
+		record('checkbox section', (await section.count()) === 1, 'one section');
 
-		const checked = page.locator('[data-slot="checkbox"][aria-checked="true"]');
-		record('six checked', (await checked.count()) === 6, `${await checked.count()}`);
-
-		const mixed = page.locator('[data-slot="checkbox"][aria-checked="mixed"]');
-		record('two indeterminate', (await mixed.count()) === 2, `${await mixed.count()}`);
-
-		const disabled = page.locator('[data-slot="checkbox"][disabled]');
-		record('three disabled', (await disabled.count()) === 3, `${await disabled.count()}`);
-
-		const invalid = page.locator('[data-slot="checkbox"][aria-invalid="true"]');
-		record('two invalid', (await invalid.count()) === 2, `${await invalid.count()}`);
-
-		const widths = await boxes.evaluateAll((nodes) => [
-			...new Set(nodes.map((node) => Math.round(node.getBoundingClientRect().width)))
-		]);
-		record('three sizes', widths.length === 3, widths.join(', '));
-
-		const live = page.locator('#live');
-		record('controlled starts unchecked', (await live.getAttribute('aria-checked')) === 'false', 'false');
-		await live.click();
-		record('controlled flips on click', (await live.getAttribute('aria-checked')) === 'true', 'true');
-		record('label follows the state', await page.getByText('checked', { exact: true }).isVisible(), 'checked');
+		for (const scheme of ['light', 'dark']) {
+			const scope = section.locator(`[data-scheme="${scheme}"]`);
+			await checkTones(record, scope, `checkbox ${scheme}`);
+			await checkStates(page, record, scope, `checkbox ${scheme}`, 'border');
+		}
 	},
 	switch: async (page, record) => {
 		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
 		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
-		const switches = page.locator('[data-slot="switch"]');
-		await switches.first().waitFor({ state: 'visible', timeout: 10_000 });
-		const count = await switches.count();
-		record('eleven switches', count === 11, `${count} of 11`);
+		const section = page.locator('#switch');
+		await section.locator('[data-slot="switch"]').first().waitFor({ state: 'visible', timeout: 10_000 });
+		record('switch section', (await section.count()) === 1, 'one section');
 
-		const checked = page.locator('[data-slot="switch"][aria-checked="true"]');
-		record('six checked', (await checked.count()) === 6, `${await checked.count()}`);
+		for (const scheme of ['light', 'dark']) {
+			const scope = section.locator(`[data-scheme="${scheme}"]`);
+			await checkTones(record, scope, `switch ${scheme}`);
+			await checkStates(page, record, scope, `switch ${scheme}`, 'border');
+		}
+	},
+	'radio-group': async (page, record) => {
+		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
+		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
-		const disabled = page.locator('[data-slot="switch"][disabled]');
-		record('two disabled', (await disabled.count()) === 2, `${await disabled.count()}`);
+		const section = page.locator('#radio-group');
+		await section
+			.locator('[data-slot="radio-group-item"]')
+			.first()
+			.waitFor({ state: 'visible', timeout: 10_000 });
+		record('radio-group section', (await section.count()) === 1, 'one section');
 
-		const invalid = page.locator('[data-slot="switch"][aria-invalid="true"]');
-		record('two invalid', (await invalid.count()) === 2, `${await invalid.count()}`);
-
-		const sizes = await switches.evaluateAll((nodes) => [
-			...new Set(nodes.map((node) => node.getAttribute('data-size')))
-		]);
-		record('both sizes present', sizes.includes('sm') && sizes.includes('default'), sizes.join(', '));
-
-		const off = switches.nth(0);
-		const on = switches.nth(1);
-		const trackOff = await off.evaluate((node) => getComputedStyle(node).backgroundColor);
-		const trackOn = await on.evaluate((node) => getComputedStyle(node).backgroundColor);
-		record('checked paints another track', trackOff !== trackOn, `${trackOff} -> ${trackOn}`);
-
-		const thumbOff = await off.locator('[data-slot="switch-thumb"]').boundingBox();
-		const thumbOn = await on.locator('[data-slot="switch-thumb"]').boundingBox();
-		record(
-			'thumb travels when checked',
-			Boolean(thumbOff && thumbOn) && thumbOn.x > thumbOff.x,
-			`${Math.round(thumbOff?.x ?? 0)} -> ${Math.round(thumbOn?.x ?? 0)}`
-		);
-
-		const offWidth = await off.evaluate((node) => Math.round(node.getBoundingClientRect().width));
-		const smallWidth = await switches
-			.nth(2)
-			.evaluate((node) => Math.round(node.getBoundingClientRect().width));
-		record('small is narrower', smallWidth < offWidth, `${smallWidth} vs ${offWidth}`);
-
-		const live = page.locator('#live');
-		record(
-			'controlled starts off',
-			(await live.getAttribute('aria-checked')) === 'false',
-			'false'
-		);
-		await live.click();
-		record('controlled flips on click', (await live.getAttribute('aria-checked')) === 'true', 'true');
-		record('label follows the state', await page.getByText('on', { exact: true }).isVisible(), 'on');
+		for (const scheme of ['light', 'dark']) {
+			const scope = section.locator(`[data-scheme="${scheme}"]`);
+			await checkTones(record, scope, `radio-group ${scheme}`);
+			await checkStates(page, record, scope, `radio-group ${scheme}`, 'border');
+		}
 	},
 	toggle: async (page, record) => {
 		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
 		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
-		const toggles = page.locator('[data-slot="toggle"]');
-		await toggles.first().waitFor({ state: 'visible', timeout: 10_000 });
-		const count = await toggles.count();
-		record('nineteen toggles', count === 19, `${count} of 19`);
+		const section = page.locator('#toggle');
+		await section.locator('[data-slot="toggle"]').first().waitFor({ state: 'visible', timeout: 10_000 });
+		record('toggle section', (await section.count()) === 1, 'one section');
 
-		const pressed = page.locator('[data-slot="toggle"][aria-pressed="true"]');
-		record('eleven pressed', (await pressed.count()) === 11, `${await pressed.count()}`);
-
-		const disabled = page.locator('[data-slot="toggle"][disabled]');
-		record('three disabled', (await disabled.count()) === 3, `${await disabled.count()}`);
-
-		const invalid = page.locator('[data-slot="toggle"][aria-invalid="true"]');
-		record('two invalid', (await invalid.count()) === 2, `${await invalid.count()}`);
-
-		const off = toggles.nth(0);
-		const on = toggles.nth(1);
-		const background = (locator) =>
-			locator.evaluate((node) => getComputedStyle(node).backgroundColor);
-		const colour = (locator) => locator.evaluate((node) => getComputedStyle(node).color);
-
-		const offIdle = await background(off);
-		const offColour = await colour(off);
-		await off.hover();
-		await page.waitForTimeout(250);
-		const offHover = await background(off);
-		record('unpressed gives hover feedback', offIdle !== offHover, `${offIdle} -> ${offHover}`);
-
-		await page.mouse.move(900, 700);
-		await page.waitForTimeout(250);
-		const onIdle = await background(on);
-		const onColour = await colour(on);
-		await on.hover();
-		await page.waitForTimeout(250);
-		const onHover = await background(on);
-		record('pressed gives hover feedback', onIdle !== onHover, `${onIdle} -> ${onHover}`);
-		record('pressed is not the hover surface', onIdle !== offHover, `${onIdle} vs ${offHover}`);
-		record(
-			'pressed text flips to the foreground pair',
-			onColour !== offColour,
-			`${offColour} -> ${onColour}`
-		);
-
-		await page.mouse.move(900, 700);
-		await page.waitForTimeout(200);
-		const invalidRing = await toggles
-			.nth(13)
-			.evaluate((node) => getComputedStyle(node).boxShadow);
-		record('invalid paints on the plain variant', invalidRing !== 'none', invalidRing);
-
-		const pressedBorder = await toggles
-			.nth(3)
-			.evaluate((node) => getComputedStyle(node).borderTopColor);
-		record(
-			'pressed outline border follows the fill',
-			pressedBorder !== 'oklch(0.86725 0.0135 260.992)',
-			pressedBorder
-		);
-
-		const plainWidth = await off.evaluate((node) => getComputedStyle(node).borderTopWidth);
-		const outlineWidth = await toggles
-			.nth(2)
-			.evaluate((node) => getComputedStyle(node).borderTopWidth);
-		record(
-			'outline carries a border, plain does not',
-			plainWidth === '0px' && outlineWidth === '1px',
-			`${plainWidth} / ${outlineWidth}`
-		);
-
-		const heights = await toggles.evaluateAll((nodes) =>
-			[4, 5, 6].map((index) => Math.round(nodes[index].getBoundingClientRect().height))
-		);
-		record(
-			'three heights',
-			heights.join(',') === '24,28,32',
-			heights.join(', ')
-		);
-
-		const radii = await toggles.evaluateAll((nodes) =>
-			[4, 5, 6].map((index) =>
-				Number(parseFloat(getComputedStyle(nodes[index]).borderRadius).toFixed(1))
-			)
-		);
-		record(
-			'radii follow the size steps',
-			radii.join(',') === '4.8,6.4,8',
-			radii.join(', ')
-		);
-
-		const live = page.locator('#live');
-		record(
-			'controlled starts off',
-			(await live.getAttribute('aria-pressed')) === 'false',
-			'false'
-		);
-		await live.click();
-		record('controlled flips on click', (await live.getAttribute('aria-pressed')) === 'true', 'true');
-		record('label follows the state', await page.getByText('on', { exact: true }).isVisible(), 'on');
+		for (const scheme of ['light', 'dark']) {
+			const scope = section.locator(`[data-scheme="${scheme}"]`);
+			await checkTones(record, scope, `toggle ${scheme}`);
+			await checkOutlinePairs(record, scope, `toggle ${scheme}`);
+			await checkStates(page, record, scope, `toggle ${scheme}`, 'ring');
+		}
 	}
 };
 
@@ -627,6 +565,14 @@ page.on('console', (message) => {
 });
 page.on('pageerror', (error) => consoleErrors.push(String(error)));
 
+// A worktree whose node_modules is a junction serves the font through /@fs and the dev server
+// answers 404 for the real path. The generic 404 console message has no URL, so it is ignored only
+// when every failed request is a font file that lives outside the dev root.
+const failedRequests = [];
+page.on('response', (response) => {
+	if (response.status() >= 400) failedRequests.push(response.url());
+});
+
 let failure = null;
 
 try {
@@ -636,10 +582,16 @@ try {
 	console.log(`FAIL journey threw: ${failure}`);
 }
 
+const fontOnly =
+	failedRequests.length > 0 && failedRequests.every((url) => /\/@fs\/.*\.woff2$/.test(url));
+const appErrors = fontOnly
+	? consoleErrors.filter((text) => !text.includes('404'))
+	: consoleErrors;
+
 record(
 	'no console errors',
-	consoleErrors.length === 0,
-	consoleErrors.length ? consoleErrors.join(' | ') : 'none'
+	appErrors.length === 0,
+	appErrors.length ? appErrors.join(' | ') : 'none'
 );
 
 const screenshot = path.join(evidenceDir, 'page.png');
@@ -655,7 +607,8 @@ await writeFile(
 			base: BASE,
 			passed,
 			failure,
-			consoleErrors,
+			consoleErrors: appErrors,
+			failedRequests,
 			checks,
 			screenshot,
 			at: new Date().toISOString()

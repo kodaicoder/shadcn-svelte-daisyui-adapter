@@ -13,7 +13,7 @@ const PORT = 5199;
 const BASE = `http://127.0.0.1:${PORT}/`;
 const RUN_DIR = path.join(ROOT, '.verify', 'run');
 const RUN_FILE = path.join(RUN_DIR, 'dev.json');
-const HANDLE = 'data-slot="radio-group"';
+const HANDLE = 'data-control="checkbox"';
 const READY_TIMEOUT_MS = 60_000;
 const IS_WINDOWS = process.platform === 'win32';
 
