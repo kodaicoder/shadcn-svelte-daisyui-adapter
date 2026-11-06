@@ -17,7 +17,7 @@ import {
 
 export { COMPONENTS, PAIRS, SITES, SUPPORTED };
 
-const ALL_SITES = [...SITES, ...BINARY_SITES, ...RADIUS, ...SURFACES, ...VARIANTS];
+const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES];
 
 // A `#` alias is a package.json subpath import and can point anywhere, so the project's own
 // `imports` map wins over the convention below. `$lib` is SvelteKit's fixed lib alias; `@/` and

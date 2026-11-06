@@ -105,8 +105,8 @@ const mapOf = (text) => {
 check('TARGETS.binarySites is BINARY_SITES', TARGETS.binarySites === BINARY_SITES);
 check('TARGETS.binaryComponents is BINARY_COMPONENTS', TARGETS.binaryComponents === BINARY_COMPONENTS);
 check(
-	'the manifest holds nine binary sites',
-	BINARY_SITES.length === 9,
+	'the manifest holds twelve binary sites',
+	BINARY_SITES.length === 12,
 	`${BINARY_SITES.length}`
 );
 check(
@@ -114,7 +114,7 @@ check(
 	BINARY_COMPONENTS.every(
 		(component) =>
 			BINARY_SITES.filter((site) => site.component === component).length ===
-			({ checkbox: 2, switch: 2, 'radio-group': 2, toggle: 3 })[component]
+			({ checkbox: 3, switch: 3, 'radio-group': 3, toggle: 3 })[component]
 	),
 	BINARY_COMPONENTS.map(
 		(component) => `${component}:${BINARY_SITES.filter((site) => site.component === component).length}`
@@ -140,14 +140,20 @@ check(
 		.map((site) => site.id)
 		.join(', ')
 );
-// `toggle-tones` inserts the filled rows after the pinned `default` line, so its stock line stays
-// inside its fixed anchor on purpose. Every other site replaces its stock block whole.
+// These anchors insert a line beside their stock line instead of replacing it, so the stock line
+// stays inside the fixed anchor on purpose. Every other site replaces its stock block whole.
+const insertSiteIds = new Set([
+	'toggle-tones',
+	'checkbox-insert',
+	'radio-group-insert',
+	'switch-insert'
+]);
 check(
 	'no replacement anchor contains its stock anchor',
-	BINARY_SITES.filter((site) => site.id !== 'toggle-tones').every(
+	BINARY_SITES.filter((site) => !insertSiteIds.has(site.id)).every(
 		(site) => !site.fixed.includes(site.stock)
 	),
-	BINARY_SITES.filter((site) => site.id !== 'toggle-tones' && site.fixed.includes(site.stock))
+	BINARY_SITES.filter((site) => !insertSiteIds.has(site.id) && site.fixed.includes(site.stock))
 		.map((site) => site.id)
 		.join(', ')
 );
@@ -209,18 +215,17 @@ check(
 	`${childRules.length} maps`
 );
 
-const classSites = {
-	checkbox: BINARY_SITES.find((site) => site.id === 'checkbox-class').fixed,
-	'radio-group': BINARY_SITES.find((site) => site.id === 'radio-group-class').fixed,
-	switch: BINARY_SITES.find((site) => site.id === 'switch-class').fixed
+const colorSites = {
+	checkbox: BINARY_SITES.find((site) => site.id === 'checkbox-colors').fixed,
+	'radio-group': BINARY_SITES.find((site) => site.id === 'radio-group-colors').fixed
 };
 check(
 	'the dark unchecked surface is scoped to data-unchecked',
-	classSites.checkbox.includes('dark:data-unchecked:bg-input/30') &&
-		classSites['radio-group'].includes('dark:data-unchecked:bg-input/30') &&
-		classSites.switch.includes('dark:data-unchecked:bg-input/80') &&
-		!Object.values(classSites).some((text) => text.includes(' dark:bg-input/30')),
-	'checkbox, radio-group and switch'
+	colorSites.checkbox.includes('dark:data-unchecked:bg-input/30') &&
+		colorSites['radio-group'].includes('dark:data-unchecked:bg-input/30') &&
+		pinned.switch.includes('dark:data-unchecked:bg-input/80') &&
+		BINARY_SITES.every((site) => !site.fixed.includes(' dark:bg-input/30')),
+	'checkbox and radio-group colors, pinned switch root'
 );
 check(
 	'the dark checked primary twin is gone',
@@ -232,7 +237,7 @@ check(
 );
 check(
 	'the tone row follows the base class through cn',
-	['checkbox-class', 'radio-group-class', 'switch-class'].every((id) =>
+	['checkbox-insert', 'radio-group-insert', 'switch-insert'].every((id) =>
 		BINARY_SITES.find((site) => site.id === id).fixed.includes('\t\tTONES[variant],\n\t\tclassName')
 	)
 );
@@ -354,6 +359,21 @@ check(
 	restoredRun.out.includes('toggle toggle-tones (toggle/toggle.svelte): stock -> fixed') &&
 		textOf(restoredPath).includes(propsSite.fixed),
 	lineWith(restoredRun.out, 'toggle-tones')
+);
+
+const partial = join(WORK, 'partial');
+scaffold(partial);
+cli(partial);
+const partialPath = pathOf(partial, FILES.checkbox);
+const colorsSite = BINARY_SITES.find((site) => site.id === 'checkbox-colors');
+writeFileSync(partialPath, textOf(partialPath).replace(colorsSite.fixed, colorsSite.stock));
+const partialRun = cliResult(partial, 'fix', 'checkbox');
+check(
+	'a fixed radius step does not hide a stock tone site',
+	partialRun.out.includes('checkbox checkbox-colors (checkbox/checkbox.svelte): stock -> fixed') &&
+		partialRun.out.includes('checkbox checkbox-selector (checkbox/checkbox.svelte): fixed') &&
+		textOf(partialPath) === textOf(join(FIXED_DIR, 'checkbox-fixed', 'checkbox.svelte')),
+	lineWith(partialRun.out, 'checkbox-colors')
 );
 
 const missing = join(WORK, 'missing');

@@ -51,10 +51,10 @@ check(
 		.filter((id) => !siteIds.has(id))
 		.join(', ')
 );
-const ALL_SITES = [...SITES, ...BINARY_SITES, ...RADIUS, ...SURFACES, ...VARIANTS];
+const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES];
 check(
-	'the manifest holds nine binary sites',
-	BINARY_SITES.length === 9,
+	'the manifest holds twelve binary sites',
+	BINARY_SITES.length === 12,
 	`${BINARY_SITES.length}`
 );
 check(

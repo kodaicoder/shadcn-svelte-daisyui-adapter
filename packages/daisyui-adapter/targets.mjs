@@ -1610,48 +1610,27 @@ const radioPropsFixed = `${toneMap('radio-group')}
 \t\tvariant?: keyof typeof TONES;
 \t} = $props();`;
 
-const checkboxClassStock = `\t\t"border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-[4px] border transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+const controlColorsStock = `border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary`;
+
+const controlColorsFixed = `border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary`;
+
+const classInsertStock = `\t\tclassName`;
+
+const classInsertFixed = `\t\tTONES[variant],
 \t\tclassName`;
 
-const checkboxClassFixed = `\t\t"border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-sm border transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
-\t\tTONES[variant],
-\t\tclassName`;
+const switchRootInsertStock = `\t\tclassName
+\t)}
+\t{...restProps}`;
 
-const radioClassStock = `\t\t"border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
-\t\tclassName`;
-
-const radioClassFixed = `\t\t"border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
-\t\tTONES[variant],
-\t\tclassName`;
-
-const switchClassStock = `\tclass={cn(
-\t\t"data-checked:bg-primary data-unchecked:bg-input focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 rounded-full border border-transparent focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px] data-[size=default]:w-[28px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] peer group/switch relative inline-flex items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+const switchRootInsertFixed = `\t\tTONES[variant],
 \t\tclassName
 \t)}
-\t{...restProps}
->
-\t<SwitchPrimitive.Thumb
-\t\tdata-slot="switch-thumb"
-\t\tclass={cn(
-\t\t\t"bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground rounded-full group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=default]/switch:data-unchecked:translate-x-0 group-data-[size=sm]/switch:data-unchecked:translate-x-0 pointer-events-none block ring-0 transition-transform",
-\t\t\t"rtl:data-[state=checked]:translate-x-[calc(-100%)]"
-\t\t)}
-\t/>`;
+\t{...restProps}`;
 
-const switchClassFixed = `\tclass={cn(
-\t\t"data-checked:bg-primary data-unchecked:bg-input focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 border border-transparent rounded-full focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px] data-[size=default]:w-[28px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] peer group/switch relative inline-flex items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
-\t\tTONES[variant],
-\t\tclassName
-\t)}
-\t{...restProps}
->
-\t<SwitchPrimitive.Thumb
-\t\tdata-slot="switch-thumb"
-\t\tclass={cn(
-\t\t\t"bg-background dark:data-unchecked:bg-foreground rounded-full group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=default]/switch:data-unchecked:translate-x-0 group-data-[size=sm]/switch:data-unchecked:translate-x-0 pointer-events-none block ring-0 transition-transform",
-\t\t\t"rtl:data-[state=checked]:translate-x-[calc(-100%)]"
-\t\t)}
-\t/>`;
+const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground rounded-full`;
+
+const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
 	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80`;
@@ -1684,27 +1663,48 @@ const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreg
 export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
 	{
-		id: 'checkbox-class',
+		id: 'checkbox-colors',
 		component: 'checkbox',
 		file: 'checkbox/checkbox.svelte',
-		stock: checkboxClassStock,
-		fixed: checkboxClassFixed
+		stock: controlColorsStock,
+		fixed: controlColorsFixed
+	},
+	{
+		id: 'checkbox-insert',
+		component: 'checkbox',
+		file: 'checkbox/checkbox.svelte',
+		stock: classInsertStock,
+		fixed: classInsertFixed
 	},
 	binaryProps('switch', switchPropsStock, switchPropsFixed),
 	{
-		id: 'switch-class',
+		id: 'switch-insert',
 		component: 'switch',
 		file: 'switch/switch.svelte',
-		stock: switchClassStock,
-		fixed: switchClassFixed
+		stock: switchRootInsertStock,
+		fixed: switchRootInsertFixed
+	},
+	{
+		id: 'switch-thumb',
+		component: 'switch',
+		file: 'switch/switch.svelte',
+		stock: switchThumbStock,
+		fixed: switchThumbFixed
 	},
 	binaryProps('radio-group', radioPropsStock, radioPropsFixed),
 	{
-		id: 'radio-group-class',
+		id: 'radio-group-colors',
 		component: 'radio-group',
 		file: 'radio-group/radio-group-item.svelte',
-		stock: radioClassStock,
-		fixed: radioClassFixed
+		stock: controlColorsStock,
+		fixed: controlColorsFixed
+	},
+	{
+		id: 'radio-group-insert',
+		component: 'radio-group',
+		file: 'radio-group/radio-group-item.svelte',
+		stock: classInsertStock,
+		fixed: classInsertFixed
 	},
 	{
 		id: 'toggle-tones',
