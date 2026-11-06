@@ -1494,8 +1494,245 @@ export const VARIANTS = VARIANT_COMPONENTS.map((component) => ({
 	fixed: renderVariantBlock(component, rowsOf(component), true)
 }));
 
+// The binary controls take one tone through `variant`, not the four presentations a cva table gives
+// button, badge, alert and bubble. Each fixed copy carries the seven rows as literal strings, because
+// Tailwind only emits classes it can read in application source, and the fixed copy under
+// `src/lib/components` is that source. The rows sit after the base class through `cn`, so they win the
+// merge without `!` and a caller's `class` still wins. Box and switch both touch a radius site, so
+// their class row carries the radius step itself; the binary table is applied first, and the radius
+// site then reads its own fixed string and writes nothing.
+export const BINARY_COMPONENTS = ['checkbox', 'switch', 'radio-group', 'toggle'];
+
+const BINARY_TONES = [
+	'default',
+	'secondary',
+	'success',
+	'warning',
+	'info',
+	'destructive',
+	'blackwhite'
+];
+const STATUS_TONES = new Set(['success', 'warning', 'info', 'destructive']);
+const toneBorder = (tone) => (STATUS_TONES.has(tone) ? `${tone}-text` : tone);
+
+// The fill and foreground sit on the control; the thumb and dot are children, so the tone row paints
+// them from the control and the stock child rule never competes.
+const TONE_EXTRAS = {
+	checkbox: () => '',
+	switch: (tone) => ` data-checked:[&_[data-slot=switch-thumb]]:bg-${tone}-foreground`,
+	'radio-group': (tone) =>
+		` data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${tone}-foreground`
+};
+
+const toneRow = (component, tone) =>
+	`data-checked:bg-${tone} data-checked:text-${tone}-foreground data-checked:border-${toneBorder(tone)}${TONE_EXTRAS[component](tone)}`;
+
+const toneMap = (component) =>
+	[
+		'\tconst TONES = {',
+		...BINARY_TONES.map(
+			(tone) => `\t\t${keyToken(tone)}: "${toneRow(component, tone)}",`
+		),
+		'\t};'
+	].join('\n');
+
+const binaryProps = (component, stock, fixed) => ({
+	id: `${component}-tones`,
+	component,
+	file: `${component}/${component === 'radio-group' ? 'radio-group-item' : component}.svelte`,
+	stock,
+	fixed
+});
+
+const checkboxPropsStock = `\tlet {
+\t\tref = $bindable(null),
+\t\tchecked = $bindable(false),
+\t\tindeterminate = $bindable(false),
+\t\tclass: className,
+\t\t...restProps
+\t}: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> = $props();`;
+
+const checkboxPropsFixed = `${toneMap('checkbox')}
+
+\tlet {
+\t\tref = $bindable(null),
+\t\tchecked = $bindable(false),
+\t\tindeterminate = $bindable(false),
+\t\tclass: className,
+\t\tvariant = "default",
+\t\t...restProps
+\t}: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> & {
+\t\tvariant?: keyof typeof TONES;
+\t} = $props();`;
+
+const switchPropsStock = `\tlet {
+\t\tref = $bindable(null),
+\t\tclass: className,
+\t\tchecked = $bindable(false),
+\t\tsize = "default",
+\t\t...restProps
+\t}: WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
+\t\tsize?: "sm" | "default";
+\t} = $props();`;
+
+const switchPropsFixed = `${toneMap('switch')}
+
+\tlet {
+\t\tref = $bindable(null),
+\t\tclass: className,
+\t\tchecked = $bindable(false),
+\t\tsize = "default",
+\t\tvariant = "default",
+\t\t...restProps
+\t}: WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
+\t\tsize?: "sm" | "default";
+\t\tvariant?: keyof typeof TONES;
+\t} = $props();`;
+
+const radioPropsStock = `\tlet {
+\t\tref = $bindable(null),
+\t\tclass: className,
+\t\t...restProps
+\t}: WithoutChildrenOrChild<RadioGroupPrimitive.ItemProps> = $props();`;
+
+const radioPropsFixed = `${toneMap('radio-group')}
+
+\tlet {
+\t\tref = $bindable(null),
+\t\tclass: className,
+\t\tvariant = "default",
+\t\t...restProps
+\t}: WithoutChildrenOrChild<RadioGroupPrimitive.ItemProps> & {
+\t\tvariant?: keyof typeof TONES;
+\t} = $props();`;
+
+const checkboxClassStock = `\t\t"border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-[4px] border transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+\t\tclassName`;
+
+const checkboxClassFixed = `\t\t"border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-sm border transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+\t\tTONES[variant],
+\t\tclassName`;
+
+const radioClassStock = `\t\t"border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+\t\tclassName`;
+
+const radioClassFixed = `\t\t"border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+\t\tTONES[variant],
+\t\tclassName`;
+
+const switchClassStock = `\tclass={cn(
+\t\t"data-checked:bg-primary data-unchecked:bg-input focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 rounded-full border border-transparent focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px] data-[size=default]:w-[28px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] peer group/switch relative inline-flex items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+\t\tclassName
+\t)}
+\t{...restProps}
+>
+\t<SwitchPrimitive.Thumb
+\t\tdata-slot="switch-thumb"
+\t\tclass={cn(
+\t\t\t"bg-background dark:data-unchecked:bg-foreground dark:data-checked:bg-primary-foreground rounded-full group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=default]/switch:data-unchecked:translate-x-0 group-data-[size=sm]/switch:data-unchecked:translate-x-0 pointer-events-none block ring-0 transition-transform",
+\t\t\t"rtl:data-[state=checked]:translate-x-[calc(-100%)]"
+\t\t)}
+\t/>`;
+
+const switchClassFixed = `\tclass={cn(
+\t\t"data-checked:bg-primary data-unchecked:bg-input focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 border border-transparent rounded-full focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px] data-[size=default]:w-[28px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] peer group/switch relative inline-flex items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+\t\tTONES[variant],
+\t\tclassName
+\t)}
+\t{...restProps}
+>
+\t<SwitchPrimitive.Thumb
+\t\tdata-slot="switch-thumb"
+\t\tclass={cn(
+\t\t\t"bg-background dark:data-unchecked:bg-foreground rounded-full group-data-[size=default]/switch:size-3.5 group-data-[size=sm]/switch:size-3 group-data-[size=default]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=sm]/switch:data-checked:translate-x-[calc(100%_-_2px)] group-data-[size=default]/switch:data-unchecked:translate-x-0 group-data-[size=sm]/switch:data-unchecked:translate-x-0 pointer-events-none block ring-0 transition-transform",
+\t\t\t"rtl:data-[state=checked]:translate-x-[calc(-100%)]"
+\t\t)}
+\t/>`;
+
+const toggleRow = (tone) =>
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80`;
+
+const toggleOutlineRow = (tone) =>
+	`border border-${toneBorder(tone)} bg-transparent text-${toneBorder(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80`;
+
+const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
+
+const toggleVariantFixed = [
+	`\t\t\t\tdefault: "bg-transparent",`,
+	...BINARY_TONES.filter((tone) => tone !== 'default').map(
+		(tone) => `\t\t\t\t${keyToken(tone)}: "${toggleRow(tone)}",`
+	)
+].join('\n');
+
+const toggleOutlineStock = `\t\t\t\toutline: "border-input hover:bg-muted border bg-transparent",`;
+
+const toggleOutlineFixed = [
+	`\t\t\t\toutline: "border-input aria-[pressed=false]:hover:bg-muted border bg-transparent",`,
+	...BINARY_TONES.filter((tone) => tone !== 'default').map(
+		(tone) => `\t\t\t\t${keyToken(`outline-${tone}`)}: "${toggleOutlineRow(tone)}",`
+	)
+].join('\n');
+
+const toggleBaseStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+
+const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 aria-[pressed=false]:hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+
+export const BINARY_SITES = [
+	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
+	{
+		id: 'checkbox-class',
+		component: 'checkbox',
+		file: 'checkbox/checkbox.svelte',
+		stock: checkboxClassStock,
+		fixed: checkboxClassFixed
+	},
+	binaryProps('switch', switchPropsStock, switchPropsFixed),
+	{
+		id: 'switch-class',
+		component: 'switch',
+		file: 'switch/switch.svelte',
+		stock: switchClassStock,
+		fixed: switchClassFixed
+	},
+	binaryProps('radio-group', radioPropsStock, radioPropsFixed),
+	{
+		id: 'radio-group-class',
+		component: 'radio-group',
+		file: 'radio-group/radio-group-item.svelte',
+		stock: radioClassStock,
+		fixed: radioClassFixed
+	},
+	{
+		id: 'toggle-tones',
+		component: 'toggle',
+		file: 'toggle/toggle.svelte',
+		stock: toggleVariantStock,
+		fixed: toggleVariantFixed
+	},
+	{
+		id: 'toggle-outline-tones',
+		component: 'toggle',
+		file: 'toggle/toggle.svelte',
+		stock: toggleOutlineStock,
+		fixed: toggleOutlineFixed
+	},
+	{
+		id: 'toggle-pressed',
+		component: 'toggle',
+		file: 'toggle/toggle.svelte',
+		stock: toggleBaseStock,
+		fixed: toggleBaseFixed
+	}
+];
+
 export const KNOWN_COMPONENTS = [
-	...new Set([...COMPONENTS, ...RADIUS_COMPONENTS, ...SURFACE_COMPONENTS, ...VARIANT_COMPONENTS])
+	...new Set([
+		...COMPONENTS,
+		...RADIUS_COMPONENTS,
+		...SURFACE_COMPONENTS,
+		...VARIANT_COMPONENTS,
+		...BINARY_COMPONENTS
+	])
 ];
 
 export const TARGETS = {
@@ -1509,6 +1746,8 @@ export const TARGETS = {
 	surfaceComponents: SURFACE_COMPONENTS,
 	variants: VARIANTS,
 	variantComponents: VARIANT_COMPONENTS,
+	binarySites: BINARY_SITES,
+	binaryComponents: BINARY_COMPONENTS,
 	buttonVariants: BUTTON_VARIANTS,
 	variantRows: VARIANT_ROWS,
 	badgeVariants: BADGE_VARIANTS,

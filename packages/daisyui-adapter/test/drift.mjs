@@ -6,6 +6,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+	BINARY_COMPONENTS,
+	BINARY_SITES,
 	COMPONENTS,
 	KNOWN_COMPONENTS,
 	PAIRS,
@@ -49,10 +51,16 @@ check(
 		.filter((id) => !siteIds.has(id))
 		.join(', ')
 );
-const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS];
+const ALL_SITES = [...SITES, ...BINARY_SITES, ...RADIUS, ...SURFACES, ...VARIANTS];
+check(
+	'the manifest holds nine binary sites',
+	BINARY_SITES.length === 9,
+	`${BINARY_SITES.length}`
+);
 check(
 	'every site belongs to a named component of its own table',
 	SITES.every((site) => COMPONENTS.includes(site.component)) &&
+		BINARY_SITES.every((site) => BINARY_COMPONENTS.includes(site.component)) &&
 		RADIUS.every((site) => RADIUS_COMPONENTS.includes(site.component)) &&
 		SURFACES.every((site) => SURFACE_COMPONENTS.includes(site.component)) &&
 		VARIANTS.every((site) => VARIANT_COMPONENTS.includes(site.component))
@@ -76,7 +84,9 @@ check(
 
 const missingStock = ALL_SITES.filter((site) => {
 	const path = join(UI, ...site.file.split('/'));
-	return !existsSync(path) || !readFileSync(path, 'utf8').includes(site.stock);
+	if (!existsSync(path)) return true;
+	const text = readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+	return !text.includes(site.stock);
 }).map((site) => site.id);
 check(
 	'every site file still holds its stock string',
