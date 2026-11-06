@@ -1514,18 +1514,22 @@ const BINARY_TONES = [
 ];
 const STATUS_TONES = new Set(['success', 'warning', 'info', 'destructive']);
 const toneBorder = (tone) => (STATUS_TONES.has(tone) ? `${tone}-text` : tone);
+// `default` is the theme's primary pair, so the key and the token differ here and only here.
+const toneToken = (tone) => (tone === 'default' ? 'primary' : tone);
 
 // The fill and foreground sit on the control; the thumb and dot are children, so the tone row paints
 // them from the control and the stock child rule never competes.
 const TONE_EXTRAS = {
 	checkbox: () => '',
-	switch: (tone) => ` data-checked:[&_[data-slot=switch-thumb]]:bg-${tone}-foreground`,
-	'radio-group': (tone) =>
-		` data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${tone}-foreground`
+	switch: (token) => ` data-checked:[&_[data-slot=switch-thumb]]:bg-${token}-foreground`,
+	'radio-group': (token) =>
+		` data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${token}-foreground`
 };
 
-const toneRow = (component, tone) =>
-	`data-checked:bg-${tone} data-checked:text-${tone}-foreground data-checked:border-${toneBorder(tone)}${TONE_EXTRAS[component](tone)}`;
+const toneRow = (component, tone) => {
+	const token = toneToken(tone);
+	return `data-checked:bg-${token} data-checked:text-${token}-foreground data-checked:border-${toneBorder(token)}${TONE_EXTRAS[component](token)}`;
+};
 
 const toneMap = (component) =>
 	[

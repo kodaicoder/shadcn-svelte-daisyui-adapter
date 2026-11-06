@@ -4,20 +4,34 @@
 	import MinusIcon from '@lucide/svelte/icons/minus';
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
+	const TONES = {
+		default: "data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary",
+		secondary: "data-checked:bg-secondary data-checked:text-secondary-foreground data-checked:border-secondary",
+		success: "data-checked:bg-success data-checked:text-success-foreground data-checked:border-success-text",
+		warning: "data-checked:bg-warning data-checked:text-warning-foreground data-checked:border-warning-text",
+		info: "data-checked:bg-info data-checked:text-info-foreground data-checked:border-info-text",
+		destructive: "data-checked:bg-destructive data-checked:text-destructive-foreground data-checked:border-destructive-text",
+		blackwhite: "data-checked:bg-blackwhite data-checked:text-blackwhite-foreground data-checked:border-blackwhite",
+	};
+
 	let {
 		ref = $bindable(null),
 		checked = $bindable(false),
 		indeterminate = $bindable(false),
 		class: className,
+		variant = "default",
 		...restProps
-	}: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> = $props();
+	}: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> & {
+		variant?: keyof typeof TONES;
+	} = $props();
 </script>
 
 <CheckboxPrimitive.Root
 	bind:ref
 	data-slot="checkbox"
 	class={cn(
-		"border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-sm border transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+		"border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-sm border transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
+		TONES[variant],
 		className
 	)}
 	bind:checked
