@@ -138,35 +138,49 @@ change that drops the guard, for every filled row.
 
 Asked: whether the checkbox renders tones and the other appearances.
 
-No, and it cannot today. The tone × presentation table covers `button`, `badge`, `alert` and `bubble`
-only (`VARIANT_COMPONENTS`, `packages/daisyui-adapter/targets.mjs:881`). Checkbox appears in the radius
-table alone, and its checked colours are fixed in the stock class:
+Checkbox, switch, radio-group and toggle now take the seven tones through one `variant` prop. `default` is the primary pair; the others are `secondary`, `success`, `warning`, `info`, `destructive` and `blackwhite`. Toggle keeps its appearance axis, so its keys are the seven filled tones, `outline`, and `outline-<tone>` for the six non-default tones. None of the four has a second appearance axis: daisyUI offers colour modifiers only.
 
-```
-data-checked:bg-primary data-checked:border-primary data-checked:text-primary-foreground
-```
+Measured on the reviewer page on 2026-11-06. The fill is the same on a checked checkbox, a checked switch and a checked radio, and on a pressed toggle. The border is the checked control border; the text is the tone foreground.
 
-daisyUI offers colour modifiers on a checkbox (`checkbox-primary`, `checkbox-success`, ...) and no
-appearance modifier, so there is one tone to show and no appearance. `switch`, `toggle` and
-`radio-group` are in the same position: the variant table never touches them.
+| tone | fill light | fill dark | border light | border dark |
+| --- | --- | --- | --- | --- |
+| `default` | `oklch(0.42 0.199 265.638)` | `oklch(0.5 0.11 240.79)` | same as fill | same as fill |
+| `secondary` | `oklch(0.81 0.111 293.571)` | `oklch(0.7 0.183 293.541)` | same as fill | same as fill |
+| `success` | `oklch(0.79 0.209 151.711)` | `oklch(0.76 0.177 163.223)` | `oklch(0.436 0.1376 205.21)` | `oklch(0.856 0.0744 224.008)` |
+| `warning` | `oklch(0.79 0.184 86.047)` | `oklch(0.82 0.189 84.429)` | `oklch(0.436 0.1276 178.944)` | `oklch(0.88 0.0792 336.49)` |
+| `info` | `oklch(0.74 0.16 232.661)` | `oklch(0.74 0.16 232.661)` | `oklch(0.416 0.118 237.59)` | `oklch(0.848 0.0676 251.783)` |
+| `destructive` | `oklch(0.5 0.213 27.518)` | `oklch(0.5 0.213 27.518)` | `oklch(0.32 0.1392 299.533)` | `oklch(0.752 0.0888 313.726)` |
+| `blackwhite` | `oklch(0.2 0.042 265.755)` | `oklch(0.98 0.002 247.839)` | same as fill | same as fill |
 
-Measured on the switch page, the state pair that exists is the track colour, `bg-input` when unchecked
-and `bg-primary` when checked: `oklch(0.86725 0.0135 260.992)` to `oklch(0.42 0.199 265.638)`.
+| tone | text light | text dark |
+| --- | --- | --- |
+| `default` | `oklch(0.98 0.016 73.684)` | `oklch(0.98 0.016 73.684)` |
+| `secondary` | `oklch(0.25 0.09 281.288)` | `oklch(0.26 0.007 34.298)` |
+| `success` | `oklch(0.27 0.072 132.109)` | `oklch(0.37 0.077 168.94)` |
+| `warning` | `oklch(0.28 0.066 53.813)` | `oklch(0.41 0.112 45.904)` |
+| `info` | `oklch(0.29 0.066 243.157)` | `oklch(0.29 0.066 243.157)` |
+| `destructive` | `oklch(0.97 0.013 17.38)` | `oklch(0.97 0.013 17.38)` |
+| `blackwhite` | `oklch(0.96 0.007 247.896)` | `oklch(0.13 0.028 261.692)` |
 
-### Why the variant table cannot add a tone
+The status borders are the text tones, so they inherit the hue shift the badge section records: under the blue foreground a success border reads cyan and a destructive border reads purple. That is the cost of clearing 3:1 on the control boundary while the fill stays the raw tone. `default`, `secondary` and `blackwhite` use the raw tone for the border, because their raw value already clears it.
+
+### Why the tone table is not a variant row
 
 Each variant entry is a static string pair that the fixer writes with
 `content.split(stock).join(fixed)` (`packages/daisyui-adapter/component-fix.mjs:177`), and
 `renderVariantBlock` builds a cva `variant: { ... }` block (`targets.mjs:1470`). Checkbox has no cva
-variant block, and a static replacement cannot choose a value at runtime. The shapes that can are a CSS
-variable seam, a wrapper component with a `tone` prop, and a two-anchor patch of the fixed copy. The
-choice is deferred to one ticket covering all four binary controls, so the mechanism is decided once.
+variant block, and a static replacement cannot choose a value at runtime. The chosen shape is a
+literal `TONES` map inserted into each fixed copy's script plus `TONES[variant]` passed to `cn`, so the
+key type comes from the map and Tailwind reads every row in application source. Toggle already has a
+cva table, so its tones are rows in that table. All of it is written from `BINARY_SITES` in
+`packages/daisyui-adapter/targets.mjs`, and the registry-44 harness proves the fixer reproduces each
+committed fixed copy byte for byte.
 
 ### Parked findings
 
-- Checkbox, switch and radio-group carry the `default` tone only, with no appearance. Toggle carries
-  primary when pressed and has an appearance axis, but still no tones. Recorded here rather than fixed,
-  because the mechanism is shared.
+- Resolved by ticket 44: checkbox, switch and radio-group carry the seven tones, and toggle carries
+  them alongside its appearance axis. The tone row is applied after the base class through `cn`, so no
+  `!` is needed.
 - `switch.svelte` moves its thumb with `rtl:data-[state=checked]:translate-x-[calc(-100%)]` while every
   other rule uses `data-checked`. bits-ui sets `data-checked`, so the RTL checked position never
   applies. Stock bug, upstream of the adapter.
@@ -200,11 +214,11 @@ Decision taken on 2026-11-06: pressed takes primary, hover keeps muted, a presse
 | invalid, `default` variant | `2px` ring of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
 | pressed `outline` border | primary, so the border follows the fill |
 
-The change lives in `src/lib/components/toggle-fixed/toggle.svelte` only. `init.mjs fix toggle` does not
-produce it, because the fix sits in the base class rather than a radius or variant row. The tone seam
-ticket has to encode it in `targets.mjs`, or the fixed copy will drift from the generator. Toggle is
-also the one binary control that already has a `variant` prop, so the seam has to serve a component
-with an existing appearance axis.
+The change lives in `src/lib/components/toggle-fixed/toggle.svelte` and in `toggle-pressed`
+(`packages/daisyui-adapter/targets.mjs`), so `init.mjs fix toggle` reproduces it. Toggle is the one
+binary control that already has a `variant` prop, so the tone seam serves a component with an existing
+appearance axis: the pressed paint stays in the base, and a tone row overrides it with the same
+`aria-pressed:` variants.
 
 ## Button
 
@@ -264,8 +278,9 @@ horizontal row needs a `class` override such as `flex w-auto items-center gap-4`
 
 ### Tone coverage
 
-Checked items paint `data-checked:bg-primary` with a `bg-primary-foreground` dot, so the group carries
-the `default` tone only. It joins checkbox, switch and toggle in the shared tone gap.
+A checked item paints the `variant` tone through `data-checked:`, and the dot follows the tone
+foreground from the item. `default` is the primary pair, so a group with no `variant` still paints
+`bg-primary` with a `bg-primary-foreground` dot.
 
 ### Radius, proved on the toggle
 
