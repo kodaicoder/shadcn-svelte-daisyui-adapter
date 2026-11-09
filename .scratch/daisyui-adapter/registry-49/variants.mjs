@@ -7,6 +7,7 @@ import { uiDirectory } from '../../../packages/daisyui-adapter/component-fix.mjs
 import {
 	BINARY_COMPONENTS,
 	BINARY_SITES,
+	CURSOR_COMPONENTS,
 	TARGETS
 } from '../../../packages/daisyui-adapter/targets.mjs';
 
@@ -25,6 +26,14 @@ const FILES = {
 	'radio-group': 'radio-group/radio-group-item.svelte',
 	toggle: 'toggle/toggle.svelte'
 };
+const CURSOR_FILES = {
+	button: 'button/button.svelte',
+	checkbox: 'checkbox/checkbox.svelte',
+	switch: 'switch/switch.svelte',
+	'radio-group': 'radio-group/radio-group-item.svelte',
+	label: 'label/label.svelte'
+};
+const FIXTURE_COMPONENTS = [...new Set([...BINARY_COMPONENTS, ...CURSOR_COMPONENTS])];
 const TONES = ['default', 'secondary', 'success', 'warning', 'info', 'destructive', 'blackwhite'];
 const STATUS = ['success', 'warning', 'info', 'destructive'];
 const OUTLINE = [
@@ -46,7 +55,7 @@ const check = (name, ok, detail) => {
 	console.log(`${ok ? 'ok  ' : 'FAIL'}  ${name}${detail ? ` :: ${detail}` : ''}`);
 };
 
-const scaffold = (dir, { components = BINARY_COMPONENTS, shadcn = '1.8.0' } = {}) => {
+const scaffold = (dir, { components = FIXTURE_COMPONENTS, shadcn = '1.8.0' } = {}) => {
 	rmSync(dir, { recursive: true, force: true });
 	mkdirSync(join(dir, 'src', 'routes'), { recursive: true });
 	cpSync(join(REPO, 'src', 'routes', 'layout.css'), join(dir, 'src', 'routes', 'layout.css'));
@@ -392,17 +401,29 @@ for (const [component, file] of Object.entries(FILES)) {
 	if (generated !== committed) mismatchedCopy.push(component);
 }
 check(
-	'the fixer reproduces each committed reviewer copy byte for byte',
+	'the fixer reproduces each committed binary copy byte for byte',
 	mismatchedCopy.length === 0,
 	mismatchedCopy.join(', ')
+);
+
+const mismatchedCursorCopy = [];
+for (const [component, file] of Object.entries(CURSOR_FILES)) {
+	const generated = textOf(pathOf(applied, file));
+	const committed = textOf(join(FIXED_DIR, `${component}-fixed`, ...file.split('/').slice(1)));
+	if (generated !== committed) mismatchedCursorCopy.push(component);
+}
+check(
+	'the fixer reproduces each committed cursor copy byte for byte',
+	mismatchedCursorCopy.length === 0,
+	mismatchedCursorCopy.join(', ')
 );
 
 const header = textOf(join(applied, 'src', 'routes', 'layout.css'))
 	.split('\n')
 	.find((line) => line.startsWith('/* '));
 check(
-	'the header records four fully fixed components',
-	header?.startsWith(`/* ${NAME} ${VERSION} | components 4 fixed | re-run `),
+	'the header records six fully fixed components',
+	header?.startsWith(`/* ${NAME} ${VERSION} | components 6 fixed | re-run `),
 	header
 );
 
