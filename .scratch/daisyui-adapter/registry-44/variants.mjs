@@ -364,6 +364,9 @@ check(
 		) &&
 		toggleRows['outline-secondary'].includes(
 			'border-secondary-foreground dark:border-secondary'
+		) &&
+		toggleRows['outline-secondary'].includes(
+			'dark:aria-pressed:text-secondary-foreground'
 		)
 );
 

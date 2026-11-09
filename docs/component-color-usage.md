@@ -220,6 +220,12 @@ on the fixed copy:
 `muted` is `--color-base-200`, one step from the page background, so its washes were too quiet. The tone
 at 20 percent carries hue as well as lightness, which is what makes the hover visible on both pages.
 
+`outline-secondary` needed one extra rule on press. The rest state sets `dark:text-secondary`, which
+outranks a single-variant `aria-pressed:text-secondary-foreground`, so the label vanished into the fill
+in dark. The pressed state now also declares `dark:aria-pressed:text-secondary-foreground`. Measured
+pressed: text `oklch(0.25 0.09 281.288)` on `oklch(0.81 0.111 293.571)` in light, and
+`oklch(0.26 0.007 34.298)` on `oklch(0.7 0.183 293.541)` in dark.
+
 The change lives in `src/lib/components/toggle-fixed/toggle.svelte` and in `toggle-pressed`
 (`packages/daisyui-adapter/targets.mjs`), so `init.mjs fix toggle` reproduces it. Toggle is the one
 binary control that already has a `variant` prop, so the tone seam serves a component with an existing

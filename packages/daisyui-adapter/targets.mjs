@@ -1663,7 +1663,11 @@ const toggleRow = (tone) =>
 	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
 const toggleOutlineRow = (tone) =>
-	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
+	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} ${
+		tone === 'secondary'
+			? 'aria-pressed:text-secondary-foreground dark:aria-pressed:text-secondary-foreground'
+			: `aria-pressed:text-${tone}-foreground`
+	} ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 

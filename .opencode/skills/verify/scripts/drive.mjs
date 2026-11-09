@@ -125,6 +125,19 @@ const checkOutlinePairs = async (record, scope, label) => {
 		const fill = await computed(scope.locator(`[data-tone="${tone}"]`), 'backgroundColor');
 		record(`${label}: ${key} fills with ${tone}`, pressed === fill, `${pressed} vs ${fill}`);
 	}
+
+	const secondaryPressed = scope.locator('[data-outline-pressed="outline-secondary"]');
+	const secondaryText = await computed(secondaryPressed, 'color');
+	const secondaryFill = await computed(secondaryPressed, 'backgroundColor');
+	const secondaryExpected = await computed(
+		scope.locator('[data-foreground-swatch="secondary"]'),
+		'color'
+	);
+	record(
+		`${label}: outline-secondary keeps its label on press`,
+		secondaryText !== secondaryFill && secondaryText === secondaryExpected,
+		`text ${secondaryText} / fill ${secondaryFill} / expected ${secondaryExpected}`
+	);
 };
 
 const checkStates = async (page, record, scope, label, invalidKind) => {
