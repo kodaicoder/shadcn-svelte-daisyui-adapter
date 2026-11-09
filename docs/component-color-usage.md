@@ -388,6 +388,6 @@ Measured: a sibling label, a group label and a wrapped label all compute `cursor
 label does not dim itself, because its control already dims once; dimming the ancestor multiplied the two
 and rendered the control at 0.25.
 
-One exception to the tone-focus claim: inside a focused `Field.Label`, the stock
-`group-has-[:focus-visible]/field-label:*` border rules still outrank the tone row, so a toned control shows
-a primary border there. Recorded in ticket 50.
+The tone survives a focused `Field.Label` too. The fixed copies remove the stock
+`group-has-[:focus-visible]/field-label:*` overrides, so a toned control keeps its tone border and tone ring
+there. Measured in both schemes on the checkbox, switch and radio-group.

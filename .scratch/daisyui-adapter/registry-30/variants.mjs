@@ -289,9 +289,13 @@ check('the stock block is not contained in the fixed block', !site.fixed.include
 check('the stock and fixed blocks differ', site.stock !== site.fixed);
 
 const writtenKey = (key) => (/^[A-Za-z_$][\w$]*$/.test(key) ? key : `"${key}"`);
+const fixedClass = (row) =>
+	row.component === 'button'
+		? row.class.replace(/\bhover:/g, 'not-aria-disabled:not-disabled:hover:')
+		: row.class;
 
 const missingRows = BUTTON_VARIANTS.filter(
-	(row) => countOf(site.fixed, `${writtenKey(row.key)}: "${row.class}",`) !== 1
+	(row) => countOf(site.fixed, `${writtenKey(row.key)}: "${fixedClass(row)}",`) !== 1
 ).map((row) => row.key);
 check(
 	'every row appears exactly once in the fixed block',
@@ -404,7 +408,7 @@ cli(states);
 const success = byKey('success');
 replaceIn(
 	pathOf(states, FILENAME),
-	`${success.key}: "${success.class}",`,
+	`${success.key}: "${fixedClass(success)}",`,
 	'success: "bg-success/50",'
 );
 const statesRun = cliResult(states, 'fix', 'button');
@@ -420,7 +424,7 @@ const added = join(WORK, 'added');
 scaffold(added);
 const addedPath = pathOf(added, FILENAME);
 const linkLine = `\t\t\t\tlink: "${pinnedClass('link')}",`;
-const closing = '\t\t\t},';
+const closing = '\t\t\t}';
 const addedText = readFileSync(addedPath, 'utf8');
 const anchor = `${linkLine}\n${closing}`;
 writeFileSync(

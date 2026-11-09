@@ -216,9 +216,13 @@ const badgePin = pinOf('badge');
 const alertPin = pinOf('alert');
 const bubblePin = pinOf('bubble');
 
+const fixedClass = (row) =>
+	row.component === 'button'
+		? row.class.replace(/\bhover:/g, 'not-aria-disabled:not-disabled:hover:')
+		: row.class;
 const rowLinesMissing = (site, rows) =>
 	rows
-		.filter((row) => countOf(site.fixed, `${writtenKey(row.key)}: "${row.class}",`) !== 1)
+		.filter((row) => countOf(site.fixed, `${writtenKey(row.key)}: "${fixedClass(row)}",`) !== 1)
 		.map((row) => row.key)
 		.join(', ');
 

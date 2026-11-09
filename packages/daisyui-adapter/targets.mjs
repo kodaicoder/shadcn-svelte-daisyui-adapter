@@ -1688,6 +1688,14 @@ export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
 	focusSite('checkbox', 'checkbox/checkbox.svelte', 'dark:aria-invalid:border-destructive/50', 30),
 	{
+		id: 'checkbox-field-label',
+		component: 'checkbox',
+		file: 'checkbox/checkbox.svelte',
+		stock:
+			'group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary',
+		fixed: 'focus-visible:ring-2 group-has-disabled/field:opacity-50 aria-invalid:ring-2'
+	},
+	{
 		id: 'checkbox-colors',
 		component: 'checkbox',
 		file: 'checkbox/checkbox.svelte',
@@ -1704,6 +1712,14 @@ export const BINARY_SITES = [
 	binaryProps('switch', switchPropsStock, switchPropsFixed),
 	focusSite('switch', 'switch/switch.svelte', 'data-unchecked:bg-input', 30),
 	{
+		id: 'switch-field-label',
+		component: 'switch',
+		file: 'switch/switch.svelte',
+		stock:
+			'aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px]',
+		fixed: 'data-[size=default]:h-[16.6px] aria-invalid:ring-2'
+	},
+	{
 		id: 'switch-insert',
 		component: 'switch',
 		file: 'switch/switch.svelte',
@@ -1719,6 +1735,14 @@ export const BINARY_SITES = [
 	},
 	binaryProps('radio-group', radioPropsStock, radioPropsFixed),
 	focusSite('radio-group', 'radio-group/radio-group-item.svelte', 'aria-invalid:border-destructive', 50),
+	{
+		id: 'radio-group-field-label',
+		component: 'radio-group',
+		file: 'radio-group/radio-group-item.svelte',
+		stock:
+			'aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary group/radio-group-item',
+		fixed: 'group/radio-group-item aria-invalid:ring-3'
+	},
 	{
 		id: 'radio-group-colors',
 		component: 'radio-group',
