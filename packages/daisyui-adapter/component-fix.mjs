@@ -112,9 +112,33 @@ const guard = ({ root, scope, directory }) => {
 };
 
 const stateOf = (content, site) => {
-	if (content.includes(site.fixed)) return 'fixed';
+	if (site.position === 'insert') {
+		const at = content.indexOf(site.stock);
+		if (at < 0) return content.includes(site.fixed) ? 'fixed' : 'customized';
+		if (content.indexOf(site.stock, at + 1) >= 0) return 'customized';
+		const stockAt = site.fixed.indexOf(site.stock);
+		const before = stockAt < 0 ? '' : site.fixed.slice(0, stockAt);
+		const after = stockAt < 0 ? '' : site.fixed.slice(stockAt + site.stock.length);
+		const head = before === '' || content.slice(Math.max(0, at - before.length), at) === before;
+		const tail = after === '' || content.startsWith(after, at + site.stock.length);
+		if (head && tail) return 'fixed';
+		return 'stock';
+	}
+	if (site.position !== 'replace') {
+		throw new Error(`[daisyui-adapter] unknown site position "${site.position}"`);
+	}
+	if (site.stock === site.fixed) return content.includes(site.stock) ? 'fixed' : 'customized';
 	if (content.includes(site.stock)) return 'stock';
-	return 'customized';
+	return content.includes(site.fixed) ? 'fixed' : 'customized';
+};
+
+const applySite = (content, site) => {
+	if (site.position === 'replace') {
+		return site.stock === site.fixed ? content : content.split(site.stock).join(site.fixed);
+	}
+	const at = content.indexOf(site.stock);
+	if (at < 0 || content.indexOf(site.stock, at + 1) >= 0) return content;
+	return `${content.slice(0, at)}${site.fixed}${content.slice(at + site.stock.length)}`;
 };
 
 const targetSites = (names) => {
@@ -183,7 +207,9 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 		if (apply && scopeFiles.has(file)) {
 			for (const entry of states) {
 				if (entry.state !== 'stock') continue;
-				content = content.split(entry.site.stock).join(entry.site.fixed);
+				const next = applySite(content, entry.site);
+				if (next === content) continue;
+				content = next;
 				entry.written = true;
 			}
 			if (states.some((entry) => entry.written)) {

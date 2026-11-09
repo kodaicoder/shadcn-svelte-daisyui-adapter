@@ -54,12 +54,28 @@ check(
 		.join(', ')
 );
 const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES, ...CURSOR_SITES];
+const positioned = ALL_SITES.filter(
+	(site) => site.position !== 'replace' && site.position !== 'insert'
+);
 check(
-	'the manifest holds twenty-one binary sites',
-	BINARY_SITES.length === 21,
+	'every site declares a position',
+	positioned.length === 0,
+	positioned.map((site) => site.id).join(', ')
+);
+const unnestedInserts = ALL_SITES.filter(
+	(site) => site.position === 'insert' && !site.fixed.includes(site.stock)
+);
+check(
+	'every insert site nests its stock in its fixed',
+	unnestedInserts.length === 0,
+	unnestedInserts.map((site) => site.id).join(', ')
+);
+check(
+	'the manifest holds twenty-two binary sites',
+	BINARY_SITES.length === 22,
 	`${BINARY_SITES.length}`
 );
-check('the manifest holds six cursor sites', CURSOR_SITES.length === 6, `${CURSOR_SITES.length}`);
+check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
 check(
 	'every site belongs to a named component of its own table',
 	SITES.every((site) => COMPONENTS.includes(site.component)) &&

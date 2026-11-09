@@ -7,6 +7,9 @@
 // `packages/daisyui-adapter/test/drift.mjs` fails when the pin moves without this list.
 export const SUPPORTED = { version: { major: 1, minor: 8 } };
 
+const replaceSite = (site) => ({ ...site, position: 'replace' });
+const insertSite = (site) => ({ ...site, position: 'insert' });
+
 export const COMPONENTS = [
 	'dialog',
 	'sheet',
@@ -106,7 +109,7 @@ export const SITES = [
 		fixed:
 			'*:data-[slot=bubble-content]:bg-muted *:data-[slot=bubble-content]:rounded-full *:data-[slot=bubble-content]:text-foreground [&>[data-slot=bubble-content]:is(button,a):hover]'
 	}
-];
+].map(replaceSite);
 
 export const PAIRS = [
 	{
@@ -466,7 +469,7 @@ export const RADIUS = [
 		stock: 'shrink-0 rounded-full border border-transparent',
 		fixed: 'shrink-0 border border-transparent rounded-full'
 	}
-];
+].map(replaceSite);
 
 // The surface table: every box that holds content, so it takes the box step (`lg`). Each entry is a
 // `rounded-none` replacement, an insertion where the stock class is absent, or the calendar
@@ -876,7 +879,7 @@ export const SURFACES = [
 		stock: 'items-center gap-1 rounded-md ps-2 pe-1',
 		fixed: 'items-center gap-1 rounded-lg ps-2 pe-1'
 	}
-];
+].map(replaceSite);
 
 export const VARIANT_COMPONENTS = ['button', 'badge', 'alert', 'bubble'];
 
@@ -1495,6 +1498,7 @@ export const VARIANTS = VARIANT_COMPONENTS.map((component) => ({
 	id: `${component}-variants`,
 	component,
 	file: VARIANT_FILES[component],
+	position: 'replace',
 	stock: renderVariantBlock(component, stockRowsOf(component)),
 	fixed: renderVariantBlock(component, rowsOf(component), true)
 }));
@@ -1529,13 +1533,14 @@ const toneTextClasses = (tone, prefix = '') =>
 			: `${prefix}text-${tone}`;
 const tokenFor = (tone) => (tone === 'default' ? 'primary' : tone);
 
-const focusSite = (component, file, before, ring) => ({
-	id: `${component}-focus`,
-	component,
-	file,
-	stock: `${before} focus-visible:border-ring focus-visible:ring-ring/${ring} aria-invalid:ring-destructive/20`,
-	fixed: `${before} aria-invalid:ring-destructive/20`
-});
+const focusSite = (component, file, before, ring) =>
+	replaceSite({
+		id: `${component}-focus`,
+		component,
+		file,
+		stock: `${before} focus-visible:border-ring focus-visible:ring-ring/${ring}`,
+		fixed: before
+	});
 
 const toneRow = (component, tone) => {
 	const token = tokenFor(tone);
@@ -1557,13 +1562,14 @@ const toneMap = (component) =>
 		'\t};'
 	].join('\n');
 
-const binaryProps = (component, stock, fixed) => ({
-	id: `${component}-tones`,
-	component,
-	file: `${component}/${component === 'radio-group' ? 'radio-group-item' : component}.svelte`,
-	stock,
-	fixed
-});
+const binaryProps = (component, stock, fixed) =>
+	replaceSite({
+		id: `${component}-tones`,
+		component,
+		file: `${component}/${component === 'radio-group' ? 'radio-group-item' : component}.svelte`,
+		stock,
+		fixed
+	});
 
 const checkboxPropsStock = `\tlet {
 \t\tref = $bindable(null),
@@ -1731,9 +1737,13 @@ const toggleOutlineFixed = [
 	)
 ].join('\n');
 
-const toggleBaseStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+const togglePressedStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted`;
 
-const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex cursor-pointer items-center justify-center whitespace-nowrap outline-none enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+const togglePressedFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive`;
+
+const toggleHoverStock = `hover:bg-muted focus-visible:ring-[3px]`;
+
+const toggleHoverFixed = `enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px]`;
 
 export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
@@ -1742,6 +1752,7 @@ export const BINARY_SITES = [
 		id: 'checkbox-field-label',
 		component: 'checkbox',
 		file: 'checkbox/checkbox.svelte',
+		position: 'replace',
 		stock:
 			'group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary',
 		fixed: 'focus-visible:ring-2 group-has-disabled/field:opacity-50 aria-invalid:ring-2'
@@ -1750,6 +1761,7 @@ export const BINARY_SITES = [
 		id: 'checkbox-colors',
 		component: 'checkbox',
 		file: 'checkbox/checkbox.svelte',
+		position: 'replace',
 		stock: controlColorsStock,
 		fixed: controlColorsFixed
 	},
@@ -1757,6 +1769,7 @@ export const BINARY_SITES = [
 		id: 'checkbox-insert',
 		component: 'checkbox',
 		file: 'checkbox/checkbox.svelte',
+		position: 'insert',
 		stock: classInsertStock,
 		fixed: classInsertFixed
 	},
@@ -1766,6 +1779,7 @@ export const BINARY_SITES = [
 		id: 'switch-field-label',
 		component: 'switch',
 		file: 'switch/switch.svelte',
+		position: 'replace',
 		stock:
 			'aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px]',
 		fixed: 'data-[size=default]:h-[16.6px] aria-invalid:ring-2'
@@ -1774,6 +1788,7 @@ export const BINARY_SITES = [
 		id: 'switch-insert',
 		component: 'switch',
 		file: 'switch/switch.svelte',
+		position: 'insert',
 		stock: switchRootInsertStock,
 		fixed: switchRootInsertFixed
 	},
@@ -1781,6 +1796,7 @@ export const BINARY_SITES = [
 		id: 'switch-thumb',
 		component: 'switch',
 		file: 'switch/switch.svelte',
+		position: 'replace',
 		stock: switchThumbStock,
 		fixed: switchThumbFixed
 	},
@@ -1788,6 +1804,7 @@ export const BINARY_SITES = [
 		id: 'radio-group-root-imports',
 		component: 'radio-group',
 		file: 'radio-group/radio-group.svelte',
+		position: 'insert',
 		stock: radioRootImportStock,
 		fixed: radioRootImportFixed
 	},
@@ -1795,6 +1812,7 @@ export const BINARY_SITES = [
 		id: 'radio-group-root-props',
 		component: 'radio-group',
 		file: 'radio-group/radio-group.svelte',
+		position: 'replace',
 		stock: radioRootPropsStock,
 		fixed: radioRootPropsFixed
 	},
@@ -1802,6 +1820,7 @@ export const BINARY_SITES = [
 		id: 'radio-group-imports',
 		component: 'radio-group',
 		file: 'radio-group/radio-group-item.svelte',
+		position: 'insert',
 		stock: radioItemImportStock,
 		fixed: radioItemImportFixed
 	},
@@ -1811,6 +1830,7 @@ export const BINARY_SITES = [
 		id: 'radio-group-field-label',
 		component: 'radio-group',
 		file: 'radio-group/radio-group-item.svelte',
+		position: 'replace',
 		stock:
 			'aria-invalid:ring-3 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary group/radio-group-item',
 		fixed: 'group/radio-group-item aria-invalid:ring-3'
@@ -1819,6 +1839,7 @@ export const BINARY_SITES = [
 		id: 'radio-group-colors',
 		component: 'radio-group',
 		file: 'radio-group/radio-group-item.svelte',
+		position: 'replace',
 		stock: controlColorsStock,
 		fixed: controlColorsFixed
 	},
@@ -1826,6 +1847,7 @@ export const BINARY_SITES = [
 		id: 'radio-group-insert',
 		component: 'radio-group',
 		file: 'radio-group/radio-group-item.svelte',
+		position: 'insert',
 		stock: classInsertStock,
 		fixed: radioClassInsertFixed
 	},
@@ -1833,6 +1855,7 @@ export const BINARY_SITES = [
 		id: 'toggle-tones',
 		component: 'toggle',
 		file: 'toggle/toggle.svelte',
+		position: 'replace',
 		stock: toggleVariantStock,
 		fixed: toggleVariantFixed
 	},
@@ -1840,6 +1863,7 @@ export const BINARY_SITES = [
 		id: 'toggle-outline-tones',
 		component: 'toggle',
 		file: 'toggle/toggle.svelte',
+		position: 'replace',
 		stock: toggleOutlineStock,
 		fixed: toggleOutlineFixed
 	},
@@ -1847,12 +1871,21 @@ export const BINARY_SITES = [
 		id: 'toggle-pressed',
 		component: 'toggle',
 		file: 'toggle/toggle.svelte',
-		stock: toggleBaseStock,
-		fixed: toggleBaseFixed
+		position: 'replace',
+		stock: togglePressedStock,
+		fixed: togglePressedFixed
+	},
+	{
+		id: 'toggle-hover',
+		component: 'toggle',
+		file: 'toggle/toggle.svelte',
+		position: 'replace',
+		stock: toggleHoverStock,
+		fixed: toggleHoverFixed
 	}
 ];
 
-export const CURSOR_COMPONENTS = ['button', 'checkbox', 'switch', 'radio-group', 'label'];
+export const CURSOR_COMPONENTS = ['button', 'checkbox', 'switch', 'radio-group', 'toggle', 'label'];
 
 export const CURSOR_SITES = [
 	{
@@ -1884,6 +1917,20 @@ export const CURSOR_SITES = [
 		fixed: 'peer relative aspect-square shrink-0 cursor-pointer border'
 	},
 	{
+		id: 'toggle-cursor',
+		component: 'toggle',
+		file: 'toggle/toggle.svelte',
+		stock: 'group/toggle inline-flex items-center',
+		fixed: 'group/toggle inline-flex cursor-pointer items-center'
+	},
+	{
+		id: 'toggle-disabled-cursor',
+		component: 'toggle',
+		file: 'toggle/toggle.svelte',
+		stock: 'disabled:pointer-events-none disabled:opacity-50',
+		fixed: 'disabled:cursor-not-allowed disabled:opacity-50'
+	},
+	{
 		id: 'button-disabled',
 		component: 'button',
 		file: 'button/button.svelte',
@@ -1899,7 +1946,7 @@ export const CURSOR_SITES = [
 		fixed:
 			'group-data-[disabled=true]:cursor-not-allowed peer-disabled:cursor-not-allowed has-[:disabled]:cursor-not-allowed'
 	}
-];
+].map(replaceSite);
 
 export const KNOWN_COMPONENTS = [
 	...new Set([

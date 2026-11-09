@@ -8,6 +8,7 @@ import {
 	BINARY_COMPONENTS,
 	BINARY_SITES,
 	CURSOR_COMPONENTS,
+	CURSOR_SITES,
 	TARGETS
 } from '../../../packages/daisyui-adapter/targets.mjs';
 
@@ -31,6 +32,7 @@ const CURSOR_FILES = {
 	checkbox: 'checkbox/checkbox.svelte',
 	switch: 'switch/switch.svelte',
 	'radio-group': 'radio-group/radio-group-item.svelte',
+	toggle: 'toggle/toggle.svelte',
 	label: 'label/label.svelte'
 };
 const FIXTURE_COMPONENTS = [...new Set([...BINARY_COMPONENTS, ...CURSOR_COMPONENTS])];
@@ -114,8 +116,8 @@ const mapOf = (text) => {
 check('TARGETS.binarySites is BINARY_SITES', TARGETS.binarySites === BINARY_SITES);
 check('TARGETS.binaryComponents is BINARY_COMPONENTS', TARGETS.binaryComponents === BINARY_COMPONENTS);
 check(
-	'the manifest holds twenty-one binary sites',
-	BINARY_SITES.length === 21,
+	'the manifest holds twenty-two binary sites',
+	BINARY_SITES.length === 22,
 	`${BINARY_SITES.length}`
 );
 check(
@@ -123,7 +125,7 @@ check(
 	BINARY_COMPONENTS.every(
 		(component) =>
 			BINARY_SITES.filter((site) => site.component === component).length ===
-			({ checkbox: 5, switch: 5, 'radio-group': 8, toggle: 3 })[component]
+			({ checkbox: 5, switch: 5, 'radio-group': 8, toggle: 4 })[component]
 	),
 	BINARY_COMPONENTS.map(
 		(component) => `${component}:${BINARY_SITES.filter((site) => site.component === component).length}`
@@ -156,20 +158,19 @@ check(
 		.map((site) => site.id)
 		.join(', ')
 );
-const insertSiteIds = new Set([
-	'toggle-tones',
-	'checkbox-insert',
-	'radio-group-insert',
-	'switch-insert',
-	'radio-group-root-imports',
-	'radio-group-imports'
-]);
+const replacements = BINARY_SITES.filter((site) => site.position === 'replace');
+check(
+	'every binary site declares a position',
+	BINARY_SITES.every((site) => site.position === 'replace' || site.position === 'insert'),
+	BINARY_SITES.filter((site) => site.position !== 'replace' && site.position !== 'insert')
+		.map((site) => site.id)
+		.join(', ')
+);
 check(
 	'no replacement anchor contains its stock anchor',
-	BINARY_SITES.filter((site) => !insertSiteIds.has(site.id)).every(
-		(site) => !site.fixed.includes(site.stock)
-	),
-	BINARY_SITES.filter((site) => !insertSiteIds.has(site.id) && site.fixed.includes(site.stock))
+	replacements.every((site) => !site.fixed.includes(site.stock)),
+	replacements
+		.filter((site) => site.fixed.includes(site.stock))
 		.map((site) => site.id)
 		.join(', ')
 );
@@ -362,8 +363,10 @@ check(
 		) &&
 		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('hover:bg-muted ') &&
 		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('aria-pressed:bg-primary') &&
-		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('cursor-pointer') &&
-		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes(
+		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('cursor-pointer') &&
+		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('disabled:') &&
+		CURSOR_SITES.find((site) => site.id === 'toggle-cursor').fixed.includes('cursor-pointer') &&
+		CURSOR_SITES.find((site) => site.id === 'toggle-disabled-cursor').fixed.includes(
 			'disabled:cursor-not-allowed'
 		)
 );
