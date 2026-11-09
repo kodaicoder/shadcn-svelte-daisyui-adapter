@@ -26,16 +26,6 @@
 		'outline-blackwhite'
 	] as const;
 
-	const outlineTone: Record<(typeof outlineTones)[number], (typeof tones)[number]> = {
-		outline: 'default',
-		'outline-secondary': 'secondary',
-		'outline-success': 'success',
-		'outline-warning': 'warning',
-		'outline-info': 'info',
-		'outline-destructive': 'destructive',
-		'outline-blackwhite': 'blackwhite'
-	};
-
 	const fillClasses = {
 		default: 'bg-primary',
 		secondary: 'bg-secondary',

@@ -1479,8 +1479,8 @@ const renderVariantBlock = (component, rows, fixed = false) => {
 		...trail.map(line),
 		'\t\t\t}'
 	].join('\n');
-	// A disabled button still matches :hover in Chrome, so every fixed hover is guarded. The native
-	// button gets `aria-disabled` from the button-disabled-attr site, so one guard serves both branches.
+	// A disabled button still matches :hover in Chrome, so every fixed hover is guarded. Native buttons
+	// use :disabled and anchors use aria-disabled, so the guard tests both.
 	return fixed && component === 'button'
 		? block.replace(/\bhover:/g, 'not-aria-disabled:not-disabled:hover:')
 		: block;
@@ -1527,7 +1527,7 @@ const toneTextClasses = (tone, prefix = '') =>
 		: tone === 'secondary'
 			? `${prefix}text-secondary-foreground dark:${prefix}text-secondary`
 			: `${prefix}text-${tone}`;
-const toneToken = (tone) => (tone === 'default' ? 'primary' : tone);
+const tokenFor = (tone) => (tone === 'default' ? 'primary' : tone);
 
 const focusSite = (component, file, before, ring) => ({
 	id: `${component}-focus`,
@@ -1538,7 +1538,7 @@ const focusSite = (component, file, before, ring) => ({
 });
 
 const toneRow = (component, tone) => {
-	const token = toneToken(tone);
+	const token = tokenFor(tone);
 	if (component === 'switch') {
 		return `data-checked:bg-${token}/10 ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=switch-thumb]]:bg-${token} focus-visible:ring-${token}/30`;
 	}
@@ -1786,13 +1786,6 @@ export const CURSOR_SITES = [
 		file: 'radio-group/radio-group-item.svelte',
 		stock: 'peer relative aspect-square shrink-0 border',
 		fixed: 'peer relative aspect-square shrink-0 cursor-pointer border'
-	},
-	{
-		id: 'button-disabled-attr',
-		component: 'button',
-		file: 'button/button.svelte',
-		stock: '\t\t{type}\n\t\t{disabled}',
-		fixed: '\t\t{type}\n\t\t{disabled}\n\t\taria-disabled={disabled}'
 	},
 	{
 		id: 'button-disabled',

@@ -100,7 +100,6 @@
 		class={cn(buttonVariants({ variant, size }), className)}
 		{type}
 		{disabled}
-		aria-disabled={disabled}
 		{...restProps}
 	>
 		{@render children?.()}

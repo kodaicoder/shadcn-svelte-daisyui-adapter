@@ -170,7 +170,7 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 - A label that belongs to a disabled control shows `not-allowed` whether it is a sibling, sits under a group wrapper marked `data-disabled="true"`, or wraps the control.
 - The redundant `dark:data-checked:bg-primary` twin is removed rather than overridden. That keeps the tone row winning without `!`, so a caller's `class` still wins.
 - The dark unchecked surface `dark:bg-input/30` is scoped to `not-data-checked`, which keeps the indeterminate checkbox on the dark input surface while a tone paints the checked one.
-- Checkbox, switch and radio-group get two replacement sites each: the props destructure plus the tone map, and the class expression. Toggle gets three: its variant block, the pressed paint, and the class that reads the variant. All anchors live in `targets.mjs`.
+- Checkbox, switch and radio-group get four replacement sites each: the props destructure plus the tone map, the focus pair, the colours, and the class insert. Toggle gets three: its variant block, its outline row, and the pressed base. All anchors live in `targets.mjs`.
 - Stock files under `src/lib/components/ui` keep their stock strings. The review copies under `src/lib/components/*-fixed` follow the existing regeneration flow: fix in `ui`, copy the directory, revert `ui`, normalize to LF.
 
 ### Out of scope
@@ -181,7 +181,7 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 
 ### Acceptance
 
-- Each control renders the seven tones in both schemes: the checked fill equals the tone token, the border equals the tone-text token for the status tones, and the foreground equals the tone foreground. The switch and radio-group are the exception: their track is the tone at 10 percent, their border is the tone border, and their thumb or dot is the tone.
+- Each control renders the seven tones in both schemes: the checked fill equals the tone token, the border equals the tone-text token for the status tones where a border exists, and the foreground equals the tone foreground. The switch and radio-group are the exception: their track is the tone at 10 percent, their border is the tone border, and their thumb or dot is the tone. The filled toggle has no border because its base has no width; the outline keys carry it.
 - Focus, invalid and disabled keep working on every tone.
 - `variant` is typed, and an unknown key is a type error where the component has a cva table.
 - The four reviewer pages show every tone, their journeys pass, and `drift.mjs` stays green.

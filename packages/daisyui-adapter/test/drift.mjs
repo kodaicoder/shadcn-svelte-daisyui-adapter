@@ -59,7 +59,7 @@ check(
 	BINARY_SITES.length === 15,
 	`${BINARY_SITES.length}`
 );
-check('the manifest holds seven cursor sites', CURSOR_SITES.length === 7, `${CURSOR_SITES.length}`);
+check('the manifest holds six cursor sites', CURSOR_SITES.length === 6, `${CURSOR_SITES.length}`);
 check(
 	'every site belongs to a named component of its own table',
 	SITES.every((site) => COMPONENTS.includes(site.component)) &&

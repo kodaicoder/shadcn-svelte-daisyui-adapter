@@ -140,12 +140,16 @@ Asked: whether the checkbox renders tones and the other appearances.
 
 Checkbox, switch, radio-group and toggle now take the seven tones through one `variant` prop. `default` is the primary pair; the others are `secondary`, `success`, `warning`, `info`, `destructive` and `blackwhite`. Toggle keeps its appearance axis, so its keys are the seven filled tones, `outline`, and `outline-<tone>` for the six non-default tones. None of the four has a second appearance axis: daisyUI offers colour modifiers only.
 
-Measured on the reviewer page on 2026-11-06. The fill is the same on a checked checkbox, a checked switch and a checked radio, and on a pressed toggle. The border is the checked control border; the text is the tone foreground.
+Measured on the reviewer page. The paint depends on the control. A checked checkbox and a pressed toggle
+fill with the tone, take the tone foreground for text, and carry the tone border; a filled toggle has no
+border because its base has no border width. The switch and radio use a 10 percent tone wash on the track,
+the tone border, and the thumb or dot in the tone, and a checked radio's text colour is the tone too. The
+table below is the checkbox and pressed-toggle paint; the wash values are in the switch section.
 
 | tone | fill light | fill dark | border light | border dark |
 | --- | --- | --- | --- | --- |
 | `default` | `oklch(0.42 0.199 265.638)` | `oklch(0.5 0.11 240.79)` | same as fill | same as fill |
-| `secondary` | `oklch(0.81 0.111 293.571)` | `oklch(0.7 0.183 293.541)` | same as fill | same as fill |
+| `secondary` | `oklch(0.81 0.111 293.571)` | `oklch(0.7 0.183 293.541)` | `oklch(0.25 0.09 281.288)` | `oklch(0.7 0.183 293.541)` |
 | `success` | `oklch(0.79 0.209 151.711)` | `oklch(0.76 0.177 163.223)` | `oklch(0.436 0.1376 205.21)` | `oklch(0.856 0.0744 224.008)` |
 | `warning` | `oklch(0.79 0.184 86.047)` | `oklch(0.82 0.189 84.429)` | `oklch(0.436 0.1276 178.944)` | `oklch(0.88 0.0792 336.49)` |
 | `info` | `oklch(0.74 0.16 232.661)` | `oklch(0.74 0.16 232.661)` | `oklch(0.416 0.118 237.59)` | `oklch(0.848 0.0676 251.783)` |
@@ -162,7 +166,7 @@ Measured on the reviewer page on 2026-11-06. The fill is the same on a checked c
 | `destructive` | `oklch(0.97 0.013 17.38)` | `oklch(0.97 0.013 17.38)` |
 | `blackwhite` | `oklch(0.96 0.007 247.896)` | `oklch(0.13 0.028 261.692)` |
 
-The status borders are the text tones, so they inherit the hue shift the badge section records: under the blue foreground a success border reads cyan and a destructive border reads purple. That is the cost of clearing 3:1 on the control boundary while the fill stays the raw tone. `default`, `secondary` and `blackwhite` use the raw tone for the border, because their raw value already clears it.
+The status borders are the text tones, so they inherit the hue shift the badge section records: under the blue foreground a success border reads cyan and a destructive border reads purple. That is the cost of clearing 3:1 on the control boundary while the fill stays the raw tone. `default` and `blackwhite` use the raw tone for the border, because their raw value already clears it; `secondary` uses its foreground in light and the tone in dark.
 
 ### Why the tone table is not a variant row
 
@@ -308,7 +312,9 @@ success checkbox before the change: fill `oklch(0.79 0.209 151.711)`, border
 `oklch(0.42 0.199 265.638)`, ring the primary at 30 percent.
 
 The base now drops both classes, the ring width stays, and every tone row declares its own ring at 30
-percent of the tone itself, not the text token. Measured after the change, light scheme:
+percent of the tone itself, not the text token. An unchecked control also loses the neutral
+`focus-visible:border-ring`, so it keeps `border-input` on focus and the ring is the focus signal.
+Measured after the change, light scheme:
 
 | tone | ring |
 | --- | --- |

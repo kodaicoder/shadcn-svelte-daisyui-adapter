@@ -26,6 +26,13 @@ recorded so it is not lost.
 - [ ] The toggle cursor and pressed paint share one whole-base replacement, so toggle cannot carry the
       cursor through `CURSOR_SITES` like the other four controls. Extract the shared base and give
       toggle its own cursor site. Comment-sicko, ticket 49 pass.
+- [ ] `targets.mjs` is 1846 lines and ticket 49 added 333 of them. Split the manifest by responsibility
+      before the next level adds more site tables. Standards axis, code review.
+- [ ] The three fixed copies redeclare the same `variant` prop type. A shared `BinaryVariant` type would
+      remove the drift. Standards axis, code review.
+- [ ] The reviewer page repeats five tone maps and a four-times-copied scheme wrapper. The per-ticket
+      routes in ticket 51 should replace them with one derived map and one snippet. Standards axis,
+      code review.
 
 Dismissed in the same round: the claim that `not-aria-disabled:` kills every enabled hover (the enabled
 button paints hover in the cursor journey), and the claim that reading `backgroundColor` on the radio dot
