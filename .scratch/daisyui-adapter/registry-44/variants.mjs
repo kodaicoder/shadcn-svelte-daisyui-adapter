@@ -191,16 +191,21 @@ const missingPair = [];
 for (const [component, map] of Object.entries(maps)) {
 	for (const tone of TONES) {
 		const token = tone === 'default' ? 'primary' : tone;
-		const border = STATUS.includes(tone) ? `${tone}-text` : token;
+		const border =
+			STATUS.includes(tone)
+				? `data-checked:border-${tone}-text`
+				: tone === 'secondary'
+					? 'data-checked:border-secondary-foreground dark:data-checked:border-secondary'
+					: `data-checked:border-${token}`;
 		const row = map[tone];
 		const ok =
 			component === 'switch'
 				? row.includes(`data-checked:bg-${token}/10`) &&
-					row.includes(`data-checked:border-${border}`) &&
+					row.includes(border) &&
 					row.includes(`[&_[data-slot=switch-thumb]]:bg-${token}`)
 				: row.includes(`data-checked:bg-${token} `) &&
 					row.includes(`data-checked:text-${token}-foreground`) &&
-					row.includes(`data-checked:border-${border}`);
+					row.includes(border);
 		if (!ok) missingPair.push(`${component}:${tone}`);
 	}
 }
@@ -210,11 +215,24 @@ const missingRing = [];
 for (const [component, map] of Object.entries(maps)) {
 	for (const tone of TONES) {
 		const token = tone === 'default' ? 'primary' : tone;
-		const border = STATUS.includes(tone) ? `${tone}-text` : token;
-		if (!map[tone].includes(`focus-visible:ring-${border}/30`)) missingRing.push(`${component}:${tone}`);
+		const border =
+			STATUS.includes(tone) ? `${tone}-text` : tone === 'secondary' ? 'secondary-foreground' : token;
+		if (!map[tone].includes(`focus-visible:ring-${token}/30`)) missingRing.push(`${component}:${tone}`);
 	}
 }
 check('every map row carries its tone focus ring', missingRing.length === 0, missingRing.join(', '));
+check(
+	'every focus ring is the raw tone, not a text token',
+	Object.values(maps).every((map) =>
+		TONES.every((tone) => {
+			const token = tone === 'default' ? 'primary' : tone;
+			return (
+				map[tone].includes(`focus-visible:ring-${token}/30`) &&
+				!map[tone].includes(`focus-visible:ring-${token}-text`)
+			);
+		})
+	)
+);
 
 const focusSites = ['checkbox-focus', 'switch-focus', 'radio-group-focus'].map((id) =>
 	BINARY_SITES.find((site) => site.id === id)
@@ -288,9 +306,14 @@ check(
 	OUTLINE.every((key) => {
 		const tone = key.replace('outline-', '');
 		const token = tone === 'default' ? 'primary' : tone;
-		const border = STATUS.includes(tone) ? `${tone}-text` : token;
+		const border =
+			STATUS.includes(tone)
+				? `border-${tone}-text`
+				: tone === 'secondary'
+					? 'border-secondary-foreground dark:border-secondary'
+					: `border-${token}`;
 		const row = toggleRows[key];
-		return row.includes(`border-${border}`) && row.includes(`aria-pressed:bg-${token}`);
+		return row.includes(border) && row.includes(`aria-pressed:bg-${token}`);
 	})
 );
 check(
@@ -302,9 +325,20 @@ check(
 	'every toggle key carries its focus ring',
 	TONES.every((tone) => {
 		const token = tone === 'default' ? 'primary' : tone;
-		const border = STATUS.includes(tone) ? `${tone}-text` : token;
-		return toggleRows[tone].includes(`focus-visible:ring-${border}/30`);
+		return toggleRows[tone].includes(`focus-visible:ring-${token}/30`);
 	}) && toggleRows.outline.includes('focus-visible:ring-primary/30')
+);
+check(
+	'the secondary border follows the foreground in light and the tone in dark',
+	Object.values(maps).every((map) =>
+		map.secondary.includes('data-checked:border-secondary-foreground dark:data-checked:border-secondary')
+	) &&
+		toggleRows.secondary.includes(
+			'aria-pressed:border-secondary-foreground dark:aria-pressed:border-secondary'
+		) &&
+		toggleRows['outline-secondary'].includes(
+			'border-secondary-foreground dark:border-secondary'
+		)
 );
 
 const applied = join(WORK, 'applied');

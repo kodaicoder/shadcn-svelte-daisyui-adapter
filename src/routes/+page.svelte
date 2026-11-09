@@ -56,7 +56,7 @@
 
 	const borderClasses = {
 		default: 'border-primary',
-		secondary: 'border-secondary',
+		secondary: 'border-secondary-foreground dark:border-secondary',
 		success: 'border-success-text',
 		warning: 'border-warning-text',
 		info: 'border-info-text',

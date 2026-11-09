@@ -1513,7 +1513,22 @@ const BINARY_TONES = [
 	'blackwhite'
 ];
 const STATUS_TONES = new Set(['success', 'warning', 'info', 'destructive']);
-const toneBorder = (tone) => (STATUS_TONES.has(tone) ? `${tone}-text` : tone);
+// The border carries the component boundary. Status tones use their text tone. Secondary is the one
+// token whose foreground stays dark in both schemes, so its border follows the foreground on a light
+// page and the tone itself on a dark one.
+const toneBorderClasses = (tone, prefix = '') =>
+	STATUS_TONES.has(tone)
+		? `${prefix}border-${tone}-text`
+		: tone === 'secondary'
+			? `${prefix}border-secondary-foreground dark:${prefix}border-secondary`
+			: `${prefix}border-${tone}`;
+
+const toneTextClasses = (tone, prefix = '') =>
+	STATUS_TONES.has(tone)
+		? `${prefix}text-${tone}-text`
+		: tone === 'secondary'
+			? `${prefix}text-secondary-foreground dark:${prefix}text-secondary`
+			: `${prefix}text-${tone}`;
 // `default` is the theme's primary pair, so the key and the token differ here and only here.
 const toneToken = (tone) => (tone === 'default' ? 'primary' : tone);
 
@@ -1540,11 +1555,10 @@ const TONE_EXTRAS = {
 
 const toneRow = (component, tone) => {
 	const token = toneToken(tone);
-	const border = toneBorder(token);
 	if (component === 'switch') {
-		return `data-checked:bg-${token}/10 data-checked:border-${border} data-checked:[&_[data-slot=switch-thumb]]:bg-${token} focus-visible:ring-${border}/30`;
+		return `data-checked:bg-${token}/10 ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=switch-thumb]]:bg-${token} focus-visible:ring-${token}/30`;
 	}
-	return `data-checked:bg-${token} data-checked:text-${token}-foreground data-checked:border-${border} focus-visible:ring-${border}/30${TONE_EXTRAS[component](token)}`;
+	return `data-checked:bg-${token} data-checked:text-${token}-foreground ${toneBorderClasses(token, 'data-checked:')} focus-visible:ring-${token}/30${TONE_EXTRAS[component](token)}`;
 };
 
 const toneMap = (component) =>
@@ -1649,10 +1663,10 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${toneBorder(tone)}/30`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${tone}/30`;
 
 const toggleOutlineRow = (tone) =>
-	`border border-${toneBorder(tone)} bg-transparent text-${toneBorder(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${toneBorder(tone)}/30`;
+	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${tone}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 

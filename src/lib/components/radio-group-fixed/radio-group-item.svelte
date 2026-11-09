@@ -5,11 +5,11 @@
 
 	const TONES = {
 		default: "data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary focus-visible:ring-primary/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-primary-foreground",
-		secondary: "data-checked:bg-secondary data-checked:text-secondary-foreground data-checked:border-secondary focus-visible:ring-secondary/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-secondary-foreground",
-		success: "data-checked:bg-success data-checked:text-success-foreground data-checked:border-success-text focus-visible:ring-success-text/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-success-foreground",
-		warning: "data-checked:bg-warning data-checked:text-warning-foreground data-checked:border-warning-text focus-visible:ring-warning-text/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-warning-foreground",
-		info: "data-checked:bg-info data-checked:text-info-foreground data-checked:border-info-text focus-visible:ring-info-text/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-info-foreground",
-		destructive: "data-checked:bg-destructive data-checked:text-destructive-foreground data-checked:border-destructive-text focus-visible:ring-destructive-text/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-destructive-foreground",
+		secondary: "data-checked:bg-secondary data-checked:text-secondary-foreground data-checked:border-secondary-foreground dark:data-checked:border-secondary focus-visible:ring-secondary/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-secondary-foreground",
+		success: "data-checked:bg-success data-checked:text-success-foreground data-checked:border-success-text focus-visible:ring-success/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-success-foreground",
+		warning: "data-checked:bg-warning data-checked:text-warning-foreground data-checked:border-warning-text focus-visible:ring-warning/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-warning-foreground",
+		info: "data-checked:bg-info data-checked:text-info-foreground data-checked:border-info-text focus-visible:ring-info/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-info-foreground",
+		destructive: "data-checked:bg-destructive data-checked:text-destructive-foreground data-checked:border-destructive-text focus-visible:ring-destructive/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-destructive-foreground",
 		blackwhite: "data-checked:bg-blackwhite data-checked:text-blackwhite-foreground data-checked:border-blackwhite focus-visible:ring-blackwhite/30 data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-blackwhite-foreground",
 	};
 

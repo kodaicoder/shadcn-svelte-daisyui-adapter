@@ -4,11 +4,11 @@
 
 	const TONES = {
 		default: "data-checked:bg-primary/10 data-checked:border-primary data-checked:[&_[data-slot=switch-thumb]]:bg-primary focus-visible:ring-primary/30",
-		secondary: "data-checked:bg-secondary/10 data-checked:border-secondary data-checked:[&_[data-slot=switch-thumb]]:bg-secondary focus-visible:ring-secondary/30",
-		success: "data-checked:bg-success/10 data-checked:border-success-text data-checked:[&_[data-slot=switch-thumb]]:bg-success focus-visible:ring-success-text/30",
-		warning: "data-checked:bg-warning/10 data-checked:border-warning-text data-checked:[&_[data-slot=switch-thumb]]:bg-warning focus-visible:ring-warning-text/30",
-		info: "data-checked:bg-info/10 data-checked:border-info-text data-checked:[&_[data-slot=switch-thumb]]:bg-info focus-visible:ring-info-text/30",
-		destructive: "data-checked:bg-destructive/10 data-checked:border-destructive-text data-checked:[&_[data-slot=switch-thumb]]:bg-destructive focus-visible:ring-destructive-text/30",
+		secondary: "data-checked:bg-secondary/10 data-checked:border-secondary-foreground dark:data-checked:border-secondary data-checked:[&_[data-slot=switch-thumb]]:bg-secondary focus-visible:ring-secondary/30",
+		success: "data-checked:bg-success/10 data-checked:border-success-text data-checked:[&_[data-slot=switch-thumb]]:bg-success focus-visible:ring-success/30",
+		warning: "data-checked:bg-warning/10 data-checked:border-warning-text data-checked:[&_[data-slot=switch-thumb]]:bg-warning focus-visible:ring-warning/30",
+		info: "data-checked:bg-info/10 data-checked:border-info-text data-checked:[&_[data-slot=switch-thumb]]:bg-info focus-visible:ring-info/30",
+		destructive: "data-checked:bg-destructive/10 data-checked:border-destructive-text data-checked:[&_[data-slot=switch-thumb]]:bg-destructive focus-visible:ring-destructive/30",
 		blackwhite: "data-checked:bg-blackwhite/10 data-checked:border-blackwhite data-checked:[&_[data-slot=switch-thumb]]:bg-blackwhite focus-visible:ring-blackwhite/30",
 	};
 

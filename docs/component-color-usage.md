@@ -296,22 +296,25 @@ success checkbox before the change: fill `oklch(0.79 0.209 151.711)`, border
 `oklch(0.42 0.199 265.638)`, ring the primary at 30 percent.
 
 The base now drops both classes, the ring width stays, and every tone row declares its own ring at 30
-percent of its border token. Measured after the change, light scheme:
+percent of the tone itself, not the text token. Measured after the change, light scheme:
 
 | tone | ring |
 | --- | --- |
 | default | `oklab(0.42 -0.0151355 -0.198424 / 0.298)` |
 | secondary | `oklab(0.81 0.0443873 -0.101739 / 0.291)` |
-| success | `oklab(0.436 -0.124494 -0.058609 / 0.291)` |
-| warning | `oklab(0.436 -0.127578 0.00235073 / 0.298)` |
-| info | `oklab(0.416 -0.063245 -0.0996196 / 0.298)` |
-| destructive | `oklab(0.32 0.0686148 -0.121114 / 0.291)` |
-| blackwhite | `oklab(0.2 -0.00310889 -0.0418848 / 0.298)` |
+| success | `oklab(0.79 -0.184039 0.0990491 / 0.291)` |
+| warning | `oklab(0.79 0.0126846 0.183562 / 0.291)` |
+| info | `oklab(0.74 -0.0970448 -0.12721 / 0.291)` |
+| destructive | `oklab(0.5 0.188902 0.0984118 / 0.291)` |
+| blackwhite | `oklab(0.2 -0.00310889 -0.0418848 / 0.291)` |
 
 The border keeps its tone on focus, and an invalid control still paints the destructive ring at 20
-percent in light and 40 percent in dark. The `30` percent ring measures low against the page, which a
-WCAG 2.4.11 review of the focus indicator would flag; the width and alpha were kept and recorded rather
-than changed in this ticket.
+percent in light and 40 percent in dark. Secondary is the one border that is not the tone in both
+schemes: `--secondary-foreground` is dark in light and in dark, so the border uses it on a light page
+and the tone itself on a dark one. Measured `oklch(0.25 0.09 281.288)` in light and
+`oklch(0.7 0.183 293.541)` in dark. The `30` percent ring measures low against the page, which a WCAG
+2.4.11 review of the focus indicator would flag; the width and alpha were kept and recorded rather than
+changed in this ticket.
 
 ### Switch keeps the tone off the track
 
