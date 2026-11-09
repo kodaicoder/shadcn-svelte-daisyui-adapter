@@ -59,15 +59,15 @@ fixed. Run it first whenever a drive result looks wrong.
 One command per feature:
 
 ```sh
-node .opencode/skills/verify/scripts/drive.mjs buttons
+node .opencode/skills/verify/scripts/drive.mjs checkbox
 ```
 
-`buttons` opens `/`, asserts 9 `[data-slot="button"]` elements, checks the five labelled buttons
-and the four `aria-label="Submit"` icon buttons, clicks `Destructive`, and fails on any console
-error or page error. Add `--headed` to watch it run.
+`checkbox` opens `/`, drives the `#checkbox` section in both schemes, checks the seven tone fills,
+the tone border and ring, the invalid ring, the cursor, and the `Field.Label` case, then fails on any
+console error or page error. Add `--headed` to watch it run.
 
-Available journeys are the files in `features/`. When you add a feature to the app, add its journey
-to `scripts/drive.mjs` and its file to `features/`.
+Available journeys are `checkbox`, `switch`, `radio-group`, `toggle` and `cursor`. When you add a
+feature to the app, add its journey to `scripts/drive.mjs`.
 
 ## Evidence
 
@@ -102,13 +102,14 @@ are already in the repo's devDependencies and browser cache.
 | Helper                | Subcommands               |
 | --------------------- | ------------------------- |
 | `scripts/session.mjs` | `start`, `status`, `stop` |
-| `scripts/drive.mjs`   | `buttons`, `--headed`     |
+| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `--headed` |
 
 ## Gotchas
 
 - The showcase has no `h1`. The inherited spec `src/routes/page.svelte.e2e.ts` asserts one and will
-  fail; do not copy that assertion into a journey. Anchor on the showcase's `data-slot` handle. The
-  `buttons`, `aspect-ratio` and `avatar` journeys each target a page that has since been replaced.
+  fail; do not copy that assertion into a journey. Anchor on the showcase's `data-slot` handle. Each
+  journey targets the current showcase section, so a replaced page means the journey is removed, not
+  left pointing at a route that no longer exists.
 - `pnpm dev` is Vite. Use `--strictPort` or the port check in `session.mjs` becomes meaningless.
 - Playwright's own `webServer` in `playwright.config.ts` builds and previews on 4173. This skill does
   not use it: a dev server is faster and does not mask type errors behind a stale build.
