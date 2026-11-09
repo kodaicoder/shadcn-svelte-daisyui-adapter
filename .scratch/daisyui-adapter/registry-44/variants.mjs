@@ -178,12 +178,21 @@ check(
 );
 check(
 	'each map uses primary for the default key',
-	Object.entries(maps).every(([component, map]) =>
-		component === 'switch'
-			? map.default.includes('data-checked:bg-primary/10') &&
+	Object.entries(maps).every(([component, map]) => {
+		if (component === 'switch') {
+			return (
+				map.default.includes('data-checked:bg-primary/10') &&
 				map.default.includes('[&_[data-slot=switch-thumb]]:bg-primary')
-			: map.default.includes('bg-primary') && map.default.includes('text-primary-foreground')
-	),
+			);
+		}
+		if (component === 'radio-group') {
+			return (
+				map.default.includes('data-checked:bg-primary/10') &&
+				map.default.includes('[&_[data-slot=radio-group-indicator]>svg]:bg-primary')
+			);
+		}
+		return map.default.includes('bg-primary') && map.default.includes('text-primary-foreground');
+	}),
 	Object.values(maps).map((map) => map.default).join(' | ')
 );
 
@@ -198,14 +207,17 @@ for (const [component, map] of Object.entries(maps)) {
 					? 'data-checked:border-secondary-foreground dark:data-checked:border-secondary'
 					: `data-checked:border-${token}`;
 		const row = map[tone];
-		const ok =
+		const child =
 			component === 'switch'
-				? row.includes(`data-checked:bg-${token}/10`) &&
-					row.includes(border) &&
-					row.includes(`[&_[data-slot=switch-thumb]]:bg-${token}`)
-				: row.includes(`data-checked:bg-${token} `) &&
-					row.includes(`data-checked:text-${token}-foreground`) &&
-					row.includes(border);
+				? `[&_[data-slot=switch-thumb]]:bg-${token}`
+				: component === 'radio-group'
+					? `[&_[data-slot=radio-group-indicator]>svg]:bg-${token}`
+					: null;
+		const ok = child
+			? row.includes(`data-checked:bg-${token}/10`) && row.includes(border) && row.includes(child)
+			: row.includes(`data-checked:bg-${token} `) &&
+				row.includes(`data-checked:text-${token}-foreground`) &&
+				row.includes(border);
 		if (!ok) missingPair.push(`${component}:${tone}`);
 	}
 }
@@ -251,14 +263,14 @@ const childRules = BINARY_SITES.filter(
 	(site) => site.id === 'switch-tones' || site.id === 'radio-group-tones'
 ).map((site) => site.fixed);
 check(
-	'the switch thumb takes the tone and the radio dot the tone foreground',
+	'the switch thumb and the radio dot take the tone',
 	childRules[0].includes('[&_[data-slot=switch-thumb]]:bg-primary') &&
 		childRules[0].includes('[&_[data-slot=switch-thumb]]:bg-blackwhite') &&
 		childRules[1].includes(
-			'data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-primary-foreground'
+			'data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-primary'
 		) &&
 		childRules[1].includes(
-			'data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-blackwhite-foreground'
+			'data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-blackwhite'
 		),
 	`${childRules.length} maps`
 );
@@ -317,8 +329,12 @@ check(
 	})
 );
 check(
-	'toggle scopes the unpressed hover and keeps the pressed paint in the base',
-	toggleRows.outline.includes('aria-[pressed=false]:hover:bg-muted') &&
+	'toggle scopes the unpressed hover to the tone wash and keeps the pressed paint in the base',
+	toggleRows.outline.includes('aria-[pressed=false]:hover:bg-primary/10') &&
+		TONES.every((tone) =>
+			toggleRows[tone].includes(`aria-[pressed=false]:hover:bg-${tone === 'default' ? 'primary' : tone}/10`)
+		) &&
+		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('hover:bg-muted') &&
 		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('aria-pressed:bg-primary')
 );
 check(

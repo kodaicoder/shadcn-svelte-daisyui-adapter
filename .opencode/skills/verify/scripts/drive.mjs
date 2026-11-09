@@ -54,7 +54,7 @@ const checkTones = async (record, scope, label, kind = 'filled') => {
 			scope.locator(`[data-border-swatch="${row.tone}"]`),
 			'borderTopColor'
 		);
-		if (kind === 'switch') {
+		if (kind === 'wash') {
 			const soft = await computed(
 				scope.locator(`[data-soft-swatch="${row.tone}"]`),
 				'backgroundColor'
@@ -562,7 +562,7 @@ const journeys = {
 
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
-			await checkTones(record, scope, `switch ${scheme}`, 'switch');
+			await checkTones(record, scope, `switch ${scheme}`, 'wash');
 			await checkStates(page, record, scope, `switch ${scheme}`, 'border');
 		}
 	},
@@ -579,7 +579,19 @@ const journeys = {
 
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
-			await checkTones(record, scope, `radio-group ${scheme}`);
+			await checkTones(record, scope, `radio-group ${scheme}`, 'wash');
+			const unchecked = await scope.locator('[data-unchecked-tone]').evaluateAll((nodes) =>
+				nodes.map((node) => ({
+					tone: node.dataset.uncheckedTone,
+					checked: node.getAttribute('aria-checked'),
+					fill: getComputedStyle(node).backgroundColor
+				}))
+			);
+			record(
+				`radio-group ${scheme}: seven unchecked items`,
+				unchecked.length === TONES.length && unchecked.every((row) => row.checked === 'false'),
+				unchecked.map((row) => `${row.tone}=${row.checked}`).join(', ')
+			);
 			await checkStates(page, record, scope, `radio-group ${scheme}`, 'border');
 		}
 	},
@@ -595,6 +607,21 @@ const journeys = {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
 			await checkTones(record, scope, `toggle ${scheme}`);
 			await checkOutlinePairs(record, scope, `toggle ${scheme}`);
+			const hoverProbe = scope.locator('[data-outline="outline-success"]');
+			const idle = await computed(hoverProbe, 'backgroundColor');
+			await hoverProbe.hover();
+			await page.waitForTimeout(200);
+			const hovered = await computed(hoverProbe, 'backgroundColor');
+			const soft = await computed(
+				scope.locator('[data-soft-swatch="success"]'),
+				'backgroundColor'
+			);
+			record(
+				`toggle ${scheme}: unpressed hover paints the tone wash`,
+				idle !== hovered && hovered === soft,
+				`${idle} -> ${hovered} (swatch ${soft})`
+			);
+			await page.mouse.move(0, 0);
 			await checkStates(page, record, scope, `toggle ${scheme}`, 'ring');
 		}
 	}

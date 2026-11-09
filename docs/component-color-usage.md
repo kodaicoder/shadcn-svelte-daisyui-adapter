@@ -203,12 +203,13 @@ Stock measured on the page:
 Pressed and hover painted one surface, so a pressed toggle gave no hover feedback and a hovered toggle
 looked pressed. `hover:text-foreground` did nothing because the text is already `foreground`.
 
-Decision taken on 2026-11-06: pressed takes primary, hover keeps muted, a pressed hover takes primary at
-80 percent, and invalid gains a 2px ring. Measured on the fixed copy:
+Decision taken on 2026-11-06: pressed takes the tone, an unpressed hover paints the tone at 10 percent,
+a pressed hover takes the tone at 80 percent, and invalid gains a 2px ring. The muted hover was replaced
+on 2026-11-09 because it was invisible on the dark page. Measured on the fixed copy:
 
 | state | resolved |
 | --- | --- |
-| unpressed, hover | `oklch(0.945 0.031 203.388)` |
+| unpressed, hover | the tone at 10 percent, `oklab(0.79 -0.184039 0.0990491 / 0.1)` for success in light |
 | pressed, idle | `oklch(0.42 0.199 265.638)`, text `oklch(0.98 0.016 73.684)` |
 | pressed, hover | same primary at 80 percent alpha |
 | invalid, `default` variant | `2px` ring of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
@@ -316,12 +317,13 @@ and the tone itself on a dark one. Measured `oklch(0.25 0.09 281.288)` in light 
 2.4.11 review of the focus indicator would flag; the width and alpha were kept and recorded rather than
 changed in this ticket.
 
-### Switch keeps the tone off the track
+### Switch and radio keep the tone off the track
 
-Asked: should a checked switch fill its track with the tone. No. The tone belongs to the thumb and the
-border, and the track stays quiet, so the sphere reads as the state instead of the whole capsule.
+Asked: should a checked switch or radio fill its track with the tone. No. The tone belongs to the thumb
+or dot and the border, and the track stays quiet, so the sphere reads as the state instead of the whole
+control.
 
-Measured, light scheme:
+Measured on the switch, light scheme:
 
 | tone | track | border | thumb |
 | --- | --- | --- | --- |
@@ -331,5 +333,10 @@ Measured, light scheme:
 Dark scheme resolves the same tokens, so `success` measures a `oklab(0.76 -0.169466 0.0510906 / 0.1)`
 track, `oklch(0.856 0.0744 224.008)` border and `oklch(0.76 0.177 163.223)` thumb.
 
-A tone thumb on a 10 percent tone track separates more in dark than in light, because the wash over a
-dark page is near-black. The border carries the component boundary, so the fill can stay this quiet.
+The radio group follows the same paint from 2026-11-09: a 10 percent wash on the track, the tone border,
+and the dot in the tone. Measured for `success` in light: track `oklab(0.79 -0.184039 0.0990491 / 0.1)`,
+border `oklch(0.436 0.1376 205.21)`, dot `oklch(0.79 0.209 151.711)`. The showcase renders an unchecked
+item beside each checked one, so the unchecked border and surface are visible per tone.
+
+A tone thumb or dot on a 10 percent tone track separates more in dark than in light, because the wash
+over a dark page is near-black. The border carries the component boundary, so the fill can stay quiet.

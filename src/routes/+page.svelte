@@ -186,6 +186,7 @@
 						<span class="flex items-center gap-2 text-xs">
 							<RadioGroup value="on" aria-label="Radio {tone}">
 								<RadioGroupItem value="on" variant={tone} data-tone={tone} />
+								<RadioGroupItem value="off" variant={tone} data-unchecked-tone={tone} />
 							</RadioGroup>
 							{tone}
 						</span>

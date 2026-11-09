@@ -1544,21 +1544,18 @@ const focusSite = (component, file, before, ring) => ({
 	fixed: `${before} aria-invalid:ring-destructive/20`
 });
 
-// The fill and foreground sit on the control; the dot is a child, so the tone row paints it from the
-// control and the stock child rule never competes. The switch is different: its track is a 10 percent
-// wash, the border carries the tone, and the thumb is the tone itself.
-const TONE_EXTRAS = {
-	checkbox: () => '',
-	'radio-group': (token) =>
-		` data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${token}-foreground`
-};
+// The fill and foreground sit on the control. Checkbox keeps the filled box; the switch and the radio
+// keep the tone on the thumb or dot, with a 10 percent wash on the track.
 
 const toneRow = (component, tone) => {
 	const token = toneToken(tone);
 	if (component === 'switch') {
 		return `data-checked:bg-${token}/10 ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=switch-thumb]]:bg-${token} focus-visible:ring-${token}/30`;
 	}
-	return `data-checked:bg-${token} data-checked:text-${token}-foreground ${toneBorderClasses(token, 'data-checked:')} focus-visible:ring-${token}/30${TONE_EXTRAS[component](token)}`;
+	if (component === 'radio-group') {
+		return `data-checked:bg-${token}/10 ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${token} focus-visible:ring-${token}/30`;
+	}
+	return `data-checked:bg-${token} data-checked:text-${token}-foreground ${toneBorderClasses(token, 'data-checked:')} focus-visible:ring-${token}/30`;
 };
 
 const toneMap = (component) =>
@@ -1663,15 +1660,15 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${tone}/30`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/10 focus-visible:ring-${tone}/30`;
 
 const toggleOutlineRow = (tone) =>
-	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${tone}/30`;
+	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/10 focus-visible:ring-${tone}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 
 const toggleVariantFixed = [
-	`\t\t\t\tdefault: "bg-transparent focus-visible:ring-primary/30",`,
+	`\t\t\t\tdefault: "bg-transparent aria-[pressed=false]:hover:bg-primary/10 focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(tone)}: "${toggleRow(tone)}",`
 	)
@@ -1680,7 +1677,7 @@ const toggleVariantFixed = [
 const toggleOutlineStock = `\t\t\t\toutline: "border-input hover:bg-muted border bg-transparent",`;
 
 const toggleOutlineFixed = [
-	`\t\t\t\toutline: "border-input aria-[pressed=false]:hover:bg-muted border bg-transparent focus-visible:ring-primary/30",`,
+	`\t\t\t\toutline: "border border-input aria-[pressed=false]:hover:bg-primary/10 bg-transparent focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(`outline-${tone}`)}: "${toggleOutlineRow(tone)}",`
 	)
@@ -1688,7 +1685,7 @@ const toggleOutlineFixed = [
 
 const toggleBaseStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
-const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 aria-[pressed=false]:hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
 export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),

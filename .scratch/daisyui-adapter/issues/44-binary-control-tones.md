@@ -14,7 +14,8 @@ variants for the binary controls".
 - [ ] `RadioGroupItem` takes the same seven keys; the dot follows the tone foreground
 - [ ] `Toggle` keeps `variant` and gains the seven filled tones plus `outline` and the six `outline-<tone>` pairs
 - [ ] The checked fill is the tone, the foreground is the tone foreground, and the status tones use the tone text token for the border
-- [ ] The switch keeps the tone off the track: a 10 percent tone wash on the track, the tone border, and the thumb in the tone
+- [ ] The switch and radio-group keep the tone off the track: a 10 percent tone wash on the track, the tone border, and the thumb or dot in the tone
+- [ ] An unpressed toggle hovers to its tone at 10 percent, so the hover reads on the dark page
 - [ ] The tone table is a literal string map inside each fixed copy, so Tailwind emits every row
 - [ ] The redundant `dark:data-checked:bg-primary` twin is removed, so no `!` is used and a caller `class` still wins
 - [ ] The dark unchecked surface is scoped to `data-unchecked`, so it cannot win the fill over a tone in dark
