@@ -140,8 +140,6 @@ check(
 		.map((site) => site.id)
 		.join(', ')
 );
-// These anchors insert a line beside their stock line instead of replacing it, so the stock line
-// stays inside the fixed anchor on purpose. Every other site replaces its stock block whole.
 const insertSiteIds = new Set([
 	'toggle-tones',
 	'checkbox-insert',
@@ -356,6 +354,13 @@ check(
 		const token = tone === 'default' ? 'primary' : tone;
 		return toggleRows[tone].includes(`focus-visible:ring-${token}/30`);
 	}) && toggleRows.outline.includes('focus-visible:ring-primary/30')
+);
+check(
+	'no tone row carries a radius utility',
+	[
+		...Object.values(maps).flatMap((map) => Object.values(map)),
+		...Object.values(toggleRows)
+	].every((row) => !/\brounded-/.test(row))
 );
 check(
 	'the secondary border follows the foreground in light and the tone in dark',

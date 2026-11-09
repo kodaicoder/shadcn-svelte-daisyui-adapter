@@ -1499,12 +1499,9 @@ export const VARIANTS = VARIANT_COMPONENTS.map((component) => ({
 	fixed: renderVariantBlock(component, rowsOf(component), true)
 }));
 
-// The binary controls take one tone through `variant`, not the four presentations a cva table gives
-// button, badge, alert and bubble. Each fixed copy carries the seven rows as literal strings, because
-// Tailwind only emits classes it can read in application source, and the fixed copy under
-// `src/lib/components` is that source. The rows sit after the base class through `cn`, so they win the
-// merge without `!` and a caller's `class` still wins. The radius sites are separate and idempotent for
-// these components: no row carries a radius utility, so each radius site reads its own fixed string.
+// Tailwind only emits a class it can read in application source, so each fixed copy under
+// `src/lib/components` carries the rows as literal strings. A row follows the base class through
+// `cn`, so it wins the merge without `!` and a caller's `class` still wins.
 export const BINARY_COMPONENTS = ['checkbox', 'switch', 'radio-group', 'toggle'];
 
 const BINARY_TONES = [
@@ -1517,9 +1514,6 @@ const BINARY_TONES = [
 	'blackwhite'
 ];
 const STATUS_TONES = new Set(['success', 'warning', 'info', 'destructive']);
-// The border carries the component boundary. Status tones use their text tone. Secondary is the one
-// token whose foreground stays dark in both schemes, so its border follows the foreground on a light
-// page and the tone itself on a dark one.
 const toneBorderClasses = (tone, prefix = '') =>
 	STATUS_TONES.has(tone)
 		? `${prefix}border-${tone}-text`
@@ -1533,13 +1527,8 @@ const toneTextClasses = (tone, prefix = '') =>
 		: tone === 'secondary'
 			? `${prefix}text-secondary-foreground dark:${prefix}text-secondary`
 			: `${prefix}text-${tone}`;
-// `default` is the theme's primary pair, so the key and the token differ here and only here.
 const toneToken = (tone) => (tone === 'default' ? 'primary' : tone);
 
-// The focus ring follows the tone, so the base class gives up `focus-visible:border-ring` and its ring
-// colour instead of letting the primary pair win over a tone on focus. The ring width stays in the
-// base; only the colour moves to the row. The anchor keeps the class before the focus utilities, so the
-// fixed string cannot be read as already fixed while the stock still holds the classes.
 const focusSite = (component, file, before, ring) => ({
 	id: `${component}-focus`,
 	component,
@@ -1547,9 +1536,6 @@ const focusSite = (component, file, before, ring) => ({
 	stock: `${before} focus-visible:border-ring focus-visible:ring-ring/${ring} aria-invalid:ring-destructive/20`,
 	fixed: `${before} aria-invalid:ring-destructive/20`
 });
-
-// The fill and foreground sit on the control. Checkbox keeps the filled box; the switch and the radio
-// keep the tone on the thumb or dot, with a 10 percent wash on the track.
 
 const toneRow = (component, tone) => {
 	const token = toneToken(tone);
@@ -1772,10 +1758,6 @@ export const BINARY_SITES = [
 
 export const CURSOR_COMPONENTS = ['button', 'checkbox', 'switch', 'radio-group', 'label'];
 
-// The stock components leave the cursor at the platform default. Every interactive control points at
-// itself instead, through a small anchor per file. Toggle carries the class in `toggleBaseFixed`
-// because the pressed site covers its whole base string. A disabled control keeps whichever rule its
-// stock base already carries (`cursor-not-allowed`) or its `pointer-events-none`.
 export const CURSOR_SITES = [
 	{
 		id: 'button-cursor',

@@ -20,6 +20,12 @@ recorded so it is not lost.
 - [ ] `stateOf` reports a site `fixed` whenever its fixed string appears anywhere in the file, so a
       component whose wiring was hand-edited can still pass `--check` (the literals are intact, the map
       is not passed to `cn`). Reviewers B and C.
+- [ ] `focusSite` is shaped so its fixed text does not contain its stock text, a coupling to the
+      substring `stateOf`. Give sites an explicit replace or insert position instead. Comment-sicko,
+      ticket 49 pass.
+- [ ] The toggle cursor and pressed paint share one whole-base replacement, so toggle cannot carry the
+      cursor through `CURSOR_SITES` like the other four controls. Extract the shared base and give
+      toggle its own cursor site. Comment-sicko, ticket 49 pass.
 
 Dismissed in the same round: the claim that `not-aria-disabled:` kills every enabled hover (the enabled
 button paints hover in the cursor journey), and the claim that reading `backgroundColor` on the radio dot

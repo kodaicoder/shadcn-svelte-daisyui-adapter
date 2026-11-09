@@ -792,9 +792,6 @@ page.on('console', (message) => {
 });
 page.on('pageerror', (error) => consoleErrors.push(String(error)));
 
-// A worktree whose node_modules is a junction serves the font through /@fs and the dev server
-// answers 404 for the real path. The generic 404 console message has no URL, so it is ignored only
-// when every failed request is a font file that lives outside the dev root.
 const failedRequests = [];
 page.on('response', (response) => {
 	if (response.status() >= 400) failedRequests.push(response.url());
@@ -809,16 +806,10 @@ try {
 	console.log(`FAIL journey threw: ${failure}`);
 }
 
-const fontOnly =
-	failedRequests.length > 0 && failedRequests.every((url) => /\/@fs\/.*\.woff2$/.test(url));
-const appErrors = fontOnly
-	? consoleErrors.filter((text) => !text.includes('404'))
-	: consoleErrors;
-
 record(
 	'no console errors',
-	appErrors.length === 0,
-	appErrors.length ? appErrors.join(' | ') : 'none'
+	consoleErrors.length === 0,
+	consoleErrors.length ? consoleErrors.join(' | ') : 'none'
 );
 
 const screenshot = path.join(evidenceDir, 'page.png');
@@ -834,7 +825,7 @@ await writeFile(
 			base: BASE,
 			passed,
 			failure,
-			consoleErrors: appErrors,
+			consoleErrors,
 			failedRequests,
 			checks,
 			screenshot,
