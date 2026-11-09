@@ -6,7 +6,7 @@ Check:
 
 **What to build:** The operator visual check, the publish and the registry proof for 0.3.0.
 
-**Blocked by:** 33
+**Blocked by:** 49, 51, 52
 
 **Status:** ready-for-agent
 

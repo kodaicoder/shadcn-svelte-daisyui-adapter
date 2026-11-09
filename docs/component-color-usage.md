@@ -173,12 +173,12 @@ variant block, and a static replacement cannot choose a value at runtime. The ch
 literal `TONES` map inserted into each fixed copy's script plus `TONES[variant]` passed to `cn`, so the
 key type comes from the map and Tailwind reads every row in application source. Toggle already has a
 cva table, so its tones are rows in that table. All of it is written from `BINARY_SITES` in
-`packages/daisyui-adapter/targets.mjs`, and the registry-44 harness proves the fixer reproduces each
+`packages/daisyui-adapter/targets.mjs`, and the registry-49 harness proves the fixer reproduces each
 committed fixed copy byte for byte.
 
 ### Parked findings
 
-- Resolved by ticket 44: checkbox, switch and radio-group carry the seven tones, and toggle carries
+- Resolved by ticket 49: checkbox, switch and radio-group carry the seven tones, and toggle carries
   them alongside its appearance axis. The tone row is applied after the base class through `cn`, so no
   `!` is needed.
 - `switch.svelte` moves its thumb with `rtl:data-[state=checked]:translate-x-[calc(-100%)]` while every
@@ -384,4 +384,4 @@ and rendered the control at 0.25.
 
 One exception to the tone-focus claim: inside a focused `Field.Label`, the stock
 `group-has-[:focus-visible]/field-label:*` border rules still outrank the tone row, so a toned control shows
-a primary border there. Recorded in ticket 45.
+a primary border there. Recorded in ticket 50.

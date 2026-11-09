@@ -117,3 +117,19 @@ Untargeted: alert-dialog, carousel, questionnaire, sidebar, sonner (5).
 2. **Molecules.** The targeted seven are close. Then `field`, `form`, `item`, `tabs`, `toggle-group`, `breadcrumb` and `pagination`, which use the atoms directly.
 3. **Organisms.** The overlay set is targeted and shares one state model. `sidebar`, `carousel`, `alert-dialog`, `questionnaire` and `sonner` are the uncovered five.
 4. **Templates and pages.** The shell last, once the blocks below it are stable.
+
+## Release train
+
+One minor per level, then a full review for the major.
+
+| level | version | ticket |
+| --- | --- | --- |
+| atoms | 0.3.0 | 34, after 49, 51 and 52 |
+| molecules | 0.4.0 | 54, after 53 |
+| organisms | 0.5.0 | 56, after 55 |
+| templates and pages | 0.6.0 | 58, after 57 |
+| full review | 1.0.0 | 59, after 58 |
+
+A level closes only when the operator passes every component in it. The release ticket then bumps the minor,
+publishes and tags. No level starts before the previous release lands.
+

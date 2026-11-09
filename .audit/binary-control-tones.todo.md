@@ -1,9 +1,9 @@
 Phase: tickets
 
-# Ticket 44: binary control tones
+# Ticket 49: binary control tones
 
 Spec: `.scratch/daisyui-adapter/spec.md`, "Amendment 2026-11-06: tone variants for the binary controls".
-Ticket: `.scratch/daisyui-adapter/issues/44-binary-control-tones.md`.
+Ticket: `.scratch/daisyui-adapter/issues/49-binary-control-tones.md`.
 Branch: `fix/nutchapon/ai/contrast-warning`.
 
 ## Gates
@@ -65,7 +65,7 @@ declares `focus-visible:ring-<toneBorder>/30`, and toggle's `default` and `outli
 `focus-visible:ring-primary/30`.
 
 Measured after: seven distinct rings per scheme, the tone border survives focus, and a focused invalid
-control keeps the destructive ring at 20 percent in light and 40 percent in dark. drift 9, registry-44
+control keeps the destructive ring at 20 percent in light and 40 percent in dark. drift 9, registry-49
 51, registry-30 43, registry-31 82, `pnpm check` clean, four journeys pass.
 
 The round was finished in the main checkout after two delegates were lost, one to a server restart and
@@ -80,6 +80,6 @@ tone border, a button disabled through a `<fieldset>` painted no dim and still h
 declared a border colour with no width, the checkbox/radio insert anchor was one short line, and the
 disabled-cursor check accepted `pointer-events: none`.
 
-Considered with ticket 45: the `Field.Label` focus override, no byte check for the cursor copies, stale
+Considered with ticket 50: the `Field.Label` focus override, no byte check for the cursor copies, stale
 journeys, the per-item radio variant, and `stateOf` false-fixed wiring. Dismissed: the dead-hover claim
 and the radio-dot measurement claim.

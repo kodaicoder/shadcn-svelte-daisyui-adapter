@@ -17,7 +17,7 @@ const CLI = join(PKG_DIR, 'cli', 'init.mjs');
 const STOCK_DIR = join(REPO, 'src', 'lib', 'components', 'ui');
 const FIXED_DIR = join(REPO, 'src', 'lib', 'components');
 const THEME = resolve(HERE, '..', 'registry-12', 'probe-theme.css');
-const WORK = join(process.env.TEMP ?? '/tmp', 'adapter-44-tones');
+const WORK = join(process.env.TEMP ?? '/tmp', 'adapter-49-tones');
 
 const FILES = {
 	checkbox: 'checkbox/checkbox.svelte',
@@ -57,7 +57,7 @@ const scaffold = (dir, { components = BINARY_COMPONENTS, shadcn = '1.8.0' } = {}
 	writeFileSync(
 		join(dir, 'package.json'),
 		JSON.stringify(
-			{ name: 'adapter-44-fixture', type: 'module', imports: { '#lib/*': './src/lib/*' } },
+			{ name: 'adapter-49-fixture', type: 'module', imports: { '#lib/*': './src/lib/*' } },
 			null,
 			'\t'
 		)

@@ -1,15 +1,15 @@
-# 45: Follow-ups from the binary control tones review
+# 50: Follow-ups from the binary control tones review
 
 **Status:** ready-for-agent
 **Labels:** adapter, test
 
-Accepted as `Consider` in the interrogate round on ticket 44. None blocks the shipped behaviour; each is
+Accepted as `Consider` in the interrogate round on ticket 49. None blocks the shipped behaviour; each is
 recorded so it is not lost.
 
 - [ ] `Field.Label` focus rules still outrank the tone border and ring. The stock
       `group-has-[:focus-visible]/field-label:*` rules beat the tone row, so a toned checkbox, radio or
       switch inside a focused `Field.Label` shows a primary border. Reviewers B and C.
-- [ ] `registry-44` has no byte-for-byte regeneration check for the cursor sites. Only the four binary
+- [ ] `registry-49` has no byte-for-byte regeneration check for the cursor sites. Only the four binary
       components are scaffolded and compared, so `button-fixed` and `label-fixed` can drift from
       `targets.mjs` while every harness stays green. Reviewer B.
 - [ ] The journeys for `buttons`, `aspect-ratio`, `avatar`, `badge` and `button` point at pages that no
