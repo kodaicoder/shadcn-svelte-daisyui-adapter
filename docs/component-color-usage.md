@@ -203,17 +203,22 @@ Stock measured on the page:
 Pressed and hover painted one surface, so a pressed toggle gave no hover feedback and a hovered toggle
 looked pressed. `hover:text-foreground` did nothing because the text is already `foreground`.
 
-Decision taken on 2026-11-06: pressed takes the tone, an unpressed hover paints the tone at 10 percent,
-a pressed hover takes the tone at 80 percent, and invalid gains a 2px ring. The muted hover was replaced
-on 2026-11-09 because it was invisible on the dark page. Measured on the fixed copy:
+Decision taken on 2026-11-06: pressed takes the tone, a pressed hover takes the tone at 80 percent, and
+invalid gains a 2px ring. The unpressed hover started as `muted`, moved to the tone at 10 percent on
+2026-11-09, and the operator then asked for `muted` at 20 percent. Measured on the fixed copy:
 
 | state | resolved |
 | --- | --- |
-| unpressed, hover | the tone at 10 percent, `oklab(0.79 -0.184039 0.0990491 / 0.1)` for success in light |
+| unpressed, hover (light) | `oklab(0.945 -0.028453 -0.0123056 / 0.2)` |
+| unpressed, hover (dark) | `oklab(0.1 -0.00310889 -0.0418848 / 0.2)` |
 | pressed, idle | `oklch(0.42 0.199 265.638)`, text `oklch(0.98 0.016 73.684)` |
 | pressed, hover | same primary at 80 percent alpha |
 | invalid, `default` variant | `2px` ring of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
 | pressed `outline` border | primary, so the border follows the fill |
+
+`muted` is `--color-base-200`, one step from the page background: `oklch(94.5% 0.031 203.388)` against
+`oklch(98.5% 0 264.542)` in light, and `oklch(10% 0.042 265.755)` against `oklch(18% 0.041 260.031)` in
+dark. At 20 percent alpha the hover is a small step in both schemes, which is the point of the trial.
 
 The change lives in `src/lib/components/toggle-fixed/toggle.svelte` and in `toggle-pressed`
 (`packages/daisyui-adapter/targets.mjs`), so `init.mjs fix toggle` reproduces it. Toggle is the one
@@ -334,8 +339,9 @@ Dark scheme resolves the same tokens, so `success` measures a `oklab(0.76 -0.169
 track, `oklch(0.856 0.0744 224.008)` border and `oklch(0.76 0.177 163.223)` thumb.
 
 The radio group follows the same paint from 2026-11-09: a 10 percent wash on the track, the tone border,
-and the dot in the tone. Measured for `success` in light: track `oklab(0.79 -0.184039 0.0990491 / 0.1)`,
-border `oklch(0.436 0.1376 205.21)`, dot `oklch(0.79 0.209 151.711)`. The showcase renders an unchecked
+the dot in the tone, and the checked text colour in the tone, so the base's primary foreground no longer
+applies. Measured for `success` in light: track `oklab(0.79 -0.184039 0.0990491 / 0.1)`, border
+`oklch(0.436 0.1376 205.21)`, dot and text `oklch(0.79 0.209 151.711)`. The showcase renders an unchecked
 item beside each checked one, so the unchecked border and surface are visible per tone.
 
 A tone thumb or dot on a 10 percent tone track separates more in dark than in light, because the wash

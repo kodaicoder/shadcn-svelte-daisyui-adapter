@@ -91,6 +91,10 @@
 				{tone}
 			</span>
 		{/each}
+		<span class="flex items-center gap-1">
+			<span data-muted-swatch class="size-4 rounded-sm bg-muted/20"></span>
+			muted/20
+		</span>
 	</div>
 {/snippet}
 

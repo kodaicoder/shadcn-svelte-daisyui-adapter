@@ -1553,7 +1553,7 @@ const toneRow = (component, tone) => {
 		return `data-checked:bg-${token}/10 ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=switch-thumb]]:bg-${token} focus-visible:ring-${token}/30`;
 	}
 	if (component === 'radio-group') {
-		return `data-checked:bg-${token}/10 ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${token} focus-visible:ring-${token}/30`;
+		return `data-checked:bg-${token}/10 data-checked:text-${token} ${toneBorderClasses(token, 'data-checked:')} data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${token} focus-visible:ring-${token}/30`;
 	}
 	return `data-checked:bg-${token} data-checked:text-${token}-foreground ${toneBorderClasses(token, 'data-checked:')} focus-visible:ring-${token}/30`;
 };
@@ -1660,15 +1660,15 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/10 focus-visible:ring-${tone}/30`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-muted/20 focus-visible:ring-${tone}/30`;
 
 const toggleOutlineRow = (tone) =>
-	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/10 focus-visible:ring-${tone}/30`;
+	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-muted/20 focus-visible:ring-${tone}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 
 const toggleVariantFixed = [
-	`\t\t\t\tdefault: "bg-transparent aria-[pressed=false]:hover:bg-primary/10 focus-visible:ring-primary/30",`,
+	`\t\t\t\tdefault: "bg-transparent aria-[pressed=false]:hover:bg-muted/20 focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(tone)}: "${toggleRow(tone)}",`
 	)
@@ -1677,7 +1677,7 @@ const toggleVariantFixed = [
 const toggleOutlineStock = `\t\t\t\toutline: "border-input hover:bg-muted border bg-transparent",`;
 
 const toggleOutlineFixed = [
-	`\t\t\t\toutline: "border border-input aria-[pressed=false]:hover:bg-primary/10 bg-transparent focus-visible:ring-primary/30",`,
+	`\t\t\t\toutline: "border border-input aria-[pressed=false]:hover:bg-muted/20 bg-transparent focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(`outline-${tone}`)}: "${toggleOutlineRow(tone)}",`
 	)

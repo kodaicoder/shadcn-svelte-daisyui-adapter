@@ -222,6 +222,13 @@ for (const [component, map] of Object.entries(maps)) {
 	}
 }
 check('every map row is the tone fill, foreground and border pair', missingPair.length === 0, missingPair.join(', '));
+check(
+	'each radio row paints its checked text with the tone',
+	TONES.every((tone) => {
+		const token = tone === 'default' ? 'primary' : tone;
+		return maps['radio-group'][tone].includes(`data-checked:text-${token}`);
+	})
+);
 
 const missingRing = [];
 for (const [component, map] of Object.entries(maps)) {
@@ -329,12 +336,10 @@ check(
 	})
 );
 check(
-	'toggle scopes the unpressed hover to the tone wash and keeps the pressed paint in the base',
-	toggleRows.outline.includes('aria-[pressed=false]:hover:bg-primary/10') &&
-		TONES.every((tone) =>
-			toggleRows[tone].includes(`aria-[pressed=false]:hover:bg-${tone === 'default' ? 'primary' : tone}/10`)
-		) &&
-		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('hover:bg-muted') &&
+	'toggle scopes the unpressed hover to the muted wash and keeps the pressed paint in the base',
+	toggleRows.outline.includes('aria-[pressed=false]:hover:bg-muted/20') &&
+		TONES.every((tone) => toggleRows[tone].includes('aria-[pressed=false]:hover:bg-muted/20')) &&
+		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('hover:bg-muted ') &&
 		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('aria-pressed:bg-primary')
 );
 check(

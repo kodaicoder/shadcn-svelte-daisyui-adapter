@@ -4,13 +4,13 @@
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
 	const TONES = {
-		default: "data-checked:bg-primary/10 data-checked:border-primary data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-primary focus-visible:ring-primary/30",
-		secondary: "data-checked:bg-secondary/10 data-checked:border-secondary-foreground dark:data-checked:border-secondary data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-secondary focus-visible:ring-secondary/30",
-		success: "data-checked:bg-success/10 data-checked:border-success-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-success focus-visible:ring-success/30",
-		warning: "data-checked:bg-warning/10 data-checked:border-warning-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-warning focus-visible:ring-warning/30",
-		info: "data-checked:bg-info/10 data-checked:border-info-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-info focus-visible:ring-info/30",
-		destructive: "data-checked:bg-destructive/10 data-checked:border-destructive-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-destructive focus-visible:ring-destructive/30",
-		blackwhite: "data-checked:bg-blackwhite/10 data-checked:border-blackwhite data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-blackwhite focus-visible:ring-blackwhite/30",
+		default: "data-checked:bg-primary/10 data-checked:text-primary data-checked:border-primary data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-primary focus-visible:ring-primary/30",
+		secondary: "data-checked:bg-secondary/10 data-checked:text-secondary data-checked:border-secondary-foreground dark:data-checked:border-secondary data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-secondary focus-visible:ring-secondary/30",
+		success: "data-checked:bg-success/10 data-checked:text-success data-checked:border-success-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-success focus-visible:ring-success/30",
+		warning: "data-checked:bg-warning/10 data-checked:text-warning data-checked:border-warning-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-warning focus-visible:ring-warning/30",
+		info: "data-checked:bg-info/10 data-checked:text-info data-checked:border-info-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-info focus-visible:ring-info/30",
+		destructive: "data-checked:bg-destructive/10 data-checked:text-destructive data-checked:border-destructive-text data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-destructive focus-visible:ring-destructive/30",
+		blackwhite: "data-checked:bg-blackwhite/10 data-checked:text-blackwhite data-checked:border-blackwhite data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-blackwhite focus-visible:ring-blackwhite/30",
 	};
 
 	let {

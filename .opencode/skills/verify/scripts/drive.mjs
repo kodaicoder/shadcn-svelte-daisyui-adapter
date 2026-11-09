@@ -592,6 +592,22 @@ const journeys = {
 				unchecked.length === TONES.length && unchecked.every((row) => row.checked === 'false'),
 				unchecked.map((row) => `${row.tone}=${row.checked}`).join(', ')
 			);
+			const texts = await scope.locator('[data-tone]').evaluateAll((nodes) =>
+				nodes.map((node) => ({ tone: node.dataset.tone, color: getComputedStyle(node).color }))
+			);
+			const textMismatch = [];
+			for (const row of texts) {
+				const fill = await computed(
+					scope.locator(`[data-fill-swatch="${row.tone}"]`),
+					'backgroundColor'
+				);
+				if (row.color !== fill) textMismatch.push(`${row.tone}:${row.color} vs ${fill}`);
+			}
+			record(
+				`radio-group ${scheme}: checked text follows the tone`,
+				textMismatch.length === 0,
+				textMismatch.join(', ')
+			);
 			await checkStates(page, record, scope, `radio-group ${scheme}`, 'border');
 		}
 	},
@@ -612,14 +628,14 @@ const journeys = {
 			await hoverProbe.hover();
 			await page.waitForTimeout(200);
 			const hovered = await computed(hoverProbe, 'backgroundColor');
-			const soft = await computed(
-				scope.locator('[data-soft-swatch="success"]'),
+			const muted = await computed(
+				scope.locator('[data-muted-swatch]'),
 				'backgroundColor'
 			);
 			record(
-				`toggle ${scheme}: unpressed hover paints the tone wash`,
-				idle !== hovered && hovered === soft,
-				`${idle} -> ${hovered} (swatch ${soft})`
+				`toggle ${scheme}: unpressed hover paints muted at 20 percent`,
+				idle !== hovered && hovered === muted,
+				`${idle} -> ${hovered} (swatch ${muted})`
 			);
 			await page.mouse.move(0, 0);
 			await checkStates(page, record, scope, `toggle ${scheme}`, 'ring');
