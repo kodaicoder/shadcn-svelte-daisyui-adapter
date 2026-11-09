@@ -279,9 +279,9 @@ controlled group reports the new value through `bind:value`.
 
 A disabled item reports `disabled`. A disabled group leaves its items unselectable even when the click
 is forced. `aria-invalid` has to be set on each item: the root does not propagate it to the items, and
-the item classes read it on the item element. On a checked item the stock rule
-`aria-invalid:aria-checked:border-primary` wins over `aria-invalid:border-destructive`, so an invalid
-checked radio looks valid; only the unchecked items show the destructive border.
+the item classes read it on the item element. The stock rule `aria-invalid:aria-checked:border-primary`
+was removed from the fixed copy, because it outranked the tone border. An invalid checked radio now keeps
+its tone border and shows the destructive ring; an unchecked one shows the destructive border.
 
 ### Layout
 
@@ -378,5 +378,10 @@ A label that belongs to a disabled control follows it. The Label already carried
 paths: `group-data-[disabled=true]:cursor-not-allowed` for a shared wrapper marked with `data-disabled="true"`,
 and `has-[:disabled]:cursor-not-allowed` for a label that wraps the control. The group path swapped
 `pointer-events-none` for the cursor, since an element that ignores pointer events cannot show its own.
-`has-[:disabled]:opacity-50` joins the existing dimming, so a wrapped label fades with its control.
-Measured: a sibling label, a group label and a wrapped label all compute `cursor: not-allowed`.
+Measured: a sibling label, a group label and a wrapped label all compute `cursor: not-allowed`. The wrapped
+label does not dim itself, because its control already dims once; dimming the ancestor multiplied the two
+and rendered the control at 0.25.
+
+One exception to the tone-focus claim: inside a focused `Field.Label`, the stock
+`group-has-[:focus-visible]/field-label:*` border rules still outrank the tone row, so a toned control shows
+a primary border there. Recorded in ticket 45.

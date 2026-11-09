@@ -287,9 +287,9 @@ const colorSites = {
 	'radio-group': BINARY_SITES.find((site) => site.id === 'radio-group-colors').fixed
 };
 check(
-	'the dark unchecked surface is scoped to data-unchecked',
-	colorSites.checkbox.includes('dark:data-unchecked:bg-input/30') &&
-		colorSites['radio-group'].includes('dark:data-unchecked:bg-input/30') &&
+	'the dark unchecked surface is scoped to not-data-checked',
+	colorSites.checkbox.includes('dark:not-data-checked:bg-input/30') &&
+		colorSites['radio-group'].includes('dark:not-data-checked:bg-input/30') &&
 		pinned.switch.includes('dark:data-unchecked:bg-input/80') &&
 		BINARY_SITES.every((site) => !site.fixed.includes(' dark:bg-input/30')),
 	'checkbox and radio-group colors, pinned switch root'
@@ -362,15 +362,10 @@ check(
 	Object.values(maps).every((map) =>
 		map.secondary.includes('data-checked:border-secondary-foreground dark:data-checked:border-secondary')
 	) &&
-		toggleRows.secondary.includes(
-			'aria-pressed:border-secondary-foreground dark:aria-pressed:border-secondary'
-		) &&
 		toggleRows['outline-secondary'].includes(
 			'border-secondary-foreground dark:border-secondary'
 		) &&
-		toggleRows['outline-secondary'].includes(
-			'dark:aria-pressed:text-secondary-foreground'
-		)
+		toggleRows['outline-secondary'].includes('aria-pressed:text-secondary-foreground')
 );
 
 const applied = join(WORK, 'applied');

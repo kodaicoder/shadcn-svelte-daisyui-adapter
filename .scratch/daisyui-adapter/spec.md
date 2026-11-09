@@ -169,7 +169,7 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 - Button, checkbox, switch, radio-group and toggle carry the pointer cursor; a disabled control shows `not-allowed` instead, with its hover guarded.
 - A label that belongs to a disabled control shows `not-allowed` whether it is a sibling, sits under a group wrapper marked `data-disabled="true"`, or wraps the control.
 - The redundant `dark:data-checked:bg-primary` twin is removed rather than overridden. That keeps the tone row winning without `!`, so a caller's `class` still wins.
-- The dark unchecked surface `dark:bg-input/30` is scoped to `data-unchecked`. Left as is, it wins the fill over a tone in dark, which the prototype measured before the change.
+- The dark unchecked surface `dark:bg-input/30` is scoped to `not-data-checked`, which keeps the indeterminate checkbox on the dark input surface while a tone paints the checked one.
 - Checkbox, switch and radio-group get two replacement sites each: the props destructure plus the tone map, and the class expression. Toggle gets three: its variant block, the pressed paint, and the class that reads the variant. All anchors live in `targets.mjs`.
 - Stock files under `src/lib/components/ui` keep their stock strings. The review copies under `src/lib/components/*-fixed` follow the existing regeneration flow: fix in `ui`, copy the directory, revert `ui`, normalize to LF.
 

@@ -70,3 +70,16 @@ control keeps the destructive ring at 20 percent in light and 40 percent in dark
 
 The round was finished in the main checkout after two delegates were lost, one to a server restart and
 one to a cancelled run that left the worktree mid-regeneration.
+
+## Interrogate round 1 (2026-11-09)
+
+Four reviewers on `d172c89..HEAD`. Acted on: indeterminate checkboxes lost their dark surface
+(`not-data-checked` replaces `data-unchecked`), `aria-invalid:aria-checked:border-primary` outranked the
+tone border, a button disabled through a `<fieldset>` painted no dim and still hovered (`disabled:` and
+`not-disabled:` joined the guard), the wrapped label dimmed its control twice, the filled toggle rows
+declared a border colour with no width, the checkbox/radio insert anchor was one short line, and the
+disabled-cursor check accepted `pointer-events: none`.
+
+Considered with ticket 45: the `Field.Label` focus override, no byte check for the cursor copies, stale
+journeys, the per-item radio variant, and `stateOf` false-fixed wiring. Dismissed: the dead-hover claim
+and the radio-dot measurement claim.

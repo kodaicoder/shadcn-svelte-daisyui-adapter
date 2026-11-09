@@ -1482,7 +1482,7 @@ const renderVariantBlock = (component, rows, fixed = false) => {
 	// A disabled button still matches :hover in Chrome, so every fixed hover is guarded. The native
 	// button gets `aria-disabled` from the button-disabled-attr site, so one guard serves both branches.
 	return fixed && component === 'button'
-		? block.replace(/\bhover:/g, 'not-aria-disabled:hover:')
+		? block.replace(/\bhover:/g, 'not-aria-disabled:not-disabled:hover:')
 		: block;
 };
 
@@ -1503,9 +1503,8 @@ export const VARIANTS = VARIANT_COMPONENTS.map((component) => ({
 // button, badge, alert and bubble. Each fixed copy carries the seven rows as literal strings, because
 // Tailwind only emits classes it can read in application source, and the fixed copy under
 // `src/lib/components` is that source. The rows sit after the base class through `cn`, so they win the
-// merge without `!` and a caller's `class` still wins. Box and switch both touch a radius site, so
-// their class row carries the radius step itself; the binary table is applied first, and the radius
-// site then reads its own fixed string and writes nothing.
+// merge without `!` and a caller's `class` still wins. The radius sites are separate and idempotent for
+// these components: no row carries a radius utility, so each radius site reads its own fixed string.
 export const BINARY_COMPONENTS = ['checkbox', 'switch', 'radio-group', 'toggle'];
 
 const BINARY_TONES = [
@@ -1642,14 +1641,15 @@ const radioPropsFixed = `${toneMap('radio-group')}
 \t\tvariant?: keyof typeof TONES;
 \t} = $props();`;
 
-const controlColorsStock = `border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary`;
+const controlColorsStock = `border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary`;
 
-const controlColorsFixed = `border-input dark:data-unchecked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary`;
+const controlColorsFixed = `border-input dark:not-data-checked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary`;
 
-const classInsertStock = `\t\tclassName`;
+const classInsertStock = `\t\tclassName\n\t)}`;
 
 const classInsertFixed = `\t\tTONES[variant],
-\t\tclassName`;
+\t\tclassName
+\t)}`;
 
 const switchRootInsertStock = `\t\tclassName
 \t)}
@@ -1665,8 +1665,10 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} enabled:aria-pressed:hover:bg-${tone}/80 enabled:aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground enabled:aria-pressed:hover:bg-${tone}/80 enabled:aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
+// The pressed label for secondary needs the dark twin: the rest state sets `dark:text-secondary`, and dark
+// outranks a plain `aria-pressed:` rule, so the single-variant pressed colour would lose and vanish.
 const toggleOutlineRow = (tone) =>
 	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} ${
 		tone === 'secondary'
@@ -1815,7 +1817,8 @@ export const CURSOR_SITES = [
 		component: 'button',
 		file: 'button/button.svelte',
 		stock: 'disabled:pointer-events-none disabled:opacity-50',
-		fixed: 'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
+		fixed:
+			'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
 	},
 	{
 		id: 'label-disabled-cursor',
@@ -1824,13 +1827,6 @@ export const CURSOR_SITES = [
 		stock: 'group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed',
 		fixed:
 			'group-data-[disabled=true]:cursor-not-allowed peer-disabled:cursor-not-allowed has-[:disabled]:cursor-not-allowed'
-	},
-	{
-		id: 'label-disabled-opacity',
-		component: 'label',
-		file: 'label/label.svelte',
-		stock: 'group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
-		fixed: 'group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50 has-[:disabled]:opacity-50'
 	}
 ];
 

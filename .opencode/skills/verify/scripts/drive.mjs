@@ -77,6 +77,18 @@ const checkTones = async (record, scope, label, kind = 'filled') => {
 			);
 			continue;
 		}
+		if (kind === 'pressed') {
+			const text = await computed(
+				scope.locator(`[data-foreground-swatch="${row.tone}"]`),
+				'color'
+			);
+			record(
+				`${label}: ${row.tone} paints the tone and its foreground`,
+				row.fill === fill && row.text === text,
+				`fill ${row.fill} / text ${row.text}`
+			);
+			continue;
+		}
 		const text = await computed(
 			scope.locator(`[data-foreground-swatch="${row.tone}"]`),
 			'color'
@@ -165,18 +177,23 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 		const control = scope.locator(`[data-tone="${tone}"]`).first();
 		await control.focus();
 		await page.waitForTimeout(120);
-		const state = await control.evaluate((node) => {
-			const layers = getComputedStyle(node).boxShadow.split(/,(?![^(]*\))/);
-			const layer =
-				layers.map((value) => value.trim()).find((value) => /\s[1-9][\d.]*px$/.test(value)) ?? '';
-			return { border: getComputedStyle(node).borderTopColor, ring: layer };
-		});
+		const state = await control.evaluate((node) => ({
+			border: getComputedStyle(node).borderTopColor,
+			borderWidth: getComputedStyle(node).borderTopWidth,
+			ring:
+				getComputedStyle(node)
+					.boxShadow.split(/,(?![^(]*\))/)
+					.map((value) => value.trim())
+					.find((value) => /\s[1-9][\d.]*px$/.test(value)) ?? ''
+		}));
 		toneRings.push(state.ring);
-		const expected = await computed(
-			scope.locator(`[data-border-swatch="${tone}"]`),
-			'borderTopColor'
-		);
-		if (state.border !== expected) borderMismatch.push(`${tone}:${state.border} vs ${expected}`);
+		if (state.borderWidth !== '0px') {
+			const expected = await computed(
+				scope.locator(`[data-border-swatch="${tone}"]`),
+				'borderTopColor'
+			);
+			if (state.border !== expected) borderMismatch.push(`${tone}:${state.border} vs ${expected}`);
+		}
 	}
 	record(
 		`${label}: seven distinct focus rings`,
@@ -223,7 +240,7 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 	}));
 	record(
 		`${label}: disabled does not invite a click`,
-		disabledCursor.cursor === 'not-allowed' || disabledCursor.events === 'none',
+		disabledCursor.cursor === 'not-allowed',
 		`${disabledCursor.cursor} / ${disabledCursor.events}`
 	);
 };
@@ -645,7 +662,7 @@ const journeys = {
 
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
-			await checkTones(record, scope, `toggle ${scheme}`);
+			await checkTones(record, scope, `toggle ${scheme}`, 'pressed');
 			await checkOutlinePairs(record, scope, `toggle ${scheme}`);
 			const hoverProbe = scope.locator('[data-outline="outline-success"]');
 			const idle = await computed(hoverProbe, 'backgroundColor');
@@ -718,6 +735,26 @@ const journeys = {
 		const disabledToggle = page.locator('#toggle [data-case="disabled"]').first();
 		const toggleCursor = await computed(disabledToggle, 'cursor');
 		record('disabled toggle does not invite a click', toggleCursor === 'not-allowed', toggleCursor);
+
+		const inherited = page.locator('[data-cursor="fieldset-button"]');
+		const inheritedStyle = await inherited.evaluate((node) => ({
+			cursor: getComputedStyle(node).cursor,
+			opacity: getComputedStyle(node).opacity
+		}));
+		record(
+			'fieldset-disabled button dims and does not point',
+			inheritedStyle.cursor === 'not-allowed' && inheritedStyle.opacity === '0.5',
+			`${inheritedStyle.cursor} / ${inheritedStyle.opacity}`
+		);
+		const inheritedIdle = await computed(inherited, 'backgroundColor');
+		await inherited.hover({ force: true });
+		await page.waitForTimeout(150);
+		const inheritedHover = await computed(inherited, 'backgroundColor');
+		record(
+			'fieldset-disabled button does not paint hover',
+			inheritedIdle === inheritedHover,
+			`${inheritedIdle} -> ${inheritedHover}`
+		);
 
 		for (const name of ['sibling', 'group', 'wrapped']) {
 			const label = page.locator(`[data-label-case="${name}"]`);

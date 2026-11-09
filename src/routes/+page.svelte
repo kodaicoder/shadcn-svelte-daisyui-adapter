@@ -108,7 +108,7 @@
 			muted/20
 		</span>
 		<span class="flex items-center gap-1">
-			<span data-strong-swatch={tones[2]} class="size-4 rounded-sm {strongClasses.success}"></span>
+			<span data-strong-swatch="success" class="size-4 rounded-sm {strongClasses.success}"></span>
 			tone/20
 		</span>
 	</div>
@@ -123,6 +123,9 @@
 			<Button data-cursor="button">Button</Button>
 			<Button data-cursor="button-disabled" disabled>Disabled button</Button>
 			<Button data-cursor="button-link-disabled" href="/nowhere" disabled>Disabled link</Button>
+			<fieldset disabled class="rounded-md border p-2">
+				<Button data-cursor="fieldset-button">Inherited disabled</Button>
+			</fieldset>
 		</div>
 	</section>
 

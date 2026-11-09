@@ -20,7 +20,7 @@ variants for the binary controls".
 - [ ] A label that belongs to a disabled control shows `not-allowed` as a sibling, under a group wrapper, or wrapping the control
 - [ ] The tone table is a literal string map inside each fixed copy, so Tailwind emits every row
 - [ ] The redundant `dark:data-checked:bg-primary` twin is removed, so no `!` is used and a caller `class` still wins
-- [ ] The dark unchecked surface is scoped to `data-unchecked`, so it cannot win the fill over a tone in dark
+- [ ] The dark unchecked surface is scoped to `not-data-checked`, so it covers indeterminate and cannot win the fill over a tone in dark
 - [ ] The anchors live in `packages/daisyui-adapter/targets.mjs`; checkbox, switch and radio-group have two sites, toggle has three
 - [ ] Stock files under `src/lib/components/ui` keep their stock strings, so `drift.mjs` stays green
 - [ ] The reviewer copies under `src/lib/components/*-fixed` are regenerated through fix, copy, revert, LF-normalize
