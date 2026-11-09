@@ -192,3 +192,51 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 Folds into 0.3.0. The package is unpublished, since npm still serves 0.2.0 and `npm whoami` returns 401,
 so the release record between `eb99aab` and `27d607b` is amended rather than superseded: README and
 CHANGELOG gain the binary tones, and the candidate is re-verified before publish.
+
+## Amendment 2026-11-09: group-level radio variant
+
+### Problem
+
+`RadioGroupItem` takes `variant` per item, so a group of N options repeats the tone N times and can mix
+tones by accident. The group is the unit that owns the selection, so it should own the tone too.
+
+### Outcome
+
+`variant` moves to `RadioGroup` root. The group publishes it through a reactive Svelte context, and an
+item resolves `variant ?? group variant ?? "default"`. The item prop stays as an override for the rare
+mixed case. The tone matrix on the reviewer page sets the tone on the group and never per item.
+
+```svelte
+<RadioGroup variant="success" bind:value>
+	<RadioGroupItem value="on" />
+	<RadioGroupItem value="off" />
+</RadioGroup>
+```
+
+### Decisions
+
+- Root owns the tone. Items read the group tone through a getter in context, so a changed root prop
+  repaints every item without an effect and without a DOM read.
+- The item `variant` prop is optional with no default. `undefined` means inherit; a value overrides.
+- The `TONES` map stays in the item. The root does not render a control and has no reason to carry the
+  palette, so the root holds the token only.
+- The context key is the string `"radio-group-variant"`. The fixed copies live in two files, and a
+  string key does not need a shared module. `registry-49` checks both copies carry the same key.
+- The fixer gains a root file for `radio-group`: one site for the import and type, one for the props and
+  the context call. `radio-group` now declares eight sites across two files. The fixed root joins the
+  byte-for-byte comparison, and the stylesheet header counts seven fully fixed files.
+- `BinaryVariant` is local to each fixed copy for now. The shared type lands with ticket 50 item 9, and
+  the root and item imports move to it in one wave.
+
+### Acceptance
+
+- `<RadioGroup variant={tone}>` paints every inheriting item with that tone. The checked fill, border,
+  ring and indicator match the tone swatches in both schemes.
+- An item with its own `variant` keeps that tone while the rest of the group keeps the group tone.
+- An item with no group tone and no item tone stays `default`.
+- The two fixed copies regenerate byte for byte, and `registry-49` still passes.
+- The reviewer page and its journey prove group inheritance and the item override.
+
+### Version
+
+Folds into 0.3.0 with the binary tone amendment.

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { RadioGroup as RadioGroupPrimitive } from "bits-ui";
 	import CircleIcon from '@lucide/svelte/icons/circle';
+	import { getContext } from "svelte";
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
 	const TONES = {
@@ -16,11 +17,16 @@
 	let {
 		ref = $bindable(null),
 		class: className,
-		variant = "default",
+		variant,
 		...restProps
 	}: WithoutChildrenOrChild<RadioGroupPrimitive.ItemProps> & {
 		variant?: keyof typeof TONES;
 	} = $props();
+
+	const groupVariant = getContext<{ variant: keyof typeof TONES } | undefined>(
+		"radio-group-variant"
+	);
+	const resolved = $derived(variant ?? groupVariant?.variant ?? "default");
 </script>
 
 <RadioGroupPrimitive.Item
@@ -28,7 +34,7 @@
 	data-slot="radio-group-item"
 	class={cn(
 		"border-input dark:not-data-checked:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground data-checked:border-primary aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-3 group/radio-group-item aria-invalid:ring-3 peer relative aspect-square shrink-0 cursor-pointer border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50",
-		TONES[variant],
+		TONES[resolved],
 		className
 	)}
 	{...restProps}

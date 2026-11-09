@@ -138,7 +138,7 @@ change that drops the guard, for every filled row.
 
 Asked: whether the checkbox renders tones and the other appearances.
 
-Checkbox, switch, radio-group and toggle now take the seven tones through one `variant` prop. `default` is the primary pair; the others are `secondary`, `success`, `warning`, `info`, `destructive` and `blackwhite`. Toggle keeps its appearance axis, so its keys are the seven filled tones, `outline`, and `outline-<tone>` for the six non-default tones. None of the four has a second appearance axis: daisyUI offers colour modifiers only.
+Checkbox, switch, radio-group and toggle now take the seven tones through one `variant` prop. `default` is the primary pair; the others are `secondary`, `success`, `warning`, `info`, `destructive` and `blackwhite`. Toggle keeps its appearance axis, so its keys are the seven filled tones, `outline`, and `outline-<tone>` for the six non-default tones. None of the four has a second appearance axis: daisyUI offers colour modifiers only. Radio-group puts `variant` on the group: each `RadioGroupItem` inherits it, and an item `variant` is an override for a deliberate mixed case.
 
 Measured on the reviewer page. The paint depends on the control. A checked checkbox and a pressed toggle
 fill with the tone, take the tone foreground for text, and carry the tone border; a filled toggle has no

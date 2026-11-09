@@ -1,4 +1,5 @@
 # 50: Follow-ups from the binary control tones review
+Session IDs: ses_e50b4d65fffer2AO1ist6QRhAZ, ses_e40e4b8f8ffe1chCTz7jYx00bF
 
 **Status:** ready-for-agent
 **Labels:** adapter, test
@@ -15,8 +16,9 @@ recorded so it is not lost.
 - [ ] The journeys for `buttons`, `aspect-ratio`, `avatar`, `badge` and `button` point at pages that no
       longer exist. Prune them, or give each reviewer page its own route so a journey always matches
       exactly one page. Reviewer C.
-- [ ] `radio-group` exposes `variant` per item, so a group of N options repeats it N times and mixed
-      tones are possible. Consider a group-level `variant` with context. Reviewer B.
+- [ ] `radio-group` exposes `variant` at the group level. The root prop is the group tone, items
+      inherit it through a reactive context getter, and an item `variant` stays as an override. Spec
+      amendment 2026-11-09. Reviewer B.
 - [ ] `stateOf` reports a site `fixed` whenever its fixed string appears anywhere in the file, so a
       component whose wiring was hand-edited can still pass `--check` (the literals are intact, the map
       is not passed to `cn`). Reviewers B and C.

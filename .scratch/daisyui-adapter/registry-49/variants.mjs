@@ -114,8 +114,8 @@ const mapOf = (text) => {
 check('TARGETS.binarySites is BINARY_SITES', TARGETS.binarySites === BINARY_SITES);
 check('TARGETS.binaryComponents is BINARY_COMPONENTS', TARGETS.binaryComponents === BINARY_COMPONENTS);
 check(
-	'the manifest holds eighteen binary sites',
-	BINARY_SITES.length === 18,
+	'the manifest holds twenty-one binary sites',
+	BINARY_SITES.length === 21,
 	`${BINARY_SITES.length}`
 );
 check(
@@ -123,23 +123,30 @@ check(
 	BINARY_COMPONENTS.every(
 		(component) =>
 			BINARY_SITES.filter((site) => site.component === component).length ===
-			({ checkbox: 5, switch: 5, 'radio-group': 5, toggle: 3 })[component]
+			({ checkbox: 5, switch: 5, 'radio-group': 8, toggle: 3 })[component]
 	),
 	BINARY_COMPONENTS.map(
 		(component) => `${component}:${BINARY_SITES.filter((site) => site.component === component).length}`
 	).join(', ')
 );
+const ALLOWED_FILES = {
+	checkbox: ['checkbox/checkbox.svelte'],
+	switch: ['switch/switch.svelte'],
+	'radio-group': ['radio-group/radio-group-item.svelte', 'radio-group/radio-group.svelte'],
+	toggle: ['toggle/toggle.svelte']
+};
 check(
 	'every site file is one of the four controls',
-	BINARY_SITES.every((site) => site.file === FILES[site.component]),
+	BINARY_SITES.every((site) => ALLOWED_FILES[site.component].includes(site.file)),
 	BINARY_SITES.map((site) => site.file).join(', ')
 );
 
+const SITE_FILES = [...new Set(BINARY_SITES.map((site) => site.file))];
 const pinned = Object.fromEntries(
-	Object.entries(FILES).map(([component, file]) => [component, textOf(join(STOCK_DIR, ...file.split('/')))])
+	SITE_FILES.map((file) => [file, textOf(join(STOCK_DIR, ...file.split('/')))])
 );
 const pinnedStock = BINARY_SITES.filter(
-	(site) => countOf(pinned[site.component], site.stock) !== 1
+	(site) => countOf(pinned[site.file], site.stock) !== 1
 ).map((site) => site.id);
 check('every stock anchor occurs once in the pinned file', pinnedStock.length === 0, pinnedStock.join(', '));
 check(
@@ -153,7 +160,9 @@ const insertSiteIds = new Set([
 	'toggle-tones',
 	'checkbox-insert',
 	'radio-group-insert',
-	'switch-insert'
+	'switch-insert',
+	'radio-group-root-imports',
+	'radio-group-imports'
 ]);
 check(
 	'no replacement anchor contains its stock anchor',
@@ -297,7 +306,7 @@ check(
 	'the dark unchecked surface is scoped to not-data-checked',
 	colorSites.checkbox.includes('dark:not-data-checked:bg-input/30') &&
 		colorSites['radio-group'].includes('dark:not-data-checked:bg-input/30') &&
-		pinned.switch.includes('dark:data-unchecked:bg-input/80') &&
+		pinned['switch/switch.svelte'].includes('dark:data-unchecked:bg-input/80') &&
 		BINARY_SITES.every((site) => !site.fixed.includes(' dark:bg-input/30')),
 	'checkbox and radio-group colors, pinned switch root'
 );
@@ -311,9 +320,10 @@ check(
 );
 check(
 	'the tone row follows the base class through cn',
-	['checkbox-insert', 'radio-group-insert', 'switch-insert'].every((id) =>
-		BINARY_SITES.find((site) => site.id === id).fixed.includes('\t\tTONES[variant],\n\t\tclassName')
-	)
+	['checkbox-insert', 'radio-group-insert', 'switch-insert'].every((id) => {
+		const fixed = BINARY_SITES.find((site) => site.id === id).fixed;
+		return /TONES\[(?:variant|resolved)\],\n\t\tclassName/.test(fixed);
+	})
 );
 
 const toggleVariantSite = BINARY_SITES.find((site) => site.id === 'toggle-tones');
@@ -394,11 +404,13 @@ for (const site of BINARY_SITES) {
 	);
 }
 
+const BINARY_COPY_FILES = [...new Set(BINARY_SITES.map((site) => site.file))];
 const mismatchedCopy = [];
-for (const [component, file] of Object.entries(FILES)) {
+for (const file of BINARY_COPY_FILES) {
+	const component = file.split('/')[0];
 	const generated = textOf(pathOf(applied, file));
 	const committed = textOf(join(FIXED_DIR, `${component}-fixed`, ...file.split('/').slice(1)));
-	if (generated !== committed) mismatchedCopy.push(component);
+	if (generated !== committed) mismatchedCopy.push(file);
 }
 check(
 	'the fixer reproduces each committed binary copy byte for byte',
@@ -422,8 +434,8 @@ const header = textOf(join(applied, 'src', 'routes', 'layout.css'))
 	.split('\n')
 	.find((line) => line.startsWith('/* '));
 check(
-	'the header records six fully fixed components',
-	header?.startsWith(`/* ${NAME} ${VERSION} | components 6 fixed | re-run `),
+	'the header records seven fully fixed components',
+	header?.startsWith(`/* ${NAME} ${VERSION} | components 7 fixed | re-run `),
 	header
 );
 

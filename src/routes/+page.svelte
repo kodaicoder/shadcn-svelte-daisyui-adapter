@@ -177,10 +177,9 @@
 				<div class="flex flex-wrap items-center gap-6">
 					{#each tones as tone}
 						<FieldLabel class="gap-1">
-							<RadioGroup value="on" aria-label="Field radio {tone}">
+							<RadioGroup value="on" variant={tone} aria-label="Field radio {tone}">
 								<RadioGroupItem
 									value="on"
-									variant={tone}
 									data-field-control="radio-group"
 									data-field-tone={tone}
 								/>
@@ -280,13 +279,19 @@
 				<div class="flex flex-wrap items-center gap-4">
 					{#each tones as tone}
 						<span class="flex items-center gap-2 text-xs">
-							<RadioGroup value="on" aria-label="Radio {tone}">
-								<RadioGroupItem value="on" variant={tone} data-tone={tone} />
-								<RadioGroupItem value="off" variant={tone} data-unchecked-tone={tone} />
+							<RadioGroup value="on" variant={tone} aria-label="Radio {tone}">
+								<RadioGroupItem value="on" data-tone={tone} />
+								<RadioGroupItem value="off" data-unchecked-tone={tone} />
 							</RadioGroup>
 							{tone}
 						</span>
 					{/each}
+					<span class="flex items-center gap-2 text-xs">
+						<RadioGroup value="on" variant="success" aria-label="Radio override">
+							<RadioGroupItem value="on" variant="destructive" data-override="radio-group" />
+						</RadioGroup>
+						override
+					</span>
 				</div>
 				<div class="flex flex-wrap items-center gap-4">
 					<span class="flex items-center gap-2 text-xs">

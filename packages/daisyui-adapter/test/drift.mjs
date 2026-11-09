@@ -55,8 +55,8 @@ check(
 );
 const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES, ...CURSOR_SITES];
 check(
-	'the manifest holds eighteen binary sites',
-	BINARY_SITES.length === 18,
+	'the manifest holds twenty-one binary sites',
+	BINARY_SITES.length === 21,
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds six cursor sites', CURSOR_SITES.length === 6, `${CURSOR_SITES.length}`);

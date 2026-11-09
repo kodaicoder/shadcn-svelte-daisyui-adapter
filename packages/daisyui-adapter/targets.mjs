@@ -1621,11 +1621,62 @@ const radioPropsFixed = `${toneMap('radio-group')}
 \tlet {
 \t\tref = $bindable(null),
 \t\tclass: className,
-\t\tvariant = "default",
+\t\tvariant,
 \t\t...restProps
 \t}: WithoutChildrenOrChild<RadioGroupPrimitive.ItemProps> & {
 \t\tvariant?: keyof typeof TONES;
-\t} = $props();`;
+\t} = $props();
+
+\tconst groupVariant = getContext<{ variant: keyof typeof TONES } | undefined>(
+\t\t"radio-group-variant"
+\t);
+\tconst resolved = $derived(variant ?? groupVariant?.variant ?? "default");`;
+
+const radioRootImportStock = `\timport { cn } from "#lib/utils.js";`;
+
+const radioRootImportFixed = `\timport { setContext } from "svelte";
+\timport { cn } from "#lib/utils.js";
+
+\ttype BinaryVariant =
+\t\t| "default"
+\t\t| "secondary"
+\t\t| "success"
+\t\t| "warning"
+\t\t| "info"
+\t\t| "destructive"
+\t\t| "blackwhite";`;
+
+const radioRootPropsStock = `\tlet {
+\t\tref = $bindable(null),
+\t\tclass: className,
+\t\tvalue = $bindable(""),
+\t\t...restProps
+\t}: RadioGroupPrimitive.RootProps = $props();`;
+
+const radioRootPropsFixed = `\tlet {
+\t\tref = $bindable(null),
+\t\tclass: className,
+\t\tvalue = $bindable(""),
+\t\tvariant = "default",
+\t\t...restProps
+\t}: RadioGroupPrimitive.RootProps & {
+\t\tvariant?: BinaryVariant;
+\t} = $props();
+
+\tsetContext("radio-group-variant", {
+\t\tget variant() {
+\t\t\treturn variant;
+\t\t}
+\t});`;
+
+const radioItemImportStock = `\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
+
+const radioItemImportFixed = `\timport { getContext } from "svelte";
+\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
+
+const radioClassInsertFixed = `\t\tTONES[resolved],
+\t\tclassName
+\t)}`;
 
 const controlColorsStock = `border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary`;
 
@@ -1733,6 +1784,27 @@ export const BINARY_SITES = [
 		stock: switchThumbStock,
 		fixed: switchThumbFixed
 	},
+	{
+		id: 'radio-group-root-imports',
+		component: 'radio-group',
+		file: 'radio-group/radio-group.svelte',
+		stock: radioRootImportStock,
+		fixed: radioRootImportFixed
+	},
+	{
+		id: 'radio-group-root-props',
+		component: 'radio-group',
+		file: 'radio-group/radio-group.svelte',
+		stock: radioRootPropsStock,
+		fixed: radioRootPropsFixed
+	},
+	{
+		id: 'radio-group-imports',
+		component: 'radio-group',
+		file: 'radio-group/radio-group-item.svelte',
+		stock: radioItemImportStock,
+		fixed: radioItemImportFixed
+	},
 	binaryProps('radio-group', radioPropsStock, radioPropsFixed),
 	focusSite('radio-group', 'radio-group/radio-group-item.svelte', 'aria-invalid:border-destructive', 50),
 	{
@@ -1755,7 +1827,7 @@ export const BINARY_SITES = [
 		component: 'radio-group',
 		file: 'radio-group/radio-group-item.svelte',
 		stock: classInsertStock,
-		fixed: classInsertFixed
+		fixed: radioClassInsertFixed
 	},
 	{
 		id: 'toggle-tones',

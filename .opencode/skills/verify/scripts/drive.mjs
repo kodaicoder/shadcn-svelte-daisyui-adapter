@@ -329,6 +329,24 @@ const journeys = {
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
 			await checkTones(record, scope, `radio-group ${scheme}`, 'wash');
+			const override = scope.locator('[data-override="radio-group"]');
+			const overrideFill = await computed(override, 'backgroundColor');
+			const overrideDot = await override
+				.locator('[data-slot="radio-group-indicator"] > svg')
+				.evaluate((node) => getComputedStyle(node).backgroundColor);
+			const destructiveSoft = await computed(
+				scope.locator('[data-soft-swatch="destructive"]'),
+				'backgroundColor'
+			);
+			const destructiveFill = await computed(
+				scope.locator('[data-fill-swatch="destructive"]'),
+				'backgroundColor'
+			);
+			record(
+				`radio-group ${scheme}: item variant overrides the group`,
+				overrideFill === destructiveSoft && overrideDot === destructiveFill,
+				`fill ${overrideFill} vs ${destructiveSoft} / dot ${overrideDot} vs ${destructiveFill}`
+			);
 			const unchecked = await scope.locator('[data-unchecked-tone]').evaluateAll((nodes) =>
 				nodes.map((node) => ({
 					tone: node.dataset.uncheckedTone,
