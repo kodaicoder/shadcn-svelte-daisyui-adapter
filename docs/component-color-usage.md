@@ -287,3 +287,28 @@ foreground from the item. `default` is the primary pair, so a group with no `var
 With `--radius: 0.5rem`, the fixed copy measures `4.8px` at `sm`, `6.4px` at `default` and `8px` at
 `lg`. The stock `sm` row is `rounded-[min(var(--radius-md),8px)]`, which resolves to `6.4px`, so the
 fixed copy is what lowers it to the selector step.
+
+### Focus ring follows the tone
+
+The stock base carries `focus-visible:border-ring` and `focus-visible:ring-ring/30`, so a focused
+control painted with a tone used to show a primary border and a primary ring. Measured on a focused
+success checkbox before the change: fill `oklch(0.79 0.209 151.711)`, border
+`oklch(0.42 0.199 265.638)`, ring the primary at 30 percent.
+
+The base now drops both classes, the ring width stays, and every tone row declares its own ring at 30
+percent of its border token. Measured after the change, light scheme:
+
+| tone | ring |
+| --- | --- |
+| default | `oklab(0.42 -0.0151355 -0.198424 / 0.298)` |
+| secondary | `oklab(0.81 0.0443873 -0.101739 / 0.291)` |
+| success | `oklab(0.436 -0.124494 -0.058609 / 0.291)` |
+| warning | `oklab(0.436 -0.127578 0.00235073 / 0.298)` |
+| info | `oklab(0.416 -0.063245 -0.0996196 / 0.298)` |
+| destructive | `oklab(0.32 0.0686148 -0.121114 / 0.291)` |
+| blackwhite | `oklab(0.2 -0.00310889 -0.0418848 / 0.298)` |
+
+The border keeps its tone on focus, and an invalid control still paints the destructive ring at 20
+percent in light and 40 percent in dark. The `30` percent ring measures low against the page, which a
+WCAG 2.4.11 review of the focus indicator would flag; the width and alpha were kept and recorded rather
+than changed in this ticket.

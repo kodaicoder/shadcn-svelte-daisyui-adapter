@@ -1517,6 +1517,18 @@ const toneBorder = (tone) => (STATUS_TONES.has(tone) ? `${tone}-text` : tone);
 // `default` is the theme's primary pair, so the key and the token differ here and only here.
 const toneToken = (tone) => (tone === 'default' ? 'primary' : tone);
 
+// The focus ring follows the tone, so the base class gives up `focus-visible:border-ring` and its ring
+// colour instead of letting the primary pair win over a tone on focus. The ring width stays in the
+// base; only the colour moves to the row. The anchor keeps the class before the focus utilities, so the
+// fixed string cannot be read as already fixed while the stock still holds the classes.
+const focusSite = (component, file, before, ring) => ({
+	id: `${component}-focus`,
+	component,
+	file,
+	stock: `${before} focus-visible:border-ring focus-visible:ring-ring/${ring} aria-invalid:ring-destructive/20`,
+	fixed: `${before} aria-invalid:ring-destructive/20`
+});
+
 // The fill and foreground sit on the control; the thumb and dot are children, so the tone row paints
 // them from the control and the stock child rule never competes.
 const TONE_EXTRAS = {
@@ -1528,7 +1540,7 @@ const TONE_EXTRAS = {
 
 const toneRow = (component, tone) => {
 	const token = toneToken(tone);
-	return `data-checked:bg-${token} data-checked:text-${token}-foreground data-checked:border-${toneBorder(token)}${TONE_EXTRAS[component](token)}`;
+	return `data-checked:bg-${token} data-checked:text-${token}-foreground data-checked:border-${toneBorder(token)} focus-visible:ring-${toneBorder(token)}/30${TONE_EXTRAS[component](token)}`;
 };
 
 const toneMap = (component) =>
@@ -1633,15 +1645,15 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${toneBorder(tone)}/30`;
 
 const toggleOutlineRow = (tone) =>
-	`border border-${toneBorder(tone)} bg-transparent text-${toneBorder(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80`;
+	`border border-${toneBorder(tone)} bg-transparent text-${toneBorder(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground aria-pressed:border-${toneBorder(tone)} aria-pressed:hover:bg-${tone}/80 focus-visible:ring-${toneBorder(tone)}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 
 const toggleVariantFixed = [
-	`\t\t\t\tdefault: "bg-transparent",`,
+	`\t\t\t\tdefault: "bg-transparent focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(tone)}: "${toggleRow(tone)}",`
 	)
@@ -1650,7 +1662,7 @@ const toggleVariantFixed = [
 const toggleOutlineStock = `\t\t\t\toutline: "border-input hover:bg-muted border bg-transparent",`;
 
 const toggleOutlineFixed = [
-	`\t\t\t\toutline: "border-input aria-[pressed=false]:hover:bg-muted border bg-transparent",`,
+	`\t\t\t\toutline: "border-input aria-[pressed=false]:hover:bg-muted border bg-transparent focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(`outline-${tone}`)}: "${toggleOutlineRow(tone)}",`
 	)
@@ -1658,10 +1670,11 @@ const toggleOutlineFixed = [
 
 const toggleBaseStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
-const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 aria-[pressed=false]:hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 aria-[pressed=false]:hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
 export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
+	focusSite('checkbox', 'checkbox/checkbox.svelte', 'dark:aria-invalid:border-destructive/50', 30),
 	{
 		id: 'checkbox-colors',
 		component: 'checkbox',
@@ -1677,6 +1690,7 @@ export const BINARY_SITES = [
 		fixed: classInsertFixed
 	},
 	binaryProps('switch', switchPropsStock, switchPropsFixed),
+	focusSite('switch', 'switch/switch.svelte', 'data-unchecked:bg-input', 30),
 	{
 		id: 'switch-insert',
 		component: 'switch',
@@ -1692,6 +1706,7 @@ export const BINARY_SITES = [
 		fixed: switchThumbFixed
 	},
 	binaryProps('radio-group', radioPropsStock, radioPropsFixed),
+	focusSite('radio-group', 'radio-group/radio-group-item.svelte', 'aria-invalid:border-destructive', 50),
 	{
 		id: 'radio-group-colors',
 		component: 'radio-group',

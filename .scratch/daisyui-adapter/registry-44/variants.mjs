@@ -105,8 +105,8 @@ const mapOf = (text) => {
 check('TARGETS.binarySites is BINARY_SITES', TARGETS.binarySites === BINARY_SITES);
 check('TARGETS.binaryComponents is BINARY_COMPONENTS', TARGETS.binaryComponents === BINARY_COMPONENTS);
 check(
-	'the manifest holds twelve binary sites',
-	BINARY_SITES.length === 12,
+	'the manifest holds fifteen binary sites',
+	BINARY_SITES.length === 15,
 	`${BINARY_SITES.length}`
 );
 check(
@@ -114,7 +114,7 @@ check(
 	BINARY_COMPONENTS.every(
 		(component) =>
 			BINARY_SITES.filter((site) => site.component === component).length ===
-			({ checkbox: 3, switch: 3, 'radio-group': 3, toggle: 3 })[component]
+			({ checkbox: 4, switch: 4, 'radio-group': 4, toggle: 3 })[component]
 	),
 	BINARY_COMPONENTS.map(
 		(component) => `${component}:${BINARY_SITES.filter((site) => site.component === component).length}`
@@ -199,6 +199,29 @@ for (const [component, map] of Object.entries(maps)) {
 }
 check('every map row is the tone fill, foreground and border pair', missingPair.length === 0, missingPair.join(', '));
 
+const missingRing = [];
+for (const [component, map] of Object.entries(maps)) {
+	for (const tone of TONES) {
+		const token = tone === 'default' ? 'primary' : tone;
+		const border = STATUS.includes(tone) ? `${tone}-text` : token;
+		if (!map[tone].includes(`focus-visible:ring-${border}/30`)) missingRing.push(`${component}:${tone}`);
+	}
+}
+check('every map row carries its tone focus ring', missingRing.length === 0, missingRing.join(', '));
+
+const focusSites = ['checkbox-focus', 'switch-focus', 'radio-group-focus'].map((id) =>
+	BINARY_SITES.find((site) => site.id === id)
+);
+check(
+	'the focus sites drop the primary focus border',
+	focusSites.every((site) => Boolean(site)) &&
+		focusSites.every(
+			(site) => site.stock.includes('focus-visible:border-ring') && !site.fixed.includes('focus-visible:border-ring')
+		) &&
+		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('focus-visible:border-ring'),
+	focusSites.map((site) => site?.id).join(', ')
+);
+
 const childRules = BINARY_SITES.filter(
 	(site) => site.id === 'switch-tones' || site.id === 'radio-group-tones'
 ).map((site) => site.fixed);
@@ -268,6 +291,14 @@ check(
 	toggleRows.outline.includes('aria-[pressed=false]:hover:bg-muted') &&
 		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('aria-pressed:bg-primary')
 );
+check(
+	'every toggle key carries its focus ring',
+	TONES.every((tone) => {
+		const token = tone === 'default' ? 'primary' : tone;
+		const border = STATUS.includes(tone) ? `${tone}-text` : token;
+		return toggleRows[tone].includes(`focus-visible:ring-${border}/30`);
+	}) && toggleRows.outline.includes('focus-visible:ring-primary/30')
+);
 
 const applied = join(WORK, 'applied');
 scaffold(applied);
@@ -328,8 +359,8 @@ const statesPath = pathOf(states, FILES.checkbox);
 writeFileSync(
 	statesPath,
 	textOf(statesPath).replace(
-		'success: "data-checked:bg-success data-checked:text-success-foreground data-checked:border-success-text",',
-		'success: "data-checked:bg-success/50",'
+		/success: "data-checked:bg-success[^"]*"/,
+		'success: "data-checked:bg-success/50"'
 	)
 );
 const statesRun = cliResult(states, 'fix', 'checkbox');

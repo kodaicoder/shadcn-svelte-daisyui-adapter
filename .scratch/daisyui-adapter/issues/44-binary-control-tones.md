@@ -1,4 +1,5 @@
 # 44: Binary controls carry the seven tones
+Session IDs: ses_e50b4d65fffer2AO1ist6QRhAZ
 
 **What to build:** checkbox, switch, toggle and radio-group accept the seven tones through one `variant`
 prop, with the tone classes emitted as literals in application source and written by the fixer's exact
@@ -20,6 +21,7 @@ variants for the binary controls".
 - [ ] Stock files under `src/lib/components/ui` keep their stock strings, so `drift.mjs` stays green
 - [ ] The reviewer copies under `src/lib/components/*-fixed` are regenerated through fix, copy, revert, LF-normalize
 - [ ] The four reviewer pages show every tone, and their journeys pass
+- [ ] The focus ring follows the tone at 30 percent, the tone border survives focus, and a focused invalid control keeps its destructive ring
 - [ ] A new harness script covers the binary tone rows, in the shape registry-30 and registry-31 use
 - [ ] README and CHANGELOG describe the new keys, since the change folds into 0.3.0
 

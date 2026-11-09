@@ -123,6 +123,32 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 		`${focusState.focusVisible} ${ring ?? focusState.shadow}`
 	);
 
+	const toneRings = [];
+	const borderMismatch = [];
+	for (const tone of TONES) {
+		const control = scope.locator(`[data-tone="${tone}"]`).first();
+		await control.focus();
+		await page.waitForTimeout(120);
+		const state = await control.evaluate((node) => {
+			const layers = getComputedStyle(node).boxShadow.split(/,(?![^(]*\))/);
+			const layer =
+				layers.map((value) => value.trim()).find((value) => /\s[1-9][\d.]*px$/.test(value)) ?? '';
+			return { border: getComputedStyle(node).borderTopColor, ring: layer };
+		});
+		toneRings.push(state.ring);
+		const expected = await computed(
+			scope.locator(`[data-border-swatch="${tone}"]`),
+			'borderTopColor'
+		);
+		if (state.border !== expected) borderMismatch.push(`${tone}:${state.border} vs ${expected}`);
+	}
+	record(
+		`${label}: seven distinct focus rings`,
+		new Set(toneRings).size === TONES.length && toneRings.every(Boolean),
+		toneRings.map((value, index) => `${TONES[index]}=${value}`).join(', ')
+	);
+	record(`${label}: focus keeps the tone border`, borderMismatch.length === 0, borderMismatch.join(', '));
+
 	const invalid = scope.locator('[data-case="invalid"]');
 	if (invalidKind === 'ring') {
 		const shadow = await computed(invalid, 'boxShadow');
@@ -136,6 +162,20 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 			`${invalidBorder} vs ${idleBorder}`
 		);
 	}
+
+	await invalid.focus();
+	await page.waitForTimeout(120);
+	const invalidRing = await invalid.evaluate((node) => {
+		const layers = getComputedStyle(node).boxShadow.split(/,(?![^(]*\))/);
+		return (
+			layers.map((value) => value.trim()).find((value) => /\s[1-9][\d.]*px$/.test(value)) ?? ''
+		);
+	});
+	record(
+		`${label}: focused invalid keeps the destructive ring`,
+		invalidRing !== '' && invalidRing !== toneRings[0],
+		`${invalidRing} vs default ${toneRings[0]}`
+	);
 
 	const disabled = scope.locator('[data-case="disabled"]');
 	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
