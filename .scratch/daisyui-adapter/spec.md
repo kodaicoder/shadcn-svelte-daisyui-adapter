@@ -164,6 +164,7 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 - One `variant` prop, not a second `tone` prop. A separate prop splits one selection into two and breaks the contract that button, badge, alert and bubble already use.
 - The tone map is a literal string table inside each fixed component. Tailwind emits only classes it can read as literals in application source; a table inside `node_modules` is never scanned, so the colours would silently disappear.
 - Fill, border and foreground follow the pair rules already in this spec: the fill is the tone, the foreground is the tone foreground, and the border is the tone text token for the status tones, so the control boundary clears 3:1 while the fill itself stays below it.
+- The switch keeps the tone off the track. Its track is the tone at 10 percent, its border is the tone border, and its thumb is the tone itself, so the sphere and the outline carry the state while the track stays quiet.
 - The redundant `dark:data-checked:bg-primary` twin is removed rather than overridden. That keeps the tone row winning without `!`, so a caller's `class` still wins.
 - The dark unchecked surface `dark:bg-input/30` is scoped to `data-unchecked`. Left as is, it wins the fill over a tone in dark, which the prototype measured before the change.
 - Checkbox, switch and radio-group get two replacement sites each: the props destructure plus the tone map, and the class expression. Toggle gets three: its variant block, the pressed paint, and the class that reads the variant. All anchors live in `targets.mjs`.
@@ -177,7 +178,7 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 
 ### Acceptance
 
-- Each control renders the seven tones in both schemes: the checked fill equals the tone token, the border equals the tone-text token for the status tones, and the foreground equals the tone foreground.
+- Each control renders the seven tones in both schemes: the checked fill equals the tone token, the border equals the tone-text token for the status tones, and the foreground equals the tone foreground. The switch is the exception: its track is the tone at 10 percent, its border is the tone border, and its thumb is the tone.
 - Focus, invalid and disabled keep working on every tone.
 - `variant` is typed, and an unknown key is a type error where the component has a cva table.
 - The four reviewer pages show every tone, their journeys pass, and `drift.mjs` stays green.

@@ -24,7 +24,7 @@ const OUTLINE_TONES = [
 const computed = (locator, property) =>
 	locator.evaluate((node, prop) => getComputedStyle(node)[prop], property);
 
-const checkTones = async (record, scope, label) => {
+const checkTones = async (record, scope, label, kind = 'filled') => {
 	const rows = await scope.locator('[data-slot][data-tone]').evaluateAll((nodes) =>
 		nodes.map((node) => ({
 			tone: node.dataset.tone,
@@ -54,6 +54,29 @@ const checkTones = async (record, scope, label) => {
 			scope.locator(`[data-border-swatch="${row.tone}"]`),
 			'borderTopColor'
 		);
+		if (kind === 'switch') {
+			const soft = await computed(
+				scope.locator(`[data-soft-swatch="${row.tone}"]`),
+				'backgroundColor'
+			);
+			record(
+				`${label}: ${row.tone} track is a 10 percent wash`,
+				row.fill === soft,
+				`${row.fill} vs ${soft}`
+			);
+			record(
+				`${label}: ${row.tone} border is the tone border`,
+				row.border === border,
+				`${row.border} vs ${border}`
+			);
+			const part = parts.find((entry) => entry.tone === row.tone);
+			record(
+				`${label}: ${row.tone} thumb takes the tone`,
+				part?.paint === fill,
+				`${part?.paint} vs ${fill}`
+			);
+			continue;
+		}
 		const text = await computed(
 			scope.locator(`[data-foreground-swatch="${row.tone}"]`),
 			'color'
@@ -539,7 +562,7 @@ const journeys = {
 
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
-			await checkTones(record, scope, `switch ${scheme}`);
+			await checkTones(record, scope, `switch ${scheme}`, 'switch');
 			await checkStates(page, record, scope, `switch ${scheme}`, 'border');
 		}
 	},

@@ -64,6 +64,16 @@
 		blackwhite: 'border-blackwhite'
 	};
 
+	const softClasses = {
+		default: 'bg-primary/10',
+		secondary: 'bg-secondary/10',
+		success: 'bg-success/10',
+		warning: 'bg-warning/10',
+		info: 'bg-info/10',
+		destructive: 'bg-destructive/10',
+		blackwhite: 'bg-blackwhite/10'
+	};
+
 	const schemes = ['light', 'dark'] as const;
 </script>
 
@@ -72,6 +82,7 @@
 		{#each tones as tone}
 			<span class="flex items-center gap-1">
 				<span data-fill-swatch={tone} class="size-4 rounded-sm {fillClasses[tone]}"></span>
+				<span data-soft-swatch={tone} class="size-4 rounded-sm {softClasses[tone]}"></span>
 				<span data-foreground-swatch={tone} class="{foregroundClasses[tone]}">Aa</span>
 				<span
 					data-border-swatch={tone}

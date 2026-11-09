@@ -1529,18 +1529,22 @@ const focusSite = (component, file, before, ring) => ({
 	fixed: `${before} aria-invalid:ring-destructive/20`
 });
 
-// The fill and foreground sit on the control; the thumb and dot are children, so the tone row paints
-// them from the control and the stock child rule never competes.
+// The fill and foreground sit on the control; the dot is a child, so the tone row paints it from the
+// control and the stock child rule never competes. The switch is different: its track is a 10 percent
+// wash, the border carries the tone, and the thumb is the tone itself.
 const TONE_EXTRAS = {
 	checkbox: () => '',
-	switch: (token) => ` data-checked:[&_[data-slot=switch-thumb]]:bg-${token}-foreground`,
 	'radio-group': (token) =>
 		` data-checked:[&_[data-slot=radio-group-indicator]>svg]:bg-${token}-foreground`
 };
 
 const toneRow = (component, tone) => {
 	const token = toneToken(tone);
-	return `data-checked:bg-${token} data-checked:text-${token}-foreground data-checked:border-${toneBorder(token)} focus-visible:ring-${toneBorder(token)}/30${TONE_EXTRAS[component](token)}`;
+	const border = toneBorder(token);
+	if (component === 'switch') {
+		return `data-checked:bg-${token}/10 data-checked:border-${border} data-checked:[&_[data-slot=switch-thumb]]:bg-${token} focus-visible:ring-${border}/30`;
+	}
+	return `data-checked:bg-${token} data-checked:text-${token}-foreground data-checked:border-${border} focus-visible:ring-${border}/30${TONE_EXTRAS[component](token)}`;
 };
 
 const toneMap = (component) =>

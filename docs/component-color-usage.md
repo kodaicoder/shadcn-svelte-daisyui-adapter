@@ -312,3 +312,21 @@ The border keeps its tone on focus, and an invalid control still paints the dest
 percent in light and 40 percent in dark. The `30` percent ring measures low against the page, which a
 WCAG 2.4.11 review of the focus indicator would flag; the width and alpha were kept and recorded rather
 than changed in this ticket.
+
+### Switch keeps the tone off the track
+
+Asked: should a checked switch fill its track with the tone. No. The tone belongs to the thumb and the
+border, and the track stays quiet, so the sphere reads as the state instead of the whole capsule.
+
+Measured, light scheme:
+
+| tone | track | border | thumb |
+| --- | --- | --- | --- |
+| default | `oklab(0.42 -0.0151355 -0.198424 / 0.1)` | `oklch(0.42 0.199 265.638)` | `oklch(0.42 0.199 265.638)` |
+| success | `oklab(0.79 -0.184039 0.0990491 / 0.1)` | `oklch(0.436 0.1376 205.21)` | `oklch(0.79 0.209 151.711)` |
+
+Dark scheme resolves the same tokens, so `success` measures a `oklab(0.76 -0.169466 0.0510906 / 0.1)`
+track, `oklch(0.856 0.0744 224.008)` border and `oklch(0.76 0.177 163.223)` thumb.
+
+A tone thumb on a 10 percent tone track separates more in dark than in light, because the wash over a
+dark page is near-black. The border carries the component boundary, so the fill can stay this quiet.
