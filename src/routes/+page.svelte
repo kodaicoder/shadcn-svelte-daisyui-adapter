@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Checkbox } from '#lib/components/checkbox-fixed/index.js';
+	import { Button } from '#lib/components/button-fixed/index.js';
 	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
 	import { Switch } from '#lib/components/switch-fixed/index.js';
 	import { Toggle } from '#lib/components/toggle-fixed/index.js';
@@ -74,6 +75,16 @@
 		blackwhite: 'bg-blackwhite/10'
 	};
 
+	const strongClasses = {
+		default: 'bg-primary/20',
+		secondary: 'bg-secondary/20',
+		success: 'bg-success/20',
+		warning: 'bg-warning/20',
+		info: 'bg-info/20',
+		destructive: 'bg-destructive/20',
+		blackwhite: 'bg-blackwhite/20'
+	};
+
 	const schemes = ['light', 'dark'] as const;
 </script>
 
@@ -95,11 +106,23 @@
 			<span data-muted-swatch class="size-4 rounded-sm bg-muted/20"></span>
 			muted/20
 		</span>
+		<span class="flex items-center gap-1">
+			<span data-strong-swatch={tones[2]} class="size-4 rounded-sm {strongClasses.success}"></span>
+			tone/20
+		</span>
 	</div>
 {/snippet}
 
 <div class="space-y-10 p-6">
 	<h1 class="text-lg font-semibold">Binary control tones</h1>
+
+	<section id="cursor" data-control="cursor" class="space-y-3">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Cursor</h2>
+		<div class="flex flex-wrap items-center gap-4">
+			<Button data-cursor="button">Button</Button>
+			<Button data-cursor="button-disabled" disabled>Disabled button</Button>
+		</div>
+	</section>
 
 	<section id="checkbox" data-control="checkbox" class="space-y-4">
 		<h2 class="text-sm font-semibold tracking-widest uppercase">Checkbox</h2>

@@ -9,6 +9,8 @@ import {
 	BINARY_COMPONENTS,
 	BINARY_SITES,
 	COMPONENTS,
+	CURSOR_COMPONENTS,
+	CURSOR_SITES,
 	KNOWN_COMPONENTS,
 	PAIRS,
 	RADIUS,
@@ -51,16 +53,18 @@ check(
 		.filter((id) => !siteIds.has(id))
 		.join(', ')
 );
-const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES];
+const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES, ...CURSOR_SITES];
 check(
 	'the manifest holds fifteen binary sites',
 	BINARY_SITES.length === 15,
 	`${BINARY_SITES.length}`
 );
+check('the manifest holds four cursor sites', CURSOR_SITES.length === 4, `${CURSOR_SITES.length}`);
 check(
 	'every site belongs to a named component of its own table',
 	SITES.every((site) => COMPONENTS.includes(site.component)) &&
 		BINARY_SITES.every((site) => BINARY_COMPONENTS.includes(site.component)) &&
+		CURSOR_SITES.every((site) => CURSOR_COMPONENTS.includes(site.component)) &&
 		RADIUS.every((site) => RADIUS_COMPONENTS.includes(site.component)) &&
 		SURFACES.every((site) => SURFACE_COMPONENTS.includes(site.component)) &&
 		VARIANTS.every((site) => VARIANT_COMPONENTS.includes(site.component))

@@ -1660,15 +1660,15 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-muted/20 focus-visible:ring-${tone}/30`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
 const toggleOutlineRow = (tone) =>
-	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-muted/20 focus-visible:ring-${tone}/30`;
+	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 
 const toggleVariantFixed = [
-	`\t\t\t\tdefault: "bg-transparent aria-[pressed=false]:hover:bg-muted/20 focus-visible:ring-primary/30",`,
+	`\t\t\t\tdefault: "bg-transparent aria-[pressed=false]:hover:bg-primary/20 focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(tone)}: "${toggleRow(tone)}",`
 	)
@@ -1677,7 +1677,7 @@ const toggleVariantFixed = [
 const toggleOutlineStock = `\t\t\t\toutline: "border-input hover:bg-muted border bg-transparent",`;
 
 const toggleOutlineFixed = [
-	`\t\t\t\toutline: "border border-input aria-[pressed=false]:hover:bg-muted/20 bg-transparent focus-visible:ring-primary/30",`,
+	`\t\t\t\toutline: "border border-input aria-[pressed=false]:hover:bg-primary/20 bg-transparent focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(`outline-${tone}`)}: "${toggleOutlineRow(tone)}",`
 	)
@@ -1685,7 +1685,7 @@ const toggleOutlineFixed = [
 
 const toggleBaseStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
-const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex cursor-pointer items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
 export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
@@ -1759,13 +1759,51 @@ export const BINARY_SITES = [
 	}
 ];
 
+export const CURSOR_COMPONENTS = ['button', 'checkbox', 'switch', 'radio-group'];
+
+// The stock components leave the cursor at the platform default. Every interactive control points at
+// itself instead, through a small anchor per file. Toggle carries the class in `toggleBaseFixed`
+// because the pressed site covers its whole base string. A disabled control keeps whichever rule its
+// stock base already carries (`cursor-not-allowed`) or its `pointer-events-none`.
+export const CURSOR_SITES = [
+	{
+		id: 'button-cursor',
+		component: 'button',
+		file: 'button/button.svelte',
+		stock: 'group/button inline-flex shrink-0 items-center justify-center',
+		fixed: 'group/button inline-flex shrink-0 cursor-pointer items-center justify-center'
+	},
+	{
+		id: 'checkbox-cursor',
+		component: 'checkbox',
+		file: 'checkbox/checkbox.svelte',
+		stock: 'peer relative shrink-0 outline-none',
+		fixed: 'peer relative shrink-0 cursor-pointer outline-none'
+	},
+	{
+		id: 'switch-cursor',
+		component: 'switch',
+		file: 'switch/switch.svelte',
+		stock: 'peer group/switch relative inline-flex items-center',
+		fixed: 'peer group/switch relative inline-flex cursor-pointer items-center'
+	},
+	{
+		id: 'radio-group-cursor',
+		component: 'radio-group',
+		file: 'radio-group/radio-group-item.svelte',
+		stock: 'peer relative aspect-square shrink-0 border',
+		fixed: 'peer relative aspect-square shrink-0 cursor-pointer border'
+	}
+];
+
 export const KNOWN_COMPONENTS = [
 	...new Set([
 		...COMPONENTS,
 		...RADIUS_COMPONENTS,
 		...SURFACE_COMPONENTS,
 		...VARIANT_COMPONENTS,
-		...BINARY_COMPONENTS
+		...BINARY_COMPONENTS,
+		...CURSOR_COMPONENTS
 	])
 ];
 
@@ -1782,6 +1820,8 @@ export const TARGETS = {
 	variantComponents: VARIANT_COMPONENTS,
 	binarySites: BINARY_SITES,
 	binaryComponents: BINARY_COMPONENTS,
+	cursorSites: CURSOR_SITES,
+	cursorComponents: CURSOR_COMPONENTS,
 	buttonVariants: BUTTON_VARIANTS,
 	variantRows: VARIANT_ROWS,
 	badgeVariants: BADGE_VARIANTS,

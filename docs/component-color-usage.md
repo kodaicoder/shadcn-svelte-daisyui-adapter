@@ -204,21 +204,21 @@ Pressed and hover painted one surface, so a pressed toggle gave no hover feedbac
 looked pressed. `hover:text-foreground` did nothing because the text is already `foreground`.
 
 Decision taken on 2026-11-06: pressed takes the tone, a pressed hover takes the tone at 80 percent, and
-invalid gains a 2px ring. The unpressed hover started as `muted`, moved to the tone at 10 percent on
-2026-11-09, and the operator then asked for `muted` at 20 percent. Measured on the fixed copy:
+invalid gains a 2px ring. The unpressed hover went through `muted`, `muted` at 20 percent and the tone at
+10 percent before the operator settled on the tone at 20 percent, which reads in both schemes. Measured
+on the fixed copy:
 
 | state | resolved |
 | --- | --- |
-| unpressed, hover (light) | `oklab(0.945 -0.028453 -0.0123056 / 0.2)` |
-| unpressed, hover (dark) | `oklab(0.1 -0.00310889 -0.0418848 / 0.2)` |
+| unpressed, hover (light, success) | `oklab(0.79 -0.184039 0.0990491 / 0.2)` |
+| unpressed, hover (dark, success) | `oklab(0.76 -0.169466 0.0510906 / 0.2)` |
 | pressed, idle | `oklch(0.42 0.199 265.638)`, text `oklch(0.98 0.016 73.684)` |
 | pressed, hover | same primary at 80 percent alpha |
 | invalid, `default` variant | `2px` ring of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
 | pressed `outline` border | primary, so the border follows the fill |
 
-`muted` is `--color-base-200`, one step from the page background: `oklch(94.5% 0.031 203.388)` against
-`oklch(98.5% 0 264.542)` in light, and `oklch(10% 0.042 265.755)` against `oklch(18% 0.041 260.031)` in
-dark. At 20 percent alpha the hover is a small step in both schemes, which is the point of the trial.
+`muted` is `--color-base-200`, one step from the page background, so its washes were too quiet. The tone
+at 20 percent carries hue as well as lightness, which is what makes the hover visible on both pages.
 
 The change lives in `src/lib/components/toggle-fixed/toggle.svelte` and in `toggle-pressed`
 (`packages/daisyui-adapter/targets.mjs`), so `init.mjs fix toggle` reproduces it. Toggle is the one

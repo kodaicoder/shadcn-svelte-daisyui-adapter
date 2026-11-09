@@ -202,6 +202,17 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 
 	const disabled = scope.locator('[data-case="disabled"]');
 	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
+	const pointer = await focus.evaluate((node) => getComputedStyle(node).cursor);
+	record(`${label}: pointer cursor on hover`, pointer === 'pointer', pointer);
+	const disabledCursor = await disabled.evaluate((node) => ({
+		cursor: getComputedStyle(node).cursor,
+		events: getComputedStyle(node).pointerEvents
+	}));
+	record(
+		`${label}: disabled does not invite a click`,
+		disabledCursor.cursor === 'not-allowed' || disabledCursor.events === 'none',
+		`${disabledCursor.cursor} / ${disabledCursor.events}`
+	);
 };
 
 
@@ -628,18 +639,48 @@ const journeys = {
 			await hoverProbe.hover();
 			await page.waitForTimeout(200);
 			const hovered = await computed(hoverProbe, 'backgroundColor');
-			const muted = await computed(
-				scope.locator('[data-muted-swatch]'),
+			const strong = await computed(
+				scope.locator('[data-strong-swatch="success"]'),
 				'backgroundColor'
 			);
 			record(
-				`toggle ${scheme}: unpressed hover paints muted at 20 percent`,
-				idle !== hovered && hovered === muted,
-				`${idle} -> ${hovered} (swatch ${muted})`
+				`toggle ${scheme}: unpressed hover paints the tone at 20 percent`,
+				idle !== hovered && hovered === strong,
+				`${idle} -> ${hovered} (swatch ${strong})`
 			);
 			await page.mouse.move(0, 0);
 			await checkStates(page, record, scope, `toggle ${scheme}`, 'ring');
 		}
+	},
+	cursor: async (page, record) => {
+		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
+		record('http 200', response?.status() === 200, `got ${response?.status()}`);
+
+		const button = page.locator('[data-cursor="button"]');
+		const buttonCursor = await computed(button, 'cursor');
+		record('button points', buttonCursor === 'pointer', buttonCursor);
+
+		for (const [name, slot] of [
+			['checkbox', 'checkbox'],
+			['switch', 'switch'],
+			['radio-group', 'radio-group-item'],
+			['toggle', 'toggle']
+		]) {
+			const node = page.locator(`#${name} [data-slot="${slot}"]`).first();
+			const cursor = await computed(node, 'cursor');
+			record(`${name} points`, cursor === 'pointer', cursor);
+		}
+
+		const disabled = page.locator('[data-cursor="button-disabled"]');
+		const disabledCursor = await disabled.evaluate((node) => ({
+			cursor: getComputedStyle(node).cursor,
+			events: getComputedStyle(node).pointerEvents
+		}));
+		record(
+			'disabled button does not invite a click',
+			disabledCursor.events === 'none' || disabledCursor.cursor === 'not-allowed',
+			`${disabledCursor.cursor} / ${disabledCursor.events}`
+		);
 	}
 };
 
