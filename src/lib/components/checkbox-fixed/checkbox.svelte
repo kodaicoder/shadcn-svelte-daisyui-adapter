@@ -2,6 +2,7 @@
 	import { Checkbox as CheckboxPrimitive } from "bits-ui";
 	import CheckIcon from '@lucide/svelte/icons/check';
 	import MinusIcon from '@lucide/svelte/icons/minus';
+	import type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
 	const TONES = {
@@ -22,7 +23,7 @@
 		variant = "default",
 		...restProps
 	}: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> & {
-		variant?: keyof typeof TONES;
+		variant?: BinaryVariant;
 	} = $props();
 </script>
 

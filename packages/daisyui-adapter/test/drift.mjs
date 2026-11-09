@@ -71,8 +71,8 @@ check(
 	unnestedInserts.map((site) => site.id).join(', ')
 );
 check(
-	'the manifest holds twenty-two binary sites',
-	BINARY_SITES.length === 22,
+	'the manifest holds twenty-four binary sites',
+	BINARY_SITES.length === 24,
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);

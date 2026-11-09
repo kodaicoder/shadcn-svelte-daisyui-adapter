@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Switch as SwitchPrimitive } from "bits-ui";
+	import type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
 	const TONES = {
@@ -21,7 +22,7 @@
 		...restProps
 	}: WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
 		size?: "sm" | "default";
-		variant?: keyof typeof TONES;
+		variant?: BinaryVariant;
 	} = $props();
 </script>
 

@@ -1,11 +1,12 @@
 // The fixer reads the project's own files, so the installed shadcn-svelte version is parsed at this
 // boundary before any byte is written.
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { isAbsolute, join, resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
 
 import {
 	ALL_SITES,
 	COMPONENTS,
+	CREATES,
 	KNOWN_COMPONENTS,
 	PAIRS,
 	SITES,
@@ -219,9 +220,29 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 		if (group.every((site) => stateOf(content, site) === 'fixed')) fullyFixed += 1;
 	}
 
+	const creates = [];
+	for (const entry of CREATES) {
+		const needed = entry.components.some((component) =>
+			ALL_SITES.some(
+				(site) =>
+					site.component === component &&
+					existsSync(join(directory, ...site.file.split('/')))
+			)
+		);
+		if (!needed) continue;
+		const path = join(directory, ...entry.file.split('/'));
+		const present = existsSync(path);
+		const written = apply && !present;
+		if (written) {
+			mkdirSync(dirname(path), { recursive: true });
+			writeFileSync(path, entry.content);
+		}
+		creates.push({ file: entry.file, present, written });
+	}
+
 	const counts = { stock: 0, fixed: 0, customized: 0, missing: 0 };
 	for (const site of sites) counts[site.state] += 1;
-	return { sites, counts, fullyFixed };
+	return { sites, counts, fullyFixed, creates };
 };
 
 export function scan(options = {}) {

@@ -313,6 +313,11 @@ const printFix = (report, { dryRun = false, suffix = '', names = [] } = {}) => {
 		`[daisyui-adapter] fix: ${stock} stock, ${fixed} fixed, ${customized} customized, ${missing} missing` +
 			suffix
 	);
+	for (const entry of report.creates ?? []) {
+		console.log(
+			`[daisyui-adapter] ${entry.written ? 'created' : entry.present ? 'present' : 'missing'} ${entry.file}`
+		);
+	}
 };
 
 // The marker records the count of files whose every site is fixed, not the files this run changed, so
@@ -517,14 +522,23 @@ const fixCommand = (args) => {
 		return;
 	}
 
-	if (check && report.counts.stock > 0) {
-		throw new Error(`[daisyui-adapter] --check: ${report.counts.stock} stock site(s) remain`);
+	const missingCreates = (report.creates ?? [])
+		.filter((entry) => !entry.present)
+		.map((entry) => entry.file);
+	const missingSuffix = missingCreates.length ? `; missing ${missingCreates.join(', ')}` : '';
+	if (check && (report.counts.stock > 0 || missingCreates.length > 0)) {
+		throw new Error(
+			`[daisyui-adapter] --check: ${report.counts.stock} stock site(s) remain${missingSuffix}`
+		);
 	}
 	if (strict) {
 		if (report.counts.customized > 0) {
 			throw new Error(
 				`[daisyui-adapter] --strict: ${report.counts.customized} customized site(s) found`
 			);
+		}
+		if (missingCreates.length > 0) {
+			throw new Error(`[daisyui-adapter] --strict: missing ${missingCreates.join(', ')}`);
 		}
 		for (const name of names) {
 			const rows = report.sites.filter((site) => site.component === name);

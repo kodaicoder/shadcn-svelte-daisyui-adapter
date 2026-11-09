@@ -116,8 +116,8 @@ const mapOf = (text) => {
 check('TARGETS.binarySites is BINARY_SITES', TARGETS.binarySites === BINARY_SITES);
 check('TARGETS.binaryComponents is BINARY_COMPONENTS', TARGETS.binaryComponents === BINARY_COMPONENTS);
 check(
-	'the manifest holds twenty-two binary sites',
-	BINARY_SITES.length === 22,
+	'the manifest holds twenty-four binary sites',
+	BINARY_SITES.length === 24,
 	`${BINARY_SITES.length}`
 );
 check(
@@ -125,7 +125,7 @@ check(
 	BINARY_COMPONENTS.every(
 		(component) =>
 			BINARY_SITES.filter((site) => site.component === component).length ===
-			({ checkbox: 5, switch: 5, 'radio-group': 8, toggle: 4 })[component]
+			({ checkbox: 6, switch: 6, 'radio-group': 8, toggle: 4 })[component]
 	),
 	BINARY_COMPONENTS.map(
 		(component) => `${component}:${BINARY_SITES.filter((site) => site.component === component).length}`

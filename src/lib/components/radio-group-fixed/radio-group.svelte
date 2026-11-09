@@ -1,16 +1,8 @@
 <script lang="ts">
 	import { RadioGroup as RadioGroupPrimitive } from "bits-ui";
 	import { setContext } from "svelte";
+	import type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
 	import { cn } from "#lib/utils.js";
-
-	type BinaryVariant =
-		| "default"
-		| "secondary"
-		| "success"
-		| "warning"
-		| "info"
-		| "destructive"
-		| "blackwhite";
 
 	let {
 		ref = $bindable(null),

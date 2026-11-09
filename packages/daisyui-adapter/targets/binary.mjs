@@ -87,7 +87,7 @@ const checkboxPropsFixed = `${toneMap('checkbox')}
 \t\tvariant = "default",
 \t\t...restProps
 \t}: WithoutChildrenOrChild<CheckboxPrimitive.RootProps> & {
-\t\tvariant?: keyof typeof TONES;
+\t\tvariant?: BinaryVariant;
 \t} = $props();`;
 
 const switchPropsStock = `\tlet {
@@ -111,7 +111,7 @@ const switchPropsFixed = `${toneMap('switch')}
 \t\t...restProps
 \t}: WithoutChildrenOrChild<SwitchPrimitive.RootProps> & {
 \t\tsize?: "sm" | "default";
-\t\tvariant?: keyof typeof TONES;
+\t\tvariant?: BinaryVariant;
 \t} = $props();`;
 
 const radioPropsStock = `\tlet {
@@ -128,10 +128,10 @@ const radioPropsFixed = `${toneMap('radio-group')}
 \t\tvariant,
 \t\t...restProps
 \t}: WithoutChildrenOrChild<RadioGroupPrimitive.ItemProps> & {
-\t\tvariant?: keyof typeof TONES;
+\t\tvariant?: BinaryVariant;
 \t} = $props();
 
-\tconst groupVariant = getContext<{ variant: keyof typeof TONES } | undefined>(
+\tconst groupVariant = getContext<{ variant: BinaryVariant } | undefined>(
 \t\t"radio-group-variant"
 \t);
 \tconst resolved = $derived(variant ?? groupVariant?.variant ?? "default");`;
@@ -139,16 +139,8 @@ const radioPropsFixed = `${toneMap('radio-group')}
 const radioRootImportStock = `\timport { cn } from "#lib/utils.js";`;
 
 const radioRootImportFixed = `\timport { setContext } from "svelte";
-\timport { cn } from "#lib/utils.js";
-
-\ttype BinaryVariant =
-\t\t| "default"
-\t\t| "secondary"
-\t\t| "success"
-\t\t| "warning"
-\t\t| "info"
-\t\t| "destructive"
-\t\t| "blackwhite";`;
+\timport type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
+\timport { cn } from "#lib/utils.js";`;
 
 const radioRootPropsStock = `\tlet {
 \t\tref = $bindable(null),
@@ -176,6 +168,12 @@ const radioRootPropsFixed = `\tlet {
 const radioItemImportStock = `\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
 
 const radioItemImportFixed = `\timport { getContext } from "svelte";
+\timport type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
+\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
+
+const binaryItemImportStock = `\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
+
+const binaryItemImportFixed = `\timport type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
 \timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
 
 const radioClassInsertFixed = `\t\tTONES[resolved],
@@ -244,6 +242,14 @@ const toggleHoverStock = `hover:bg-muted focus-visible:ring-[3px]`;
 const toggleHoverFixed = `enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px]`;
 
 export const BINARY_SITES = [
+	{
+		id: 'checkbox-imports',
+		component: 'checkbox',
+		file: 'checkbox/checkbox.svelte',
+		position: 'insert',
+		stock: binaryItemImportStock,
+		fixed: binaryItemImportFixed
+	},
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
 	focusSite('checkbox', 'checkbox/checkbox.svelte', 'dark:aria-invalid:border-destructive/50', 30),
 	{
@@ -270,6 +276,14 @@ export const BINARY_SITES = [
 		position: 'insert',
 		stock: classInsertStock,
 		fixed: classInsertFixed
+	},
+	{
+		id: 'switch-imports',
+		component: 'switch',
+		file: 'switch/switch.svelte',
+		position: 'insert',
+		stock: binaryItemImportStock,
+		fixed: binaryItemImportFixed
 	},
 	binaryProps('switch', switchPropsStock, switchPropsFixed),
 	focusSite('switch', 'switch/switch.svelte', 'data-unchecked:bg-input', 30),

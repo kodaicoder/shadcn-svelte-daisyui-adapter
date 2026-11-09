@@ -20,6 +20,7 @@ import {
 } from './targets/variants.mjs';
 import { BINARY_COMPONENTS, BINARY_SITES } from './targets/binary.mjs';
 import { CURSOR_COMPONENTS, CURSOR_SITES } from './targets/cursor.mjs';
+import { CREATES } from './targets/site.mjs';
 
 export {
 	ALERT_VARIANTS,
@@ -29,6 +30,7 @@ export {
 	BUBBLE_VARIANTS,
 	BUTTON_VARIANTS,
 	COMPONENTS,
+	CREATES,
 	CURSOR_COMPONENTS,
 	CURSOR_SITES,
 	PAIRS,
