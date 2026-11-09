@@ -337,15 +337,18 @@ check(
 );
 check(
 	'toggle scopes the unpressed hover to the tone at 20 percent and keeps the pressed paint in the base',
-	toggleRows.outline.includes('aria-[pressed=false]:hover:bg-primary/20') &&
+	toggleRows.outline.includes('enabled:aria-[pressed=false]:hover:bg-primary/20') &&
 		TONES.every((tone) =>
 			toggleRows[tone].includes(
-				`aria-[pressed=false]:hover:bg-${tone === 'default' ? 'primary' : tone}/20`
+				`enabled:aria-[pressed=false]:hover:bg-${tone === 'default' ? 'primary' : tone}/20`
 			)
 		) &&
 		!BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('hover:bg-muted ') &&
 		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('aria-pressed:bg-primary') &&
-		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('cursor-pointer')
+		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes('cursor-pointer') &&
+		BINARY_SITES.find((site) => site.id === 'toggle-pressed').fixed.includes(
+			'disabled:cursor-not-allowed'
+		)
 );
 check(
 	'every toggle key carries its focus ring',

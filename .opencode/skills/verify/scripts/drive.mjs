@@ -672,6 +672,16 @@ const journeys = {
 		const button = page.locator('[data-cursor="button"]');
 		const buttonCursor = await computed(button, 'cursor');
 		record('button points', buttonCursor === 'pointer', buttonCursor);
+		const enabledPaint = await computed(button, 'backgroundColor');
+		await button.hover();
+		await page.waitForTimeout(150);
+		const enabledHover = await computed(button, 'backgroundColor');
+		record(
+			'enabled button still paints hover',
+			enabledPaint !== enabledHover,
+			`${enabledPaint} -> ${enabledHover}`
+		);
+		await page.mouse.move(0, 0);
 
 		for (const [name, slot] of [
 			['checkbox', 'checkbox'],
@@ -691,9 +701,23 @@ const journeys = {
 		}));
 		record(
 			'disabled button does not invite a click',
-			disabledCursor.events === 'none' || disabledCursor.cursor === 'not-allowed',
+			disabledCursor.cursor === 'not-allowed',
 			`${disabledCursor.cursor} / ${disabledCursor.events}`
 		);
+
+		const disabledLink = page.locator('[data-cursor="button-link-disabled"]');
+		const linkCursor = await computed(disabledLink, 'cursor');
+		record('disabled link button does not invite a click', linkCursor === 'not-allowed', linkCursor);
+
+		const idlePaint = await computed(disabled, 'backgroundColor');
+		await disabled.hover({ force: true });
+		await page.waitForTimeout(150);
+		const hoverPaint = await computed(disabled, 'backgroundColor');
+		record('disabled button does not paint hover', idlePaint === hoverPaint, `${idlePaint} -> ${hoverPaint}`);
+
+		const disabledToggle = page.locator('#toggle [data-case="disabled"]').first();
+		const toggleCursor = await computed(disabledToggle, 'cursor');
+		record('disabled toggle does not invite a click', toggleCursor === 'not-allowed', toggleCursor);
 	}
 };
 

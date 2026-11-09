@@ -352,3 +352,23 @@ item beside each checked one, so the unchecked border and surface are visible pe
 
 A tone thumb or dot on a 10 percent tone track separates more in dark than in light, because the wash
 over a dark page is near-black. The border carries the component boundary, so the fill can stay quiet.
+
+## Disabled cursor
+
+Everything that takes a click now shows `cursor: not-allowed` when disabled: button, checkbox, switch,
+radio-group and toggle. The three checked controls already carried it; the button and toggle did not,
+because their stock base used `disabled:pointer-events-none`, and a control that ignores pointer events
+cannot show its own cursor.
+
+Removing `pointer-events-none` exposes another stock behaviour: Chrome still matches `:hover` on a
+disabled button and on an `aria-disabled` anchor. So the hover rules are guarded. The button's fixed
+variant rows use `not-aria-disabled:hover:`, and its native branch now carries `aria-disabled={disabled}`
+so one guard covers the button and the link button. The toggle uses `enabled:` because it is always a
+native button. The base swaps `disabled:pointer-events-none disabled:opacity-50` for
+`aria-disabled:cursor-not-allowed aria-disabled:opacity-50` on the button and
+`disabled:cursor-not-allowed disabled:opacity-50` on the toggle.
+
+Measured: a disabled button, a disabled link button and a disabled toggle all compute
+`cursor: not-allowed`; hovering a disabled button leaves its background at
+`oklch(0.42 0.199 265.638)`, while the enabled button still paints `oklab(0.42 -0.0151355 -0.198424 / 0.8)`
+on hover.

@@ -121,6 +121,7 @@
 		<div class="flex flex-wrap items-center gap-4">
 			<Button data-cursor="button">Button</Button>
 			<Button data-cursor="button-disabled" disabled>Disabled button</Button>
+			<Button data-cursor="button-link-disabled" href="/nowhere" disabled>Disabled link</Button>
 		</div>
 	</section>
 

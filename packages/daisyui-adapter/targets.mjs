@@ -1472,13 +1472,18 @@ const renderVariantBlock = (component, rows, fixed = false) => {
 	const pinned = VARIANT_PINNED[component];
 	const line = (key) =>
 		`\t\t\t\t${keyToken(key)}: "${(fixed && VARIANT_FIXED[component]?.[key]) || pinned[key]}",`;
-	return [
+	const block = [
 		...(open ? ['variant: {'] : []),
 		...lead.map(line),
 		...rows.map((row) => `\t\t\t\t${keyToken(row.key)}: "${row.class}",`),
 		...trail.map(line),
 		'\t\t\t}'
 	].join('\n');
+	// A disabled button still matches :hover in Chrome, so every fixed hover is guarded. The native
+	// button gets `aria-disabled` from the button-disabled-attr site, so one guard serves both branches.
+	return fixed && component === 'button'
+		? block.replace(/\bhover:/g, 'not-aria-disabled:hover:')
+		: block;
 };
 
 const stockRowsOf = (component) =>
@@ -1660,19 +1665,19 @@ const switchThumbStock = `bg-background dark:data-unchecked:bg-foreground dark:d
 const switchThumbFixed = `bg-background dark:data-unchecked:bg-foreground rounded-full`;
 
 const toggleRow = (tone) =>
-	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
+	`bg-transparent aria-pressed:bg-${tone} aria-pressed:text-${tone}-foreground ${toneBorderClasses(tone, 'aria-pressed:')} enabled:aria-pressed:hover:bg-${tone}/80 enabled:aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
 const toggleOutlineRow = (tone) =>
 	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} ${
 		tone === 'secondary'
 			? 'aria-pressed:text-secondary-foreground dark:aria-pressed:text-secondary-foreground'
 			: `aria-pressed:text-${tone}-foreground`
-	} ${toneBorderClasses(tone, 'aria-pressed:')} aria-pressed:hover:bg-${tone}/80 aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
+	} ${toneBorderClasses(tone, 'aria-pressed:')} enabled:aria-pressed:hover:bg-${tone}/80 enabled:aria-[pressed=false]:hover:bg-${tone}/20 focus-visible:ring-${tone}/30`;
 
 const toggleVariantStock = `\t\t\t\tdefault: "bg-transparent",`;
 
 const toggleVariantFixed = [
-	`\t\t\t\tdefault: "bg-transparent aria-[pressed=false]:hover:bg-primary/20 focus-visible:ring-primary/30",`,
+	`\t\t\t\tdefault: "bg-transparent enabled:aria-[pressed=false]:hover:bg-primary/20 focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(tone)}: "${toggleRow(tone)}",`
 	)
@@ -1681,7 +1686,7 @@ const toggleVariantFixed = [
 const toggleOutlineStock = `\t\t\t\toutline: "border-input hover:bg-muted border bg-transparent",`;
 
 const toggleOutlineFixed = [
-	`\t\t\t\toutline: "border border-input aria-[pressed=false]:hover:bg-primary/20 bg-transparent focus-visible:ring-primary/30",`,
+	`\t\t\t\toutline: "border border-input enabled:aria-[pressed=false]:hover:bg-primary/20 bg-transparent focus-visible:ring-primary/30",`,
 	...BINARY_TONES.filter((tone) => tone !== 'default').map(
 		(tone) => `\t\t\t\t${keyToken(`outline-${tone}`)}: "${toggleOutlineRow(tone)}",`
 	)
@@ -1689,7 +1694,7 @@ const toggleOutlineFixed = [
 
 const toggleBaseStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex items-center justify-center whitespace-nowrap outline-none hover:bg-muted focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
-const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex cursor-pointer items-center justify-center whitespace-nowrap outline-none aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
+const toggleBaseFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex cursor-pointer items-center justify-center whitespace-nowrap outline-none enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0`;
 
 export const BINARY_SITES = [
 	binaryProps('checkbox', checkboxPropsStock, checkboxPropsFixed),
@@ -1797,6 +1802,20 @@ export const CURSOR_SITES = [
 		file: 'radio-group/radio-group-item.svelte',
 		stock: 'peer relative aspect-square shrink-0 border',
 		fixed: 'peer relative aspect-square shrink-0 cursor-pointer border'
+	},
+	{
+		id: 'button-disabled-attr',
+		component: 'button',
+		file: 'button/button.svelte',
+		stock: '\t\t{type}\n\t\t{disabled}',
+		fixed: '\t\t{type}\n\t\t{disabled}\n\t\taria-disabled={disabled}'
+	},
+	{
+		id: 'button-disabled',
+		component: 'button',
+		file: 'button/button.svelte',
+		stock: 'disabled:pointer-events-none disabled:opacity-50',
+		fixed: 'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
 	}
 ];
 
