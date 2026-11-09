@@ -2,6 +2,7 @@
 	import { Checkbox } from '#lib/components/checkbox-fixed/index.js';
 	import { Button } from '#lib/components/button-fixed/index.js';
 	import { Label } from '#lib/components/label-fixed/index.js';
+	import { FieldLabel } from '#lib/components/ui/field/index.js';
 	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
 	import { Switch } from '#lib/components/switch-fixed/index.js';
 	import { Toggle } from '#lib/components/toggle-fixed/index.js';
@@ -135,6 +136,61 @@
 				Wrapped label
 			</Label>
 		</div>
+	</section>
+
+	<section id="field-label" data-control="field-label" class="space-y-4">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Field.Label focus</h2>
+		{#each schemes as scheme}
+			<div
+				data-scheme={scheme}
+				class="space-y-4 rounded-lg border p-4 {scheme === 'dark'
+					? 'dark bg-background text-foreground'
+					: ''}"
+			>
+				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+				<div class="flex flex-wrap items-center gap-6">
+					{#each tones as tone}
+						<FieldLabel class="gap-1">
+							<Checkbox
+								variant={tone}
+								checked
+								data-field-control="checkbox"
+								data-field-tone={tone}
+							/>
+							<span class="text-xs">{tone}</span>
+						</FieldLabel>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-6">
+					{#each tones as tone}
+						<FieldLabel class="gap-1">
+							<Switch
+								variant={tone}
+								checked
+								data-field-control="switch"
+								data-field-tone={tone}
+							/>
+							<span class="text-xs">{tone}</span>
+						</FieldLabel>
+					{/each}
+				</div>
+				<div class="flex flex-wrap items-center gap-6">
+					{#each tones as tone}
+						<FieldLabel class="gap-1">
+							<RadioGroup value="on" aria-label="Field radio {tone}">
+								<RadioGroupItem
+									value="on"
+									variant={tone}
+									data-field-control="radio-group"
+									data-field-tone={tone}
+								/>
+							</RadioGroup>
+							<span class="text-xs">{tone}</span>
+						</FieldLabel>
+					{/each}
+				</div>
+			</div>
+		{/each}
 	</section>
 
 	<section id="checkbox" data-control="checkbox" class="space-y-4">

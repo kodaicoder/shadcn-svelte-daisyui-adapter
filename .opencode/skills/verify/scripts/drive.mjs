@@ -243,6 +243,46 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 		disabledCursor.cursor === 'not-allowed',
 		`${disabledCursor.cursor} / ${disabledCursor.events}`
 	);
+
+	const [component, scheme] = label.split(' ');
+	const fieldRows = page.locator(
+		`#field-label [data-scheme="${scheme}"] [data-field-control="${component}"]`
+	);
+	if ((await fieldRows.count()) > 0) {
+		const fieldRings = [];
+		const fieldBorderMismatch = [];
+		for (const tone of TONES) {
+			const control = page.locator(
+				`#field-label [data-scheme="${scheme}"] [data-field-control="${component}"][data-field-tone="${tone}"]`
+			);
+			await control.focus();
+			await page.waitForTimeout(120);
+			const state = await control.evaluate((node) => ({
+				border: getComputedStyle(node).borderTopColor,
+				ring:
+					getComputedStyle(node)
+						.boxShadow.split(/,(?![^(]*\))/)
+						.map((value) => value.trim())
+						.find((value) => /\s[1-9][\d.]*px$/.test(value)) ?? ''
+			}));
+			fieldRings.push(state.ring);
+			const expected = await computed(
+				scope.locator(`[data-border-swatch="${tone}"]`),
+				'borderTopColor'
+			);
+			if (state.border !== expected) fieldBorderMismatch.push(`${tone}:${state.border} vs ${expected}`);
+		}
+		record(
+			`${label}: Field.Label keeps the tone border`,
+			fieldBorderMismatch.length === 0,
+			fieldBorderMismatch.join(', ')
+		);
+		record(
+			`${label}: Field.Label keeps the tone ring`,
+			fieldRings.every(Boolean) && new Set(fieldRings).size === TONES.length,
+			fieldRings.map((value, index) => `${TONES[index]}=${value}`).join(', ')
+		);
+	}
 };
 
 
