@@ -448,9 +448,11 @@ check(
 const missing = join(WORK, 'missing');
 const missingUi = scaffold(missing);
 cli(missing);
+const beforeHeader = headerLines(readFileSync(cssPathOf(missing), 'utf8'));
 rmSync(join(missingUi, 'textarea', 'textarea.svelte'), { force: true });
 const missingRun = cliResult(missing, 'fix');
 const missingHeader = headerLines(readFileSync(cssPathOf(missing), 'utf8'));
+const headerCount = (line) => Number(/components (\d+) fixed/.exec(line ?? '')?.[1] ?? -1);
 check(
 	'a radius file deleted while its directory remains reports missing and is not recreated',
 	missingRun.code === 0 &&
@@ -458,12 +460,10 @@ check(
 		!existsSync(join(missingUi, 'textarea', 'textarea.svelte')),
 	`exit ${missingRun.code}`
 );
-// This fixture also installs calendar and range-calendar for the excluded-class checks, so its three
-// contrast files count too: 19 before the delete (13 radius, 3 contrast and 3 surface), 18 after.
 check(
-	'a missing radius file drops the count from nineteen to eighteen',
-	missingHeader[0]?.startsWith(headerFor(18)),
-	missingHeader[0]
+	'a missing radius file drops the count by one',
+	headerCount(missingHeader[0]) === headerCount(beforeHeader[0]) - 1,
+	`${beforeHeader[0]} -> ${missingHeader[0]}`
 );
 
 const partial = join(WORK, 'partial');

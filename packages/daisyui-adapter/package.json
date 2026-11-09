@@ -19,6 +19,7 @@
 		"cli",
 		"component-fix.mjs",
 		"targets.mjs",
+		"targets",
 		"CHANGELOG.md"
 	],
 	"keywords": [
