@@ -157,10 +157,10 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 	}
 
 	// A radius component the project never installed is not a gap, and reporting every form-control
-	// file as missing would inflate the missing count of every project that uses only some components.
-	// A named component always reports its rows, and a site whose directory exists but whose file is
-	// gone is a real missing file.
-	const reportMissing = (site) =>
+// file as missing would inflate the missing count of every project that uses only some components.
+// A named component always reports its rows, and a site whose directory exists but whose file is
+// gone is a real missing file.
+const reportMissing = (site) =>
 		names.length > 0 ||
 		SITES.includes(site) ||
 		existsSync(join(directory, ...site.file.split('/').slice(0, -1)));

@@ -1,5 +1,5 @@
 // Drives one feature of the app and keeps the evidence.
-//   node scripts/drive.mjs buttons [--headed]
+//   node scripts/drive.mjs checkbox [--headed]
 // Requires a running session: node scripts/session.mjs start
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';

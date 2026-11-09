@@ -1,18 +1,11 @@
 #!/usr/bin/env node
-// The adapter CLI. It reads components.json and the stylesheet, validates the theme, then writes the
-// header comment, the plugin line, the bindings for both blocks, the `@theme inline` aliases and the
-// five chart values. Re-running it is byte-identical. The override file and its import are the
-// project's to add; this CLI never creates, deletes or rewrites either one.
-//
-// It never writes a `--color-*` value into `:root` or `.dark` (ticket 14: that forms a cycle with
+// The CLI never writes a `--color-*` value into `:root` or `.dark` (ticket 14: that forms a cycle with
 // `@theme inline`, and the fallback is then silently ignored); the `@theme inline` aliases are the
 // only `--color-*` names it writes. It writes the chart ramp itself rather than leaving it to the
 // plugin, because `addBase` lands in `@layer base` and the project's unlayered `:root` wins
 // (ticket 13).
-//
-// Name, version and the bin come from package.json, so the header, the plugin specifier and the
-// self-install spec cannot drift from each other. The header is replaced, not prepended: a project
-// that ran an older CLI must end up with exactly one line naming its version.
+// The header is replaced, not prepended: a project that ran an older CLI must end up with exactly
+// one line naming its version.
 import { execSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -407,8 +400,8 @@ const init = ({ withFix = true } = {}) => {
 	}
 
 	// E1: absence warns at init and continues, because a later paste fixes it. E2 and E3 throw,
-	// because a malformed pair would render wrong colours silently.
-	const path = themePath();
+// because a malformed pair would render wrong colours silently.
+const path = themePath();
 	let themes = null;
 	if (!existsSync(path)) {
 		console.warn(
@@ -428,8 +421,8 @@ const init = ({ withFix = true } = {}) => {
 		? { light: solveScheme(themes.light), dark: solveScheme(themes.dark) }
 		: null;
 	// Measured before the write. A theme value the math cannot read is a warning, not a failure,
-	// because the mapping still writes and the project still renders.
-	const contrast = themes ? measureContrast(themes) : null;
+// because the mapping still writes and the project still renders.
+const contrast = themes ? measureContrast(themes) : null;
 
 	css = replaceBlock(
 		css,
@@ -451,16 +444,16 @@ const init = ({ withFix = true } = {}) => {
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
 
 	// The fixer runs before the stylesheet is written: a refused version must leave the
-	// project untouched, so the map waits in memory until the guard has passed. A map-only run
-	// writes no component file and records zero, so the header still says what the file holds.
-	const report = withFix ? fix({ components }) : null;
+// project untouched, so the map waits in memory until the guard has passed. A map-only run
+// writes no component file and records zero, so the header still says what the file holds.
+const report = withFix ? fix({ components }) : null;
 	css = `${headerFor(report ? report.fullyFixed : 0)}\n${css}`;
 
 	writeFileSync(cssPath, css);
 
 	// Read back what was written: a block the CLI matched but could not fill has to show a count
-	// below 45 rather than a number from the data it meant to write.
-	const written = readFileSync(cssPath, 'utf8');
+// below 45 rather than a number from the data it meant to write.
+const written = readFileSync(cssPath, 'utf8');
 	const count = (selector) =>
 		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-'))
 			.length;
@@ -474,8 +467,8 @@ const init = ({ withFix = true } = {}) => {
 	else console.log('[daisyui-adapter] map only: components untouched');
 
 	// The install is last, after the lines that describe what was written, so a failed install
-	// still tells the user the stylesheet is in place.
-	const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
+// still tells the user the stylesheet is in place.
+const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
 	console.log(`[daisyui-adapter] ${installLine(spec)}`);
 
 	if (chart) {
