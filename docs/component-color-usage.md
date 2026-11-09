@@ -372,3 +372,11 @@ Measured: a disabled button, a disabled link button and a disabled toggle all co
 `cursor: not-allowed`; hovering a disabled button leaves its background at
 `oklch(0.42 0.199 265.638)`, while the enabled button still paints `oklab(0.42 -0.0151355 -0.198424 / 0.8)`
 on hover.
+
+A label that belongs to a disabled control follows it. The Label already carried
+`peer-disabled:cursor-not-allowed` for the case where it follows the control. The fixed Label adds two more
+paths: `group-data-[disabled=true]:cursor-not-allowed` for a shared wrapper marked with `data-disabled="true"`,
+and `has-[:disabled]:cursor-not-allowed` for a label that wraps the control. The group path swapped
+`pointer-events-none` for the cursor, since an element that ignores pointer events cannot show its own.
+`has-[:disabled]:opacity-50` joins the existing dimming, so a wrapped label fades with its control.
+Measured: a sibling label, a group label and a wrapped label all compute `cursor: not-allowed`.

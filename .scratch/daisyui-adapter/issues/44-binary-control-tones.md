@@ -17,6 +17,7 @@ variants for the binary controls".
 - [ ] The switch and radio-group keep the tone off the track: a 10 percent tone wash on the track, the tone border, and the thumb or dot in the tone
 - [ ] An unpressed toggle hovers to its tone at 20 percent
 - [ ] Button, checkbox, switch, radio-group and toggle carry the pointer cursor; a disabled control shows `not-allowed` and paints no hover
+- [ ] A label that belongs to a disabled control shows `not-allowed` as a sibling, under a group wrapper, or wrapping the control
 - [ ] The tone table is a literal string map inside each fixed copy, so Tailwind emits every row
 - [ ] The redundant `dark:data-checked:bg-primary` twin is removed, so no `!` is used and a caller `class` still wins
 - [ ] The dark unchecked surface is scoped to `data-unchecked`, so it cannot win the fill over a tone in dark

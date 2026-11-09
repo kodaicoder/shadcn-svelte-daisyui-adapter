@@ -1768,7 +1768,7 @@ export const BINARY_SITES = [
 	}
 ];
 
-export const CURSOR_COMPONENTS = ['button', 'checkbox', 'switch', 'radio-group'];
+export const CURSOR_COMPONENTS = ['button', 'checkbox', 'switch', 'radio-group', 'label'];
 
 // The stock components leave the cursor at the platform default. Every interactive control points at
 // itself instead, through a small anchor per file. Toggle carries the class in `toggleBaseFixed`
@@ -1816,6 +1816,21 @@ export const CURSOR_SITES = [
 		file: 'button/button.svelte',
 		stock: 'disabled:pointer-events-none disabled:opacity-50',
 		fixed: 'aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
+	},
+	{
+		id: 'label-disabled-cursor',
+		component: 'label',
+		file: 'label/label.svelte',
+		stock: 'group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed',
+		fixed:
+			'group-data-[disabled=true]:cursor-not-allowed peer-disabled:cursor-not-allowed has-[:disabled]:cursor-not-allowed'
+	},
+	{
+		id: 'label-disabled-opacity',
+		component: 'label',
+		file: 'label/label.svelte',
+		stock: 'group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
+		fixed: 'group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50 has-[:disabled]:opacity-50'
 	}
 ];
 

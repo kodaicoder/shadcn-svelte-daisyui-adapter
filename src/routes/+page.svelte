@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Checkbox } from '#lib/components/checkbox-fixed/index.js';
 	import { Button } from '#lib/components/button-fixed/index.js';
+	import { Label } from '#lib/components/label-fixed/index.js';
 	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
 	import { Switch } from '#lib/components/switch-fixed/index.js';
 	import { Toggle } from '#lib/components/toggle-fixed/index.js';
@@ -122,6 +123,24 @@
 			<Button data-cursor="button">Button</Button>
 			<Button data-cursor="button-disabled" disabled>Disabled button</Button>
 			<Button data-cursor="button-link-disabled" href="/nowhere" disabled>Disabled link</Button>
+		</div>
+	</section>
+
+	<section id="disabled-label" data-control="disabled-label" class="space-y-3">
+		<h2 class="text-sm font-semibold tracking-widest uppercase">Disabled label</h2>
+		<div class="flex flex-wrap items-center gap-8">
+			<div class="flex items-center gap-2">
+				<Checkbox id="label-sibling" disabled />
+				<Label for="label-sibling" data-label-case="sibling">Sibling label</Label>
+			</div>
+			<div class="group flex items-center gap-2" data-disabled="true">
+				<Label for="label-group" data-label-case="group">Group label</Label>
+				<Checkbox id="label-group" disabled />
+			</div>
+			<Label data-label-case="wrapped">
+				<Checkbox disabled />
+				Wrapped label
+			</Label>
 		</div>
 	</section>
 

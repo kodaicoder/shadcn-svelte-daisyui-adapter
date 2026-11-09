@@ -718,6 +718,12 @@ const journeys = {
 		const disabledToggle = page.locator('#toggle [data-case="disabled"]').first();
 		const toggleCursor = await computed(disabledToggle, 'cursor');
 		record('disabled toggle does not invite a click', toggleCursor === 'not-allowed', toggleCursor);
+
+		for (const name of ['sibling', 'group', 'wrapped']) {
+			const label = page.locator(`[data-label-case="${name}"]`);
+			const cursor = await computed(label, 'cursor');
+			record(`disabled ${name} label does not invite a click`, cursor === 'not-allowed', cursor);
+		}
 	}
 };
 

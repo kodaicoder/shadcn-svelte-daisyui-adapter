@@ -167,6 +167,7 @@ The tones are `default`, `secondary`, `success`, `warning`, `info`, `destructive
 - The switch and radio-group keep the tone off the track. Their track is the tone at 10 percent, their border is the tone border, and their thumb or dot is the tone itself, so the sphere carries the state while the track stays quiet.
 - An unpressed toggle hovers to its tone at 20 percent.
 - Button, checkbox, switch, radio-group and toggle carry the pointer cursor; a disabled control shows `not-allowed` instead, with its hover guarded.
+- A label that belongs to a disabled control shows `not-allowed` whether it is a sibling, sits under a group wrapper marked `data-disabled="true"`, or wraps the control.
 - The redundant `dark:data-checked:bg-primary` twin is removed rather than overridden. That keeps the tone row winning without `!`, so a caller's `class` still wins.
 - The dark unchecked surface `dark:bg-input/30` is scoped to `data-unchecked`. Left as is, it wins the fill over a tone in dark, which the prototype measured before the change.
 - Checkbox, switch and radio-group get two replacement sites each: the props destructure plus the tone map, and the class expression. Toggle gets three: its variant block, the pressed paint, and the class that reads the variant. All anchors live in `targets.mjs`.
