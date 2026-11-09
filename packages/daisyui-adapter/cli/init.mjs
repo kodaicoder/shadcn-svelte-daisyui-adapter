@@ -306,11 +306,6 @@ const printFix = (report, { dryRun = false, suffix = '', names = [] } = {}) => {
 		`[daisyui-adapter] fix: ${stock} stock, ${fixed} fixed, ${customized} customized, ${missing} missing` +
 			suffix
 	);
-	for (const entry of report.creates ?? []) {
-		console.log(
-			`[daisyui-adapter] ${entry.written ? 'created' : entry.present ? 'present' : 'missing'} ${entry.file}`
-		);
-	}
 };
 
 // The marker records the count of files whose every site is fixed, not the files this run changed, so
@@ -335,9 +330,7 @@ const warningSuffix = (warning) => {
 const printContrast = (matrix) => {
 	for (const scheme of ['light', 'dark']) {
 		const rows = matrix[scheme];
-		console.log(
-			`[daisyui-adapter] contrast ${scheme} (text ${TEXT_THRESHOLD.toFixed(2)})`
-		);
+		console.log(`[daisyui-adapter] contrast ${scheme} (text ${TEXT_THRESHOLD.toFixed(2)})`);
 		console.log(
 			`[daisyui-adapter]   pairs: ${rows.pairs
 				.map((row) => `${row.name} ${row.ratio.toFixed(2)}`)
@@ -400,8 +393,8 @@ const init = ({ withFix = true } = {}) => {
 	}
 
 	// E1: absence warns at init and continues, because a later paste fixes it. E2 and E3 throw,
-// because a malformed pair would render wrong colours silently.
-const path = themePath();
+	// because a malformed pair would render wrong colours silently.
+	const path = themePath();
 	let themes = null;
 	if (!existsSync(path)) {
 		console.warn(
@@ -421,8 +414,8 @@ const path = themePath();
 		? { light: solveScheme(themes.light), dark: solveScheme(themes.dark) }
 		: null;
 	// Measured before the write. A theme value the math cannot read is a warning, not a failure,
-// because the mapping still writes and the project still renders.
-const contrast = themes ? measureContrast(themes) : null;
+	// because the mapping still writes and the project still renders.
+	const contrast = themes ? measureContrast(themes) : null;
 
 	css = replaceBlock(
 		css,
@@ -444,16 +437,16 @@ const contrast = themes ? measureContrast(themes) : null;
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
 
 	// The fixer runs before the stylesheet is written: a refused version must leave the
-// project untouched, so the map waits in memory until the guard has passed. A map-only run
-// writes no component file and records zero, so the header still says what the file holds.
-const report = withFix ? fix({ components }) : null;
+	// project untouched, so the map waits in memory until the guard has passed. A map-only run
+	// writes no component file and records zero, so the header still says what the file holds.
+	const report = withFix ? fix({ components }) : null;
 	css = `${headerFor(report ? report.fullyFixed : 0)}\n${css}`;
 
 	writeFileSync(cssPath, css);
 
 	// Read back what was written: a block the CLI matched but could not fill has to show a count
-// below 45 rather than a number from the data it meant to write.
-const written = readFileSync(cssPath, 'utf8');
+	// below 45 rather than a number from the data it meant to write.
+	const written = readFileSync(cssPath, 'utf8');
 	const count = (selector) =>
 		readBlock(written, selector, where).filter((d) => !d.prop.startsWith('--daisy-derived-'))
 			.length;
@@ -467,8 +460,8 @@ const written = readFileSync(cssPath, 'utf8');
 	else console.log('[daisyui-adapter] map only: components untouched');
 
 	// The install is last, after the lines that describe what was written, so a failed install
-// still tells the user the stylesheet is in place.
-const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
+	// still tells the user the stylesheet is in place.
+	const spec = process.env.DAISYUI_ADAPTER_INSTALL_SPEC ?? `${PKG}@${VERSION}`;
 	console.log(`[daisyui-adapter] ${installLine(spec)}`);
 
 	if (chart) {
@@ -515,23 +508,14 @@ const fixCommand = (args) => {
 		return;
 	}
 
-	const missingCreates = (report.creates ?? [])
-		.filter((entry) => !entry.present)
-		.map((entry) => entry.file);
-	const missingSuffix = missingCreates.length ? `; missing ${missingCreates.join(', ')}` : '';
-	if (check && (report.counts.stock > 0 || missingCreates.length > 0)) {
-		throw new Error(
-			`[daisyui-adapter] --check: ${report.counts.stock} stock site(s) remain${missingSuffix}`
-		);
+	if (check && report.counts.stock > 0) {
+		throw new Error(`[daisyui-adapter] --check: ${report.counts.stock} stock site(s) remain`);
 	}
 	if (strict) {
 		if (report.counts.customized > 0) {
 			throw new Error(
 				`[daisyui-adapter] --strict: ${report.counts.customized} customized site(s) found`
 			);
-		}
-		if (missingCreates.length > 0) {
-			throw new Error(`[daisyui-adapter] --strict: missing ${missingCreates.join(', ')}`);
 		}
 		for (const name of names) {
 			const rows = report.sites.filter((site) => site.component === name);

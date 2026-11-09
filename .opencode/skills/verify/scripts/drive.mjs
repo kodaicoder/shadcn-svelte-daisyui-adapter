@@ -38,7 +38,10 @@ const checkTones = async (record, scope, label, kind = 'filled') => {
 			const part = node.querySelector(
 				'[data-slot="switch-thumb"], [data-slot="radio-group-indicator"] > svg'
 			);
-			return { tone: node.dataset.tone, paint: part ? getComputedStyle(part).backgroundColor : null };
+			return {
+				tone: node.dataset.tone,
+				paint: part ? getComputedStyle(part).backgroundColor : null
+			};
 		})
 	);
 	record(`${label}: seven tones`, rows.length === TONES.length, `${rows.length} of 7`);
@@ -49,7 +52,10 @@ const checkTones = async (record, scope, label, kind = 'filled') => {
 	);
 
 	for (const row of rows) {
-		const fill = await computed(scope.locator(`[data-fill-swatch="${row.tone}"]`), 'backgroundColor');
+		const fill = await computed(
+			scope.locator(`[data-fill-swatch="${row.tone}"]`),
+			'backgroundColor'
+		);
 		const border = await computed(
 			scope.locator(`[data-border-swatch="${row.tone}"]`),
 			'borderTopColor'
@@ -78,10 +84,7 @@ const checkTones = async (record, scope, label, kind = 'filled') => {
 			continue;
 		}
 		if (kind === 'pressed') {
-			const text = await computed(
-				scope.locator(`[data-foreground-swatch="${row.tone}"]`),
-				'color'
-			);
+			const text = await computed(scope.locator(`[data-foreground-swatch="${row.tone}"]`), 'color');
 			record(
 				`${label}: ${row.tone} paints the tone and its foreground`,
 				row.fill === fill && row.text === text,
@@ -89,10 +92,7 @@ const checkTones = async (record, scope, label, kind = 'filled') => {
 			);
 			continue;
 		}
-		const text = await computed(
-			scope.locator(`[data-foreground-swatch="${row.tone}"]`),
-			'color'
-		);
+		const text = await computed(scope.locator(`[data-foreground-swatch="${row.tone}"]`), 'color');
 		record(
 			`${label}: ${row.tone} paints the tone pair`,
 			row.fill === fill && row.border === border && row.text === text,
@@ -152,7 +152,7 @@ const checkOutlinePairs = async (record, scope, label) => {
 	);
 };
 
-const checkStates = async (page, record, scope, label, invalidKind) => {
+const checkStates = async (page, record, scope, component, scheme, label, invalidKind) => {
 	await page.keyboard.press('Tab');
 	const focus = scope.locator('[data-case="focus"]');
 	await focus.focus();
@@ -200,7 +200,11 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 		new Set(toneRings).size === TONES.length && toneRings.every(Boolean),
 		toneRings.map((value, index) => `${TONES[index]}=${value}`).join(', ')
 	);
-	record(`${label}: focus keeps the tone border`, borderMismatch.length === 0, borderMismatch.join(', '));
+	record(
+		`${label}: focus keeps the tone border`,
+		borderMismatch.length === 0,
+		borderMismatch.join(', ')
+	);
 
 	const invalid = scope.locator('[data-case="invalid"]');
 	if (invalidKind === 'ring') {
@@ -244,7 +248,6 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 		`${disabledCursor.cursor} / ${disabledCursor.events}`
 	);
 
-	const [component, scheme] = label.split(' ');
 	const fieldRows = page.locator(
 		`#field-label [data-scheme="${scheme}"] [data-field-control="${component}"]`
 	);
@@ -270,7 +273,8 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 				scope.locator(`[data-border-swatch="${tone}"]`),
 				'borderTopColor'
 			);
-			if (state.border !== expected) fieldBorderMismatch.push(`${tone}:${state.border} vs ${expected}`);
+			if (state.border !== expected)
+				fieldBorderMismatch.push(`${tone}:${state.border} vs ${expected}`);
 		}
 		record(
 			`${label}: Field.Label keeps the tone border`,
@@ -285,20 +289,22 @@ const checkStates = async (page, record, scope, label, invalidKind) => {
 	}
 };
 
-
 const journeys = {
 	checkbox: async (page, record) => {
 		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
 		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
 		const section = page.locator('#checkbox');
-		await section.locator('[data-slot="checkbox"]').first().waitFor({ state: 'visible', timeout: 10_000 });
+		await section
+			.locator('[data-slot="checkbox"]')
+			.first()
+			.waitFor({ state: 'visible', timeout: 10_000 });
 		record('checkbox section', (await section.count()) === 1, 'one section');
 
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
 			await checkTones(record, scope, `checkbox ${scheme}`);
-			await checkStates(page, record, scope, `checkbox ${scheme}`, 'border');
+			await checkStates(page, record, scope, 'checkbox', scheme, `checkbox ${scheme}`, 'border');
 		}
 	},
 	switch: async (page, record) => {
@@ -306,13 +312,16 @@ const journeys = {
 		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
 		const section = page.locator('#switch');
-		await section.locator('[data-slot="switch"]').first().waitFor({ state: 'visible', timeout: 10_000 });
+		await section
+			.locator('[data-slot="switch"]')
+			.first()
+			.waitFor({ state: 'visible', timeout: 10_000 });
 		record('switch section', (await section.count()) === 1, 'one section');
 
 		for (const scheme of ['light', 'dark']) {
 			const scope = section.locator(`[data-scheme="${scheme}"]`);
 			await checkTones(record, scope, `switch ${scheme}`, 'wash');
-			await checkStates(page, record, scope, `switch ${scheme}`, 'border');
+			await checkStates(page, record, scope, 'switch', scheme, `switch ${scheme}`, 'border');
 		}
 	},
 	'radio-group': async (page, record) => {
@@ -359,9 +368,11 @@ const journeys = {
 				unchecked.length === TONES.length && unchecked.every((row) => row.checked === 'false'),
 				unchecked.map((row) => `${row.tone}=${row.checked}`).join(', ')
 			);
-			const texts = await scope.locator('[data-tone]').evaluateAll((nodes) =>
-				nodes.map((node) => ({ tone: node.dataset.tone, color: getComputedStyle(node).color }))
-			);
+			const texts = await scope
+				.locator('[data-tone]')
+				.evaluateAll((nodes) =>
+					nodes.map((node) => ({ tone: node.dataset.tone, color: getComputedStyle(node).color }))
+				);
 			const textMismatch = [];
 			for (const row of texts) {
 				const fill = await computed(
@@ -375,7 +386,15 @@ const journeys = {
 				textMismatch.length === 0,
 				textMismatch.join(', ')
 			);
-			await checkStates(page, record, scope, `radio-group ${scheme}`, 'border');
+			await checkStates(
+				page,
+				record,
+				scope,
+				'radio-group',
+				scheme,
+				`radio-group ${scheme}`,
+				'border'
+			);
 		}
 	},
 	toggle: async (page, record) => {
@@ -383,7 +402,10 @@ const journeys = {
 		record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
 		const section = page.locator('#toggle');
-		await section.locator('[data-slot="toggle"]').first().waitFor({ state: 'visible', timeout: 10_000 });
+		await section
+			.locator('[data-slot="toggle"]')
+			.first()
+			.waitFor({ state: 'visible', timeout: 10_000 });
 		record('toggle section', (await section.count()) === 1, 'one section');
 
 		for (const scheme of ['light', 'dark']) {
@@ -405,7 +427,7 @@ const journeys = {
 				`${idle} -> ${hovered} (swatch ${strong})`
 			);
 			await page.mouse.move(0, 0);
-			await checkStates(page, record, scope, `toggle ${scheme}`, 'ring');
+			await checkStates(page, record, scope, 'toggle', scheme, `toggle ${scheme}`, 'ring');
 		}
 	},
 	cursor: async (page, record) => {
@@ -450,13 +472,21 @@ const journeys = {
 
 		const disabledLink = page.locator('[data-cursor="button-link-disabled"]');
 		const linkCursor = await computed(disabledLink, 'cursor');
-		record('disabled link button does not invite a click', linkCursor === 'not-allowed', linkCursor);
+		record(
+			'disabled link button does not invite a click',
+			linkCursor === 'not-allowed',
+			linkCursor
+		);
 
 		const idlePaint = await computed(disabled, 'backgroundColor');
 		await disabled.hover({ force: true });
 		await page.waitForTimeout(150);
 		const hoverPaint = await computed(disabled, 'backgroundColor');
-		record('disabled button does not paint hover', idlePaint === hoverPaint, `${idlePaint} -> ${hoverPaint}`);
+		record(
+			'disabled button does not paint hover',
+			idlePaint === hoverPaint,
+			`${idlePaint} -> ${hoverPaint}`
+		);
 
 		const disabledToggle = page.locator('#toggle [data-case="disabled"]').first();
 		const toggleCursor = await computed(disabledToggle, 'cursor');

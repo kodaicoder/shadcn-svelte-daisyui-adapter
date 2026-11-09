@@ -54,9 +54,7 @@ const toneRow = (component, tone) => {
 const toneMap = (component) =>
 	[
 		'\tconst TONES = {',
-		...BINARY_TONES.map(
-			(tone) => `\t\t${keyToken(tone)}: "${toneRow(component, tone)}",`
-		),
+		...BINARY_TONES.map((tone) => `\t\t${keyToken(tone)}: "${toneRow(component, tone)}",`),
 		'\t};'
 	].join('\n');
 
@@ -132,14 +130,14 @@ const radioPropsFixed = `${toneMap('radio-group')}
 \t} = $props();
 
 \tconst groupVariant = getContext<{ variant: BinaryVariant } | undefined>(
-\t\t"radio-group-variant"
+\t\tRADIO_GROUP_VARIANT
 \t);
 \tconst resolved = $derived(variant ?? groupVariant?.variant ?? "default");`;
 
 const radioRootImportStock = `\timport { cn } from "#lib/utils.js";`;
 
 const radioRootImportFixed = `\timport { setContext } from "svelte";
-\timport type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
+\timport { RADIO_GROUP_VARIANT, type BinaryVariant } from "#lib/components/ui/binary-variant.js";
 \timport { cn } from "#lib/utils.js";`;
 
 const radioRootPropsStock = `\tlet {
@@ -159,7 +157,7 @@ const radioRootPropsFixed = `\tlet {
 \t\tvariant?: BinaryVariant;
 \t} = $props();
 
-\tsetContext("radio-group-variant", {
+\tsetContext(RADIO_GROUP_VARIANT, {
 \t\tget variant() {
 \t\t\treturn variant;
 \t\t}
@@ -168,7 +166,7 @@ const radioRootPropsFixed = `\tlet {
 const radioItemImportStock = `\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
 
 const radioItemImportFixed = `\timport { getContext } from "svelte";
-\timport type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
+\timport { RADIO_GROUP_VARIANT, type BinaryVariant } from "#lib/components/ui/binary-variant.js";
 \timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
 
 const binaryItemImportStock = `\timport { cn, type WithoutChildrenOrChild } from "#lib/utils.js";`;
@@ -337,7 +335,12 @@ export const BINARY_SITES = [
 		fixed: radioItemImportFixed
 	},
 	binaryProps('radio-group', radioPropsStock, radioPropsFixed),
-	focusSite('radio-group', 'radio-group/radio-group-item.svelte', 'aria-invalid:border-destructive', 50),
+	focusSite(
+		'radio-group',
+		'radio-group/radio-group-item.svelte',
+		'aria-invalid:border-destructive',
+		50
+	),
 	{
 		id: 'radio-group-field-label',
 		component: 'radio-group',

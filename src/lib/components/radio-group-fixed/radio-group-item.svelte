@@ -2,7 +2,7 @@
 	import { RadioGroup as RadioGroupPrimitive } from "bits-ui";
 	import CircleIcon from '@lucide/svelte/icons/circle';
 	import { getContext } from "svelte";
-	import type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
+	import { RADIO_GROUP_VARIANT, type BinaryVariant } from "#lib/components/ui/binary-variant.js";
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
 	const TONES = {
@@ -25,7 +25,7 @@
 	} = $props();
 
 	const groupVariant = getContext<{ variant: BinaryVariant } | undefined>(
-		"radio-group-variant"
+		RADIO_GROUP_VARIANT
 	);
 	const resolved = $derived(variant ?? groupVariant?.variant ?? "default");
 </script>

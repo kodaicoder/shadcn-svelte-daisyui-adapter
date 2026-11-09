@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
+	ALL_SITES,
 	BINARY_COMPONENTS,
 	BINARY_SITES,
 	COMPONENTS,
@@ -53,7 +54,6 @@ check(
 		.filter((id) => !siteIds.has(id))
 		.join(', ')
 );
-const ALL_SITES = [...SITES, ...RADIUS, ...SURFACES, ...VARIANTS, ...BINARY_SITES, ...CURSOR_SITES];
 const positioned = ALL_SITES.filter(
 	(site) => site.position !== 'replace' && site.position !== 'insert'
 );

@@ -170,15 +170,16 @@ The status borders are the text tones, so they inherit the hue shift the badge s
 
 ### Why the tone table is not a variant row
 
-Each variant entry is a static string pair that the fixer writes with
-`content.split(stock).join(fixed)` (`packages/daisyui-adapter/component-fix.mjs:177`), and
-`renderVariantBlock` builds a cva `variant: { ... }` block (`targets.mjs:1470`). Checkbox has no cva
-variant block, and a static replacement cannot choose a value at runtime. The chosen shape is a
-literal `TONES` map inserted into each fixed copy's script plus `TONES[variant]` passed to `cn`, so the
-key type comes from the map and Tailwind reads every row in application source. Toggle already has a
-cva table, so its tones are rows in that table. All of it is written from `BINARY_SITES` in
-`packages/daisyui-adapter/targets.mjs`, and the registry-49 harness proves the fixer reproduces each
-committed fixed copy byte for byte.
+Each variant entry is a static string pair that the fixer writes with `applySite` in
+`packages/daisyui-adapter/component-fix.mjs`: a `replace` site rewrites a stock span, and an `insert`
+site adds text before its anchor. `renderVariantBlock` builds a cva `variant: { ... }` block in
+`targets/variants.mjs`. Checkbox has no cva variant block, and a static replacement cannot choose a
+value at runtime. The chosen shape is a literal `TONES` map inserted into each fixed copy's script plus
+`TONES[resolved]` passed to `cn`, where `resolved` is typed by the shared `BinaryVariant` module the
+fixer writes at `ui/binary-variant.ts`. Tailwind reads every row in application source. Toggle already
+has a cva table, so its tones are rows in that table. All of it is written from `BINARY_SITES` in
+`packages/daisyui-adapter/targets/binary.mjs`, and the registry-49 harness proves the fixer reproduces
+each committed fixed copy byte for byte.
 
 ### Parked findings
 

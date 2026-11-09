@@ -220,13 +220,14 @@ mixed case. The tone matrix on the reviewer page sets the tone on the group and 
 - The item `variant` prop is optional with no default. `undefined` means inherit; a value overrides.
 - The `TONES` map stays in the item. The root does not render a control and has no reason to carry the
   palette, so the root holds the token only.
-- The context key is the string `"radio-group-variant"`. The fixed copies live in two files, and a
-  string key does not need a shared module. `registry-49` checks both copies carry the same key.
+- The context key is `RADIO_GROUP_VARIANT`, a symbol exported from `ui/binary-variant.ts`. Both fixed
+  copies import it, so one module owns the key, the type and the seven tone names.
 - The fixer gains a root file for `radio-group`: one site for the import and type, one for the props and
   the context call. `radio-group` now declares eight sites across two files. The fixed root joins the
   byte-for-byte comparison, and the stylesheet header counts seven fully fixed files.
-- `BinaryVariant` is local to each fixed copy for now. The shared type lands with ticket 50 item 9, and
-  the root and item imports move to it in one wave.
+- `BinaryVariant` and `RADIO_GROUP_VARIANT` live in `ui/binary-variant.ts`, written by the fixer. The
+  checkbox, switch and radio-group fixed copies import them, so the three local `variant` types and the
+  duplicated key string are gone.
 
 ### Acceptance
 

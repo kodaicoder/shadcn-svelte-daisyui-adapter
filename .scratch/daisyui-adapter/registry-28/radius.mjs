@@ -452,7 +452,6 @@ const beforeHeader = headerLines(readFileSync(cssPathOf(missing), 'utf8'));
 rmSync(join(missingUi, 'textarea', 'textarea.svelte'), { force: true });
 const missingRun = cliResult(missing, 'fix');
 const missingHeader = headerLines(readFileSync(cssPathOf(missing), 'utf8'));
-const headerCount = (line) => Number(/components (\d+) fixed/.exec(line ?? '')?.[1] ?? -1);
 check(
 	'a radius file deleted while its directory remains reports missing and is not recreated',
 	missingRun.code === 0 &&
@@ -461,8 +460,8 @@ check(
 	`exit ${missingRun.code}`
 );
 check(
-	'a missing radius file drops the count by one',
-	headerCount(missingHeader[0]) === headerCount(beforeHeader[0]) - 1,
+	'a missing radius file drops the count from twenty-one to twenty',
+	beforeHeader[0]?.startsWith(headerFor(21)) && missingHeader[0]?.startsWith(headerFor(20)),
 	`${beforeHeader[0]} -> ${missingHeader[0]}`
 );
 

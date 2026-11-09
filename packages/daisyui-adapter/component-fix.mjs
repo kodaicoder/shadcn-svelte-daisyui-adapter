@@ -102,7 +102,7 @@ const guard = ({ root, scope, directory }) => {
 const stateOf = (content, site) => {
 	if (site.position === 'insert') {
 		const at = content.indexOf(site.stock);
-		if (at < 0) return content.includes(site.fixed) ? 'fixed' : 'customized';
+		if (at < 0) return 'customized';
 		if (content.indexOf(site.stock, at + 1) >= 0) return 'customized';
 		const stockAt = site.fixed.indexOf(site.stock);
 		const before = stockAt < 0 ? '' : site.fixed.slice(0, stockAt);
@@ -157,10 +157,10 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 	}
 
 	// A radius component the project never installed is not a gap, and reporting every form-control
-// file as missing would inflate the missing count of every project that uses only some components.
-// A named component always reports its rows, and a site whose directory exists but whose file is
-// gone is a real missing file.
-const reportMissing = (site) =>
+	// file as missing would inflate the missing count of every project that uses only some components.
+	// A named component always reports its rows, and a site whose directory exists but whose file is
+	// gone is a real missing file.
+	const reportMissing = (site) =>
 		names.length > 0 ||
 		SITES.includes(site) ||
 		existsSync(join(directory, ...site.file.split('/').slice(0, -1)));
@@ -220,29 +220,28 @@ const reportMissing = (site) =>
 		if (group.every((site) => stateOf(content, site) === 'fixed')) fullyFixed += 1;
 	}
 
-	const creates = [];
 	for (const entry of CREATES) {
+		if (names.length > 0 && !names.some((name) => entry.components.includes(name))) continue;
 		const needed = entry.components.some((component) =>
 			ALL_SITES.some(
 				(site) =>
-					site.component === component &&
-					existsSync(join(directory, ...site.file.split('/')))
+					site.component === component && existsSync(join(directory, ...site.file.split('/')))
 			)
 		);
 		if (!needed) continue;
 		const path = join(directory, ...entry.file.split('/'));
-		const present = existsSync(path);
-		const written = apply && !present;
-		if (written) {
+		const current = existsSync(path)
+			? readFileSync(path, 'utf8').replace(/\r\n/g, '\n')
+			: null;
+		if (apply && current !== entry.content) {
 			mkdirSync(dirname(path), { recursive: true });
 			writeFileSync(path, entry.content);
 		}
-		creates.push({ file: entry.file, present, written });
 	}
 
 	const counts = { stock: 0, fixed: 0, customized: 0, missing: 0 };
 	for (const site of sites) counts[site.state] += 1;
-	return { sites, counts, fullyFixed, creates };
+	return { sites, counts, fullyFixed };
 };
 
 export function scan(options = {}) {

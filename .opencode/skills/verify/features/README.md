@@ -5,7 +5,6 @@ drives one convenient entry point is incomplete when this map lists others.
 
 | Feature                              | Surface              | Journey   | Last proven                              |
 | ------------------------------------ | -------------------- | --------- | ---------------------------------------- |
-| [Button showcase](buttons.md)        | Showcase app, `/`    | `buttons` | see `result.json` in `.verify/evidence/` |
 | [Storybook stories](storybook.md)    | Storybook, port 6007 | none yet  | not proven                               |
 | [Packaged library](package-build.md) | `dist/`              | none yet  | not proven                               |
 

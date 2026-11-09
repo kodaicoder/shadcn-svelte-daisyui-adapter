@@ -250,8 +250,7 @@ export const VARIANT_ROWS = [
 		key: 'outline-info',
 		tone: 'info',
 		presentation: 'outline',
-		class:
-			'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 hover:text-info-text/70'
+		class: 'border border-info-text bg-info/10 text-info-text px-1.5 py-0.5 hover:text-info-text/70'
 	},
 	{
 		component: 'badge',

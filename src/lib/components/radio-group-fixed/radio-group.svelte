@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { RadioGroup as RadioGroupPrimitive } from "bits-ui";
 	import { setContext } from "svelte";
-	import type { BinaryVariant } from "#lib/components/ui/binary-variant.js";
+	import { RADIO_GROUP_VARIANT, type BinaryVariant } from "#lib/components/ui/binary-variant.js";
 	import { cn } from "#lib/utils.js";
 
 	let {
@@ -14,7 +14,7 @@
 		variant?: BinaryVariant;
 	} = $props();
 
-	setContext("radio-group-variant", {
+	setContext(RADIO_GROUP_VARIANT, {
 		get variant() {
 			return variant;
 		}
