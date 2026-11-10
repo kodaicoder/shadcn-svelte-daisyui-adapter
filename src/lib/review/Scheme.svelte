@@ -1,0 +1,16 @@
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	import type { Scheme } from './tones.js';
+
+	let { scheme, children }: { scheme: Scheme; children?: Snippet } = $props();
+</script>
+
+<div
+	data-scheme={scheme}
+	class="space-y-4 rounded-lg border p-4 {scheme === 'dark'
+		? 'dark bg-background text-foreground'
+		: ''}"
+>
+	<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+	{@render children?.()}
+</div>
