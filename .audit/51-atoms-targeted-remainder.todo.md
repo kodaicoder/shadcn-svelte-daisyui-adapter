@@ -168,10 +168,25 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 
 - [x] spec amendment approved (field variants and the field states)
 - [x] operator re-approved tickets 52 and 34 against the amended spec (2026-11-10)
-- [ ] `targets/field-variants.mjs`: the seven literal tone rows, the `variant` prop and the state fixes
-- [ ] regenerate `input-fixed`, `textarea-fixed`, `native-select-fixed`; `ui` stays stock
-- [ ] pages show a tone row per field; journeys assert border, ring, invalid, disabled pointer and
+- [x] `targets/field-variants.mjs`: the seven literal tone rows, the `variant` prop and the state fixes
+- [x] regenerate `input-fixed`, `textarea-fixed`, `native-select-fixed`; `ui` stays stock
+- [x] pages show a tone row per field; journeys assert border, ring, invalid, disabled pointer and
       readonly surface
-- [ ] verify `pnpm check`, drift, twelve journeys
+- [x] verify `pnpm check`, drift, twelve journeys
 - [ ] `code-review`
 - [ ] operator pass on all three
+
+## Round 3 verification
+
+- `field-variants.mjs` holds 21 sites; `fix` twice reports 38 stock then 38 fixed and 0 stock, `ui`
+  and `layout.css` stay stock.
+- `pnpm check` 0 errors, 0 warnings. Drift 18 checks pass, including the variant count, the component
+  membership and the radius-anchor guard.
+- Journeys: input 84, native-select 78, textarea 86; the other nine unchanged; all pass.
+- The tone checks cover seven idle borders against the tone oracles, the focused border equal to the
+  idle border, the focused ring equal to a `ring-2 ring-<tone>/30` oracle (2 px and 30 percent), the
+  destructive invalid border while focused, the disabled cursor with pointer events on and no hover
+  paint, and the readonly muted surface with `cursor: default` and focus.
+- Review fixes: the disabled native-select hover is gated with `dark:enabled:hover`, the readonly text
+  mute is dropped to match the spec, the shared `applySite` serves drift, and the tone row is one
+  `ToneRow` component instead of three copies.

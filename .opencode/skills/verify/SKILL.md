@@ -69,12 +69,13 @@ console error or page error. Add `--headed` to watch it run.
 The three field journeys drive a route of their own under `/review/<component>`, in both schemes,
 against one shared checklist:
 
-- `input` drives `/review/input` and proves the stock field: a painted border and background, the
-  28 px height, the focus ring and its border shift, the invalid ring and border, the disabled opacity
-  and cursor, readonly, and typing that changes the value.
-- `native-select` drives `/review/native-select` and proves the shared states except readonly, which a
-  native select does not support, plus a 28 px base against a 24 px `size="sm"`, a chevron that lets
-  clicks through, and an option choice that changes the value.
+- `input` drives `/review/input` and proves a painted border and background, the 28 px height, the
+  seven tone borders and rings, the focus ring with no border colour change, the destructive invalid
+  border and ring, the disabled opacity, pointer and cursor, the readonly muted surface,
+  `cursor: default` and focus, and typing that changes the value.
+- `native-select` drives `/review/native-select` and proves the shared states except readonly, the
+  seven tones, a 28 px base against a 24 px `size="sm"`, a chevron that lets clicks through, an option
+  choice that changes the value, and no hover while disabled.
 - `textarea` drives `/review/textarea` and proves the same list plus a 64 px `min-height` and
   `resize: none`.
 
@@ -124,9 +125,9 @@ broken attempts do not strand port 5199.
 Both helpers are plain Node ESM, run with `node`, and need no install step. Playwright and Chromium
 are already in the repo's devDependencies and browser cache.
 
-| Helper                | Subcommands                                                                                               |
-| --------------------- | --------------------------------------------------------------------------------------------------------- |
-| `scripts/session.mjs` | `start`, `status`, `stop`                                                                                 |
+| Helper                | Subcommands                                                                                                                                          |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scripts/session.mjs` | `start`, `status`, `stop`                                                                                                                            |
 | `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `--headed` |
 
 ## Gotchas

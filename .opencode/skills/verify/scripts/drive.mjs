@@ -441,12 +441,18 @@ const checkFieldTones = async (record, scope, label) => {
 
 	const rings = [];
 	const focusMismatch = [];
+	const ringMismatch = [];
 	for (const row of idle) {
 		const control = scope.locator(`[data-tone="${row.tone}"]`).first();
 		await control.focus();
 		await settle();
 		const state = await fieldState(control);
-		rings.push(ringOf(state.shadow));
+		const ring = ringOf(state.shadow);
+		rings.push(ring);
+		const oracle = ringOf(
+			await computed(scope.locator(`[data-tone-ring="${row.tone}"]`), 'boxShadow')
+		);
+		if (ring !== oracle) ringMismatch.push(`${row.tone}:${ring} vs ${oracle}`);
 		if (state.border !== row.border)
 			focusMismatch.push(`${row.tone}:${state.border} vs ${row.border}`);
 	}
@@ -454,6 +460,11 @@ const checkFieldTones = async (record, scope, label) => {
 		`${label}: focus keeps the tone border`,
 		focusMismatch.length === 0,
 		focusMismatch.join(', ')
+	);
+	record(
+		`${label}: every tone ring is its token at 2px`,
+		ringMismatch.length === 0,
+		ringMismatch.join(', ')
 	);
 	record(`${label}: every tone paints a ring`, rings.every(Boolean), rings.join(', '));
 	record(
@@ -498,6 +509,11 @@ const checkDisabledField = async (record, scope, label) => {
 		`${state.pointerEvents} / ${state.cursor}`
 	);
 	record(`${label}: disabled dims to 50 percent`, state.opacity === '0.5', state.opacity);
+	const idle = await computed(disabled, 'backgroundColor');
+	await disabled.hover({ force: true });
+	await settle();
+	const hovered = await computed(disabled, 'backgroundColor');
+	record(`${label}: disabled paints no hover`, idle === hovered, `${idle} -> ${hovered}`);
 };
 
 const checkReadonlyField = async (record, scope, label, baseState) => {
