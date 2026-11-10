@@ -1,9 +1,23 @@
+<script lang="ts" module>
+	const FIELD_TONES = {
+		default: "border-primary focus-visible:border-primary focus-visible:ring-primary/30",
+		secondary: "border-secondary-foreground dark:border-secondary focus-visible:border-secondary-foreground dark:focus-visible:border-secondary focus-visible:ring-secondary/30",
+		success: "border-success-text focus-visible:border-success-text focus-visible:ring-success/30",
+		warning: "border-warning-text focus-visible:border-warning-text focus-visible:ring-warning/30",
+		info: "border-info-text focus-visible:border-info-text focus-visible:ring-info/30",
+		destructive: "border-destructive-text focus-visible:border-destructive-text focus-visible:ring-destructive/30",
+		blackwhite: "border-blackwhite focus-visible:border-blackwhite focus-visible:ring-blackwhite/30",
+	} as const;
+
+	export type FieldVariant = keyof typeof FIELD_TONES;
+</script>
+
 <script lang="ts">
 	import ChevronDownIcon from '@lucide/svelte/icons/chevron-down';
 	import { cn, type WithElementRef } from "#lib/utils.js";
 	import type { HTMLSelectAttributes } from "svelte/elements";
 
-	type NativeSelectProps = Omit<WithElementRef<HTMLSelectAttributes, HTMLSelectElement>, "size"> & {
+	type NativeSelectProps = Omit<WithElementRef<HTMLSelectAttributes, HTMLSelectElement>, "size"> & { variant?: FieldVariant } & {
 		size?: "sm" | "default" | "lg";
 	};
 
@@ -12,6 +26,7 @@
 		value = $bindable(),
 		class: className,
 		size = "default",
+		variant = "default",
 		children,
 		...restProps
 	}: NativeSelectProps = $props();
@@ -30,7 +45,7 @@
 		bind:this={ref}
 		data-slot="native-select"
 		data-size={size}
-		class="border-input bg-input/20 placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 h-7 w-full min-w-0 appearance-none rounded-md data-[size=sm]:rounded-sm data-[size=lg]:rounded-lg border py-0.5 pr-6 pl-2 text-xs/relaxed transition-colors select-none focus-visible:ring-2 aria-invalid:ring-2 data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:text-sm outline-none disabled:pointer-events-none disabled:cursor-not-allowed"
+		class={cn("border-input bg-input/20 placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 dark:hover:bg-input/50 focus-visible:border-ring focus-visible:ring-ring/30 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive h-7 w-full min-w-0 appearance-none rounded-md data-[size=sm]:rounded-sm data-[size=lg]:rounded-lg border py-0.5 pr-6 pl-2 text-xs/relaxed transition-colors select-none focus-visible:ring-2 aria-invalid:ring-2 data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:text-sm outline-none disabled:cursor-not-allowed", FIELD_TONES[variant])}
 		{...restProps}
 	>
 		{@render children?.()}
