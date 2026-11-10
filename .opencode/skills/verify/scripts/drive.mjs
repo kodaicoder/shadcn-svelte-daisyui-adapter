@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
-const PORT = 5199;
+const PORT = Number(process.env.VERIFY_PORT) || 5199;
 const BASE = `http://127.0.0.1:${PORT}/`;
 
 const TONES = ['default', 'secondary', 'success', 'warning', 'info', 'destructive', 'blackwhite'];
@@ -315,6 +315,7 @@ const fieldState = (locator) =>
 			minHeight: style.minHeight,
 			opacity: getComputedStyle(dimmed).opacity,
 			cursor: style.cursor,
+			pointerEvents: style.pointerEvents,
 			resize: style.resize,
 			readOnly: node.readOnly === true
 		};
@@ -407,23 +408,77 @@ const checkFocusField = async (record, scope, label, baseState) => {
 	record(`${label}: focus is visible`, visible, 'focus-visible');
 	record(`${label}: focus paints a ring`, ring !== '', ring || state.shadow);
 	record(
-		`${label}: focus border differs from base`,
-		state.border !== baseState.border,
+		`${label}: focus keeps the border`,
+		state.border === baseState.border,
 		`${state.border} vs ${baseState.border}`
 	);
 	return ring;
 };
 
-const checkInvalidField = async (record, scope, label, baseState, focusRing) => {
+const checkFieldTones = async (record, scope, label) => {
+	const controls = scope.locator('[data-tone]');
+	const count = await controls.count();
+	record(`${label}: seven tone controls`, count === TONES.length, `${count} of 7`);
+	const idle = await controls.evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			tone: node.dataset.tone,
+			border: getComputedStyle(node).borderTopColor
+		}))
+	);
+	const borderMismatch = [];
+	for (const row of idle) {
+		const expected = await computed(
+			scope.locator(`[data-tone-border="${row.tone}"]`),
+			'borderTopColor'
+		);
+		if (row.border !== expected) borderMismatch.push(`${row.tone}:${row.border} vs ${expected}`);
+	}
+	record(
+		`${label}: every idle border is its tone`,
+		borderMismatch.length === 0,
+		borderMismatch.join(', ')
+	);
+
+	const rings = [];
+	const focusMismatch = [];
+	for (const row of idle) {
+		const control = scope.locator(`[data-tone="${row.tone}"]`).first();
+		await control.focus();
+		await settle();
+		const state = await fieldState(control);
+		rings.push(ringOf(state.shadow));
+		if (state.border !== row.border)
+			focusMismatch.push(`${row.tone}:${state.border} vs ${row.border}`);
+	}
+	record(
+		`${label}: focus keeps the tone border`,
+		focusMismatch.length === 0,
+		focusMismatch.join(', ')
+	);
+	record(`${label}: every tone paints a ring`, rings.every(Boolean), rings.join(', '));
+	record(
+		`${label}: seven distinct tone rings`,
+		new Set(rings).size === TONES.length,
+		rings.map((value, index) => `${idle[index].tone}=${value}`).join(', ')
+	);
+};
+
+const checkInvalidField = async (record, scope, label, focusRing) => {
 	const invalid = scope.locator('[data-case="invalid"]');
-	const state = await fieldState(invalid);
 	const mark = await invalid.getAttribute('aria-invalid');
+	await invalid.focus();
+	await settle();
+	const state = await fieldState(invalid);
+	const expected = await computed(
+		scope.locator('[data-oracle="invalid-border"]'),
+		'borderTopColor'
+	);
 	const ring = ringOf(state.shadow);
 	record(`${label}: invalid is marked`, mark === 'true', mark);
 	record(
-		`${label}: invalid border differs from base`,
-		state.border !== baseState.border,
-		`${state.border} vs ${baseState.border}`
+		`${label}: invalid border is destructive`,
+		state.border === expected,
+		`${state.border} vs ${expected}`
 	);
 	record(`${label}: invalid paints a ring`, ring !== '', ring || state.shadow);
 	record(
@@ -439,8 +494,8 @@ const checkDisabledField = async (record, scope, label) => {
 	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
 	record(
 		`${label}: disabled does not invite a click`,
-		state.cursor === 'not-allowed',
-		state.cursor
+		state.pointerEvents !== 'none' && state.cursor === 'not-allowed',
+		`${state.pointerEvents} / ${state.cursor}`
 	);
 	record(`${label}: disabled dims to 50 percent`, state.opacity === '0.5', state.opacity);
 };
@@ -449,11 +504,22 @@ const checkReadonlyField = async (record, scope, label, baseState) => {
 	const readonly = scope.locator('[data-case="readonly"]');
 	const state = await fieldState(readonly);
 	const editable = await readonly.isEditable();
+	const focused = await readonly.evaluate((node) => {
+		node.focus();
+		return document.activeElement === node;
+	});
 	record(
 		`${label}: readonly stays read only`,
 		state.readOnly && !editable,
 		`readOnly ${state.readOnly} / editable ${editable}`
 	);
+	record(
+		`${label}: readonly surface is muted`,
+		state.background !== baseState.background,
+		`${state.background} vs ${baseState.background}`
+	);
+	record(`${label}: readonly uses the default cursor`, state.cursor === 'default', state.cursor);
+	record(`${label}: readonly takes focus`, focused, String(focused));
 	record(
 		`${label}: readonly is not dimmed`,
 		state.opacity === baseState.opacity,
@@ -497,8 +563,9 @@ const checkField = async (record, scope, label, kind) => {
 	if (kind === 'textarea') checkTextarea(record, label, state);
 	else record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
 	await checkFieldSizes(record, scope, label, kind);
+	await checkFieldTones(record, scope, label);
 	const focusRing = await checkFocusField(record, scope, label, state);
-	await checkInvalidField(record, scope, label, state, focusRing);
+	await checkInvalidField(record, scope, label, focusRing);
 	await checkDisabledField(record, scope, label);
 	if (kind === 'native-select') {
 		await checkNativeSelect(record, scope, label, base, state);
