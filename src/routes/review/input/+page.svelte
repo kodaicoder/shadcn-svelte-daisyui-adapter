@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input } from '#lib/components/ui/input/index.js';
+	import { Input } from '#lib/components/input-fixed/index.js';
 	import { ReviewPage } from '#lib/review/index.js';
 
 	let base = $state('');
@@ -38,6 +38,23 @@
 					<span class="text-xs text-muted-foreground">readonly</span>
 					<Input data-case="readonly" readonly bind:value={readonly} />
 				</label>
+				<label class="space-y-1">
+					<span class="text-xs text-muted-foreground">size-sm</span>
+					<Input data-case="size-sm" size="sm" />
+				</label>
+				<label class="space-y-1">
+					<span class="text-xs text-muted-foreground">size-default</span>
+					<Input data-case="size-default" size="default" />
+				</label>
+				<label class="space-y-1">
+					<span class="text-xs text-muted-foreground">size-lg</span>
+					<Input data-case="size-lg" size="lg" />
+				</label>
+				<div class="flex items-end gap-2">
+					<span class="size-4 rounded-sm" data-oracle="radius-sm"></span>
+					<span class="size-4 rounded-md" data-oracle="radius-md"></span>
+					<span class="size-4 rounded-lg" data-oracle="radius-lg"></span>
+				</div>
 			</div>
 		{/snippet}
 	</ReviewPage>

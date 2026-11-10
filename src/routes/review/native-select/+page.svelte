@@ -8,6 +8,8 @@
 	let invalid = $state('one');
 	let disabled = $state('one');
 	let small = $state('one');
+	let sizeDefault = $state('one');
+	let sizeLarge = $state('one');
 </script>
 
 <div class="space-y-6 p-6">
@@ -57,6 +59,25 @@
 						<NativeSelectOption value="two">Two</NativeSelectOption>
 					</NativeSelect>
 				</label>
+				<label class="space-y-1">
+					<span class="text-xs text-muted-foreground">size-default</span>
+					<NativeSelect data-case="size-default" size="default" bind:value={sizeDefault}>
+						<NativeSelectOption value="one">One</NativeSelectOption>
+						<NativeSelectOption value="two">Two</NativeSelectOption>
+					</NativeSelect>
+				</label>
+				<label class="space-y-1">
+					<span class="text-xs text-muted-foreground">size-lg</span>
+					<NativeSelect data-case="size-lg" size="lg" bind:value={sizeLarge}>
+						<NativeSelectOption value="one">One</NativeSelectOption>
+						<NativeSelectOption value="two">Two</NativeSelectOption>
+					</NativeSelect>
+				</label>
+				<div class="flex items-end gap-2">
+					<span class="size-4 rounded-sm" data-oracle="radius-sm"></span>
+					<span class="size-4 rounded-md" data-oracle="radius-md"></span>
+					<span class="size-4 rounded-lg" data-oracle="radius-lg"></span>
+				</div>
 			</div>
 		{/snippet}
 	</ReviewPage>
