@@ -11,7 +11,7 @@
 </script>
 
 <div class="space-y-6 p-6">
-	<FieldReview control="input" title="Input">
+	<FieldReview kind="input" title="Input">
 		{#snippet controls()}
 			<div class="grid gap-6 sm:grid-cols-2">
 				<label class="space-y-1">

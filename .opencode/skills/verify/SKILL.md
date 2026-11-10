@@ -72,8 +72,9 @@ against one shared checklist:
 - `input` drives `/review/input` and proves the stock field: a painted border and background, the
   28 px height, the focus ring and its border shift, the invalid ring and border, the disabled opacity
   and cursor, readonly, and typing that changes the value.
-- `native-select` drives `/review/native-select` and proves the same list plus a 28 px base against a
-  24 px `size="sm"`, a chevron that lets clicks through, and an option choice that changes the value.
+- `native-select` drives `/review/native-select` and proves the shared states except readonly, which a
+  native select does not support, plus a 28 px base against a 24 px `size="sm"`, a chevron that lets
+  clicks through, and an option choice that changes the value.
 - `textarea` drives `/review/textarea` and proves the same list plus a 64 px `min-height` and
   `resize: none`.
 
@@ -118,10 +119,10 @@ are already in the repo's devDependencies and browser cache.
 
 ## Gotchas
 
-- The showcase has no `h1`. The inherited spec `src/routes/page.svelte.e2e.ts` asserts one and will
-  fail; do not copy that assertion into a journey. Anchor on the showcase's `data-slot` handle. Each
-  journey targets the current showcase section, so a replaced page means the journey is removed, not
-  left pointing at a route that no longer exists.
+- The showcase and each review route render an `h1`; the inherited spec `src/routes/page.svelte.e2e.ts`
+  asserts one on `/` only. Do not copy that assertion into a journey. Anchor on the page's `data-slot`
+  handle. Each journey targets the current showcase section or its own review route, so a replaced page
+  means the journey is removed, not left pointing at a route that no longer exists.
 - `pnpm dev` is Vite. Use `--strictPort` or the port check in `session.mjs` becomes meaningless.
 - Playwright's own `webServer` in `playwright.config.ts` builds and previews on 4173. This skill does
   not use it: a dev server is faster and does not mask type errors behind a stale build.

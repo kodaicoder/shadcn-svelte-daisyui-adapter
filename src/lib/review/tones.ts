@@ -73,5 +73,5 @@ export const OUTLINE_TONES = [
 	'outline-blackwhite'
 ] as const;
 
-export type Scheme = (typeof SCHEMES)[number];
+export type ColorScheme = (typeof SCHEMES)[number];
 export type FieldKind = 'input' | 'native-select' | 'textarea';

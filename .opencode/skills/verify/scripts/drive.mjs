@@ -21,8 +21,6 @@ const OUTLINE_TONES = [
 	['outline-blackwhite', 'blackwhite']
 ];
 
-const REVIEW = { input: 'input', 'native-select': 'native-select', textarea: 'textarea' };
-
 const computed = (locator, property) =>
 	locator.evaluate((node, prop) => getComputedStyle(node)[prop], property);
 
@@ -155,6 +153,7 @@ const checkOutlinePairs = async (record, scope, label) => {
 };
 
 const checkStates = async (page, record, scope, component, scheme, label, invalidKind) => {
+	await checkSchemeHeading(record, scope, label);
 	await page.keyboard.press('Tab');
 	const focus = scope.locator('[data-case="focus"]');
 	await focus.focus();
@@ -321,117 +320,102 @@ const fieldState = (locator) =>
 		};
 	});
 
-const checkField = async (record, scope, label, options) => {
-	const { kind } = options;
-	const base = scope.locator('[data-case="base"]');
-	const baseState = await fieldState(base);
+const checkSchemeHeading = async (record, scope, label) => {
+	const count = await scope.locator('h3').count();
+	record(`${label}: one scheme heading`, count === 1, `${count}`);
+};
 
-	record(`${label}: base border is painted`, !TRANSPARENT.has(baseState.border), baseState.border);
+const checkBaseField = async (record, scope, label) => {
+	const base = scope.locator('[data-case="base"]');
+	const state = await fieldState(base);
+	record(`${label}: base border is painted`, !TRANSPARENT.has(state.border), state.border);
 	record(
 		`${label}: base background is painted`,
-		!TRANSPARENT.has(baseState.background),
-		baseState.background
+		!TRANSPARENT.has(state.background),
+		state.background
 	);
 	record(
 		`${label}: enabled cursor does not refuse a click`,
-		CURSORS_OK.has(baseState.cursor),
-		baseState.cursor
+		CURSORS_OK.has(state.cursor),
+		state.cursor
 	);
+	return { base, state };
+};
 
-	if (kind === 'textarea') {
-		record(`${label}: min height is 64px`, baseState.minHeight === '64px', baseState.minHeight);
-		record(`${label}: resize is off`, baseState.resize === 'none', baseState.resize);
-	} else {
-		record(
-			`${label}: height is 28px`,
-			Math.round(baseState.height) === 28,
-			`${baseState.height}px`
-		);
-	}
+const checkFieldSize = (record, label, state) => {
+	record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
+};
 
+const checkTextarea = (record, label, state) => {
+	record(`${label}: min height is 64px`, state.minHeight === '64px', state.minHeight);
+	record(`${label}: resize is off`, state.resize === 'none', state.resize);
+};
+
+const checkFocusField = async (record, scope, label, baseState) => {
 	const focus = scope.locator('[data-case="focus"]');
 	await focus.focus();
 	await settle();
-	const focusVisible = await focus.evaluate((node) => node.matches(':focus-visible'));
-	const focusState = await fieldState(focus);
-	const focusRing = ringOf(focusState.shadow);
-	record(`${label}: focus is visible`, focusVisible, 'focus-visible');
-	record(`${label}: focus paints a ring`, focusRing !== '', focusRing || focusState.shadow);
+	const visible = await focus.evaluate((node) => node.matches(':focus-visible'));
+	const state = await fieldState(focus);
+	const ring = ringOf(state.shadow);
+	record(`${label}: focus is visible`, visible, 'focus-visible');
+	record(`${label}: focus paints a ring`, ring !== '', ring || state.shadow);
 	record(
 		`${label}: focus border differs from base`,
-		focusState.border !== baseState.border,
-		`${focusState.border} vs ${baseState.border}`
+		state.border !== baseState.border,
+		`${state.border} vs ${baseState.border}`
 	);
+	return ring;
+};
 
+const checkInvalidField = async (record, scope, label, baseState, focusRing) => {
 	const invalid = scope.locator('[data-case="invalid"]');
-	const invalidState = await fieldState(invalid);
-	const invalidMark = await invalid.getAttribute('aria-invalid');
-	const invalidRing = ringOf(invalidState.shadow);
-	record(`${label}: invalid is marked`, invalidMark === 'true', invalidMark);
+	const state = await fieldState(invalid);
+	const mark = await invalid.getAttribute('aria-invalid');
+	const ring = ringOf(state.shadow);
+	record(`${label}: invalid is marked`, mark === 'true', mark);
 	record(
 		`${label}: invalid border differs from base`,
-		invalidState.border !== baseState.border,
-		`${invalidState.border} vs ${baseState.border}`
+		state.border !== baseState.border,
+		`${state.border} vs ${baseState.border}`
 	);
-	record(`${label}: invalid paints a ring`, invalidRing !== '', invalidRing || invalidState.shadow);
+	record(`${label}: invalid paints a ring`, ring !== '', ring || state.shadow);
 	record(
 		`${label}: invalid ring differs from the focus ring`,
-		invalidRing !== focusRing,
-		`${invalidRing} vs ${focusRing}`
+		ring !== focusRing,
+		`${ring} vs ${focusRing}`
 	);
+};
 
+const checkDisabledField = async (record, scope, label) => {
 	const disabled = scope.locator('[data-case="disabled"]');
-	const disabledState = await fieldState(disabled);
+	const state = await fieldState(disabled);
 	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
 	record(
 		`${label}: disabled does not invite a click`,
-		disabledState.cursor === 'not-allowed',
-		disabledState.cursor
+		state.cursor === 'not-allowed',
+		state.cursor
+	);
+	record(`${label}: disabled dims to 50 percent`, state.opacity === '0.5', state.opacity);
+};
+
+const checkReadonlyField = async (record, scope, label, baseState) => {
+	const readonly = scope.locator('[data-case="readonly"]');
+	const state = await fieldState(readonly);
+	const editable = await readonly.isEditable();
+	record(
+		`${label}: readonly stays read only`,
+		state.readOnly && !editable,
+		`readOnly ${state.readOnly} / editable ${editable}`
 	);
 	record(
-		`${label}: disabled dims to 50 percent`,
-		disabledState.opacity === '0.5',
-		disabledState.opacity
+		`${label}: readonly is not dimmed`,
+		state.opacity === baseState.opacity,
+		`${state.opacity} vs ${baseState.opacity}`
 	);
+};
 
-	if (kind !== 'native-select') {
-		const readonly = scope.locator('[data-case="readonly"]');
-		const readonlyState = await fieldState(readonly);
-		const readonlyEditable = await readonly.isEditable();
-		record(
-			`${label}: readonly stays read only`,
-			readonlyState.readOnly && !readonlyEditable,
-			`readOnly ${readonlyState.readOnly} / editable ${readonlyEditable}`
-		);
-		record(
-			`${label}: readonly is not dimmed`,
-			readonlyState.opacity === baseState.opacity,
-			`${readonlyState.opacity} vs ${baseState.opacity}`
-		);
-	}
-
-	if (kind === 'native-select') {
-		const small = scope.locator('[data-case="size-sm"]');
-		const smallState = await fieldState(small);
-		record(
-			`${label}: size-sm is 24px against a 28px base`,
-			Math.round(smallState.height) === 24 && Math.round(baseState.height) === 28,
-			`${smallState.height}px vs ${baseState.height}px`
-		);
-		const chevron = await small.evaluate((node) => {
-			const icon = node.parentElement?.querySelector('[data-slot="native-select-icon"]');
-			return icon ? getComputedStyle(icon).pointerEvents : 'missing';
-		});
-		record(`${label}: chevron lets clicks through`, chevron === 'none', chevron);
-		await base.selectOption('two');
-		record(
-			`${label}: choosing an option changes the value`,
-			(await base.inputValue()) === 'two',
-			await base.inputValue()
-		);
-		return;
-	}
-
+const checkTyping = async (record, label, base) => {
 	await base.fill('typed');
 	record(
 		`${label}: typing changes the value`,
@@ -440,20 +424,57 @@ const checkField = async (record, scope, label, options) => {
 	);
 };
 
+const checkNativeSelect = async (record, scope, label, base, baseState) => {
+	const small = scope.locator('[data-case="size-sm"]');
+	const state = await fieldState(small);
+	record(
+		`${label}: size-sm is 24px against a 28px base`,
+		Math.round(state.height) === 24 && Math.round(baseState.height) === 28,
+		`${state.height}px vs ${baseState.height}px`
+	);
+	const chevron = await small.evaluate((node) => {
+		const icon = node.parentElement?.querySelector('[data-slot="native-select-icon"]');
+		return icon ? getComputedStyle(icon).pointerEvents : 'missing';
+	});
+	record(`${label}: chevron lets clicks through`, chevron === 'none', chevron);
+	await base.selectOption('two');
+	record(
+		`${label}: choosing an option changes the value`,
+		(await base.inputValue()) === 'two',
+		await base.inputValue()
+	);
+};
+
+const checkField = async (record, scope, label, kind) => {
+	await checkSchemeHeading(record, scope, label);
+	const { base, state } = await checkBaseField(record, scope, label);
+	if (kind === 'textarea') checkTextarea(record, label, state);
+	else checkFieldSize(record, label, state);
+	const focusRing = await checkFocusField(record, scope, label, state);
+	await checkInvalidField(record, scope, label, state, focusRing);
+	await checkDisabledField(record, scope, label);
+	if (kind === 'native-select') {
+		await checkNativeSelect(record, scope, label, base, state);
+		return;
+	}
+	await checkReadonlyField(record, scope, label, state);
+	await checkTyping(record, label, base);
+};
+
 const fieldJourney = (kind) => async (page, record) => {
 	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });
 	record('http 200', response?.status() === 200, `got ${response?.status()}`);
 
 	const section = page.locator(`#${kind}`);
 	await section
-		.locator(`[data-slot="${REVIEW[kind]}"]`)
+		.locator(`[data-slot="${kind}"]`)
 		.first()
 		.waitFor({ state: 'visible', timeout: 10_000 });
 	record(`${kind} section`, (await section.count()) === 1, 'one section');
 
 	for (const scheme of ['light', 'dark']) {
 		const scope = section.locator(`[data-scheme="${scheme}"]`);
-		await checkField(record, scope, `${kind} ${scheme}`, { kind });
+		await checkField(record, scope, `${kind} ${scheme}`, kind);
 	}
 };
 

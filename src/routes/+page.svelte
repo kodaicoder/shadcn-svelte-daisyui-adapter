@@ -6,8 +6,31 @@
 	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
 	import { Switch } from '#lib/components/switch-fixed/index.js';
 	import { Toggle } from '#lib/components/toggle-fixed/index.js';
-	import { OUTLINE_TONES, SCHEMES, Scheme, SwatchRow, TONE_NAMES } from '#lib/review/index.js';
+	import { OUTLINE_TONES, SCHEMES, Scheme, TONE_NAMES, TONES } from '#lib/review/index.js';
 </script>
+
+{#snippet swatches()}
+	<div class="flex flex-wrap items-center gap-3 text-[0.625rem] text-muted-foreground">
+		{#each TONE_NAMES as tone (tone)}
+			<span class="flex items-center gap-1">
+				<span data-fill-swatch={tone} class="size-4 rounded-sm {TONES[tone].fill}"></span>
+				<span data-soft-swatch={tone} class="size-4 rounded-sm {TONES[tone].soft}"></span>
+				<span data-foreground-swatch={tone} class={TONES[tone].foreground}>Aa</span>
+				<span data-border-swatch={tone} class="size-4 rounded-sm border-2 {TONES[tone].border}"
+				></span>
+				{tone}
+			</span>
+		{/each}
+		<span class="flex items-center gap-1">
+			<span data-muted-swatch class="size-4 rounded-sm bg-muted/20"></span>
+			muted/20
+		</span>
+		<span class="flex items-center gap-1">
+			<span data-strong-swatch="success" class="size-4 rounded-sm {TONES.success.strong}"></span>
+			tone/20
+		</span>
+	</div>
+{/snippet}
 
 <div class="space-y-10 p-6">
 	<h1 class="text-lg font-semibold">Binary control tones</h1>
@@ -111,7 +134,7 @@
 						disabled
 					</label>
 				</div>
-				<SwatchRow />
+				{@render swatches()}
 			</Scheme>
 		{/each}
 	</section>
@@ -142,7 +165,7 @@
 						disabled
 					</label>
 				</div>
-				<SwatchRow />
+				{@render swatches()}
 			</Scheme>
 		{/each}
 	</section>
@@ -188,7 +211,7 @@
 						disabled
 					</span>
 				</div>
-				<SwatchRow />
+				{@render swatches()}
 			</Scheme>
 		{/each}
 	</section>
@@ -213,7 +236,7 @@
 					<Toggle data-case="invalid" aria-invalid="true" aria-label="Invalid tone">invalid</Toggle>
 					<Toggle data-case="disabled" disabled aria-label="Disabled tone">disabled</Toggle>
 				</div>
-				<SwatchRow />
+				{@render swatches()}
 			</Scheme>
 		{/each}
 	</section>

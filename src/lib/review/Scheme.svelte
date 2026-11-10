@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { Scheme } from './tones.js';
+	import type { ColorScheme } from './tones.js';
 
-	let { scheme, children }: { scheme: Scheme; children?: Snippet } = $props();
+	let { scheme, children }: { scheme: ColorScheme; children?: Snippet } = $props();
 </script>
 
 <div
