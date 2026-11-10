@@ -63,8 +63,9 @@ const readonlySite = (component, file, stock) =>
 		component,
 		file,
 		stock,
-		// The dark twin outranks the base `dark:bg-input/30`; without it the muted surface loses in dark.
-		fixed: `transition-colors read-only:cursor-default read-only:bg-muted/50 dark:read-only:bg-muted/50 ${stock.replace('transition-colors ', '')}`
+		// `:read-only` also matches a disabled control, so the surface is gated on `:enabled`; the dark
+		// twin outranks the base `dark:bg-input/30`.
+		fixed: `transition-colors read-only:enabled:cursor-default read-only:enabled:bg-muted/50 dark:read-only:enabled:bg-muted/50 ${stock.replace('transition-colors ', '')}`
 	});
 
 export const FIELD_VARIANTS = [

@@ -499,7 +499,7 @@ const checkInvalidField = async (record, scope, label, focusRing) => {
 	);
 };
 
-const checkDisabledField = async (record, scope, label) => {
+const checkDisabledField = async (record, scope, label, baseState) => {
 	const disabled = scope.locator('[data-case="disabled"]');
 	const state = await fieldState(disabled);
 	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
@@ -509,6 +509,11 @@ const checkDisabledField = async (record, scope, label) => {
 		`${state.pointerEvents} / ${state.cursor}`
 	);
 	record(`${label}: disabled dims to 50 percent`, state.opacity === '0.5', state.opacity);
+	record(
+		`${label}: disabled keeps the base surface`,
+		state.background === baseState.background,
+		`${state.background} vs ${baseState.background}`
+	);
 	const idle = await computed(disabled, 'backgroundColor');
 	await disabled.hover({ force: true });
 	await settle();
@@ -582,7 +587,7 @@ const checkField = async (record, scope, label, kind) => {
 	await checkFieldTones(record, scope, label);
 	const focusRing = await checkFocusField(record, scope, label, state);
 	await checkInvalidField(record, scope, label, focusRing);
-	await checkDisabledField(record, scope, label);
+	await checkDisabledField(record, scope, label, state);
 	if (kind === 'native-select') {
 		await checkNativeSelect(record, scope, label, base, state);
 		return;

@@ -182,7 +182,7 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
   and `layout.css` stay stock.
 - `pnpm check` 0 errors, 0 warnings. Drift 18 checks pass, including the variant count, the component
   membership and the radius-anchor guard.
-- Journeys: input 84, native-select 78, textarea 86; the other nine unchanged; all pass.
+- Journeys: input 86, native-select 80, textarea 88; the other nine unchanged; all pass.
 - The tone checks cover seven idle borders against the tone oracles, the focused border equal to the
   idle border, the focused ring equal to a `ring-2 ring-<tone>/30` oracle (2 px and 30 percent), the
   destructive invalid border while focused, the disabled cursor with pointer events on and no hover
@@ -193,3 +193,5 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 - Round 2 review fixes: the stock `dark:aria-invalid:border-destructive/50` is kept so the invalid
   state does not change, the invalid oracle carries the same dark twin, and the one-call type helpers
   are inlined. The ticket's `default` line now says the primary tone, matching the spec.
+- Round 3 review fix: `:read-only` also matches a disabled control, so the readonly surface and cursor
+  are gated on `:enabled`; the journey now asserts the disabled background equals the base surface.
