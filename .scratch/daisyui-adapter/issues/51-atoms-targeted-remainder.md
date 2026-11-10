@@ -29,7 +29,7 @@ fixer reports their stock and fixed strings as identical. `native-select-fixed` 
 `native-select.svelte` and re-exports its option and optgroup from `ui`; the patch is one insertion,
 `data-[size=sm]:rounded-sm`.
 
-Gates: `pnpm check` 0 errors and 0 warnings; `pnpm test:adapter` 13/13; journeys checkbox 43, switch
+Gates: `pnpm check` 0 errors and 0 warnings; `pnpm test:adapter` 12/12; journeys checkbox 43, switch
 71, radio-group 77, toggle 63, cursor 17, input 39, native-select 39, textarea 41, all pass, with
 evidence under `.verify/evidence/`. The fixed copy matches the fixer output, and `ui` plus
 `src/routes/layout.css` are unchanged.

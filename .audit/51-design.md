@@ -70,7 +70,7 @@ Chain: route to `FieldReview` to `Scheme` is three hops. `SwatchRow` is not rend
 
 ## Fixed copies
 
-`input` and `textarea` import `ui` (dry-run: stock equals fixed). `native-select` gets `native-select-fixed/` from `init.mjs fix native-select`, copy, revert `ui/native-select` and the `layout.css` header, LF normalize. `pnpm test:adapter` stays 13/13.
+`input` and `textarea` import `ui` (dry-run: stock equals fixed). `native-select` gets `native-select-fixed/` from `init.mjs fix native-select`, copy, revert `ui/native-select` and the `layout.css` header, LF normalize. `pnpm test:adapter` stays 12/12.
 
 ## Risks
 

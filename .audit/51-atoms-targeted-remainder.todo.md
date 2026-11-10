@@ -107,7 +107,7 @@ Dismissed with a reason:
 
 - Worktree branch `ticket-51-atoms` merged fast-forward into `fix/nutchapon/ai/contrast-warning`.
 - `pnpm check`: 0 errors, 0 warnings.
-- `pnpm test:adapter`: all drift checks passed, 13/13.
+- `pnpm test:adapter`: all drift checks passed, 12/12.
 - Journeys in the main tree: checkbox 41, switch 69, radio-group 75, toggle 61, cursor 17, input 37,
   native-select 37, textarea 39 checks, all pass.
 - Heading probe: one `h3` per `[data-scheme]` on `/`, one `h1` per review route.
