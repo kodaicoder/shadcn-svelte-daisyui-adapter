@@ -1,9 +1,9 @@
-import { keyToken } from './render.mjs';
 import { insertSite, replaceSite } from './site.mjs';
 
 // The three fields share one tone table. Each row is literal inside the fixed copy because Tailwind
 // only emits a class it can read in application source. The row follows the base class through `cn`,
-// so it wins the border and ring merge without `!`, and a caller's class still wins.
+// so it wins the border and ring merge without `!`. On input and textarea a caller's class still wins;
+// native-select applies the caller's class to its wrapper.
 export const FIELD_VARIANT_COMPONENTS = ['input', 'textarea', 'native-select'];
 
 const TONES = {
@@ -20,7 +20,7 @@ const TONES = {
 
 const TONE_MAP = [
 	'\tconst FIELD_TONES = {',
-	...Object.entries(TONES).map(([tone, row]) => `\t\t${keyToken(tone)}: "${row}",`),
+	...Object.entries(TONES).map(([tone, row]) => `\t\t${tone}: "${row}",`),
 	'\t} as const;',
 	'',
 	'\texport type FieldVariant = keyof typeof FIELD_TONES;'
@@ -75,14 +75,14 @@ const disabledSite = (component, file) =>
 		fixed: 'disabled:cursor-not-allowed'
 	});
 
-const readonlySite = (component, file, stock, anchor) =>
+const readonlySite = (component, file, stock) =>
 	replaceSite({
 		id: `${component}-readonly-surface`,
 		component,
 		file,
 		stock,
 		// The dark twin outranks the base `dark:bg-input/30`; without it the muted surface loses in dark.
-		fixed: `transition-colors read-only:cursor-default read-only:bg-muted/50 dark:read-only:bg-muted/50 read-only:text-muted-foreground ${anchor}`
+		fixed: `transition-colors read-only:cursor-default read-only:bg-muted/50 dark:read-only:bg-muted/50 ${stock.replace('transition-colors ', '')}`
 	});
 
 // The stock dims the destructive border to 50 percent in dark, so the invalid signal is not the token
@@ -114,7 +114,7 @@ export const FIELD_VARIANTS = [
 		fixed: '",\n\t\t\tFIELD_TONES[variant],\n\t\t\tclassName'
 	}),
 	disabledSite('input', 'input/input.svelte'),
-	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6', 'file:h-6'),
+	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6'),
 	invalidBorderSite('input', 'input/input.svelte'),
 
 	toneMapSite('textarea', 'textarea/textarea.svelte'),
@@ -132,12 +132,7 @@ export const FIELD_VARIANTS = [
 		stock: '",\n\t\tclassName',
 		fixed: '",\n\t\tFIELD_TONES[variant],\n\t\tclassName'
 	}),
-	readonlySite(
-		'textarea',
-		'textarea/textarea.svelte',
-		'transition-colors focus-visible:ring-2',
-		'focus-visible:ring-2'
-	),
+	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-2'),
 	invalidBorderSite('textarea', 'textarea/textarea.svelte'),
 
 	toneMapSite('native-select', 'native-select/native-select.svelte'),
@@ -153,8 +148,8 @@ export const FIELD_VARIANTS = [
 		id: 'native-select-field-tone-open',
 		component: 'native-select',
 		file: 'native-select/native-select.svelte',
-		stock: '\n\t\tclass="',
-		fixed: '\n\t\tclass={cn("'
+		stock: 'data-size={size}\n\t\tclass="',
+		fixed: 'data-size={size}\n\t\tclass={cn("'
 	}),
 	replaceSite({
 		id: 'native-select-field-tone-close',
@@ -164,5 +159,12 @@ export const FIELD_VARIANTS = [
 		fixed: '", FIELD_TONES[variant])}\n\t\t{...restProps}'
 	}),
 	disabledSite('native-select', 'native-select/native-select.svelte'),
+	replaceSite({
+		id: 'native-select-disabled-hover',
+		component: 'native-select',
+		file: 'native-select/native-select.svelte',
+		stock: 'dark:hover:bg-input/50',
+		fixed: 'dark:enabled:hover:bg-input/50'
+	}),
 	invalidBorderSite('native-select', 'native-select/native-select.svelte')
 ];

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { NativeSelect, NativeSelectOption } from '#lib/components/native-select-fixed/index.js';
-	import { TONES, TONE_NAMES, ReviewPage } from '#lib/review/index.js';
+	import { ReviewPage, ToneRow, type Tone } from '#lib/review/index.js';
 
 	let base = $state('one');
 	let filled = $state('two');
@@ -78,25 +78,14 @@
 					<span class="size-4 rounded-md" data-oracle="radius-md"></span>
 					<span class="size-4 rounded-lg" data-oracle="radius-lg"></span>
 				</div>
-				<div class="space-y-2 sm:col-span-2">
-					<span class="text-xs text-muted-foreground">tones</span>
-					<div class="flex flex-wrap items-end gap-2">
-						{#each TONE_NAMES as tone (tone)}
-							<NativeSelect data-tone={tone} variant={tone}>
-								<NativeSelectOption value="one">One</NativeSelectOption>
-								<NativeSelectOption value="two">Two</NativeSelectOption>
-							</NativeSelect>
-						{/each}
-					</div>
-					<div class="flex flex-wrap items-center gap-2">
-						{#each TONE_NAMES as tone (tone)}
-							<span data-tone-border={tone} class="size-4 rounded-sm border-2 {TONES[tone].border}"
-							></span>
-						{/each}
-						<span data-oracle="invalid-border" class="size-4 rounded-sm border-2 border-destructive"
-						></span>
-					</div>
-				</div>
+				<ToneRow>
+					{#snippet control(tone: Tone)}
+						<NativeSelect data-tone={tone} variant={tone}>
+							<NativeSelectOption value="one">One</NativeSelectOption>
+							<NativeSelectOption value="two">Two</NativeSelectOption>
+						</NativeSelect>
+					{/snippet}
+				</ToneRow>
 			</div>
 		{/snippet}
 	</ReviewPage>

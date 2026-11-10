@@ -91,8 +91,8 @@ check(
 	sizeCoupling.map((site) => site.id).join(', ')
 );
 check(
-	'the manifest holds twenty field variant sites',
-	FIELD_VARIANTS.length === 20,
+	'the manifest holds twenty-one field variant sites',
+	FIELD_VARIANTS.length === 21,
 	`${FIELD_VARIANTS.length}`
 );
 check(

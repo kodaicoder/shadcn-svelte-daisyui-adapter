@@ -2,6 +2,7 @@ export type ToneClasses = {
 	fill: string;
 	foreground: string;
 	border: string;
+	ring: string;
 	soft: string;
 	strong: string;
 };
@@ -14,6 +15,7 @@ export const TONES = {
 		fill: 'bg-primary',
 		foreground: 'text-primary-foreground',
 		border: 'border-primary',
+		ring: 'ring-primary/30',
 		soft: 'bg-primary/10',
 		strong: 'bg-primary/20'
 	},
@@ -21,6 +23,7 @@ export const TONES = {
 		fill: 'bg-secondary',
 		foreground: 'text-secondary-foreground',
 		border: 'border-secondary-foreground dark:border-secondary',
+		ring: 'ring-secondary/30',
 		soft: 'bg-secondary/10',
 		strong: 'bg-secondary/20'
 	},
@@ -28,6 +31,7 @@ export const TONES = {
 		fill: 'bg-success',
 		foreground: 'text-success-foreground',
 		border: 'border-success-text',
+		ring: 'ring-success/30',
 		soft: 'bg-success/10',
 		strong: 'bg-success/20'
 	},
@@ -35,6 +39,7 @@ export const TONES = {
 		fill: 'bg-warning',
 		foreground: 'text-warning-foreground',
 		border: 'border-warning-text',
+		ring: 'ring-warning/30',
 		soft: 'bg-warning/10',
 		strong: 'bg-warning/20'
 	},
@@ -42,6 +47,7 @@ export const TONES = {
 		fill: 'bg-info',
 		foreground: 'text-info-foreground',
 		border: 'border-info-text',
+		ring: 'ring-info/30',
 		soft: 'bg-info/10',
 		strong: 'bg-info/20'
 	},
@@ -49,6 +55,7 @@ export const TONES = {
 		fill: 'bg-destructive',
 		foreground: 'text-destructive-foreground',
 		border: 'border-destructive-text',
+		ring: 'ring-destructive/30',
 		soft: 'bg-destructive/10',
 		strong: 'bg-destructive/20'
 	},
@@ -56,6 +63,7 @@ export const TONES = {
 		fill: 'bg-blackwhite',
 		foreground: 'text-blackwhite-foreground',
 		border: 'border-blackwhite',
+		ring: 'ring-blackwhite/30',
 		soft: 'bg-blackwhite/10',
 		strong: 'bg-blackwhite/20'
 	}
