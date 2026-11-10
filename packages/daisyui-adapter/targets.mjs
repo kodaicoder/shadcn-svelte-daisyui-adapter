@@ -8,6 +8,7 @@
 
 import { COMPONENTS, PAIRS, SITES, SUPPORTED } from './targets/contrast.mjs';
 import { RADIUS, RADIUS_COMPONENTS, ROLE_STEPS, SIZE_STEPS } from './targets/radius.mjs';
+import { SIZE_COMPONENTS, SIZES } from './targets/sizes.mjs';
 import { SURFACE_COMPONENTS, SURFACES } from './targets/surfaces.mjs';
 import {
 	ALERT_VARIANTS,
@@ -38,7 +39,9 @@ export {
 	RADIUS_COMPONENTS,
 	ROLE_STEPS,
 	SITES,
+	SIZE_COMPONENTS,
 	SIZE_STEPS,
+	SIZES,
 	SUPPORTED,
 	SURFACE_COMPONENTS,
 	SURFACES,
@@ -49,6 +52,7 @@ export {
 
 const TABLES = [
 	{ sites: SITES, components: COMPONENTS },
+	{ sites: SIZES, components: SIZE_COMPONENTS },
 	{ sites: RADIUS, components: RADIUS_COMPONENTS },
 	{ sites: SURFACES, components: SURFACE_COMPONENTS },
 	{ sites: VARIANTS, components: VARIANT_COMPONENTS },
@@ -66,6 +70,8 @@ export const TARGETS = {
 	pairs: PAIRS,
 	radius: RADIUS,
 	radiusComponents: RADIUS_COMPONENTS,
+	sizes: SIZES,
+	sizeComponents: SIZE_COMPONENTS,
 	surfaces: SURFACES,
 	surfaceComponents: SURFACE_COMPONENTS,
 	variants: VARIANTS,

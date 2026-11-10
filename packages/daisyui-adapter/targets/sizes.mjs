@@ -1,0 +1,107 @@
+import { insertSite, replaceSite } from './site.mjs';
+
+// The field size sets the box, the text and the radius step. Radius is a separate table, so every
+// entry here stays independent of the radius anchor and a second `fix` run still reports `fixed`.
+export const SIZE_COMPONENTS = ['input', 'textarea', 'native-select'];
+
+const INPUT_TEXT =
+	'border px-2 py-0.5 data-[size=sm]:h-6 data-[size=sm]:px-1.5 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:px-2.5 data-[size=lg]:text-sm text-xs/relaxed';
+const TEXTAREA_TEXT =
+	'px-2 py-2 data-[size=sm]:min-h-12 data-[size=sm]:py-1.5 data-[size=sm]:text-[0.625rem] data-[size=lg]:min-h-20 data-[size=lg]:py-2.5 data-[size=lg]:text-sm text-xs/relaxed';
+
+export const SIZES = [
+	insertSite({
+		id: 'input-size-prop',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: 'type,',
+		fixed: 'type,\n\t\tsize = "default",'
+	}),
+	replaceSite({
+		id: 'input-size-type',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: 'Omit<HTMLInputAttributes, "type">',
+		fixed: 'Omit<HTMLInputAttributes, "type" | "size">'
+	}),
+	insertSite({
+		id: 'input-size-props',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: '({ type: "file"; files?: FileList } | { type?: InputType; files?: undefined })',
+		fixed:
+			'({ type: "file"; files?: FileList } | { type?: InputType; files?: undefined }) & {\n\t\t\t\tsize?: "sm" | "default" | "lg";\n\t\t\t}'
+	}),
+	replaceSite({
+		id: 'input-size-attribute',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: 'data-slot={dataSlot}',
+		fixed: 'data-slot={dataSlot}\n\t\tdata-size={size}'
+	}),
+	replaceSite({
+		id: 'input-size-class',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: 'border px-2 py-0.5 text-sm',
+		fixed: INPUT_TEXT
+	}),
+	replaceSite({
+		id: 'input-size-md',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: 'aria-invalid:ring-2 md:text-xs/relaxed',
+		fixed: 'aria-invalid:ring-2'
+	}),
+	insertSite({
+		id: 'textarea-size-prop',
+		component: 'textarea',
+		file: 'textarea/textarea.svelte',
+		stock: 'value = $bindable(),',
+		fixed: 'value = $bindable(),\n\t\tsize = "default",'
+	}),
+	replaceSite({
+		id: 'textarea-size-type',
+		component: 'textarea',
+		file: 'textarea/textarea.svelte',
+		stock: '}: WithoutChildren<WithElementRef<HTMLTextareaAttributes>> = $props();',
+		fixed:
+			'}: WithoutChildren<WithElementRef<HTMLTextareaAttributes>> & {\n\t\tsize?: "sm" | "default" | "lg";\n\t} = $props();'
+	}),
+	insertSite({
+		id: 'textarea-size-attribute',
+		component: 'textarea',
+		file: 'textarea/textarea.svelte',
+		stock: 'data-slot={dataSlot}',
+		fixed: 'data-slot={dataSlot}\n\tdata-size={size}'
+	}),
+	replaceSite({
+		id: 'textarea-size-class',
+		component: 'textarea',
+		file: 'textarea/textarea.svelte',
+		stock: 'px-2 py-2 text-sm',
+		fixed: TEXTAREA_TEXT
+	}),
+	replaceSite({
+		id: 'textarea-size-md',
+		component: 'textarea',
+		file: 'textarea/textarea.svelte',
+		stock: 'aria-invalid:ring-2 md:text-xs/relaxed',
+		fixed: 'aria-invalid:ring-2'
+	}),
+	replaceSite({
+		id: 'native-select-size-type',
+		component: 'native-select',
+		file: 'native-select/native-select.svelte',
+		stock: 'size?: "sm" | "default";',
+		fixed: 'size?: "sm" | "default" | "lg";'
+	}),
+	replaceSite({
+		id: 'native-select-size-class',
+		component: 'native-select',
+		file: 'native-select/native-select.svelte',
+		stock: 'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem]',
+		fixed:
+			'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:text-sm'
+	})
+];
