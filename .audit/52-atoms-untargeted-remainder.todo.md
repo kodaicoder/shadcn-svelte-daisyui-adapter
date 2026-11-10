@@ -64,8 +64,8 @@ Code-coupled work (one feature, one migration) goes to a single owner with the c
 
 ## Verification
 
-- Spec amendment 2026-11-10 adds the field size scale (ticket 51). The operator re-approved this ticket
-  against the amended spec on 2026-11-10.
+- Spec amendment 2026-11-10 adds the field size scale (ticket 51) and the field tone variants (ticket
+  51, round 3). The operator re-approved this ticket against the amended spec on 2026-11-10.
 
 - Batch A (`kbd`, `separator`, `skeleton`, `spinner`) merged fast-forward from `ticket-52a-atoms`.
 - `pnpm check`: 0 errors, 0 warnings. Drift: 12 checks pass.
