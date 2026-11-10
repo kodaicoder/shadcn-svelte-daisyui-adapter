@@ -17,6 +17,8 @@ import {
 	RADIUS,
 	RADIUS_COMPONENTS,
 	SITES,
+	SIZE_COMPONENTS,
+	SIZES,
 	SUPPORTED,
 	SURFACES,
 	SURFACE_COMPONENTS,
@@ -76,6 +78,20 @@ check(
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
+check('the manifest holds thirteen size sites', SIZES.length === 13, `${SIZES.length}`);
+const sizeCoupling = SIZES.filter((site) => site.fixed.includes('rounded-'));
+check(
+	'no size site crosses the radius anchor',
+	sizeCoupling.length === 0,
+	sizeCoupling.map((site) => site.id).join(', ')
+);
+check(
+	'every size site belongs to a size component',
+	SIZES.every((site) => SIZE_COMPONENTS.includes(site.component)),
+	SIZES.filter((site) => !SIZE_COMPONENTS.includes(site.component))
+		.map((site) => site.id)
+		.join(', ')
+);
 check(
 	'every site belongs to a named component of its own table',
 	SITES.every((site) => COMPONENTS.includes(site.component)) &&
