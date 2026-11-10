@@ -346,6 +346,51 @@ const checkFieldSize = (record, label, state) => {
 	record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
 };
 
+const FIELD_SIZES = [
+	{ size: 'sm', radius: 'sm', text: '10px', height: '24px', minHeight: '48px' },
+	{ size: 'default', radius: 'md', text: '12px', height: '28px', minHeight: '64px' },
+	{ size: 'lg', radius: 'lg', text: '14px', height: '32px', minHeight: '80px' }
+];
+
+const checkFieldSizes = async (record, scope, label, kind) => {
+	for (const entry of FIELD_SIZES) {
+		const control = scope.locator(`[data-case="size-${entry.size}"]`);
+		const state = await control.evaluate((node) => {
+			const style = getComputedStyle(node);
+			return {
+				text: style.fontSize,
+				radius: style.borderTopLeftRadius,
+				height: `${Math.round(node.getBoundingClientRect().height)}px`,
+				minHeight: style.minHeight,
+				dataSize: node.dataset.size
+			};
+		});
+		const probe = await computed(
+			scope.locator(`[data-oracle="radius-${entry.radius}"]`),
+			'borderTopLeftRadius'
+		);
+		record(`${label}: ${entry.size} text is ${entry.text}`, state.text === entry.text, state.text);
+		const box = kind === 'textarea' ? state.minHeight : state.height;
+		const expected = kind === 'textarea' ? entry.minHeight : entry.height;
+		record(`${label}: ${entry.size} box is ${expected}`, box === expected, box);
+		record(
+			`${label}: ${entry.size} radius is ${entry.radius}`,
+			state.radius === probe,
+			`${state.radius} vs ${probe}`
+		);
+		record(`${label}: ${entry.size} sets data-size`, state.dataSize === entry.size, state.dataSize);
+	}
+	const page = scope.page();
+	const viewport = page.viewportSize();
+	if (viewport) {
+		await page.setViewportSize({ width: 400, height: viewport.height });
+		await settle();
+		const narrow = await computed(scope.locator('[data-case="size-default"]'), 'fontSize');
+		await page.setViewportSize(viewport);
+		record(`${label}: default text stays 12px below md`, narrow === '12px', narrow);
+	}
+};
+
 const checkTextarea = (record, label, state) => {
 	record(`${label}: min height is 64px`, state.minHeight === '64px', state.minHeight);
 	record(`${label}: resize is off`, state.resize === 'none', state.resize);
@@ -450,6 +495,7 @@ const checkField = async (record, scope, label, kind) => {
 	const { base, state } = await checkBaseField(record, scope, label);
 	if (kind === 'textarea') checkTextarea(record, label, state);
 	else checkFieldSize(record, label, state);
+	await checkFieldSizes(record, scope, label, kind);
 	const focusRing = await checkFocusField(record, scope, label, state);
 	await checkInvalidField(record, scope, label, state, focusRing);
 	await checkDisabledField(record, scope, label);
