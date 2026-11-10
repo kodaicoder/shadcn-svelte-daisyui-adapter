@@ -5,9 +5,9 @@ import { insertSite, replaceSite } from './site.mjs';
 export const SIZE_COMPONENTS = ['input', 'textarea', 'native-select'];
 
 const INPUT_TEXT =
-	'border px-2 py-0.5 data-[size=sm]:h-6 data-[size=sm]:px-1.5 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:px-2.5 data-[size=lg]:text-sm text-xs/relaxed';
+	'border px-2 py-0.5 data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:text-sm text-xs/relaxed';
 const TEXTAREA_TEXT =
-	'px-2 py-2 data-[size=sm]:min-h-12 data-[size=sm]:py-1.5 data-[size=sm]:text-[0.625rem] data-[size=lg]:min-h-20 data-[size=lg]:py-2.5 data-[size=lg]:text-sm text-xs/relaxed';
+	'px-2 py-2 data-[size=sm]:min-h-12 data-[size=sm]:text-[0.625rem] data-[size=lg]:min-h-20 data-[size=lg]:text-sm text-xs/relaxed';
 
 export const SIZES = [
 	insertSite({
@@ -52,6 +52,14 @@ export const SIZES = [
 		file: 'input/input.svelte',
 		stock: 'aria-invalid:ring-2 md:text-xs/relaxed',
 		fixed: 'aria-invalid:ring-2'
+	}),
+	replaceSite({
+		id: 'input-size-file',
+		component: 'input',
+		file: 'input/input.svelte',
+		stock: 'file:h-6 file:text-xs/relaxed file:font-medium',
+		fixed:
+			'file:h-6 file:text-xs/relaxed data-[size=sm]:file:text-[0.625rem] data-[size=lg]:file:text-sm file:font-medium'
 	}),
 	insertSite({
 		id: 'textarea-size-prop',

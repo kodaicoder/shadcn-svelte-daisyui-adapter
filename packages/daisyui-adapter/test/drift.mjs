@@ -78,8 +78,10 @@ check(
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
-check('the manifest holds thirteen size sites', SIZES.length === 13, `${SIZES.length}`);
-const sizeCoupling = SIZES.filter((site) => site.fixed.includes('rounded-'));
+check('the manifest holds fourteen size sites', SIZES.length === 14, `${SIZES.length}`);
+const sizeCoupling = SIZES.filter(
+	(site) => site.fixed.includes('rounded-') || site.stock.includes('rounded-')
+);
 check(
 	'no size site crosses the radius anchor',
 	sizeCoupling.length === 0,

@@ -131,7 +131,7 @@ export const RADIUS = [
 		id: 'input-field',
 		component: 'input',
 		file: 'input/input.svelte',
-		role: 'field',
+		size: 'default',
 		step: 'md',
 		stock: 'h-7 rounded-md border px-2 py-0.5',
 		fixed: 'h-7 rounded-md data-[size=sm]:rounded-sm data-[size=lg]:rounded-lg border px-2 py-0.5'
@@ -140,7 +140,7 @@ export const RADIUS = [
 		id: 'textarea-field',
 		component: 'textarea',
 		file: 'textarea/textarea.svelte',
-		role: 'field',
+		size: 'default',
 		step: 'md',
 		stock: 'resize-none rounded-md border px-2 py-2',
 		fixed:
