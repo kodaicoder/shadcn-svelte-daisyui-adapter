@@ -75,7 +75,8 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 
 - The role chooses the scale step: selector to `--radius-sm`, field to `--radius-md`, box to `--radius-lg`.
 - The component size shifts the step: xs, sm, icon-xs and icon-sm to sm; default, md and icon to md; lg and icon-lg to lg; larger sizes follow the scale.
-- All size-bearing components use the size step: button, toggle, item, attachment, select, native-select, switch and input-group-button. Fixed-size components use their role default.
+- All size-bearing components use the size step: button, toggle, item, attachment, select, native-select, switch, input-group-button, input and textarea. `input` and `textarea` take `size: 'sm' | 'default' | 'lg'` and set `data-size`; `native-select` keeps `sm` and `default` and gains `lg`. A field size maps to the radius step as `sm` to `sm`, `default` to `md` and `lg` to `lg`.
+- The field size sets the box and the text together. `sm` is `h-6` with 10 px text and the `sm` radius; `default` is `h-7` with 12 px text and the `md` radius; `lg` is `h-8` with 14 px text and the `lg` radius. A textarea has no fixed height: its `min-h` is 3rem at `sm`, 4rem at `default` and 5rem at `lg`, and `field-sizing-content` still grows it. The `default` text is 12 px at every width: the stock `text-sm` and its `md:text-xs/relaxed` override are replaced so the 10/12/14 scale is explicit.
 - The four existing scale sites (calendar head cells and selects, chart tooltip) are aligned to their role.
 - `rounded-full` circles, edge-joining utilities and the calendar `--cell-radius` custom property are excluded from the blanket replacement.
 - The three daisyUI role values collapse into the shadcn scale, which derives from the box rung. This is a deliberate loss: a theme whose field and selector rungs differ from its box rung is approximated. ADR 0002 records the trade-off.
