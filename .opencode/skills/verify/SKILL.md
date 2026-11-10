@@ -78,9 +78,21 @@ against one shared checklist:
 - `textarea` drives `/review/textarea` and proves the same list plus a 64 px `min-height` and
   `resize: none`.
 
+The four atom journeys drive their own route under `/review/<component>`, in both schemes:
+
+- `kbd` drives `/review/kbd` and proves three keys or more, the 22 px height, the muted fill, a
+  key that never takes the pointer, and a group holding two keys.
+- `separator` drives `/review/separator` and proves a horizontal 1 px rule wider than 100 px, a
+  vertical 1 px rule at least 40 px tall, both real rules announced as `separator`, and the
+  decorative one kept out of the accessibility tree.
+- `skeleton` drives `/review/skeleton` and proves two skeletons, the pulse animation, the muted
+  fill, empty content, and a 32 by 160 px block.
+- `spinner` drives `/review/spinner` and proves a 16 px status spinner labelled Loading that spins,
+  a 24 px sibling, and the primary stroke on the large one.
+
 Available journeys are `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`,
-`native-select`, `textarea`. When you add a feature to the app, add its journey to
-`scripts/drive.mjs`.
+`native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`. When you add a feature to
+the app, add its journey to `scripts/drive.mjs`.
 
 ## Evidence
 
@@ -115,7 +127,7 @@ are already in the repo's devDependencies and browser cache.
 | Helper                | Subcommands                                                                                               |
 | --------------------- | --------------------------------------------------------------------------------------------------------- |
 | `scripts/session.mjs` | `start`, `status`, `stop`                                                                                 |
-| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `--headed` |
+| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `--headed` |
 
 ## Gotchas
 

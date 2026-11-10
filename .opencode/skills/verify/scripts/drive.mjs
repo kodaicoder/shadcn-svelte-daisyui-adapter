@@ -478,6 +478,156 @@ const fieldJourney = (kind) => async (page, record) => {
 	}
 };
 
+const checkKbd = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const keys = scope.locator('[data-slot="kbd"]');
+	const keyCount = await keys.count();
+	record(`${label}: three keys`, keyCount >= 3, `${keyCount}`);
+
+	const base = scope.locator('[data-case="base"]');
+	const state = await base.evaluate((node) => ({
+		height: node.getBoundingClientRect().height,
+		background: getComputedStyle(node).backgroundColor,
+		pointerEvents: getComputedStyle(node).pointerEvents
+	}));
+	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
+	record(`${label}: key height is 22px`, Math.round(state.height) === 22, `${state.height}px`);
+	record(`${label}: key takes the muted fill`, state.background === muted, `${state.background} vs ${muted}`);
+	record(`${label}: key never takes the pointer`, state.pointerEvents === 'none', state.pointerEvents);
+
+	const grouped = await scope.locator('[data-case="group"] [data-slot="kbd"]').count();
+	record(`${label}: group holds two keys`, grouped === 2, `${grouped}`);
+};
+
+const checkSeparator = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const read = (locator) =>
+		locator.evaluate((node) => {
+			const rect = node.getBoundingClientRect();
+			return {
+				orientation: node.getAttribute('data-orientation'),
+				role: node.getAttribute('role'),
+				ariaHidden: node.getAttribute('aria-hidden'),
+				width: rect.width,
+				height: rect.height
+			};
+		});
+
+	const horizontal = await read(scope.locator('[data-case="horizontal"]'));
+	record(
+		`${label}: horizontal spans the row`,
+		horizontal.orientation === 'horizontal' &&
+			Math.round(horizontal.height) === 1 &&
+			horizontal.width > 100,
+		`${horizontal.orientation} ${horizontal.width} x ${horizontal.height}`
+	);
+	record(`${label}: horizontal is announced`, horizontal.role === 'separator', horizontal.role);
+
+	const vertical = await read(scope.locator('[data-case="vertical"]'));
+	record(
+		`${label}: vertical spans the row height`,
+		vertical.orientation === 'vertical' &&
+			Math.round(vertical.width) === 1 &&
+			vertical.height >= 40,
+		`${vertical.orientation} ${vertical.width} x ${vertical.height}`
+	);
+	record(`${label}: vertical is announced`, vertical.role === 'separator', vertical.role);
+
+	const decorative = await read(scope.locator('[data-case="decorative"]'));
+	record(
+		`${label}: decorative stays silent`,
+		decorative.role !== 'separator' && decorative.ariaHidden === 'true',
+		`role ${decorative.role} / aria-hidden ${decorative.ariaHidden}`
+	);
+};
+
+const checkSkeleton = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const count = await scope.locator('[data-slot="skeleton"]').count();
+	record(`${label}: two skeletons`, count === 2, `${count}`);
+
+	const block = scope.locator('[data-case="block"]');
+	const state = await block.evaluate((node) => {
+		const rect = node.getBoundingClientRect();
+		return {
+			animation: getComputedStyle(node).animationName,
+			background: getComputedStyle(node).backgroundColor,
+			text: node.textContent.trim(),
+			width: rect.width,
+			height: rect.height
+		};
+	});
+	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
+	record(`${label}: skeleton pulses`, state.animation === 'pulse', state.animation);
+	record(`${label}: skeleton takes the muted fill`, state.background === muted, `${state.background} vs ${muted}`);
+	record(`${label}: skeleton carries no text`, state.text === '', state.text || 'empty');
+	record(
+		`${label}: block measures 32px by 160px`,
+		Math.round(state.height) === 32 && Math.round(state.width) === 160,
+		`${state.height} x ${state.width}`
+	);
+};
+
+const checkSpinner = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	// animate-spin rotates the box, so its bounding rect oscillates; the CSS size is the honest one.
+	const read = (locator) =>
+		locator.evaluate((node) => {
+			const style = getComputedStyle(node);
+			const svg = node.tagName.toLowerCase() === 'svg' ? node : node.querySelector('svg');
+			return {
+				role: node.getAttribute('role'),
+				ariaLabel: node.getAttribute('aria-label'),
+				animation: style.animationName,
+				width: parseFloat(style.width),
+				height: parseFloat(style.height),
+				stroke: svg ? getComputedStyle(svg).stroke : 'missing',
+				color: style.color
+			};
+		});
+
+	const base = await read(scope.locator('[data-case="base"]'));
+	record(
+		`${label}: spinner announces itself`,
+		base.role === 'status' && base.ariaLabel === 'Loading',
+		`${base.role} / ${base.ariaLabel}`
+	);
+	record(`${label}: spinner spins`, base.animation === 'spin', base.animation);
+	record(
+		`${label}: base spinner is 16px`,
+		Math.round(base.width) === 16 && Math.round(base.height) === 16,
+		`${base.width} x ${base.height}`
+	);
+
+	const large = await read(scope.locator('[data-case="large"]'));
+	record(
+		`${label}: large spinner is 24px`,
+		Math.round(large.width) === 24 && Math.round(large.height) === 24,
+		`${large.width} x ${large.height}`
+	);
+	const primary = await computed(scope.locator('[data-oracle="primary"]'), 'color');
+	record(
+		`${label}: large spinner takes the primary paint`,
+		large.stroke === primary && large.color === primary,
+		`stroke ${large.stroke} / color ${large.color} vs ${primary}`
+	);
+};
+
+const atomJourney = (kind, probe, check) => async (page, record) => {
+	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });
+	record('http 200', response?.status() === 200, `got ${response?.status()}`);
+
+	const section = page.locator(`#${kind}`);
+	await section.locator(probe).first().waitFor({ state: 'visible', timeout: 10_000 });
+	record(`${kind} section`, (await section.count()) === 1, 'one section');
+	await settle();
+
+	for (const scheme of ['light', 'dark']) {
+		const scope = section.locator(`[data-scheme="${scheme}"]`);
+		await check(record, scope, `${kind} ${scheme}`);
+	}
+};
+
 const journeys = {
 	checkbox: async (page, record) => {
 		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
@@ -709,7 +859,11 @@ const journeys = {
 	},
 	input: fieldJourney('input'),
 	'native-select': fieldJourney('native-select'),
-	textarea: fieldJourney('textarea')
+	textarea: fieldJourney('textarea'),
+	kbd: atomJourney('kbd', '[data-slot="kbd"]', checkKbd),
+	separator: atomJourney('separator', '[data-slot="separator"]', checkSeparator),
+	skeleton: atomJourney('skeleton', '[data-slot="skeleton"]', checkSkeleton),
+	spinner: atomJourney('spinner', '[role="status"]', checkSpinner)
 };
 
 const journey = process.argv[2];
