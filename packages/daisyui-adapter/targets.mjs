@@ -7,6 +7,7 @@
 // `packages/daisyui-adapter/test/drift.mjs` fails when the pin moves without this list.
 
 import { COMPONENTS, PAIRS, SITES, SUPPORTED } from './targets/contrast.mjs';
+import { FIELD_VARIANT_COMPONENTS, FIELD_VARIANTS } from './targets/field-variants.mjs';
 import { RADIUS, RADIUS_COMPONENTS, ROLE_STEPS, SIZE_STEPS } from './targets/radius.mjs';
 import { SIZE_COMPONENTS, SIZES } from './targets/sizes.mjs';
 import { SURFACE_COMPONENTS, SURFACES } from './targets/surfaces.mjs';
@@ -34,6 +35,8 @@ export {
 	CREATES,
 	CURSOR_COMPONENTS,
 	CURSOR_SITES,
+	FIELD_VARIANT_COMPONENTS,
+	FIELD_VARIANTS,
 	PAIRS,
 	RADIUS,
 	RADIUS_COMPONENTS,
@@ -53,6 +56,7 @@ export {
 const TABLES = [
 	{ sites: SITES, components: COMPONENTS },
 	{ sites: SIZES, components: SIZE_COMPONENTS },
+	{ sites: FIELD_VARIANTS, components: FIELD_VARIANT_COMPONENTS },
 	{ sites: RADIUS, components: RADIUS_COMPONENTS },
 	{ sites: SURFACES, components: SURFACE_COMPONENTS },
 	{ sites: VARIANTS, components: VARIANT_COMPONENTS },
@@ -72,6 +76,8 @@ export const TARGETS = {
 	radiusComponents: RADIUS_COMPONENTS,
 	sizes: SIZES,
 	sizeComponents: SIZE_COMPONENTS,
+	fieldVariants: FIELD_VARIANTS,
+	fieldVariantComponents: FIELD_VARIANT_COMPONENTS,
 	surfaces: SURFACES,
 	surfaceComponents: SURFACE_COMPONENTS,
 	variants: VARIANTS,

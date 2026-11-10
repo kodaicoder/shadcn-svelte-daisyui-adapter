@@ -68,13 +68,13 @@ export const SIZES = [
 		stock: 'value = $bindable(),',
 		fixed: 'value = $bindable(),\n\t\tsize = "default",'
 	}),
-	replaceSite({
+	insertSite({
 		id: 'textarea-size-type',
 		component: 'textarea',
 		file: 'textarea/textarea.svelte',
-		stock: '}: WithoutChildren<WithElementRef<HTMLTextareaAttributes>> = $props();',
+		stock: 'WithoutChildren<WithElementRef<HTMLTextareaAttributes>>',
 		fixed:
-			'}: WithoutChildren<WithElementRef<HTMLTextareaAttributes>> & {\n\t\tsize?: "sm" | "default" | "lg";\n\t} = $props();'
+			'WithoutChildren<WithElementRef<HTMLTextareaAttributes>> & {\n\t\tsize?: "sm" | "default" | "lg";\n\t}'
 	}),
 	insertSite({
 		id: 'textarea-size-attribute',

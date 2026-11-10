@@ -12,6 +12,8 @@ import {
 	COMPONENTS,
 	CURSOR_COMPONENTS,
 	CURSOR_SITES,
+	FIELD_VARIANT_COMPONENTS,
+	FIELD_VARIANTS,
 	KNOWN_COMPONENTS,
 	PAIRS,
 	RADIUS,
@@ -88,6 +90,26 @@ check(
 	sizeCoupling.map((site) => site.id).join(', ')
 );
 check(
+	'the manifest holds twenty field variant sites',
+	FIELD_VARIANTS.length === 20,
+	`${FIELD_VARIANTS.length}`
+);
+check(
+	'every field variant site belongs to a field component',
+	FIELD_VARIANTS.every((site) => FIELD_VARIANT_COMPONENTS.includes(site.component)),
+	FIELD_VARIANTS.filter((site) => !FIELD_VARIANT_COMPONENTS.includes(site.component))
+		.map((site) => site.id)
+		.join(', ')
+);
+const fieldRadiusCoupling = FIELD_VARIANTS.filter(
+	(site) => site.fixed.includes('rounded-') || site.stock.includes('rounded-')
+);
+check(
+	'no field variant site crosses the radius anchor',
+	fieldRadiusCoupling.length === 0,
+	fieldRadiusCoupling.map((site) => site.id).join(', ')
+);
+check(
 	'every size site belongs to a size component',
 	SIZES.every((site) => SIZE_COMPONENTS.includes(site.component)),
 	SIZES.filter((site) => !SIZE_COMPONENTS.includes(site.component))
@@ -120,14 +142,39 @@ check(
 	missingComponents.join(', ')
 );
 
-const missingStock = ALL_SITES.filter((site) => {
-	const path = join(UI, ...site.file.split('/'));
-	if (!existsSync(path)) return true;
-	const text = readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
-	return !text.includes(site.stock);
-}).map((site) => site.id);
+// A later table may target text that an earlier one just wrote, so each site is checked against the
+// content its turn sees, in the same file order and site order the fixer uses.
+const applySite = (content, site) => {
+	if (site.position === 'replace') {
+		return site.stock === site.fixed ? content : content.split(site.stock).join(site.fixed);
+	}
+	const at = content.indexOf(site.stock);
+	if (at < 0 || content.indexOf(site.stock, at + 1) >= 0) return content;
+	return `${content.slice(0, at)}${site.fixed}${content.slice(at + site.stock.length)}`;
+};
+
+const fileGroups = new Map();
+for (const site of ALL_SITES) {
+	const group = fileGroups.get(site.file) ?? [];
+	group.push(site);
+	fileGroups.set(site.file, group);
+}
+
+const missingStock = [];
+for (const [file, group] of fileGroups) {
+	const path = join(UI, ...file.split('/'));
+	if (!existsSync(path)) {
+		missingStock.push(...group.map((site) => site.id));
+		continue;
+	}
+	let content = readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+	for (const site of group) {
+		if (!content.includes(site.stock)) missingStock.push(site.id);
+		content = applySite(content, site);
+	}
+}
 check(
-	'every site file still holds its stock string',
+	'every site still finds its stock in its turn',
 	missingStock.length === 0,
 	missingStock.join(', ')
 );
