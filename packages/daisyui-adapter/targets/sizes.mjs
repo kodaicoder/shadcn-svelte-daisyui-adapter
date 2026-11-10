@@ -36,8 +36,8 @@ export const SIZES = [
 		id: 'input-size-attribute',
 		component: 'input',
 		file: 'input/input.svelte',
-		stock: 'data-slot={dataSlot}',
-		fixed: 'data-slot={dataSlot}\n\t\tdata-size={size}'
+		stock: 'data-slot={dataSlot}\n\t\tclass={cn(',
+		fixed: 'data-slot={dataSlot}\n\t\tdata-size={size}\n\t\tclass={cn('
 	}),
 	replaceSite({
 		id: 'input-size-class',
@@ -100,8 +100,8 @@ export const SIZES = [
 		id: 'native-select-size-class',
 		component: 'native-select',
 		file: 'native-select/native-select.svelte',
-		stock: 'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem]',
+		stock: 'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] outline-none',
 		fixed:
-			'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:text-sm'
+			'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] data-[size=lg]:h-8 data-[size=lg]:text-sm outline-none'
 	})
 ];

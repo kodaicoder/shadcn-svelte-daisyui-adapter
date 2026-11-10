@@ -134,7 +134,7 @@ export const RADIUS = [
 		role: 'field',
 		step: 'md',
 		stock: 'h-7 rounded-md border px-2 py-0.5',
-		fixed: 'h-7 rounded-md border px-2 py-0.5'
+		fixed: 'h-7 rounded-md data-[size=sm]:rounded-sm data-[size=lg]:rounded-lg border px-2 py-0.5'
 	},
 	{
 		id: 'textarea-field',
@@ -143,7 +143,8 @@ export const RADIUS = [
 		role: 'field',
 		step: 'md',
 		stock: 'resize-none rounded-md border px-2 py-2',
-		fixed: 'resize-none rounded-md border px-2 py-2'
+		fixed:
+			'resize-none rounded-md data-[size=sm]:rounded-sm data-[size=lg]:rounded-lg border px-2 py-2'
 	},
 	{
 		id: 'native-select-field',
@@ -152,7 +153,8 @@ export const RADIUS = [
 		size: 'default',
 		step: 'md',
 		stock: 'appearance-none rounded-md border py-0.5 pr-6 pl-2',
-		fixed: 'appearance-none rounded-md data-[size=sm]:rounded-sm border py-0.5 pr-6 pl-2'
+		fixed:
+			'appearance-none rounded-md data-[size=sm]:rounded-sm data-[size=lg]:rounded-lg border py-0.5 pr-6 pl-2'
 	},
 	{
 		id: 'select-trigger-base',
