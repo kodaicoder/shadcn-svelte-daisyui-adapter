@@ -120,7 +120,7 @@ const stateOf = (content, site) => {
 	return content.includes(site.fixed) ? 'fixed' : 'customized';
 };
 
-const applySite = (content, site) => {
+export const applySite = (content, site) => {
 	if (site.position === 'replace') {
 		return site.stock === site.fixed ? content : content.split(site.stock).join(site.fixed);
 	}

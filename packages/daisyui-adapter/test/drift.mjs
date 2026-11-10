@@ -27,6 +27,7 @@ import {
 	VARIANTS,
 	VARIANT_COMPONENTS
 } from '../targets.mjs';
+import { applySite } from '../component-fix.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
 const UI = join(ROOT, 'src', 'lib', 'components', 'ui');
@@ -144,15 +145,6 @@ check(
 
 // A later table may target text that an earlier one just wrote, so each site is checked against the
 // content its turn sees, in the same file order and site order the fixer uses.
-const applySite = (content, site) => {
-	if (site.position === 'replace') {
-		return site.stock === site.fixed ? content : content.split(site.stock).join(site.fixed);
-	}
-	const at = content.indexOf(site.stock);
-	if (at < 0 || content.indexOf(site.stock, at + 1) >= 0) return content;
-	return `${content.slice(0, at)}${site.fixed}${content.slice(at + site.stock.length)}`;
-};
-
 const fileGroups = new Map();
 for (const site of ALL_SITES) {
 	const group = fileGroups.get(site.file) ?? [];

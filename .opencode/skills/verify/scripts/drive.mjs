@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
 const ROOT = fileURLToPath(new URL('../../../../', import.meta.url));
-const PORT = Number(process.env.VERIFY_PORT) || 5199;
+const PORT = 5199;
 const BASE = `http://127.0.0.1:${PORT}/`;
 
 const TONES = ['default', 'secondary', 'success', 'warning', 'info', 'destructive', 'blackwhite'];
