@@ -342,7 +342,7 @@ const checkBaseField = async (record, scope, label) => {
 	return { base, state };
 };
 
-const checkFieldSize = (record, label, state) => {
+const checkBaseHeight = (record, label, state) => {
 	record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
 };
 
@@ -380,14 +380,19 @@ const checkFieldSizes = async (record, scope, label, kind) => {
 		);
 		record(`${label}: ${entry.size} sets data-size`, state.dataSize === entry.size, state.dataSize);
 	}
-	const page = scope.page();
+};
+
+const checkNarrowFieldText = async (page, record, scope, kind) => {
 	const viewport = page.viewportSize();
-	if (viewport) {
+	if (!viewport) return;
+	try {
 		await page.setViewportSize({ width: 400, height: viewport.height });
 		await settle();
-		const narrow = await computed(scope.locator('[data-case="size-default"]'), 'fontSize');
+		const text = await computed(scope.locator('[data-case="size-default"]'), 'fontSize');
+		record(`${kind}: default text stays 12px below md`, text === '12px', text);
+	} finally {
 		await page.setViewportSize(viewport);
-		record(`${label}: default text stays 12px below md`, narrow === '12px', narrow);
+		await settle();
 	}
 };
 
@@ -494,7 +499,7 @@ const checkField = async (record, scope, label, kind) => {
 	await checkSchemeHeading(record, scope, label);
 	const { base, state } = await checkBaseField(record, scope, label);
 	if (kind === 'textarea') checkTextarea(record, label, state);
-	else checkFieldSize(record, label, state);
+	else checkBaseHeight(record, label, state);
 	await checkFieldSizes(record, scope, label, kind);
 	const focusRing = await checkFocusField(record, scope, label, state);
 	await checkInvalidField(record, scope, label, state, focusRing);
@@ -522,6 +527,7 @@ const fieldJourney = (kind) => async (page, record) => {
 		const scope = section.locator(`[data-scheme="${scheme}"]`);
 		await checkField(record, scope, `${kind} ${scheme}`, kind);
 	}
+	await checkNarrowFieldText(page, record, section.locator('[data-scheme="light"]'), kind);
 };
 
 const checkKbd = async (record, scope, label) => {
@@ -538,8 +544,16 @@ const checkKbd = async (record, scope, label) => {
 	}));
 	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
 	record(`${label}: key height is 22px`, Math.round(state.height) === 22, `${state.height}px`);
-	record(`${label}: key takes the muted fill`, state.background === muted, `${state.background} vs ${muted}`);
-	record(`${label}: key never takes the pointer`, state.pointerEvents === 'none', state.pointerEvents);
+	record(
+		`${label}: key takes the muted fill`,
+		state.background === muted,
+		`${state.background} vs ${muted}`
+	);
+	record(
+		`${label}: key never takes the pointer`,
+		state.pointerEvents === 'none',
+		state.pointerEvents
+	);
 
 	const grouped = await scope.locator('[data-case="group"] [data-slot="kbd"]').count();
 	record(`${label}: group holds two keys`, grouped === 2, `${grouped}`);
@@ -605,7 +619,11 @@ const checkSkeleton = async (record, scope, label) => {
 	});
 	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
 	record(`${label}: skeleton pulses`, state.animation === 'pulse', state.animation);
-	record(`${label}: skeleton takes the muted fill`, state.background === muted, `${state.background} vs ${muted}`);
+	record(
+		`${label}: skeleton takes the muted fill`,
+		state.background === muted,
+		`${state.background} vs ${muted}`
+	);
 	record(`${label}: skeleton carries no text`, state.text === '', state.text || 'empty');
 	record(
 		`${label}: block measures 32px by 160px`,

@@ -131,16 +131,19 @@ Dismissed with a reason:
 
 ## Round 2 verification
 
-- `targets/sizes.mjs` holds 13 sites; `targets/radius.mjs` widens the three field radii.
-- `fix` run twice: 16 stock on run 1, 0 stock and 16 fixed on run 2; scoped `--check` and `--strict`
-  exit 0 against the patched tree.
+- `targets/sizes.mjs` holds 14 sites; `targets/radius.mjs` widens the three field radii and moves the
+  `input-field` and `textarea-field` entries to the `size` key.
+- `fix` run twice: 17 stock on run 1, 0 stock and 17 fixed on run 2. The `input-size-file` site first
+  nested its stock in its fixed and stayed `stock` on every run; it now replaces a contiguous
+  `file:h-6 file:text-xs/relaxed file:font-medium` run, so the second run is clean.
 - Fixed copies `input-fixed`, `textarea-fixed` and the updated `native-select-fixed` match the patched
   `ui` byte for byte after LF normalization; `ui` and `layout.css` stay stock.
 - `pnpm check` 0 errors, 0 warnings. Drift 15 checks pass, including the size table count and the
   radius-anchor guard.
-- Journeys: input 65, native-select 65, textarea 67; the other nine unchanged; all pass. The field
+- Journeys: input 64, native-select 64, textarea 66; the other nine unchanged; all pass. The field
   checks cover 10/12/14 px text, 24/28/32 px height, 48/64/80 px textarea min height, the radius
-  oracle per size and `data-size`, in both schemes and at a 400 px viewport for the default text.
+  oracle per size and `data-size`, in both schemes. The 400 px default-text check runs once per field
+  journey, after both schemes, and restores the viewport in a `finally`.
 - `input` no longer forwards the HTML `size` attribute; the prop owns the name.
 
 ## Round 2: field sizes (reopened 2026-11-10)
