@@ -1,3 +1,14 @@
+export type ToneClasses = {
+	fill: string;
+	foreground: string;
+	border: string;
+	soft: string;
+	strong: string;
+};
+
+export type Tone =
+	'default' | 'secondary' | 'success' | 'warning' | 'info' | 'destructive' | 'blackwhite';
+
 export const TONES = {
 	default: {
 		fill: 'bg-primary',
@@ -48,10 +59,7 @@ export const TONES = {
 		soft: 'bg-blackwhite/10',
 		strong: 'bg-blackwhite/20'
 	}
-} satisfies Record<
-	string,
-	{ fill: string; foreground: string; border: string; soft: string; strong: string }
->;
+} satisfies Record<Tone, ToneClasses>;
 
 export const TONE_NAMES = Object.keys(TONES) as Tone[];
 export const SCHEMES = ['light', 'dark'] as const;
@@ -65,6 +73,5 @@ export const OUTLINE_TONES = [
 	'outline-blackwhite'
 ] as const;
 
-export type Tone = keyof typeof TONES;
 export type Scheme = (typeof SCHEMES)[number];
 export type FieldKind = 'input' | 'native-select' | 'textarea';

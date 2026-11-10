@@ -46,7 +46,6 @@
 		<h2 class="text-sm font-semibold tracking-widest uppercase">Field.Label focus</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
-				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
 				<div class="flex flex-wrap items-center gap-6">
 					{#each TONE_NAMES as tone (tone)}
 						<FieldLabel class="gap-1">
@@ -90,7 +89,6 @@
 		<h2 class="text-sm font-semibold tracking-widest uppercase">Checkbox</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
-				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
 						<label class="flex items-center gap-2 text-xs">
@@ -122,7 +120,6 @@
 		<h2 class="text-sm font-semibold tracking-widest uppercase">Switch</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
-				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
 						<label class="flex items-center gap-2 text-xs">
@@ -154,7 +151,6 @@
 		<h2 class="text-sm font-semibold tracking-widest uppercase">Radio group</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
-				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
 						<span class="flex items-center gap-2 text-xs">
@@ -201,7 +197,6 @@
 		<h2 class="text-sm font-semibold tracking-widest uppercase">Toggle</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
-				<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
 						<Toggle variant={tone} pressed data-tone={tone}>{tone}</Toggle>
