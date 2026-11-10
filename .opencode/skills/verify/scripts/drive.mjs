@@ -342,10 +342,6 @@ const checkBaseField = async (record, scope, label) => {
 	return { base, state };
 };
 
-const checkBaseHeight = (record, label, state) => {
-	record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
-};
-
 const FIELD_SIZES = [
 	{ size: 'sm', radius: 'sm', text: '10px', height: '24px', minHeight: '48px' },
 	{ size: 'default', radius: 'md', text: '12px', height: '28px', minHeight: '64px' },
@@ -499,7 +495,7 @@ const checkField = async (record, scope, label, kind) => {
 	await checkSchemeHeading(record, scope, label);
 	const { base, state } = await checkBaseField(record, scope, label);
 	if (kind === 'textarea') checkTextarea(record, label, state);
-	else checkBaseHeight(record, label, state);
+	else record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
 	await checkFieldSizes(record, scope, label, kind);
 	const focusRing = await checkFocusField(record, scope, label, state);
 	await checkInvalidField(record, scope, label, state, focusRing);
