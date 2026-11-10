@@ -16,7 +16,10 @@
 		{#each TONE_NAMES as tone (tone)}
 			<span data-tone-border={tone} class="size-4 rounded-sm border-2 {TONES[tone].border}"></span>
 		{/each}
-		<span data-oracle="invalid-border" class="size-4 rounded-sm border-2 border-destructive"></span>
+		<span
+			data-oracle="invalid-border"
+			class="size-4 rounded-sm border-2 border-destructive dark:border-destructive/50"
+		></span>
 	</div>
 	<div class="flex flex-wrap items-center gap-2">
 		{#each TONE_NAMES as tone (tone)}

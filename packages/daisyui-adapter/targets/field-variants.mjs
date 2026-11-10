@@ -48,24 +48,6 @@ const variantPropSite = (component, file, stock) =>
 		fixed: `variant = "default",\n\t\t${stock}`
 	});
 
-const variantTypeBefore = (component, file, stock, before) =>
-	insertSite({
-		id: `${component}-field-variant-type`,
-		component,
-		file,
-		stock,
-		fixed: `${before}${stock}`
-	});
-
-const variantTypeAfter = (component, file, stock) =>
-	insertSite({
-		id: `${component}-field-variant-type`,
-		component,
-		file,
-		stock,
-		fixed: `${stock} & { variant?: FieldVariant }`
-	});
-
 const disabledSite = (component, file) =>
 	replaceSite({
 		id: `${component}-disabled-cursor`,
@@ -83,17 +65,6 @@ const readonlySite = (component, file, stock) =>
 		stock,
 		// The dark twin outranks the base `dark:bg-input/30`; without it the muted surface loses in dark.
 		fixed: `transition-colors read-only:cursor-default read-only:bg-muted/50 dark:read-only:bg-muted/50 ${stock.replace('transition-colors ', '')}`
-	});
-
-// The stock dims the destructive border to 50 percent in dark, so the invalid signal is not the token
-// the tone contract promises. Dropping the dark override leaves one destructive border in both schemes.
-const invalidBorderSite = (component, file) =>
-	replaceSite({
-		id: `${component}-invalid-border`,
-		component,
-		file,
-		stock: 'aria-invalid:border-destructive dark:aria-invalid:border-destructive/50',
-		fixed: 'aria-invalid:border-destructive'
 	});
 
 export const FIELD_VARIANTS = [
@@ -115,16 +86,16 @@ export const FIELD_VARIANTS = [
 	}),
 	disabledSite('input', 'input/input.svelte'),
 	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6'),
-	invalidBorderSite('input', 'input/input.svelte'),
 
 	toneMapSite('textarea', 'textarea/textarea.svelte'),
 	variantPropSite('textarea', 'textarea/textarea.svelte', 'class: className,'),
-	variantTypeBefore(
-		'textarea',
-		'textarea/textarea.svelte',
-		' = $props();',
-		' & { variant?: FieldVariant }'
-	),
+	insertSite({
+		id: 'textarea-field-variant-type',
+		component: 'textarea',
+		file: 'textarea/textarea.svelte',
+		stock: ' = $props();',
+		fixed: ' & { variant?: FieldVariant } = $props();'
+	}),
 	replaceSite({
 		id: 'textarea-field-tone-class',
 		component: 'textarea',
@@ -133,15 +104,17 @@ export const FIELD_VARIANTS = [
 		fixed: '",\n\t\tFIELD_TONES[variant],\n\t\tclassName'
 	}),
 	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-2'),
-	invalidBorderSite('textarea', 'textarea/textarea.svelte'),
 
 	toneMapSite('native-select', 'native-select/native-select.svelte'),
 	variantPropSite('native-select', 'native-select/native-select.svelte', 'children,'),
-	variantTypeAfter(
-		'native-select',
-		'native-select/native-select.svelte',
-		'Omit<WithElementRef<HTMLSelectAttributes, HTMLSelectElement>, "size">'
-	),
+	insertSite({
+		id: 'native-select-field-variant-type',
+		component: 'native-select',
+		file: 'native-select/native-select.svelte',
+		stock: 'Omit<WithElementRef<HTMLSelectAttributes, HTMLSelectElement>, "size">',
+		fixed:
+			'Omit<WithElementRef<HTMLSelectAttributes, HTMLSelectElement>, "size"> & { variant?: FieldVariant }'
+	}),
 	// The select class spans `rounded-md`, which belongs to the radius table. Opening the `cn` call
 	// and closing it after the class keep this row independent of the radius anchor.
 	replaceSite({
@@ -165,6 +138,5 @@ export const FIELD_VARIANTS = [
 		file: 'native-select/native-select.svelte',
 		stock: 'dark:hover:bg-input/50',
 		fixed: 'dark:enabled:hover:bg-input/50'
-	}),
-	invalidBorderSite('native-select', 'native-select/native-select.svelte')
+	})
 ];

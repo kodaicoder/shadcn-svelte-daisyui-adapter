@@ -178,7 +178,7 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 
 ## Round 3 verification
 
-- `field-variants.mjs` holds 21 sites; `fix` twice reports 38 stock then 38 fixed and 0 stock, `ui`
+- `field-variants.mjs` holds 18 sites; `fix` twice reports 35 stock then 35 fixed and 0 stock, `ui`
   and `layout.css` stay stock.
 - `pnpm check` 0 errors, 0 warnings. Drift 18 checks pass, including the variant count, the component
   membership and the radius-anchor guard.
@@ -190,3 +190,6 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 - Review fixes: the disabled native-select hover is gated with `dark:enabled:hover`, the readonly text
   mute is dropped to match the spec, the shared `applySite` serves drift, and the tone row is one
   `ToneRow` component instead of three copies.
+- Round 2 review fixes: the stock `dark:aria-invalid:border-destructive/50` is kept so the invalid
+  state does not change, the invalid oracle carries the same dark twin, and the one-call type helpers
+  are inlined. The ticket's `default` line now says the primary tone, matching the spec.
