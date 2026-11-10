@@ -39,5 +39,4 @@ evidence under `.verify/evidence/`. The fixed copy matches the fixer output, and
 Findings filed, not fixed: 60 disabled field cursor, 61 readonly field affordance, 62 native select
 option list in the dark scheme.
 
-Close commits: `eb928eb`, `4c9dbf2`, `615f690`, `6af11cd`, then the review-fix and bookkeeping
-commits.
+Close commits: `eb928eb`, `4c9dbf2`, `615f690`, `6af11cd`, `51a383d`. Bookkeeping: `0a283be`.
