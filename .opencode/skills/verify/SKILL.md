@@ -66,8 +66,20 @@ node .opencode/skills/verify/scripts/drive.mjs checkbox
 the tone border and ring, the invalid ring, the cursor, and the `Field.Label` case, then fails on any
 console error or page error. Add `--headed` to watch it run.
 
-Available journeys are `checkbox`, `switch`, `radio-group`, `toggle` and `cursor`. When you add a
-feature to the app, add its journey to `scripts/drive.mjs`.
+The three field journeys drive a route of their own under `/review/<component>`, in both schemes,
+against one shared checklist:
+
+- `input` drives `/review/input` and proves the stock field: a painted border and background, the
+  28 px height, the focus ring and its border shift, the invalid ring and border, the disabled opacity
+  and cursor, readonly, and typing that changes the value.
+- `native-select` drives `/review/native-select` and proves the same list plus a 28 px base against a
+  24 px `size="sm"`, a chevron that lets clicks through, and an option choice that changes the value.
+- `textarea` drives `/review/textarea` and proves the same list plus a 64 px `min-height` and
+  `resize: none`.
+
+Available journeys are `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`,
+`native-select`, `textarea`. When you add a feature to the app, add its journey to
+`scripts/drive.mjs`.
 
 ## Evidence
 
@@ -99,10 +111,10 @@ broken attempts do not strand port 5199.
 Both helpers are plain Node ESM, run with `node`, and need no install step. Playwright and Chromium
 are already in the repo's devDependencies and browser cache.
 
-| Helper                | Subcommands               |
-| --------------------- | ------------------------- |
-| `scripts/session.mjs` | `start`, `status`, `stop` |
-| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `--headed` |
+| Helper                | Subcommands                                                                                               |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| `scripts/session.mjs` | `start`, `status`, `stop`                                                                                 |
+| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `--headed` |
 
 ## Gotchas
 

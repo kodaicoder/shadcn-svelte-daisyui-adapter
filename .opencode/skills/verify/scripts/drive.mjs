@@ -21,6 +21,8 @@ const OUTLINE_TONES = [
 	['outline-blackwhite', 'blackwhite']
 ];
 
+const REVIEW = { input: 'input', 'native-select': 'native-select', textarea: 'textarea' };
+
 const computed = (locator, property) =>
 	locator.evaluate((node, prop) => getComputedStyle(node)[prop], property);
 
@@ -289,6 +291,172 @@ const checkStates = async (page, record, scope, component, scheme, label, invali
 	}
 };
 
+const CURSORS_OK = new Set(['text', 'auto', 'default']);
+const TRANSPARENT = new Set(['transparent', 'rgba(0, 0, 0, 0)']);
+
+const settle = () => new Promise((resolve) => setTimeout(resolve, 250));
+
+const ringOf = (shadow) =>
+	shadow === 'none'
+		? ''
+		: (shadow
+				.split(/,(?![^(]*\))/)
+				.map((layer) => layer.trim())
+				.find((layer) => /\s[1-9][\d.]*px$/.test(layer)) ?? '');
+
+const fieldState = (locator) =>
+	locator.evaluate((node) => {
+		const style = getComputedStyle(node);
+		const dimmed = node.closest('[data-slot="native-select-wrapper"]') ?? node;
+		return {
+			border: style.borderTopColor,
+			background: style.backgroundColor,
+			shadow: style.boxShadow,
+			height: node.getBoundingClientRect().height,
+			minHeight: style.minHeight,
+			opacity: getComputedStyle(dimmed).opacity,
+			cursor: style.cursor,
+			resize: style.resize,
+			readOnly: node.readOnly === true
+		};
+	});
+
+const checkField = async (record, scope, label, options) => {
+	const { kind } = options;
+	const base = scope.locator('[data-case="base"]');
+	const baseState = await fieldState(base);
+
+	record(`${label}: base border is painted`, !TRANSPARENT.has(baseState.border), baseState.border);
+	record(
+		`${label}: base background is painted`,
+		!TRANSPARENT.has(baseState.background),
+		baseState.background
+	);
+	record(
+		`${label}: enabled cursor does not refuse a click`,
+		CURSORS_OK.has(baseState.cursor),
+		baseState.cursor
+	);
+
+	if (kind === 'textarea') {
+		record(`${label}: min height is 64px`, baseState.minHeight === '64px', baseState.minHeight);
+		record(`${label}: resize is off`, baseState.resize === 'none', baseState.resize);
+	} else {
+		record(
+			`${label}: height is 28px`,
+			Math.round(baseState.height) === 28,
+			`${baseState.height}px`
+		);
+	}
+
+	const focus = scope.locator('[data-case="focus"]');
+	await focus.focus();
+	await settle();
+	const focusVisible = await focus.evaluate((node) => node.matches(':focus-visible'));
+	const focusState = await fieldState(focus);
+	const focusRing = ringOf(focusState.shadow);
+	record(`${label}: focus is visible`, focusVisible, 'focus-visible');
+	record(`${label}: focus paints a ring`, focusRing !== '', focusRing || focusState.shadow);
+	record(
+		`${label}: focus border differs from base`,
+		focusState.border !== baseState.border,
+		`${focusState.border} vs ${baseState.border}`
+	);
+
+	const invalid = scope.locator('[data-case="invalid"]');
+	const invalidState = await fieldState(invalid);
+	const invalidMark = await invalid.getAttribute('aria-invalid');
+	const invalidRing = ringOf(invalidState.shadow);
+	record(`${label}: invalid is marked`, invalidMark === 'true', invalidMark);
+	record(
+		`${label}: invalid border differs from base`,
+		invalidState.border !== baseState.border,
+		`${invalidState.border} vs ${baseState.border}`
+	);
+	record(`${label}: invalid paints a ring`, invalidRing !== '', invalidRing || invalidState.shadow);
+	record(
+		`${label}: invalid ring differs from the focus ring`,
+		invalidRing !== focusRing,
+		`${invalidRing} vs ${focusRing}`
+	);
+
+	const disabled = scope.locator('[data-case="disabled"]');
+	const disabledState = await fieldState(disabled);
+	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
+	record(
+		`${label}: disabled does not invite a click`,
+		disabledState.cursor === 'not-allowed',
+		disabledState.cursor
+	);
+	record(
+		`${label}: disabled dims to 50 percent`,
+		disabledState.opacity === '0.5',
+		disabledState.opacity
+	);
+
+	if (kind !== 'native-select') {
+		const readonly = scope.locator('[data-case="readonly"]');
+		const readonlyState = await fieldState(readonly);
+		const readonlyEditable = await readonly.isEditable();
+		record(
+			`${label}: readonly stays read only`,
+			readonlyState.readOnly && !readonlyEditable,
+			`readOnly ${readonlyState.readOnly} / editable ${readonlyEditable}`
+		);
+		record(
+			`${label}: readonly is not dimmed`,
+			readonlyState.opacity === baseState.opacity,
+			`${readonlyState.opacity} vs ${baseState.opacity}`
+		);
+	}
+
+	if (kind === 'native-select') {
+		const small = scope.locator('[data-case="size-sm"]');
+		const smallState = await fieldState(small);
+		record(
+			`${label}: size-sm is 24px against a 28px base`,
+			Math.round(smallState.height) === 24 && Math.round(baseState.height) === 28,
+			`${smallState.height}px vs ${baseState.height}px`
+		);
+		const chevron = await small.evaluate((node) => {
+			const icon = node.parentElement?.querySelector('[data-slot="native-select-icon"]');
+			return icon ? getComputedStyle(icon).pointerEvents : 'missing';
+		});
+		record(`${label}: chevron lets clicks through`, chevron === 'none', chevron);
+		await base.selectOption('two');
+		record(
+			`${label}: choosing an option changes the value`,
+			(await base.inputValue()) === 'two',
+			await base.inputValue()
+		);
+		return;
+	}
+
+	await base.fill('typed');
+	record(
+		`${label}: typing changes the value`,
+		(await base.inputValue()) === 'typed',
+		await base.inputValue()
+	);
+};
+
+const fieldJourney = (kind) => async (page, record) => {
+	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });
+	record('http 200', response?.status() === 200, `got ${response?.status()}`);
+
+	const section = page.locator(`#${kind}`);
+	await section
+		.locator(`[data-slot="${REVIEW[kind]}"]`)
+		.first()
+		.waitFor({ state: 'visible', timeout: 10_000 });
+	record(`${kind} section`, (await section.count()) === 1, 'one section');
+
+	for (const scheme of ['light', 'dark']) {
+		const scope = section.locator(`[data-scheme="${scheme}"]`);
+		await checkField(record, scope, `${kind} ${scheme}`, { kind });
+	}
+};
+
 const journeys = {
 	checkbox: async (page, record) => {
 		const response = await page.goto(BASE, { waitUntil: 'networkidle' });
@@ -517,7 +685,10 @@ const journeys = {
 			const cursor = await computed(label, 'cursor');
 			record(`disabled ${name} label does not invite a click`, cursor === 'not-allowed', cursor);
 		}
-	}
+	},
+	input: fieldJourney('input'),
+	'native-select': fieldJourney('native-select'),
+	textarea: fieldJourney('textarea')
 };
 
 const journey = process.argv[2];
