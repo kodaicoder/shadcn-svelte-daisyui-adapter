@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Input } from '#lib/components/ui/input/index.js';
-	import { FieldReview } from '#lib/review/index.js';
+	import { ReviewPage } from '#lib/review/index.js';
 
 	let base = $state('');
 	let filled = $state('Filled value');
@@ -11,7 +11,7 @@
 </script>
 
 <div class="space-y-6 p-6">
-	<FieldReview kind="input" title="Input">
+	<ReviewPage kind="input" title="Input">
 		{#snippet controls()}
 			<div class="grid gap-6 sm:grid-cols-2">
 				<label class="space-y-1">
@@ -40,5 +40,5 @@
 				</label>
 			</div>
 		{/snippet}
-	</FieldReview>
+	</ReviewPage>
 </div>

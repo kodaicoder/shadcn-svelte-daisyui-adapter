@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import Scheme from './Scheme.svelte';
-	import { SCHEMES, type FieldKind } from './tones.js';
+	import { SCHEMES } from './tones.js';
 
-	let { kind, title, controls }: { kind: FieldKind; title: string; controls: Snippet } = $props();
+	let { kind, title, controls }: { kind: string; title: string; controls: Snippet } = $props();
 </script>
 
 <h1 class="text-lg font-semibold">{title}</h1>

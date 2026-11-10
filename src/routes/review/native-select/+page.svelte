@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { NativeSelect, NativeSelectOption } from '#lib/components/native-select-fixed/index.js';
-	import { FieldReview } from '#lib/review/index.js';
+	import { ReviewPage } from '#lib/review/index.js';
 
 	let base = $state('one');
 	let filled = $state('two');
@@ -11,7 +11,7 @@
 </script>
 
 <div class="space-y-6 p-6">
-	<FieldReview kind="native-select" title="Native select">
+	<ReviewPage kind="native-select" title="Native select">
 		{#snippet controls()}
 			<div class="grid gap-6 sm:grid-cols-2">
 				<label class="space-y-1">
@@ -59,5 +59,5 @@
 				</label>
 			</div>
 		{/snippet}
-	</FieldReview>
+	</ReviewPage>
 </div>
