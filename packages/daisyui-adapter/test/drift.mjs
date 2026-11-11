@@ -98,7 +98,7 @@ check(
 	BINARY_SITES.length === 25,
 	`${BINARY_SITES.length}`
 );
-check('the manifest holds two ring sites', RINGS.length === 2, `${RINGS.length}`);
+check('the manifest holds four ring sites', RINGS.length === 4, `${RINGS.length}`);
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
 check('the manifest holds sixteen size sites', SIZES.length === 16, `${SIZES.length}`);
 const sizeCoupling = SIZES.filter(
