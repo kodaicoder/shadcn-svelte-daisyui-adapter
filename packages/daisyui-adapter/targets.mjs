@@ -24,6 +24,7 @@ import {
 import { BINARY_COMPONENTS, BINARY_SITES } from './targets/binary.mjs';
 import { CURSOR_COMPONENTS, CURSOR_SITES } from './targets/cursor.mjs';
 import { CREATES } from './targets/site.mjs';
+import { TEXT_RUNGS } from './targets/text-rungs.mjs';
 
 export {
 	ALERT_VARIANTS,
@@ -51,10 +52,15 @@ export {
 	SUPPORTED,
 	SURFACE_COMPONENTS,
 	SURFACES,
+	TEXT_RUNGS,
 	VARIANT_COMPONENTS,
 	VARIANT_ROWS,
 	VARIANTS
 };
+
+// The rung shift is generated from the pinned stock, so every component it names gets a site, not
+// only the components the hand-written tables happen to touch.
+export const TEXT_RUNG_COMPONENTS = [...new Set(TEXT_RUNGS.map((site) => site.component))];
 
 const TABLES = [
 	{ sites: SITES, components: COMPONENTS },
@@ -65,7 +71,8 @@ const TABLES = [
 	{ sites: VARIANTS, components: VARIANT_COMPONENTS },
 	{ sites: BINARY_SITES, components: BINARY_COMPONENTS },
 	{ sites: CURSOR_SITES, components: CURSOR_COMPONENTS },
-	{ sites: RINGS, components: RING_COMPONENTS }
+	{ sites: RINGS, components: RING_COMPONENTS },
+	{ sites: TEXT_RUNGS, components: TEXT_RUNG_COMPONENTS }
 ];
 
 export const ALL_SITES = TABLES.flatMap((table) => table.sites);
@@ -92,6 +99,8 @@ export const TARGETS = {
 	cursorComponents: CURSOR_COMPONENTS,
 	rings: RINGS,
 	ringComponents: RING_COMPONENTS,
+	textRungs: TEXT_RUNGS,
+	textRungComponents: TEXT_RUNG_COMPONENTS,
 	buttonVariants: BUTTON_VARIANTS,
 	variantRows: VARIANT_ROWS,
 	badgeVariants: BADGE_VARIANTS,

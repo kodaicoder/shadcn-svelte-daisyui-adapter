@@ -19,3 +19,14 @@ export const typeScaleDeclarations = () =>
 	]);
 
 export const scaleValue = (rung, factor) => `[calc(var(--text-${rung})*${factor})]`;
+
+const RUNG_ABOVE = { xs: 'sm', sm: 'base', base: 'lg', lg: 'xl', xl: '2xl' };
+
+// One pass, so a shifted name is never read again: `text-xs` becomes `text-sm` and stays there. A
+// prefix (`hover:`, `file:`, `peer-data-[slot=checkbox]:`) and a modifier (`/relaxed`) are outside the
+// match, and the lookahead skips a longer name such as `text-balance` while keeping `2xl` at the top.
+export const shiftRungs = (text) =>
+	text.replace(
+		/text-(xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/g,
+		(_, rung) => `text-${RUNG_ABOVE[rung] ?? rung}`
+	);
