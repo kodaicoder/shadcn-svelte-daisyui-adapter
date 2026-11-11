@@ -4,8 +4,8 @@
 	import { Label } from '#lib/components/label-fixed/index.js';
 	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
 	import { Switch } from '#lib/components/switch-fixed/index.js';
-	import { Field, FieldDescription, FieldLabel } from '#lib/components/ui/field/index.js';
 	import { ReviewPage } from '#lib/review/index.js';
+	import FieldCase from './FieldCase.svelte';
 	import LabelFor from './LabelFor.svelte';
 </script>
 
@@ -71,11 +71,7 @@
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">field-label</span>
 					<div class="w-64">
-						<Field>
-							<FieldLabel data-case="field-label" for="label-field-input">Field label</FieldLabel>
-							<FieldDescription>A short description for the field.</FieldDescription>
-							<Input id="label-field-input" placeholder="Field value" />
-						</Field>
+						<FieldCase />
 					</div>
 				</div>
 				<div class="flex items-end gap-4">
