@@ -74,6 +74,15 @@ const disabledSite = (component, file) =>
 		fixed: 'disabled:cursor-not-allowed'
 	});
 
+const ringWidthSite = (component, file) =>
+	replaceSite({
+		id: `${component}-focus-ring-width`,
+		component,
+		file,
+		stock: 'focus-visible:ring-2',
+		fixed: 'focus-visible:ring-3'
+	});
+
 const readonlySite = (component, file, stock) =>
 	replaceSite({
 		id: `${component}-readonly-surface`,
@@ -103,6 +112,7 @@ export const FIELD_VARIANTS = [
 		fixed: '",\n\t\t\tFIELD_TONES[variant],\n\t\t\tclassName'
 	}),
 	disabledSite('input', 'input/input.svelte'),
+	ringWidthSite('input', 'input/input.svelte'),
 	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6'),
 
 	toneMapSite('textarea', 'textarea/textarea.svelte'),
@@ -121,7 +131,8 @@ export const FIELD_VARIANTS = [
 		stock: '",\n\t\tclassName',
 		fixed: '",\n\t\tFIELD_TONES[variant],\n\t\tclassName'
 	}),
-	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-2'),
+	ringWidthSite('textarea', 'textarea/textarea.svelte'),
+	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-3'),
 
 	toneMapSite('native-select', 'native-select/native-select.svelte'),
 	variantPropSite('native-select', 'native-select/native-select.svelte', 'children,'),
@@ -150,6 +161,7 @@ export const FIELD_VARIANTS = [
 		fixed: '", FIELD_TONES[variant])}\n\t\t{...restProps}'
 	}),
 	disabledSite('native-select', 'native-select/native-select.svelte'),
+	ringWidthSite('native-select', 'native-select/native-select.svelte'),
 	replaceSite({
 		id: 'native-select-disabled-hover',
 		component: 'native-select',

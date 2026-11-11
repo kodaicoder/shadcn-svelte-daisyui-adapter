@@ -81,7 +81,7 @@ check(
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
-check('the manifest holds fifteen size sites', SIZES.length === 15, `${SIZES.length}`);
+check('the manifest holds sixteen size sites', SIZES.length === 16, `${SIZES.length}`);
 const sizeCoupling = SIZES.filter(
 	(site) => site.fixed.includes('rounded-') || site.stock.includes('rounded-')
 );
@@ -91,8 +91,8 @@ check(
 	sizeCoupling.map((site) => site.id).join(', ')
 );
 check(
-	'the manifest holds eighteen field variant sites',
-	FIELD_VARIANTS.length === 18,
+	'the manifest holds twenty-one field variant sites',
+	FIELD_VARIANTS.length === 21,
 	`${FIELD_VARIANTS.length}`
 );
 check(

@@ -178,16 +178,17 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 
 ## Round 3 verification
 
-- `field-variants.mjs` holds 18 sites and `sizes.mjs` 15; `fix` twice reports 36 stock then 36 fixed
-  and 0 stock, `ui` and `layout.css` stay stock.
+- `field-variants.mjs` holds 21 sites and `sizes.mjs` 16; `fix` converges to 40 fixed (the third run
+  reports 0 stock) and `ui` and `layout.css` stay stock.
 - `pnpm check` 0 errors, 0 warnings. Drift 18 checks pass, including the variant count, the component
   membership and the radius-anchor guard.
-- Journeys: input 90, native-select 84, textarea 92; the other nine unchanged; all pass.
+- Journeys: input 92, native-select 86, textarea 94; the other nine unchanged; all pass. The focus ring
+  is 3 px; the invalid ring stays 2 px.
 - Operator review of `/review/input`: the idle border is 70 percent and focus 100 percent, and
   `secondary`, `warning` and `destructive` use the raw tone so the border matches the ring; `success`
   and `info` keep the text token. The journeys assert both alphas and the focus oracle.
 - The tone checks cover seven idle borders against the tone oracles, the focused border equal to the
-  focus oracle at 100 percent, the focused ring equal to a `ring-2 ring-<tone>/30` oracle (2 px and 30
+  focus oracle at 100 percent, the focused ring equal to a `ring-3 ring-<tone>/30` oracle (3 px and 30
   percent), the destructive invalid border while focused, the disabled cursor with pointer events on
   and no hover paint, and the readonly muted surface with `cursor: default` and focus.
 - Field size trial 2026-11-11: sm 12, default 14, lg 16; height 24/28/32; textarea min 48/56/64;

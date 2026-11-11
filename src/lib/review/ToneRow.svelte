@@ -28,7 +28,7 @@
 			></span>
 		{/each}
 		{#each TONE_NAMES as tone (tone)}
-			<span data-tone-ring={tone} class="size-4 rounded-sm ring-2 {TONES[tone].ring}"></span>
+			<span data-tone-ring={tone} class="size-4 rounded-sm ring-3 {TONES[tone].ring}"></span>
 		{/each}
 	</div>
 </div>

@@ -94,7 +94,7 @@ The workflow becomes: `shadcn-svelte init`, `shadcn-svelte add <components you u
 
 **Field variants**
 
-- `input`, `textarea` and `native-select` take the same `variant` prop with the seven tone keys. The tone sets the border colour in the idle and the focused state, and the focus ring colour. The border keeps its width and shows the tone at 70 percent when idle and at 100 percent on focus; the ring keeps its 2 px width and its 30 percent alpha.
+- `input`, `textarea` and `native-select` take the same `variant` prop with the seven tone keys. The tone sets the border colour in the idle and the focused state, and the focus ring colour. The border keeps its width and shows the tone at 70 percent when idle and at 100 percent on focus; the ring keeps its 3 px width and its 30 percent alpha.
 - The border token is the raw tone for `secondary`, `warning` and `destructive`, the text tone for `success` and `info`, and `primary` for `default`. The ring uses the raw tone at 30 percent, so `default` is `primary/30` and matches the stock ring because `--ring` is primary.
 - The invalid state keeps the destructive border and ring on top of the tone. A tone never replaces the error signal.
 - A disabled field shows `not-allowed` and paints no hover, so the pointer-events guard that hid the cursor is removed from `input` and `native-select`.
