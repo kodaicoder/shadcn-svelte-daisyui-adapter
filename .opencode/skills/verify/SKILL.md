@@ -79,7 +79,7 @@ against one shared checklist:
 - `textarea` drives `/review/textarea` and proves the same list plus a 64 px `min-height` and
   `resize: none`.
 
-The four atom journeys drive their own route under `/review/<component>`, in both schemes:
+The eight atom journeys drive their own route under `/review/<component>`, in both schemes:
 
 - `kbd` drives `/review/kbd` and proves three keys or more, the 22 px height, the muted fill, a
   key that never takes the pointer, and a group holding two keys.
@@ -90,10 +90,23 @@ The four atom journeys drive their own route under `/review/<component>`, in bot
   fill, empty content, and a 32 by 160 px block.
 - `spinner` drives `/review/spinner` and proves a 16 px status spinner labelled Loading that spins,
   a 24 px sibling, and the primary stroke on the large one.
+- `marker` drives `/review/marker` and proves four markers with their variants, uppercase text at
+  the `text-sm` rung and positive letter spacing in the muted foreground, two 1 px separator
+  hairlines and a 1 px bottom edge in the border paint, a 16 px icon kept out of the accessibility
+  tree, and one underlined anchor in the link case.
+- `progress` drives `/review/progress` and proves three progressbars announcing 0, 50 and 100 of
+  100 on a 2 px track in the muted paint, each indicator translated -100, -50 and 0 percent.
+- `slider` drives `/review/slider` and proves one thumb on the single case against two on the range
+  case, a 12 px primary thumb, an input track, a primary range, a disabled slider at 50 percent
+  opacity, and the focus ring on a Tab-focused thumb with its measured width.
+- `scroll-area` drives `/review/scroll-area` and proves each case overflows on its axis, a scrollbar
+  that mounts on hover with a border-painted thumb, and the viewport focus ring with its measured
+  width and alpha.
 
 Available journeys are `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`,
-`native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`. When you add a feature to
-the app, add its journey to `scripts/drive.mjs`.
+`native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `marker`, `progress`,
+`slider`, `scroll-area`. When you add a feature to the app, add its journey to
+`scripts/drive.mjs`.
 
 ## Evidence
 
@@ -128,7 +141,7 @@ are already in the repo's devDependencies and browser cache.
 | Helper                | Subcommands                                                                                                                                          |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `scripts/session.mjs` | `start`, `status`, `stop`                                                                                                                            |
-| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `--headed` |
+| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `marker`, `progress`, `slider`, `scroll-area`, `--headed` |
 
 ## Gotchas
 
