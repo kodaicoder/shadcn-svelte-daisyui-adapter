@@ -388,14 +388,28 @@ const checkBaseField = async (record, scope, label) => {
 	return { base, state };
 };
 
+// The contract the field journey asserts: each size names one rung, the box is 2× that rung's px,
+// the textarea's `min-h` is 4× and the inline padding is 0.5×. Reading the tokens means a change to
+// the table moves the assertion with it.
 const FIELD_SIZES = [
-	{ size: 'sm', radius: 'sm', text: '12px', height: '24px', minHeight: '48px' },
-	{ size: 'default', radius: 'md', text: '14px', height: '28px', minHeight: '56px' },
-	{ size: 'lg', radius: 'lg', text: '16px', height: '32px', minHeight: '64px' }
+	{ size: 'sm', rung: 'sm', radius: 'sm' },
+	{ size: 'default', rung: 'base', radius: 'md' },
+	{ size: 'lg', rung: 'lg', radius: 'lg' }
 ];
 
-const checkFieldSizes = async (record, scope, label, kind) => {
+const readFieldTokens = (page) =>
+	page.evaluate(() => {
+		const style = getComputedStyle(document.documentElement);
+		const px = (rung) => parseFloat(style.getPropertyValue(`--text-${rung}`).trim());
+		return { sm: px('sm'), base: px('base'), lg: px('lg') };
+	});
+
+const checkFieldSizes = async (record, scope, label, kind, tokens) => {
 	for (const entry of FIELD_SIZES) {
+		const token = tokens[entry.rung];
+		const expectedText = `${token}px`;
+		const expectedBox = kind === 'textarea' ? `${token * 4}px` : `${token * 2}px`;
+		const expectedPadding = `${token * 0.5}px`;
 		const control = scope.locator(`[data-case="size-${entry.size}"]`);
 		const state = await control.evaluate((node) => {
 			const style = getComputedStyle(node);
@@ -404,6 +418,7 @@ const checkFieldSizes = async (record, scope, label, kind) => {
 				radius: style.borderTopLeftRadius,
 				height: `${Math.round(node.getBoundingClientRect().height)}px`,
 				minHeight: style.minHeight,
+				paddingLeft: style.paddingLeft,
 				dataSize: node.dataset.size
 			};
 		});
@@ -411,10 +426,14 @@ const checkFieldSizes = async (record, scope, label, kind) => {
 			scope.locator(`[data-oracle="radius-${entry.radius}"]`),
 			'borderTopLeftRadius'
 		);
-		record(`${label}: ${entry.size} text is ${entry.text}`, state.text === entry.text, state.text);
+		record(`${label}: ${entry.size} text is ${expectedText}`, state.text === expectedText, state.text);
 		const box = kind === 'textarea' ? state.minHeight : state.height;
-		const expected = kind === 'textarea' ? entry.minHeight : entry.height;
-		record(`${label}: ${entry.size} box is ${expected}`, box === expected, box);
+		record(`${label}: ${entry.size} box is ${expectedBox}`, box === expectedBox, box);
+		record(
+			`${label}: ${entry.size} padding-left is ${expectedPadding}`,
+			state.paddingLeft === expectedPadding,
+			state.paddingLeft
+		);
 		record(
 			`${label}: ${entry.size} radius is ${entry.radius}`,
 			state.radius === probe,
@@ -424,22 +443,27 @@ const checkFieldSizes = async (record, scope, label, kind) => {
 	}
 };
 
-const checkNarrowFieldText = async (page, record, scope, kind) => {
+const checkNarrowFieldText = async (page, record, scope, kind, tokens) => {
 	const viewport = page.viewportSize();
 	if (!viewport) return;
 	try {
 		await page.setViewportSize({ width: 400, height: viewport.height });
 		await settle();
 		const text = await computed(scope.locator('[data-case="size-default"]'), 'fontSize');
-		record(`${kind}: default text stays 14px below md`, text === '14px', text);
+		record(
+			`${kind}: default text stays ${tokens.base}px below md`,
+			text === `${tokens.base}px`,
+			text
+		);
 	} finally {
 		await page.setViewportSize(viewport);
 		await settle();
 	}
 };
 
-const checkTextarea = (record, label, state) => {
-	record(`${label}: min height is 56px`, state.minHeight === '56px', state.minHeight);
+const checkTextarea = (record, label, state, tokens) => {
+	const minHeight = `${tokens.base * 4}px`;
+	record(`${label}: min height is ${minHeight}`, state.minHeight === minHeight, state.minHeight);
 	record(`${label}: resize is off`, state.resize === 'none', state.resize);
 };
 
@@ -630,16 +654,18 @@ const checkTyping = async (record, label, base) => {
 	);
 };
 
-const checkNativeSelect = async (record, scope, label, base, baseState, scheme) => {
+const checkNativeSelect = async (record, scope, label, base, baseState, scheme, tokens) => {
 	if (scheme === 'dark') {
 		const resolvedScheme = await computed(scope, 'colorScheme');
 		record(`${label}: scope resolves the color scheme`, resolvedScheme === 'dark', resolvedScheme);
 	}
 	const small = scope.locator('[data-case="size-sm"]');
 	const state = await fieldState(small);
+	const smallBox = `${tokens.sm * 2}px`;
+	const baseBox = `${tokens.base * 2}px`;
 	record(
-		`${label}: size-sm is 24px against a 28px base`,
-		Math.round(state.height) === 24 && Math.round(baseState.height) === 28,
+		`${label}: size-sm is ${smallBox} against a ${baseBox} base`,
+		`${Math.round(state.height)}px` === smallBox && `${Math.round(baseState.height)}px` === baseBox,
 		`${state.height}px vs ${baseState.height}px`
 	);
 	const chevron = await small.evaluate((node) => {
@@ -674,18 +700,19 @@ const checkNativeSelect = async (record, scope, label, base, baseState, scheme) 
 	);
 };
 
-const checkField = async (record, scope, label, kind, scheme) => {
+const checkField = async (record, scope, label, kind, scheme, tokens) => {
 	await checkSchemeHeading(record, scope, label);
 	const { base, state } = await checkBaseField(record, scope, label);
-	if (kind === 'textarea') checkTextarea(record, label, state);
-	else record(`${label}: height is 28px`, Math.round(state.height) === 28, `${state.height}px`);
-	await checkFieldSizes(record, scope, label, kind);
+	const baseBox = `${tokens.base * 2}px`;
+	if (kind === 'textarea') checkTextarea(record, label, state, tokens);
+	else record(`${label}: height is ${baseBox}`, `${Math.round(state.height)}px` === baseBox, `${state.height}px`);
+	await checkFieldSizes(record, scope, label, kind, tokens);
 	await checkFieldTones(record, scope, label);
 	const focusRing = await checkFocusField(record, scope, label, state);
 	await checkInvalidField(record, scope, label, focusRing);
 	await checkDisabledField(record, scope, label, state);
 	if (kind === 'native-select') {
-		await checkNativeSelect(record, scope, label, base, state, scheme);
+		await checkNativeSelect(record, scope, label, base, state, scheme, tokens);
 		return;
 	}
 	await checkReadonlyField(record, scope, label, state);
@@ -703,11 +730,12 @@ const fieldJourney = (kind) => async (page, record) => {
 		.waitFor({ state: 'visible', timeout: 10_000 });
 	record(`${kind} section`, (await section.count()) === 1, 'one section');
 
+	const tokens = await readFieldTokens(page);
 	for (const scheme of ['light', 'dark']) {
 		const scope = section.locator(`[data-scheme="${scheme}"]`);
-		await checkField(record, scope, `${kind} ${scheme}`, kind, scheme);
+		await checkField(record, scope, `${kind} ${scheme}`, kind, scheme, tokens);
 	}
-	await checkNarrowFieldText(page, record, section.locator('[data-scheme="light"]'), kind);
+	await checkNarrowFieldText(page, record, section.locator('[data-scheme="light"]'), kind, tokens);
 };
 
 const checkKbd = async (record, scope, label) => {
