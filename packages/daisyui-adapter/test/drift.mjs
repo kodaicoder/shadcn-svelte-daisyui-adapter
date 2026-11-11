@@ -1,7 +1,7 @@
 // Runs from the repo root with no install step: it reads the pinned stock components that are
 // committed under `src/lib/components/ui`, so a dependency bump that rewrites a class fails here
 // before the manifest can drift past a user's machine.
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -27,7 +27,8 @@ import {
 	SURFACES,
 	SURFACE_COMPONENTS,
 	VARIANTS,
-	VARIANT_COMPONENTS
+	VARIANT_COMPONENTS,
+	VARIANT_ROWS
 } from '../targets.mjs';
 import { applySite } from '../component-fix.mjs';
 
@@ -93,6 +94,27 @@ check(
 	sizeCoupling.length === 0,
 	sizeCoupling.map((site) => site.id).join(', ')
 );
+// The smallest component rung is 12px: `text-xs` is 10px on the type scale, so a class left on it is
+// a component a rung behind. The fixed copies are scanned too, because the fixer only owns the sites
+// and a regeneration would otherwise bring a stock `text-xs` back without a failure.
+const TEXT_XS = /\btext-xs\b/;
+const onXs = [
+	...ALL_SITES.filter((site) => TEXT_XS.test(site.fixed)).map((site) => site.id),
+	...VARIANT_ROWS.filter((row) => TEXT_XS.test(row.class)).map((row) => `${row.component}:${row.key}`)
+];
+const copyNames = readdirSync(join(ROOT, 'src', 'lib', 'components'), { withFileTypes: true })
+	.filter((entry) => entry.isDirectory() && entry.name.endsWith('-fixed'))
+	.flatMap((entry) =>
+		readdirSync(join(ROOT, 'src', 'lib', 'components', entry.name))
+			.filter((file) => file.endsWith('.svelte'))
+			.map((file) => ({ dir: entry.name, file }))
+	);
+for (const { dir, file } of copyNames) {
+	const text = readFileSync(join(ROOT, 'src', 'lib', 'components', dir, file), 'utf8');
+	if (TEXT_XS.test(text)) onXs.push(`${dir}/${file}`);
+}
+check('no fixed string, variant row, or fixed copy names text-xs', onXs.length === 0, onXs.join(', '));
+
 check(
 	'the manifest holds twenty-four field variant sites',
 	FIELD_VARIANTS.length === 24,
