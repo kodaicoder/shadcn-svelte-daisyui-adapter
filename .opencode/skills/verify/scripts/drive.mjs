@@ -24,6 +24,27 @@ const OUTLINE_TONES = [
 const computed = (locator, property) =>
 	locator.evaluate((node, prop) => getComputedStyle(node)[prop], property);
 
+const wcagRelativeLuminance = (color) => {
+	const match = /rgba?\(([^)]+)\)/.exec(color);
+	if (!match) throw new Error(`expected an rgb() colour, got ${color}`);
+	const [r, g, b] = match[1]
+		.split(/[,\s/]+/)
+		.slice(0, 3)
+		.map(Number);
+	const linear = (channel) => {
+		const value = channel / 255;
+		return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+	};
+	return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+};
+
+const AA_TEXT_CONTRAST = 4.5;
+
+const wcagContrastRatio = (a, b) => {
+	const [high, low] = [wcagRelativeLuminance(a), wcagRelativeLuminance(b)].sort((x, y) => y - x);
+	return (high + 0.05) / (low + 0.05);
+};
+
 const checkTones = async (record, scope, label, kind = 'filled') => {
 	const rows = await scope.locator('[data-slot][data-tone]').evaluateAll((nodes) =>
 		nodes.map((node) => ({
@@ -609,7 +630,11 @@ const checkTyping = async (record, label, base) => {
 	);
 };
 
-const checkNativeSelect = async (record, scope, label, base, baseState) => {
+const checkNativeSelect = async (record, scope, label, base, baseState, scheme) => {
+	if (scheme === 'dark') {
+		const resolvedScheme = await computed(scope, 'colorScheme');
+		record(`${label}: scope resolves the color scheme`, resolvedScheme === 'dark', resolvedScheme);
+	}
 	const small = scope.locator('[data-case="size-sm"]');
 	const state = await fieldState(small);
 	record(
@@ -628,9 +653,28 @@ const checkNativeSelect = async (record, scope, label, base, baseState) => {
 		(await base.inputValue()) === 'two',
 		await base.inputValue()
 	);
+	const optionPaint = await scope
+		.locator('[data-slot="native-select-option"]')
+		.first()
+		.evaluate((node) => ({
+			background: getComputedStyle(node).backgroundColor,
+			color: getComputedStyle(node).color
+		}));
+	const optionLuminance = wcagRelativeLuminance(optionPaint.background);
+	record(
+		`${label}: option list follows the scheme`,
+		scheme === 'dark' ? optionLuminance <= 0.05 : optionPaint.background === 'rgb(255, 255, 255)',
+		`${optionPaint.background} L ${optionLuminance.toFixed(3)}`
+	);
+	const optionContrast = wcagContrastRatio(optionPaint.color, optionPaint.background);
+	record(
+		`${label}: option text meets AA on the list`,
+		optionContrast >= AA_TEXT_CONTRAST,
+		`${optionContrast.toFixed(1)}:1`
+	);
 };
 
-const checkField = async (record, scope, label, kind) => {
+const checkField = async (record, scope, label, kind, scheme) => {
 	await checkSchemeHeading(record, scope, label);
 	const { base, state } = await checkBaseField(record, scope, label);
 	if (kind === 'textarea') checkTextarea(record, label, state);
@@ -641,7 +685,7 @@ const checkField = async (record, scope, label, kind) => {
 	await checkInvalidField(record, scope, label, focusRing);
 	await checkDisabledField(record, scope, label, state);
 	if (kind === 'native-select') {
-		await checkNativeSelect(record, scope, label, base, state);
+		await checkNativeSelect(record, scope, label, base, state, scheme);
 		return;
 	}
 	await checkReadonlyField(record, scope, label, state);
@@ -661,7 +705,7 @@ const fieldJourney = (kind) => async (page, record) => {
 
 	for (const scheme of ['light', 'dark']) {
 		const scope = section.locator(`[data-scheme="${scheme}"]`);
-		await checkField(record, scope, `${kind} ${scheme}`, kind);
+		await checkField(record, scope, `${kind} ${scheme}`, kind, scheme);
 	}
 	await checkNarrowFieldText(page, record, section.locator('[data-scheme="light"]'), kind);
 };

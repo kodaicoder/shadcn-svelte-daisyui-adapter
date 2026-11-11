@@ -114,7 +114,7 @@ A run that writes refuses when the header names a newer version than the CLI. It
 
 ### Tokens
 
-Each block holds 45 non-derived declarations: 38 binding keys, 2 static tokens and 5 chart rows. Thirteen derived helpers sit beside them: nine from the four mix keys and the five chart rows, and four from the text tones.
+Each block holds 45 non-derived declarations: 38 binding keys, 2 static tokens and 5 chart rows. The dark block also carries `color-scheme: dark`, which the readback does not count because it is not a custom property, so the native `<option>` list follows the scheme. Thirteen derived helpers sit beside them: nine from the four mix keys and the five chart rows, and four from the text tones.
 
 0.3.0 adds eleven bindings. The seven status tokens are `success`, `success-foreground`, `warning`, `warning-foreground`, `info`, `info-foreground` and `destructive-foreground`. The four text tones are `success-text`, `warning-text`, `info-text` and `destructive-text`. Each has a `--color-*` alias. `blackwhite` and `blackwhite-foreground` are a static pair the CLI writes per scheme, `oklch(20% 0.042 265.755)` with `oklch(96% 0.007 247.896)` in light and `oklch(98% 0.002 247.839)` with `oklch(13% 0.028 261.692)` in dark, with the same aliases. They have no daisyUI source, so the value is written literally.
 

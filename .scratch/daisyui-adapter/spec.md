@@ -275,3 +275,27 @@ secondary foreground with its dark twin, the text tone for the status tones, and
 - The toggle journey asserts the rest alpha and the default border.
 - The fixed copy regenerates byte for byte through the fixer.
 
+## Amendment 2026-11-11: native select option list follows the color scheme
+
+### Problem
+
+The `<select>` is themed, but its `<option>` carries `bg-[Canvas] text-[CanvasText]`, and neither `.dark` nor
+the daisy theme sets `color-scheme`. The open list therefore uses the platform light canvas in both schemes.
+Measured on `/review/native-select`: the option background is `rgb(255, 255, 255)` with `rgb(0, 0, 0)` text in
+both schemes, while the enclosing `[data-scheme="dark"]` computes `color-scheme: normal`. The closed select
+paints `oklch(0.291 …)` with a 30 percent input wash in dark, so the popup flips from a dark field to a white
+list.
+
+### Decision
+
+The map writes `color-scheme: dark` as the first declaration of the rebuilt `.dark` body. The light `:root`
+block is unchanged. The stock option and optgroup classes stay, because `Canvas` and `CanvasText` resolve
+against the scheme the element is used in, so one declaration covers both without a fixer site. The journey
+asserts the scope scheme, the dark option luminance and the AA contrast on the list.
+
+### Acceptance
+
+- The dark option resolves a dark canvas at AA: `rgb(18, 18, 18)` with `rgb(255, 255, 255)` text, contrast 18.7.
+- Light is unchanged at `rgb(255, 255, 255)` with `rgb(0, 0, 0)` text.
+- A second map run leaves the `.dark` block body byte-identical, with one `color-scheme` declaration.
+- The readback still reports 45 light and 45 dark; `color-scheme` is not a custom property and is not counted.

@@ -395,3 +395,26 @@ and rendered the control at 0.25.
 The tone survives a focused `Field.Label` too. The fixed copies remove the stock
 `group-has-[:focus-visible]/field-label:*` overrides, so a toned control keeps its tone border and tone ring
 there. Measured in both schemes on the checkbox, switch and radio-group.
+
+## Native select
+
+### Option list follows the color scheme
+
+Asked: why the open option list paints a white field on the dark page.
+
+| part | class | token | daisyUI source | resolved |
+| --- | --- | --- | --- | --- |
+| option | `bg-[Canvas] text-[CanvasText]` | `Canvas` / `CanvasText` | none, platform system colours | `rgb(18, 18, 18)` / `rgb(255, 255, 255)` in the dark scheme |
+
+Before 2026-11-11 the option resolved `rgb(255, 255, 255)` with `rgb(0, 0, 0)` text in both schemes,
+because `.dark` declared no `color-scheme`, so the platform canvas stayed light. `map` now writes
+`color-scheme: dark` as the first declaration of `.dark`, and the option resolves `rgb(18, 18, 18)` with
+`rgb(255, 255, 255)` text there, a contrast of 18.7. The light `:root` block is byte-identical, so light
+stays `rgb(255, 255, 255)`.
+
+The stock `bg-[Canvas] text-[CanvasText]` classes stay. `Canvas` and `CanvasText` are system colours that
+resolve against the scheme the element is used in, so one declaration on the dark scope covers the
+`<option>` and the `<optgroup>` without a fixer site.
+
+Limit: the option list is the platform widget, so this is proven by computed values plus an OS-level
+screenshot of the open popup, not by page pixels. Measured 2026-11-11 on the review route in both schemes.

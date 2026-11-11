@@ -1,13 +1,13 @@
 # 62: The native select option list ignores the dark scheme
-Session IDs:
-Lesson:
-Check:
+Session IDs: ses_e373b3507ffeTuC0vzOAEVfeiy
+Lesson: A themed subtree that paints platform system colours must declare its color-scheme; the adapter wrote only custom properties, so Canvas stayed light.
+Check: code - the three native-select assertions in .opencode/skills/verify/scripts/drive.mjs prove the dark scope scheme, the option luminance and the AA contrast, and the popup capture covers the rendered list.
 
 **What to build:** make the open option list follow the scheme. The `<select>` is themed, but its
 `<option>` carries `bg-[Canvas] text-[CanvasText]`, and neither `.dark` nor the daisy theme sets
 `color-scheme`, so the list opens with the platform canvas colours.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** review, atoms, finding
 **Blocked by:** None
 
