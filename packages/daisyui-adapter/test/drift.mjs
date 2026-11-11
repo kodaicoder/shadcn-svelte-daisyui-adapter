@@ -2,7 +2,7 @@
 // committed under `src/lib/components/ui`, so a dependency bump that rewrites a class fails here
 // before the manifest can drift past a user's machine.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import {
@@ -31,9 +31,26 @@ import {
 	VARIANT_ROWS
 } from '../targets.mjs';
 import { applySite } from '../component-fix.mjs';
+import { shiftRungs } from '../targets/type-scale.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
 const UI = join(ROOT, 'src', 'lib', 'components', 'ui');
+const COMPONENT_DIR = join(ROOT, 'src', 'lib', 'components');
+
+// A failing check reports one short line per file: the first line where the two versions part, and the
+// window around the character that parts them.
+const firstDifference = (want, got) => {
+	const wanted = want.split('\n');
+	const actual = got.split('\n');
+	let line = 0;
+	while (line < wanted.length && wanted[line] === actual[line]) line += 1;
+	const from = wanted[line] ?? '';
+	const to = actual[line] ?? '';
+	let at = 0;
+	while (at < from.length && from[at] === to[at]) at += 1;
+	const window = (text) => text.slice(Math.max(0, at - 20), at + 60);
+	return `line ${line + 1} col ${at + 1} wants ${JSON.stringify(window(from))} got ${JSON.stringify(window(to))}`;
+};
 
 const results = [];
 const check = (name, ok, detail) => {
@@ -115,6 +132,36 @@ for (const { dir, file } of copyNames) {
 }
 check('no fixed string, variant row, or fixed copy names text-xs', onXs.length === 0, onXs.join(', '));
 
+// A copy is the review surface for one component, so it has to be exactly what the manifest produces
+// from the pin. A hand edit that shifts one class here and not in the table is what this catches.
+const copyDrift = [];
+const copies = readdirSync(COMPONENT_DIR, { withFileTypes: true })
+	.filter((entry) => entry.isDirectory() && entry.name.endsWith('-fixed'))
+	.flatMap((entry) =>
+		readdirSync(join(COMPONENT_DIR, entry.name))
+			.filter((file) => file.endsWith('.svelte'))
+			.map((file) => ({ dir: entry.name, file }))
+	);
+for (const { dir, file } of copies) {
+	const component = dir.slice(0, -6);
+	const source = join(UI, component, file);
+	if (!existsSync(source)) {
+		copyDrift.push(`${dir}/${file}: ui/${component}/${file} is missing`);
+		continue;
+	}
+	let expected = readFileSync(source, 'utf8').replace(/\r\n/g, '\n');
+	for (const site of ALL_SITES) {
+		if (site.file === `${component}/${file}`) expected = applySite(expected, site);
+	}
+	const copy = readFileSync(join(COMPONENT_DIR, dir, file), 'utf8').replace(/\r\n/g, '\n');
+	if (copy !== expected) copyDrift.push(`${dir}/${file}: ${firstDifference(expected, copy)}`);
+}
+check(
+	'every fixed copy is what the manifest produces from the pin',
+	copyDrift.length === 0,
+	copyDrift.join(' | ')
+);
+
 check(
 	'the manifest holds twenty-four field variant sites',
 	FIELD_VARIANTS.length === 24,
@@ -195,6 +242,49 @@ check(
 	'every site still finds its stock in its turn',
 	missingStock.length === 0,
 	missingStock.join(', ')
+);
+
+// The shift is complete when the manifest is the whole difference between the pin and the new scale:
+// every file it names has to reach the stock with each rung the tables leave alone moved one step up.
+// A stock class no site shifts fails here, which is what makes completeness a computed property.
+const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
+const unnamedRungs = [];
+const walkUi = (directory) =>
+	readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
+		entry.isDirectory()
+			? walkUi(join(directory, entry.name))
+			: entry.name.endsWith('.svelte')
+				? [join(directory, entry.name)]
+				: []
+	);
+for (const path of walkUi(UI)) {
+	const file = path.slice(UI.length + 1).replaceAll(sep, '/');
+	if (fileGroups.has(file)) continue;
+	if (RUNG.test(readFileSync(path, 'utf8'))) unnamedRungs.push(file);
+}
+check(
+	'no ui file keeps a rung the manifest does not name',
+	unnamedRungs.length === 0,
+	unnamedRungs.join(', ')
+);
+
+const shiftDrift = [];
+for (const [file, group] of fileGroups) {
+	const path = join(UI, ...file.split('/'));
+	if (!existsSync(path)) continue;
+	const stock = readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+	let current = stock;
+	let target = shiftRungs(stock);
+	for (const site of group) {
+		current = applySite(current, site);
+		target = applySite(target, { ...site, stock: shiftRungs(site.stock) });
+	}
+	if (current !== target) shiftDrift.push(`${file}: ${firstDifference(target, current)}`);
+}
+check(
+	'every stock rung the tables leave alone is shifted one step up',
+	shiftDrift.length === 0,
+	shiftDrift.join(' | ')
 );
 
 const shadcnVersion = () => {
