@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Kbd, KbdGroup } from '#lib/components/kbd-fixed/index.js';
-	import { ReviewPage } from '#lib/review/index.js';
+	import { ReviewPage, TONE_NAMES } from '#lib/review/index.js';
 </script>
 
 <div class="space-y-6 p-6">
@@ -21,6 +21,14 @@
 				<div class="space-y-1">
 					<span class="text-sm text-muted-foreground">muted</span>
 					<div class="bg-muted size-4 rounded-sm" data-oracle="muted"></div>
+				</div>
+			</div>
+			<div class="space-y-2">
+				<span class="text-sm text-muted-foreground">tones</span>
+				<div class="flex flex-wrap items-end gap-2">
+					{#each TONE_NAMES as tone (tone)}
+						<Kbd data-tone={tone} variant={tone}>{tone}</Kbd>
+					{/each}
 				</div>
 			</div>
 		{/snippet}
