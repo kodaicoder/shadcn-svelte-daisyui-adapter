@@ -419,3 +419,44 @@ carry no tone variant at all, so the review cannot show the system's tone vocabu
 - `spinner` renders 12, 16, 24 and 32, and the existing 16px default is unchanged.
 - The generated copies are what the fixer produces from the pin, and `ui` and `src/routes/layout.css`
   stay stock.
+
+## Amendment 2026-11-11: Storybook is the component docs and showcase
+
+### Problem
+
+The package ships with README prose only. The `/review/<component>` pages are an internal
+verification surface: they carry `data-case` hooks for the journeys, show both schemes side by side,
+and have no props table, so they document nothing a consumer can read. Storybook is already installed
+at 10.6.4 with a11y, docs, svelte-csf, themes and vitest addons, and holds only the three scaffold
+stories from `sv create`.
+
+### Decision
+
+- **Scope is the 19 atoms.** A story file per atom, published as the 0.3.0 docs. Molecules and above
+  come with their own release.
+- **Stories render the shipped copy.** Every atom with a `*-fixed` directory imports from it, because
+  that is what an install gets after `fix`. `aspect-ratio` and `avatar` have no copy and render from
+  `ui`.
+- **`/review` stays the verification surface.** The journeys keep driving those routes, because they
+  depend on the `data-case` hooks and the two schemes on one page. Storybook documents; it does not
+  gate behaviour.
+- **One story file per component** with `tags: ['autodocs']`, a `Playground` story whose args drive
+  the Controls panel, and the states the review page already proves: every tone, every size, and the
+  states that apply to that component.
+- **The scheme is the toolbar.** `addon-themes` switches `data-theme` between light and dark, so the
+  docs show one scheme at a time instead of two cards.
+- **a11y is an error with `color-contrast` off.** The contrast gate is the adapter's own matrix and
+  the journeys, so the addon's advisory pairs would fail for theme reasons rather than story reasons.
+- **A story lint enforces three rules** learned in the reference project: a story that renders
+  content sets `asChild`, a component story defines a `Playground` with non-empty args and a template
+  that spreads them, and a select control goes through a helper rather than `control: 'select'`, which
+  drops URL-persisted args.
+- **Static build only.** `pnpm build-storybook` joins the release gate for 0.3.0. No hosting.
+
+### Acceptance
+
+- 19 atom stories exist, each with autodocs and a Playground that Controls can drive.
+- The theme toolbar shows every story in light and dark with the adapter tokens.
+- `pnpm check-stories` passes over every story file and fails when any of the three rules is broken.
+- The a11y addon reports no violation for the story set in either scheme.
+- `pnpm build-storybook` writes a static build with no console error.
