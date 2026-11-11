@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Kbd, KbdGroup } from '#lib/components/ui/kbd/index.js';
+	import { Kbd, KbdGroup } from '#lib/components/kbd-fixed/index.js';
 	import { ReviewPage } from '#lib/review/index.js';
 </script>
 
