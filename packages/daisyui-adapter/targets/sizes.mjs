@@ -1,13 +1,34 @@
 import { insertSite, replaceSite } from './site.mjs';
+import { scaleValue } from './type-scale.mjs';
 
 // The field size sets the box, the text and the radius step. Radius is a separate table, so every
 // entry here stays independent of the radius anchor and a second `fix` run still reports `fixed`.
 export const SIZE_COMPONENTS = ['input', 'textarea', 'native-select'];
 
-const INPUT_TEXT =
-	'border px-2 py-0.5 data-[size=sm]:h-6 data-[size=sm]:px-1.5 data-[size=sm]:text-sm data-[size=default]:px-[0.4375rem] data-[size=lg]:h-8 data-[size=lg]:text-lg text-base';
-const TEXTAREA_TEXT =
-	'px-2 py-2 data-[size=sm]:min-h-12 data-[size=sm]:px-1.5 data-[size=sm]:text-sm data-[size=default]:px-[0.4375rem] data-[size=lg]:min-h-16 data-[size=lg]:text-lg text-base';
+// The box and the padding are multiples of the text token that owns the size: the height is 2×, the
+// textarea's `min-h` is 4× and the inline padding is 0.5×. `sm`, `default` and `lg` read the `sm`,
+// `base` and `lg` rungs, so one change to `--text-base` moves the default field's text, box and
+// padding together and leaves the other two alone.
+const INPUT_TEXT = [
+	'border px-2 py-0.5',
+	`data-[size=sm]:h-${scaleValue('sm', 2)} data-[size=sm]:px-${scaleValue('sm', 0.5)} data-[size=sm]:text-sm`,
+	`data-[size=default]:h-${scaleValue('base', 2)} data-[size=default]:px-${scaleValue('base', 0.5)}`,
+	`data-[size=lg]:h-${scaleValue('lg', 2)} data-[size=lg]:px-${scaleValue('lg', 0.5)} data-[size=lg]:text-lg`,
+	'text-base'
+].join(' ');
+const TEXTAREA_TEXT = [
+	'px-2 py-2',
+	`data-[size=sm]:min-h-${scaleValue('sm', 4)} data-[size=sm]:px-${scaleValue('sm', 0.5)} data-[size=sm]:text-sm`,
+	`data-[size=default]:px-${scaleValue('base', 0.5)}`,
+	`data-[size=lg]:min-h-${scaleValue('lg', 4)} data-[size=lg]:px-${scaleValue('lg', 0.5)} data-[size=lg]:text-lg`,
+	'text-base'
+].join(' ');
+const NATIVE_SELECT_STEPS = [
+	`data-[size=sm]:h-${scaleValue('sm', 2)} data-[size=sm]:pl-${scaleValue('sm', 0.5)} data-[size=sm]:text-sm`,
+	`data-[size=default]:h-${scaleValue('base', 2)} data-[size=default]:pl-${scaleValue('base', 0.5)}`,
+	`data-[size=lg]:h-${scaleValue('lg', 2)} data-[size=lg]:pl-${scaleValue('lg', 0.5)} data-[size=lg]:text-lg`,
+	'outline-none'
+].join(' ');
 
 export const SIZES = [
 	insertSite({
@@ -88,7 +109,7 @@ export const SIZES = [
 		component: 'textarea',
 		file: 'textarea/textarea.svelte',
 		stock: 'field-sizing-content min-h-16 w-full',
-		fixed: 'field-sizing-content min-h-14 w-full'
+		fixed: `field-sizing-content min-h-${scaleValue('base', 4)} w-full`
 	}),
 	replaceSite({
 		id: 'textarea-size-class',
@@ -123,7 +144,6 @@ export const SIZES = [
 		component: 'native-select',
 		file: 'native-select/native-select.svelte',
 		stock: 'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] outline-none',
-		fixed:
-			'data-[size=sm]:h-6 data-[size=sm]:pl-1.5 data-[size=sm]:text-sm data-[size=default]:pl-[0.4375rem] data-[size=lg]:h-8 data-[size=lg]:text-lg outline-none'
+		fixed: NATIVE_SELECT_STEPS
 	})
 ];
