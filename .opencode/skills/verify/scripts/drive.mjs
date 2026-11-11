@@ -1194,6 +1194,160 @@ const checkScrollArea = async (record, scope, label) => {
 	);
 };
 
+const LABEL_CASES = [
+	'for',
+	'wrap',
+	'peer-checkbox',
+	'peer-radio',
+	'peer-switch',
+	'disabled-sibling',
+	'disabled-group',
+	'disabled-wrapped',
+	'field-label'
+];
+
+const checkLabel = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+
+	const labels = scope.locator('[data-slot="label"], [data-slot="field-label"]');
+	const count = await labels.count();
+	record(`${label}: nine label variants`, count === LABEL_CASES.length, `${count} of 9`);
+
+	const names = await labels.evaluateAll((nodes) => nodes.map((node) => node.dataset.case));
+	const missing = LABEL_CASES.filter((name) => !names.includes(name));
+	const extra = names.filter((name) => !LABEL_CASES.includes(name));
+	record(
+		`${label}: every label carries its own case name`,
+		missing.length === 0 && extra.length === 0 && new Set(names).size === names.length,
+		names.join(', ')
+	);
+
+	const tokens = await scope.page().evaluate(() => {
+		const root = getComputedStyle(document.documentElement);
+		return {
+			xs: parseFloat(root.getPropertyValue('--text-xs').trim()),
+			sm: parseFloat(root.getPropertyValue('--text-sm').trim()),
+			base: parseFloat(root.getPropertyValue('--text-base').trim())
+		};
+	});
+
+	const textOf = (target) =>
+		target.evaluate((node) => {
+			const style = getComputedStyle(node);
+			return {
+				size: parseFloat(style.fontSize),
+				transform: style.textTransform,
+				spacing: style.letterSpacing,
+				weight: style.fontWeight,
+				color: style.color
+			};
+		});
+
+	const baseText = await textOf(scope.locator('[data-case="for"]'));
+	const foreground = await computed(scope.locator('[data-oracle="foreground"]'), 'backgroundColor');
+	record(
+		`${label}: base label is ${baseText.size}px`,
+		baseText.size === tokens.sm,
+		`${baseText.size}px of ${tokens.sm}px`
+	);
+	record(
+		`${label}: base label is uppercase`,
+		baseText.transform === 'uppercase',
+		baseText.transform
+	);
+	record(
+		`${label}: base label tracking is ${baseText.spacing}`,
+		parseFloat(baseText.spacing) > 0,
+		baseText.spacing
+	);
+	record(
+		`${label}: base label weight is ${baseText.weight}`,
+		baseText.weight === '600',
+		baseText.weight
+	);
+	record(
+		`${label}: base label takes the foreground`,
+		baseText.color === foreground,
+		`${baseText.color} vs ${foreground}`
+	);
+
+	for (const name of ['peer-checkbox', 'peer-radio', 'peer-switch']) {
+		const peer = await textOf(scope.locator(`[data-case="${name}"]`));
+		record(
+			`${label}: ${name} label is ${peer.size}px`,
+			peer.size === tokens.base,
+			`${peer.size}px of ${tokens.base}px`
+		);
+		record(`${label}: ${name} label is not uppercase`, peer.transform === 'none', peer.transform);
+		record(
+			`${label}: ${name} label tracking is ${peer.spacing}`,
+			peer.spacing === 'normal' || parseFloat(peer.spacing) === 0,
+			peer.spacing
+		);
+		record(
+			`${label}: ${name} label weight is ${peer.weight}`,
+			peer.weight === '400',
+			peer.weight
+		);
+	}
+
+	const scheme = await scope.getAttribute('data-scheme');
+	if (scheme === 'light') {
+		const forIds = await scope
+			.page()
+			.locator('#label [data-case="for"]')
+			.evaluateAll((nodes) => nodes.map((node) => node.htmlFor));
+		record(
+			`${label}: light and dark for labels carry different ids`,
+			forIds.length === 2 && new Set(forIds).size === 2,
+			forIds.join(' and ')
+		);
+
+		const association = await scope.locator('[data-case="for"]').evaluate((node) => ({
+			htmlFor: node.htmlFor,
+			tag: node.control?.tagName.toLowerCase() ?? null,
+			controlId: node.control?.id ?? null,
+			owner: node.control?.closest('[data-scheme]')?.dataset.scheme ?? null
+		}));
+		record(
+			`${label}: for resolves to the input in this scheme`,
+			association.tag === 'input' &&
+				association.controlId === association.htmlFor &&
+				association.owner === scheme,
+			`${association.htmlFor} -> ${association.tag}#${association.controlId} in ${association.owner}`
+		);
+
+		const wrap = scope.locator('[data-case="wrap"]');
+		await wrap.locator('span').click();
+		await settle();
+		const focused = await wrap.evaluate(
+			(node) => node.querySelector('input') === document.activeElement
+		);
+		record(
+			`${label}: clicking the wrap label focuses its input`,
+			focused,
+			focused ? 'input focused' : 'input not focused'
+		);
+	}
+
+	for (const name of ['disabled-sibling', 'disabled-group', 'disabled-wrapped']) {
+		const cursor = await computed(scope.locator(`[data-case="${name}"]`), 'cursor');
+		record(`${label}: ${name} label does not invite a click`, cursor === 'not-allowed', cursor);
+	}
+	const groupOpacity = await computed(scope.locator('[data-case="disabled-group"]'), 'opacity');
+	record(`${label}: disabled group label dims to 0.5`, groupOpacity === '0.5', groupOpacity);
+
+	const fieldLabels = scope.locator('[data-slot="field-label"]');
+	const fieldCount = await fieldLabels.count();
+	record(`${label}: one field label`, fieldCount === 1, `${fieldCount}`);
+	const fieldText = await textOf(fieldLabels);
+	record(
+		`${label}: field label sits at the ${fieldText.size}px stock rung`,
+		fieldText.size === tokens.xs,
+		`${fieldText.size}px of ${tokens.xs}px, ${tokens.sm}px on the shipped label`
+	);
+};
+
 const atomJourney = (kind, probe, check) => async (page, record) => {
 	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });
 	record('http 200', response?.status() === 200, `got ${response?.status()}`);
@@ -1448,7 +1602,8 @@ const journeys = {
 	marker: atomJourney('marker', '[data-slot="marker"]', checkMarker),
 	progress: atomJourney('progress', '[role="progressbar"]', checkProgress),
 	slider: atomJourney('slider', '[data-slot="slider"]', checkSlider),
-	'scroll-area': atomJourney('scroll-area', '[data-slot="scroll-area"]', checkScrollArea)
+	'scroll-area': atomJourney('scroll-area', '[data-slot="scroll-area"]', checkScrollArea),
+	label: atomJourney('label', '[data-slot="label"]', checkLabel)
 };
 
 const journey = process.argv[2];
