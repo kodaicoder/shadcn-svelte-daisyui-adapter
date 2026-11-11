@@ -1081,7 +1081,6 @@ const checkSlider = async (record, scope, label) => {
 	const total = await thumbs.count();
 	record(`${label}: four thumbs across three sliders`, total === 4, `${total}`);
 
-	const COUNTS = { single: 1, range: 2, disabled: 1 };
 	for (const [name, expected] of Object.entries(SLIDER_CASES)) {
 		const found = await scope.locator(`[data-case="${name}"] [data-slot="slider-thumb"]`).count();
 		record(`${label}: ${name} holds ${expected} thumb`, found === expected, `${found}`);
