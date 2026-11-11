@@ -1,7 +1,7 @@
 # 63: The passed interactive components carry the 3px ring
-Session IDs:
-Lesson:
-Check:
+Session IDs: ses_e3779ea3affeQXvoGAMatMLPbv
+Lesson: A ring width that lives in each component's own class string drifts; one shared site helper feeding the generated fixed copies is the only source.
+Check: code - the binary journeys assert `focus ring is 3px` and `invalid ring is 3px` in both schemes, and `test/drift.mjs` pins the two ring sites.
 
 **What to build:** bring the interactive components that already passed up to the field ring
 treatment. `button`, `checkbox`, `switch`, `radio-group` and `toggle` still paint a 2 px focus ring;
@@ -9,7 +9,7 @@ treatment. `button`, `checkbox`, `switch`, `radio-group` and `toggle` still pain
 the focus ring and the invalid ring, keep the tone colour and the 30 percent alpha, and keep the dark
 scheme unchanged.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** adapter, review, atoms
 **Blocked by:** None
 

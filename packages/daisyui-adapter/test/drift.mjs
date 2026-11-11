@@ -18,6 +18,8 @@ import {
 	PAIRS,
 	RADIUS,
 	RADIUS_COMPONENTS,
+	RING_COMPONENTS,
+	RINGS,
 	SITES,
 	SIZE_COMPONENTS,
 	SIZES,
@@ -76,10 +78,11 @@ check(
 	unnestedInserts.map((site) => site.id).join(', ')
 );
 check(
-	'the manifest holds twenty-four binary sites',
-	BINARY_SITES.length === 24,
+	'the manifest holds twenty-five binary sites',
+	BINARY_SITES.length === 25,
 	`${BINARY_SITES.length}`
 );
+check('the manifest holds two ring sites', RINGS.length === 2, `${RINGS.length}`);
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
 check('the manifest holds sixteen size sites', SIZES.length === 16, `${SIZES.length}`);
 const sizeCoupling = SIZES.filter(
@@ -123,6 +126,7 @@ check(
 		BINARY_SITES.every((site) => BINARY_COMPONENTS.includes(site.component)) &&
 		CURSOR_SITES.every((site) => CURSOR_COMPONENTS.includes(site.component)) &&
 		RADIUS.every((site) => RADIUS_COMPONENTS.includes(site.component)) &&
+		RINGS.every((site) => RING_COMPONENTS.includes(site.component)) &&
 		SURFACES.every((site) => SURFACE_COMPONENTS.includes(site.component)) &&
 		VARIANTS.every((site) => VARIANT_COMPONENTS.includes(site.component))
 );

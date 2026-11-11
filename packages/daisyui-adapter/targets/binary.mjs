@@ -1,5 +1,5 @@
 import { keyToken } from './render.mjs';
-import { insertSite, replaceSite } from './site.mjs';
+import { insertSite, replaceSite, ringWidthSite } from './site.mjs';
 
 // Tailwind only emits a class it can read in application source, so each fixed copy under
 // `src/lib/components` carries the rows as literal strings. A row follows the base class through
@@ -233,11 +233,11 @@ const toggleOutlineFixed = [
 
 const togglePressedStock = `hover:text-foreground aria-pressed:bg-muted focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[state=on]:bg-muted`;
 
-const togglePressedFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-2 aria-invalid:border-destructive`;
+const togglePressedFixed = `aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-3 aria-invalid:border-destructive`;
 
 const toggleHoverStock = `hover:bg-muted focus-visible:ring-[3px]`;
 
-const toggleHoverFixed = `enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-[3px]`;
+const toggleHoverFixed = `enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-3`;
 
 export const BINARY_SITES = [
 	{
@@ -257,7 +257,7 @@ export const BINARY_SITES = [
 		position: 'replace',
 		stock:
 			'group-has-disabled/field:opacity-50 focus-visible:ring-2 aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:not-data-checked:border-input group-has-[:focus-visible]/field-label:data-checked:border-primary',
-		fixed: 'focus-visible:ring-2 group-has-disabled/field:opacity-50 aria-invalid:ring-2'
+		fixed: 'focus-visible:ring-3 group-has-disabled/field:opacity-50 aria-invalid:ring-3'
 	},
 	{
 		id: 'checkbox-colors',
@@ -285,6 +285,7 @@ export const BINARY_SITES = [
 	},
 	binaryProps('switch', switchPropsStock, switchPropsFixed),
 	focusSite('switch', 'switch/switch.svelte', 'data-unchecked:bg-input', 30),
+	ringWidthSite('switch', 'switch/switch.svelte'),
 	{
 		id: 'switch-field-label',
 		component: 'switch',
@@ -292,7 +293,7 @@ export const BINARY_SITES = [
 		position: 'replace',
 		stock:
 			'aria-invalid:ring-2 group-has-[:focus-visible]/field-label:ring-0 group-has-[:focus-visible]/field-label:border-transparent data-[size=default]:h-[16.6px]',
-		fixed: 'data-[size=default]:h-[16.6px] aria-invalid:ring-2'
+		fixed: 'data-[size=default]:h-[16.6px] aria-invalid:ring-3'
 	},
 	{
 		id: 'switch-insert',

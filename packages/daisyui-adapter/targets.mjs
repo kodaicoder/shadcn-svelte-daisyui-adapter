@@ -9,6 +9,7 @@
 import { COMPONENTS, PAIRS, SITES, SUPPORTED } from './targets/contrast.mjs';
 import { FIELD_VARIANT_COMPONENTS, FIELD_VARIANTS } from './targets/field-variants.mjs';
 import { RADIUS, RADIUS_COMPONENTS, ROLE_STEPS, SIZE_STEPS } from './targets/radius.mjs';
+import { RING_COMPONENTS, RINGS } from './targets/rings.mjs';
 import { SIZE_COMPONENTS, SIZES } from './targets/sizes.mjs';
 import { SURFACE_COMPONENTS, SURFACES } from './targets/surfaces.mjs';
 import {
@@ -40,6 +41,8 @@ export {
 	PAIRS,
 	RADIUS,
 	RADIUS_COMPONENTS,
+	RING_COMPONENTS,
+	RINGS,
 	ROLE_STEPS,
 	SITES,
 	SIZE_COMPONENTS,
@@ -61,7 +64,8 @@ const TABLES = [
 	{ sites: SURFACES, components: SURFACE_COMPONENTS },
 	{ sites: VARIANTS, components: VARIANT_COMPONENTS },
 	{ sites: BINARY_SITES, components: BINARY_COMPONENTS },
-	{ sites: CURSOR_SITES, components: CURSOR_COMPONENTS }
+	{ sites: CURSOR_SITES, components: CURSOR_COMPONENTS },
+	{ sites: RINGS, components: RING_COMPONENTS }
 ];
 
 export const ALL_SITES = TABLES.flatMap((table) => table.sites);
@@ -86,6 +90,8 @@ export const TARGETS = {
 	binaryComponents: BINARY_COMPONENTS,
 	cursorSites: CURSOR_SITES,
 	cursorComponents: CURSOR_COMPONENTS,
+	rings: RINGS,
+	ringComponents: RING_COMPONENTS,
 	buttonVariants: BUTTON_VARIANTS,
 	variantRows: VARIANT_ROWS,
 	badgeVariants: BADGE_VARIANTS,

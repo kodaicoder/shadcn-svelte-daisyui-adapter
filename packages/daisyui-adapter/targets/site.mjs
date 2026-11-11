@@ -1,6 +1,24 @@
 export const replaceSite = (site) => ({ ...site, position: 'replace' });
 export const insertSite = (site) => ({ ...site, position: 'insert' });
 
+export const ringWidthSite = (component, file) =>
+	replaceSite({
+		id: `${component}-focus-ring-width`,
+		component,
+		file,
+		stock: 'focus-visible:ring-2',
+		fixed: 'focus-visible:ring-3'
+	});
+
+export const invalidRingSite = (component, file) =>
+	replaceSite({
+		id: `${component}-invalid-ring-width`,
+		component,
+		file,
+		stock: 'aria-invalid:ring-2',
+		fixed: 'aria-invalid:ring-3'
+	});
+
 export const CREATES = [
 	{
 		file: 'binary-variant.ts',

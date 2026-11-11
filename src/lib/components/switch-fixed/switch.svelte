@@ -32,7 +32,7 @@
 	data-slot="switch"
 	data-size={size}
 	class={cn(
-		"data-checked:bg-primary data-unchecked:bg-input aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 border border-transparent rounded-full focus-visible:ring-2 data-[size=default]:h-[16.6px] aria-invalid:ring-2 data-[size=default]:w-[28px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] peer group/switch relative inline-flex cursor-pointer items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
+		"data-checked:bg-primary data-unchecked:bg-input aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 dark:data-unchecked:bg-input/80 shrink-0 border border-transparent rounded-full focus-visible:ring-3 data-[size=default]:h-[16.6px] aria-invalid:ring-3 data-[size=default]:w-[28px] data-[size=sm]:h-[14px] data-[size=sm]:w-[24px] peer group/switch relative inline-flex cursor-pointer items-center transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 data-disabled:cursor-not-allowed data-disabled:opacity-50",
 		TONES[variant],
 		className
 	)}

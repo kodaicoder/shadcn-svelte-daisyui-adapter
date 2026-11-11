@@ -222,6 +222,9 @@ on the fixed copy:
 | invalid, `default` variant | `2px` ring of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
 | pressed `outline` border | primary, so the border follows the fill |
 
+Ticket 63 aligned the interactive components with the fields on 2026-11-11: the toggle invalid ring is
+now `3px` of the same destructive colour, and the focus ring stays at 30 percent.
+
 `muted` is `--color-base-200`, one step from the page background, so its washes were too quiet. The tone
 at 20 percent carries hue as well as lightness, which is what makes the hover visible on both pages.
 
@@ -245,8 +248,8 @@ Asked: does the button show a focus ring, and where does it come from.
 
 | case | measured |
 | --- | --- |
-| keyboard focus, default variant | `2px` of `oklab(0.42 -0.0151355 -0.198424 / 0.3)`, which is `--ring` at 30 percent |
-| keyboard focus, `destructive` | `2px` of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
+| keyboard focus, default variant | `3px` of `oklab(0.42 -0.0151355 -0.198424 / 0.3)`, which is `--ring` at 30 percent |
+| keyboard focus, `destructive` | `3px` of `oklab(0.5 0.188902 0.0984118 / 0.2)` |
 | mouse press | `:focus-visible` false, no ring layer |
 
 `:focus-visible` matches after `Tab`, and `--ring` maps to primary. The ring fades in because the base
@@ -275,10 +278,10 @@ A disabled `<button>` reports `disabled` and cannot be activated. A disabled lin
 Asked: how focus lands in a group, and what the arrow keys do.
 
 `Tab` lands on the checked item, not the first one, because the group uses a roving tabindex. The focus
-ring measures `3px` of `oklab(0.42 -0.0151355 -0.198424 / 0.5)`, which is `--ring` at 50 percent. That
-is wider and stronger than the button's `2px` at 30 percent, so the ring weight is not uniform across
-components. `ArrowDown` selects the next item and clears the previous one. A click does the same, and a
-controlled group reports the new value through `bind:value`.
+ring measures `3px` of `oklab(0.42 -0.0151355 -0.198424 / 0.3)`, which is `--ring` at 30 percent. The
+button and the radio item now paint the same 3px ring at 30 percent. `ArrowDown` selects the next item
+and clears the previous one. A click does the same, and a controlled group reports the new value through
+`bind:value`.
 
 ### Disabled and invalid
 

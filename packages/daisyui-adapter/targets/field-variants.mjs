@@ -1,4 +1,4 @@
-import { insertSite, replaceSite } from './site.mjs';
+import { insertSite, invalidRingSite, replaceSite, ringWidthSite } from './site.mjs';
 
 // The three fields share one tone table. Each row is literal inside the fixed copy because Tailwind
 // only emits a class it can read in application source. The row follows the base class through `cn`,
@@ -72,24 +72,6 @@ const disabledSite = (component, file) =>
 		file,
 		stock: 'disabled:pointer-events-none disabled:cursor-not-allowed',
 		fixed: 'disabled:cursor-not-allowed'
-	});
-
-const ringWidthSite = (component, file) =>
-	replaceSite({
-		id: `${component}-focus-ring-width`,
-		component,
-		file,
-		stock: 'focus-visible:ring-2',
-		fixed: 'focus-visible:ring-3'
-	});
-
-const invalidRingSite = (component, file) =>
-	replaceSite({
-		id: `${component}-invalid-ring-width`,
-		component,
-		file,
-		stock: 'aria-invalid:ring-2',
-		fixed: 'aria-invalid:ring-3'
 	});
 
 const readonlySite = (component, file, stock) =>

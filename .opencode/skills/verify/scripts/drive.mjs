@@ -171,6 +171,7 @@ const checkStates = async (page, record, scope, component, scheme, label, invali
 		focusState.focusVisible && Boolean(ring),
 		`${focusState.focusVisible} ${ring ?? focusState.shadow}`
 	);
+	record(`${label}: focus ring is 3px`, /\s3px$/.test(ring ?? ''), ring ?? focusState.shadow);
 
 	const toneRings = [];
 	const borderMismatch = [];
@@ -234,6 +235,7 @@ const checkStates = async (page, record, scope, component, scheme, label, invali
 		invalidRing !== '' && invalidRing !== toneRings[0],
 		`${invalidRing} vs default ${toneRings[0]}`
 	);
+	record(`${label}: invalid ring is 3px`, /\s3px$/.test(invalidRing), invalidRing);
 
 	const disabled = scope.locator('[data-case="disabled"]');
 	record(`${label}: disabled stays disabled`, await disabled.isDisabled(), 'disabled');
