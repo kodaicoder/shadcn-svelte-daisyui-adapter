@@ -79,7 +79,7 @@ against one shared checklist:
 - `textarea` drives `/review/textarea` and proves the same list plus a 64 px `min-height` and
   `resize: none`.
 
-The eight atom journeys drive their own route under `/review/<component>`, in both schemes:
+The nine atom journeys drive their own route under `/review/<component>`, in both schemes:
 
 - `kbd` drives `/review/kbd` and proves three keys or more, the 22 px height, the muted fill, a
   key that never takes the pointer, and a group holding two keys.
@@ -102,10 +102,15 @@ The eight atom journeys drive their own route under `/review/<component>`, in bo
 - `scroll-area` drives `/review/scroll-area` and proves each case overflows on its axis, a scrollbar
   that mounts on hover with a border-painted thumb, and the viewport focus ring with its measured
   width and alpha.
+- `label` drives `/review/label` and proves nine label variants carrying their case names, a 12 px
+  uppercase base at weight 600 in the measured foreground, three 14 px peer cases that drop the
+  case, tracking and weight, a per-scheme `for` association and two distinct ids, a wrap label that
+  focuses its input on click, three disabled cases at `not-allowed` with the group at half opacity,
+  and the stock `field-label` at its 10 px rung.
 
 Available journeys are `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`,
 `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `marker`, `progress`,
-`slider`, `scroll-area`. When you add a feature to the app, add its journey to
+`slider`, `scroll-area`, `label`. When you add a feature to the app, add its journey to
 `scripts/drive.mjs`.
 
 ## Evidence
@@ -141,7 +146,7 @@ are already in the repo's devDependencies and browser cache.
 | Helper                | Subcommands                                                                                                                                          |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `scripts/session.mjs` | `start`, `status`, `stop`                                                                                                                            |
-| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `marker`, `progress`, `slider`, `scroll-area`, `--headed` |
+| `scripts/drive.mjs`   | `checkbox`, `switch`, `radio-group`, `toggle`, `cursor`, `input`, `native-select`, `textarea`, `kbd`, `separator`, `skeleton`, `spinner`, `marker`, `progress`, `slider`, `scroll-area`, `label`, `--headed` |
 
 ## Gotchas
 
