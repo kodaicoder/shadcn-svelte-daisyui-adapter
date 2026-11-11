@@ -56,8 +56,8 @@ unlisted: `docs/component-color-usage.md` (the ticket records the choice there),
 - [x] Verify: `pnpm check`, `pnpm test:adapter`, native-select journey, computed values, popup evidence
 - [x] Light scheme unchanged (computed values identical)
 - [x] `pstack-no-comments`, then `code-review` (Standards and Spec axes)
-- [ ] Operator pass on `/review/native-select` in both schemes (server on 5198)
-- [ ] Close: Status resolved, Lesson and Check, tag `t62-native-select-option-scheme`, commit after wording approval
+- [ ] Operator pass on `/review/native-select` in both schemes (not recorded separately)
+- [x] Close: Status resolved, Lesson and Check, tag `t62-native-select-option-scheme`, commits 80d0e6c and 11130b6, merged at e95f47c
 
 ## Decisions
 

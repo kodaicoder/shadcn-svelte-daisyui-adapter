@@ -33,3 +33,4 @@ Session: `ses_e3779ea3affeQXvoGAMatMLPbv`
 
 - Operator pass on the six tone outline rows and the default `outline` on `/`.
 - Commit after the wording is approved, separate from ticket 63.
+- Commit: 9127ec3, tag t65-toggle-outline-border-opacity, merged at e95f47c

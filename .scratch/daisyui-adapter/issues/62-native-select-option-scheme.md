@@ -16,7 +16,10 @@ background is `rgb(255, 255, 255)` in both schemes, and the enclosing `[data-sch
 `color-scheme: normal`. The closed select paints `oklch(0.291 …)` with a 30 percent input wash in dark,
 so the popup flips from a dark field to a white list.
 
-- [ ] Set `color-scheme: dark` on the dark scope, or theme the option list another way
-- [ ] Prove it on the rendered popup, not only on the option's computed class
-- [ ] Keep the light scheme unchanged
-- [ ] `docs/component-color-usage.md` records the choice
+- [x] Set `color-scheme: dark` on the dark scope, or theme the option list another way
+- [x] Prove it on the rendered popup, not only on the option's computed class
+- [x] Keep the light scheme unchanged
+- [x] `docs/component-color-usage.md` records the choice
+
+Closeout: 80d0e6c, 11130b6 (tag `t62-native-select-option-scheme`)
+Merged: e95f47c

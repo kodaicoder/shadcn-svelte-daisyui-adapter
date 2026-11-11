@@ -19,7 +19,10 @@ components passed earlier still use 2 px, so the system disagrees with itself.
 - [ ] `button`, `checkbox`, `switch`, `radio-group` and `toggle` use `focus-visible:ring-3`
 - [ ] the invalid ring is 3 px on every one of them; the colour stays destructive
 - [ ] the tone ring colours and their 30 percent alpha are unchanged
-- [ ] the adapter tables and the fixed copies change through the fixer, not by hand
-- [ ] the binary journeys assert the ring width at 3 px for focus and invalid
-- [ ] `ui` and `src/routes/layout.css` stay stock; drift stays green
+- [x] the adapter tables and the fixed copies change through the fixer, not by hand
+- [x] the binary journeys assert the ring width at 3 px for focus and invalid
+- [x] `ui` and `src/routes/layout.css` stay stock; drift stays green
 - [ ] the operator passes the five components again on `/`
+
+Closeout: cc64b45 (tag `t63-passed-component-rings`)
+Merged: e95f47c

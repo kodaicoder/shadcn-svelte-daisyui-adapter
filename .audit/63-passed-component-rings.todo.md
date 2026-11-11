@@ -66,7 +66,7 @@ Code-coupled work (one feature, one migration) goes to a single owner with the c
 - [x] `pstack-no-comments`
 - [x] `code-review` (Standards and Spec), one fix round, re-review APPROVE
 - [ ] Operator pass on `/` for the five components
-- [ ] Approach wording approved, then commit and tag
+- [x] Approach wording approved, then commit and tag (cc64b45, tag t63-passed-component-rings)
 
 ## Decisions
 

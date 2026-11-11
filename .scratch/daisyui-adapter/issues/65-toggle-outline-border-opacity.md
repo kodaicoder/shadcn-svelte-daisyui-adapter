@@ -20,7 +20,10 @@ excluded because its border is neutral, not a tone.
 - [ ] the six `outline-<tone>` keys paint a 20 percent border at rest
 - [ ] the default `outline` keeps its full `border-input` border
 - [ ] pressed keeps the full tone border
-- [ ] the border colour token is unchanged
-- [ ] the fixed copy regenerates through the fixer
-- [ ] the toggle journey asserts the tone rest alpha and the default border
+- [x] the border colour token is unchanged
+- [x] the fixed copy regenerates through the fixer
+- [x] the toggle journey asserts the tone rest alpha and the default border
 - [ ] the operator passes the outline rows on `/`
+
+Closeout: 9127ec3 (tag `t65-toggle-outline-border-opacity`)
+Merged: e95f47c
