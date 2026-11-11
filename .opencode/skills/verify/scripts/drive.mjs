@@ -1117,11 +1117,7 @@ const checkSlider = async (record, scope, label) => {
 	const ring = ringOf(shadow);
 	const ringWidth = ring ? Number(/([\d.]+)px$/.exec(ring)?.[1] ?? 0) : 0;
 	record(`${label}: Tab reaches the thumb`, reached, reached ? 'focused' : 'not reachable');
-	record(
-		`${label}: thumb focus ring is 3px, measured ${ringWidth}px`,
-		/\s3px$/.test(ring),
-		ring || shadow
-	);
+	record(`${label}: thumb focus ring is 3px`, near(ringWidth, 3), `${ringWidth}px`);
 };
 
 const SCROLL_CASES = {
@@ -1179,11 +1175,7 @@ const checkScrollArea = async (record, scope, label) => {
 	const ringWidth = ring ? Number(/([\d.]+)px$/.exec(ring)?.[1] ?? 0) : 0;
 	const ringAlpha = ring ? alphaOf(ring) : 0;
 	record(`${label}: Tab reaches the viewport`, reached, reached ? 'focused' : 'not reachable');
-	record(
-		`${label}: viewport focus ring is 3px, measured ${ringWidth}px`,
-		/\s3px$/.test(ring),
-		ring || shadow
-	);
+	record(`${label}: viewport focus ring is 3px`, near(ringWidth, 3), `${ringWidth}px`);
 	record(
 		`${label}: viewport ring alpha is 30 percent, measured ${Math.round(ringAlpha * 100)} percent`,
 		near(ringAlpha, 0.3),
@@ -1200,15 +1192,40 @@ const LABEL_CASES = [
 	'disabled-sibling',
 	'disabled-group',
 	'disabled-wrapped',
+	'disabled-input-sibling',
 	'field-label'
 ];
 
-const checkLabel = async (record, scope, label) => {
-	await checkSchemeHeading(record, scope, label);
+const readTextTokens = (page) =>
+	page.evaluate(() => {
+		const root = getComputedStyle(document.documentElement);
+		return {
+			xs: parseFloat(root.getPropertyValue('--text-xs').trim()),
+			sm: parseFloat(root.getPropertyValue('--text-sm').trim()),
+			base: parseFloat(root.getPropertyValue('--text-base').trim())
+		};
+	});
 
+const labelText = (target) =>
+	target.evaluate((node) => {
+		const style = getComputedStyle(node);
+		return {
+			size: parseFloat(style.fontSize),
+			transform: style.textTransform,
+			spacing: style.letterSpacing,
+			weight: style.fontWeight,
+			color: style.color
+		};
+	});
+
+const checkLabelType = async (record, scope, label, tokens) => {
 	const labels = scope.locator('[data-slot="label"], [data-slot="field-label"]');
 	const count = await labels.count();
-	record(`${label}: nine label variants`, count === LABEL_CASES.length, `${count} of 9`);
+	record(
+		`${label}: ${LABEL_CASES.length} label variants`,
+		count === LABEL_CASES.length,
+		`${count}`
+	);
 
 	const names = await labels.evaluateAll((nodes) => nodes.map((node) => node.dataset.case));
 	const missing = LABEL_CASES.filter((name) => !names.includes(name));
@@ -1219,131 +1236,115 @@ const checkLabel = async (record, scope, label) => {
 		names.join(', ')
 	);
 
-	const tokens = await scope.page().evaluate(() => {
-		const root = getComputedStyle(document.documentElement);
-		return {
-			xs: parseFloat(root.getPropertyValue('--text-xs').trim()),
-			sm: parseFloat(root.getPropertyValue('--text-sm').trim()),
-			base: parseFloat(root.getPropertyValue('--text-base').trim())
-		};
-	});
-
-	const textOf = (target) =>
-		target.evaluate((node) => {
-			const style = getComputedStyle(node);
-			return {
-				size: parseFloat(style.fontSize),
-				transform: style.textTransform,
-				spacing: style.letterSpacing,
-				weight: style.fontWeight,
-				color: style.color
-			};
-		});
-
-	const baseText = await textOf(scope.locator('[data-case="for"]'));
+	const base = await labelText(scope.locator('[data-case="for"]'));
 	const foreground = await computed(scope.locator('[data-oracle="foreground"]'), 'backgroundColor');
-	record(
-		`${label}: base label is ${baseText.size}px`,
-		baseText.size === tokens.sm,
-		`${baseText.size}px of ${tokens.sm}px`
-	);
-	record(
-		`${label}: base label is uppercase`,
-		baseText.transform === 'uppercase',
-		baseText.transform
-	);
-	record(
-		`${label}: base label tracking is ${baseText.spacing}`,
-		parseFloat(baseText.spacing) > 0,
-		baseText.spacing
-	);
-	record(
-		`${label}: base label weight is ${baseText.weight}`,
-		baseText.weight === '600',
-		baseText.weight
-	);
+	record(`${label}: base label is ${tokens.sm}px`, base.size === tokens.sm, `${base.size}px`);
+	record(`${label}: base label is uppercase`, base.transform === 'uppercase', base.transform);
+	record(`${label}: base label tracks wide`, parseFloat(base.spacing) > 0, base.spacing);
+	record(`${label}: base label is weight 600`, base.weight === '600', base.weight);
 	record(
 		`${label}: base label takes the foreground`,
-		baseText.color === foreground,
-		`${baseText.color} vs ${foreground}`
+		base.color === foreground,
+		`${base.color} vs ${foreground}`
 	);
 
 	for (const name of ['peer-checkbox', 'peer-radio', 'peer-switch']) {
-		const peer = await textOf(scope.locator(`[data-case="${name}"]`));
-		record(
-			`${label}: ${name} label is ${peer.size}px`,
-			peer.size === tokens.base,
-			`${peer.size}px of ${tokens.base}px`
-		);
+		const peer = await labelText(scope.locator(`[data-case="${name}"]`));
+		record(`${label}: ${name} label is ${tokens.base}px`, peer.size === tokens.base, `${peer.size}px`);
 		record(`${label}: ${name} label is not uppercase`, peer.transform === 'none', peer.transform);
 		record(
-			`${label}: ${name} label tracking is ${peer.spacing}`,
+			`${label}: ${name} label keeps normal tracking`,
 			peer.spacing === 'normal' || parseFloat(peer.spacing) === 0,
 			peer.spacing
 		);
-		record(
-			`${label}: ${name} label weight is ${peer.weight}`,
-			peer.weight === '400',
-			peer.weight
-		);
+		record(`${label}: ${name} label is weight 400`, peer.weight === '400', peer.weight);
 	}
+};
 
+const checkLabelAssociation = async (record, scope, label) => {
 	const scheme = await scope.getAttribute('data-scheme');
-	if (scheme === 'light') {
-		const forIds = await scope
-			.page()
-			.locator('#label [data-case="for"]')
-			.evaluateAll((nodes) => nodes.map((node) => node.htmlFor));
-		record(
-			`${label}: light and dark for labels carry different ids`,
-			forIds.length === 2 && new Set(forIds).size === 2,
-			forIds.join(' and ')
-		);
+	if (scheme !== 'light') return;
 
-		const association = await scope.locator('[data-case="for"]').evaluate((node) => ({
-			htmlFor: node.htmlFor,
-			tag: node.control?.tagName.toLowerCase() ?? null,
-			controlId: node.control?.id ?? null,
-			owner: node.control?.closest('[data-scheme]')?.dataset.scheme ?? null
-		}));
-		record(
-			`${label}: for resolves to the input in this scheme`,
-			association.tag === 'input' &&
-				association.controlId === association.htmlFor &&
-				association.owner === scheme,
-			`${association.htmlFor} -> ${association.tag}#${association.controlId} in ${association.owner}`
-		);
+	const forIds = await scope
+		.page()
+		.locator('#label [data-case="for"]')
+		.evaluateAll((nodes) => nodes.map((node) => node.htmlFor));
+	record(
+		`${label}: the two schemes carry different for ids`,
+		forIds.length === 2 && new Set(forIds).size === 2,
+		forIds.join(' and ')
+	);
 
-		const wrap = scope.locator('[data-case="wrap"]');
-		await wrap.locator('span').click();
-		await settle();
-		const focused = await wrap.evaluate(
-			(node) => node.querySelector('input') === document.activeElement
-		);
-		record(
-			`${label}: clicking the wrap label focuses its input`,
-			focused,
-			focused ? 'input focused' : 'input not focused'
-		);
-	}
+	const association = await scope.locator('[data-case="for"]').evaluate((node) => ({
+		htmlFor: node.htmlFor,
+		tag: node.control?.tagName.toLowerCase() ?? null,
+		controlId: node.control?.id ?? null,
+		owner: node.control?.closest('[data-scheme]')?.dataset.scheme ?? null
+	}));
+	record(
+		`${label}: for resolves to the input in this scheme`,
+		association.controlId === association.htmlFor && association.owner === scheme,
+		`${association.htmlFor} -> ${association.tag}#${association.controlId} in ${association.owner}`
+	);
 
+	const wrap = scope.locator('[data-case="wrap"]');
+	await wrap.locator('span').click();
+	await settle();
+	const focused = await wrap.evaluate(
+		(node) => node.querySelector('input') === document.activeElement
+	);
+	record(
+		`${label}: clicking the wrap label focuses its input`,
+		focused,
+		focused ? 'input focused' : 'input not focused'
+	);
+};
+
+const checkLabelDisabled = async (record, scope, label) => {
 	for (const name of ['disabled-sibling', 'disabled-group', 'disabled-wrapped']) {
 		const cursor = await computed(scope.locator(`[data-case="${name}"]`), 'cursor');
 		record(`${label}: ${name} label does not invite a click`, cursor === 'not-allowed', cursor);
 	}
-	const groupOpacity = await computed(scope.locator('[data-case="disabled-group"]'), 'opacity');
-	record(`${label}: disabled group label dims to 0.5`, groupOpacity === '0.5', groupOpacity);
+	const group = await computed(scope.locator('[data-case="disabled-group"]'), 'opacity');
+	record(`${label}: disabled group label dims to 0.5`, group === '0.5', group);
 
-	const fieldLabels = scope.locator('[data-slot="field-label"]');
-	const fieldCount = await fieldLabels.count();
-	record(`${label}: one field label`, fieldCount === 1, `${fieldCount}`);
-	const fieldText = await textOf(fieldLabels);
+	const input = await scope.locator('[data-case="disabled-input-sibling"]').evaluate((node) => {
+		const control = node.control;
+		const style = control ? getComputedStyle(control) : null;
+		return {
+			found: Boolean(control),
+			cursor: style?.cursor ?? 'missing',
+			opacity: style?.opacity ?? 'missing'
+		};
+	});
 	record(
-		`${label}: field label sits at the ${fieldText.size}px stock rung`,
-		fieldText.size === tokens.xs,
-		`${fieldText.size}px of ${tokens.xs}px, ${tokens.sm}px on the shipped label`
+		`${label}: disabled text input does not invite a click`,
+		input.found && input.cursor === 'not-allowed' && input.opacity === '0.5',
+		`${input.cursor} / ${input.opacity}`
 	);
 };
+
+const checkLabelField = async (record, scope, label, tokens) => {
+	const fieldLabels = scope.locator('[data-slot="field-label"]');
+	const count = await fieldLabels.count();
+	record(`${label}: one field label`, count === 1, `${count}`);
+	const field = await labelText(fieldLabels);
+	record(
+		`${label}: field label sits at the ${tokens.xs}px stock rung`,
+		field.size === tokens.xs,
+		`${field.size}px, ${tokens.sm}px on the shipped label`
+	);
+};
+
+const checkLabel = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const tokens = await readTextTokens(scope.page());
+	await checkLabelType(record, scope, label, tokens);
+	await checkLabelAssociation(record, scope, label);
+	await checkLabelDisabled(record, scope, label);
+	await checkLabelField(record, scope, label, tokens);
+};
+
 
 const atomJourney = (kind, probe, check) => async (page, record) => {
 	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });

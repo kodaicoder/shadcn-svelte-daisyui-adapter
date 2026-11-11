@@ -69,6 +69,10 @@
 					</Label>
 				</div>
 				<div class="space-y-2">
+					<span class="text-sm text-muted-foreground">disabled-input-sibling</span>
+					<LabelFor name="disabled-input-sibling" disabled />
+				</div>
+				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">field-label</span>
 					<div class="w-64">
 						<FieldCase />

@@ -39,10 +39,7 @@
 				<div class="flex items-end gap-4">
 					<div class="space-y-1">
 						<span class="text-sm text-muted-foreground">muted</span>
-						<span
-							class="bg-muted text-muted-foreground inline-flex size-4 items-center justify-center text-xs"
-							data-oracle="muted">A</span
-						>
+						<span class="text-muted-foreground text-sm" data-oracle="muted">Muted</span>
 					</div>
 					<div class="space-y-1">
 						<span class="text-sm text-muted-foreground">border</span>
