@@ -42,6 +42,60 @@ const wcagContrastRatio = (a, b) => {
 	return (high + 0.05) / (low + 0.05);
 };
 
+// Computed colours arrive as oklch, and a tone fill carries alpha. A one-pixel canvas resolves both
+// to the sRGB the eye sees, stacked in order, which is the only honest way to compare a 15 percent
+// wash against the page behind it.
+const paint = (page, layers) =>
+	page.evaluate((colors) => {
+		const canvas = document.createElement('canvas');
+		canvas.width = 1;
+		canvas.height = 1;
+		const context = canvas.getContext('2d');
+		for (const value of colors) {
+			context.fillStyle = value;
+			context.fillRect(0, 0, 1, 1);
+		}
+		const [r, g, b] = context.getImageData(0, 0, 1, 1).data;
+		return `rgb(${r}, ${g}, ${b})`;
+	}, layers);
+
+const surfaceRatio = async (page, pageBackground, fill) =>
+	wcagContrastRatio(
+		await paint(page, [pageBackground]),
+		await paint(page, [pageBackground, fill])
+	);
+
+const inkRatio = async (page, pageBackground, fill, ink) =>
+	wcagContrastRatio(
+		await paint(page, [pageBackground, fill]),
+		await paint(page, [pageBackground, fill, ink])
+	);
+
+const SURFACE_FLOOR = { light: 1.1, dark: 1.25 };
+const INK_FLOOR = 3;
+
+const cssLength = (page, expression) =>
+	page.evaluate((value) => {
+		const probe = document.createElement('div');
+		probe.style.position = 'absolute';
+		probe.style.width = value;
+		document.body.append(probe);
+		const width = probe.getBoundingClientRect().width;
+		probe.remove();
+		return width;
+	}, expression);
+
+// The light scheme card paints no background of its own, so the page behind it is the honest
+// backdrop. Walk up until an opaque layer shows.
+const backdropOf = (scope) =>
+	scope.evaluate((node) => {
+		for (let current = node; current; current = current.parentElement) {
+			const value = getComputedStyle(current).backgroundColor;
+			if (value && value !== 'transparent' && !/rgba\(0, 0, 0, 0\)/.test(value)) return value;
+		}
+		return 'rgb(255, 255, 255)';
+	});
+
 const checkTones = async (record, scope, label, kind = 'filled') => {
 	const rows = await scope.locator('[data-slot][data-tone]').evaluateAll((nodes) =>
 		nodes.map((node) => ({
@@ -748,37 +802,92 @@ const fieldJourney = (kind) => async (page, record) => {
 	await checkNarrowFieldText(page, record, section.locator('[data-scheme="light"]'), kind, tokens);
 };
 
+const schemeOf = (scope) => scope.getAttribute('data-scheme');
+
+const toneRows = (scope) => scope.locator('[data-tone]');
+
+const toneFills = (locator) =>
+	locator.evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			tone: node.dataset.tone,
+			fill: getComputedStyle(node).backgroundColor
+		}))
+	);
+
 const checkKbd = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
-	const keys = scope.locator('[data-slot="kbd"]');
-	const keyCount = await keys.count();
-	record(`${label}: three keys`, keyCount >= 3, `${keyCount}`);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
+	const selectorRadius = await cssLength(page, 'var(--radius-sm)');
 
+	const keys = scope.locator('[data-slot="kbd"]');
 	const base = scope.locator('[data-case="base"]');
-	const state = await base.evaluate((node) => ({
-		height: node.getBoundingClientRect().height,
-		background: getComputedStyle(node).backgroundColor,
-		pointerEvents: getComputedStyle(node).pointerEvents
-	}));
-	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
+	const state = await base.evaluate((node) => {
+		const style = getComputedStyle(node);
+		return {
+			height: node.getBoundingClientRect().height,
+			fill: style.backgroundColor,
+			ink: style.color,
+			pointerEvents: style.pointerEvents,
+			radius: style.borderRadius,
+			bottomBorder: style.borderBottomWidth
+		};
+	});
 	record(`${label}: key height is 22px`, Math.round(state.height) === 22, `${state.height}px`);
-	record(
-		`${label}: key takes the muted fill`,
-		state.background === muted,
-		`${state.background} vs ${muted}`
-	);
 	record(
 		`${label}: key never takes the pointer`,
 		state.pointerEvents === 'none',
 		state.pointerEvents
 	);
+	record(
+		`${label}: key radius follows the selector step`,
+		Math.abs(parseFloat(state.radius) - selectorRadius) < 0.5,
+		`${state.radius} of ${selectorRadius}px`
+	);
+	record(
+		`${label}: key carries a 2px bottom edge`,
+		state.bottomBorder === '2px',
+		state.bottomBorder
+	);
+
+	const surface = await surfaceRatio(page, pageBackground, state.fill);
+	record(
+		`${label}: key surface reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		surface >= SURFACE_FLOOR[scheme],
+		`${surface.toFixed(2)}:1`
+	);
+	const ink = await inkRatio(page, pageBackground, state.fill, state.ink);
+	record(`${label}: key text reaches 3 to 1`, ink >= INK_FLOOR, `${ink.toFixed(2)}:1`);
 
 	const grouped = await scope.locator('[data-case="group"] [data-slot="kbd"]').count();
 	record(`${label}: group holds two keys`, grouped === 2, `${grouped}`);
+
+	const tones = await toneFills(toneRows(scope));
+	record(`${label}: ${TONES.length} tone keys`, tones.length === TONES.length, `${tones.length}`);
+	record(
+		`${label}: every tone paints its own fill`,
+		new Set(tones.map((row) => row.fill)).size === TONES.length,
+		tones.map((row) => `${row.tone}=${row.fill}`).join(', ')
+	);
+	const dim = [];
+	for (const row of tones) {
+		const ratio = await surfaceRatio(page, pageBackground, row.fill);
+		if (ratio < SURFACE_FLOOR[scheme]) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+	}
+	record(
+		`${label}: every tone surface reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		dim.length === 0,
+		dim.join(', ') || `${tones.length} rows`
+	);
+	record(`${label}: key count is the group plus the row`, (await keys.count()) === 10, `${await keys.count()}`);
 };
 
 const checkSeparator = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
 	const read = (locator) =>
 		locator.evaluate((node) => {
 			const rect = node.getBoundingClientRect();
@@ -804,9 +913,7 @@ const checkSeparator = async (record, scope, label) => {
 	const vertical = await read(scope.locator('[data-case="vertical"]'));
 	record(
 		`${label}: vertical spans the row height`,
-		vertical.orientation === 'vertical' &&
-			Math.round(vertical.width) === 1 &&
-			vertical.height >= 40,
+		vertical.orientation === 'vertical' && Math.round(vertical.width) === 1 && vertical.height >= 40,
 		`${vertical.orientation} ${vertical.width} x ${vertical.height}`
 	);
 	record(`${label}: vertical is announced`, vertical.role === 'separator', vertical.role);
@@ -817,41 +924,91 @@ const checkSeparator = async (record, scope, label) => {
 		decorative.role !== 'separator' && decorative.ariaHidden === 'true',
 		`role ${decorative.role} / aria-hidden ${decorative.ariaHidden}`
 	);
+
+	const lines = await toneFills(toneRows(scope));
+	record(
+		`${label}: ${TONES.length + 1} tone lines`,
+		lines.length === TONES.length + 1,
+		`${lines.length}`
+	);
+	const dim = [];
+	for (const row of lines) {
+		const ratio = await surfaceRatio(page, pageBackground, row.fill);
+		if (ratio < SURFACE_FLOOR[scheme]) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+	}
+	record(
+		`${label}: every line reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		dim.length === 0,
+		dim.join(', ') || `${lines.length} rows`
+	);
 };
 
 const checkSkeleton = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
-	const count = await scope.locator('[data-slot="skeleton"]').count();
-	record(`${label}: two skeletons`, count === 2, `${count}`);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
+	const selectorRadius = await cssLength(page, 'var(--radius-sm)');
 
-	const block = scope.locator('[data-case="block"]');
-	const state = await block.evaluate((node) => {
+	const block = await scope.locator('[data-case="block"]').evaluate((node) => {
 		const rect = node.getBoundingClientRect();
+		const style = getComputedStyle(node);
 		return {
-			animation: getComputedStyle(node).animationName,
-			background: getComputedStyle(node).backgroundColor,
+			animation: style.animationName,
+			fill: style.backgroundColor,
 			text: node.textContent.trim(),
 			width: rect.width,
-			height: rect.height
+			height: rect.height,
+			radius: style.borderRadius
 		};
 	});
-	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
-	record(`${label}: skeleton pulses`, state.animation === 'pulse', state.animation);
-	record(
-		`${label}: skeleton takes the muted fill`,
-		state.background === muted,
-		`${state.background} vs ${muted}`
-	);
-	record(`${label}: skeleton carries no text`, state.text === '', state.text || 'empty');
+	record(`${label}: skeleton pulses`, block.animation === 'pulse', block.animation);
+	record(`${label}: skeleton carries no text`, block.text === '', block.text || 'empty');
 	record(
 		`${label}: block measures 32px by 160px`,
-		Math.round(state.height) === 32 && Math.round(state.width) === 160,
-		`${state.height} x ${state.width}`
+		Math.round(block.height) === 32 && Math.round(block.width) === 160,
+		`${block.height} x ${block.width}`
+	);
+	record(
+		`${label}: block radius follows the selector step`,
+		Math.abs(parseFloat(block.radius) - selectorRadius) < 0.5,
+		`${block.radius} of ${selectorRadius}px`
+	);
+
+	const circle = await computed(scope.locator('[data-case="circle"]'), 'borderRadius');
+	record(`${label}: circle stays fully round`, parseFloat(circle) >= 20, circle);
+
+	const neutral = await scope.locator('[data-tone="neutral"]').evaluate((node) => getComputedStyle(node).backgroundColor);
+	const neutralRatio = await surfaceRatio(page, pageBackground, neutral);
+	record(
+		`${label}: neutral surface reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		neutralRatio >= SURFACE_FLOOR[scheme],
+		`${neutralRatio.toFixed(2)}:1`
+	);
+
+	const tones = await toneFills(toneRows(scope).filter({ hasNot: scope.locator('[data-tone="neutral"]') }));
+	record(
+		`${label}: ${TONES.length} tone fill and one neutral`,
+		(await toneRows(scope).count()) === TONES.length + 1,
+		`${await toneRows(scope).count()}`
+	);
+	const dim = [];
+	for (const row of tones) {
+		const ratio = await surfaceRatio(page, pageBackground, row.fill);
+		if (ratio < SURFACE_FLOOR[scheme]) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+	}
+	record(
+		`${label}: every tone surface reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		dim.length === 0,
+		dim.join(', ') || `${tones.length} rows`
 	);
 };
 
 const checkSpinner = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
 	// animate-spin rotates the box, so its bounding rect oscillates; the CSS size is the honest one.
 	const read = (locator) =>
 		locator.evaluate((node) => {
@@ -881,24 +1038,54 @@ const checkSpinner = async (record, scope, label) => {
 		`${base.width} x ${base.height}`
 	);
 
-	const large = await read(scope.locator('[data-case="large"]'));
-	record(
-		`${label}: large spinner is 24px`,
-		Math.round(large.width) === 24 && Math.round(large.height) === 24,
-		`${large.width} x ${large.height}`
+	const sizes = await scope.locator('[data-size]').evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			size: node.dataset.size,
+			width: parseFloat(getComputedStyle(node).width)
+		}))
 	);
-	const primary = await computed(scope.locator('[data-oracle="primary"]'), 'color');
+	const expectedSizes = { sm: 12, default: 16, lg: 24, xl: 32 };
+	const wrongSize = sizes
+		.filter((row) => Math.round(row.width) !== expectedSizes[row.size])
+		.map((row) => `${row.size}=${row.width}`);
 	record(
-		`${label}: large spinner takes the primary paint`,
-		large.stroke === primary && large.color === primary,
-		`stroke ${large.stroke} / color ${large.color} vs ${primary}`
+		`${label}: four sizes render at 12, 16, 24 and 32`,
+		sizes.length === 4 && wrongSize.length === 0,
+		wrongSize.join(', ') || sizes.map((row) => `${row.size}=${row.width}`).join(', ')
+	);
+
+	const tones = await scope.locator('[data-tone]').evaluateAll((nodes) =>
+		nodes.map((node) => {
+			const svg = node.tagName.toLowerCase() === 'svg' ? node : node.querySelector('svg');
+			return {
+				tone: node.dataset.tone,
+				stroke: svg ? getComputedStyle(svg).stroke : 'missing'
+			};
+		})
+	);
+	record(`${label}: ${TONES.length} tone spinners`, tones.length === TONES.length, `${tones.length}`);
+	record(
+		`${label}: every tone paints its own stroke`,
+		new Set(tones.map((row) => row.stroke)).size === TONES.length,
+		tones.map((row) => `${row.tone}=${row.stroke}`).join(', ')
+	);
+	const dim = [];
+	for (const row of tones) {
+		const ratio = await surfaceRatio(page, pageBackground, row.stroke);
+		if (ratio < INK_FLOOR) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+	}
+	record(
+		`${label}: every stroke reaches 3 to 1`,
+		dim.length === 0,
+		dim.join(', ') || `${tones.length} rows`
 	);
 };
 
-const MARKER_VARIANTS = { base: 'default', separator: 'separator', border: 'border', link: 'default' };
-
 const checkMarker = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
 	const markers = scope.locator('[data-slot="marker"]');
 	const count = await markers.count();
 	record(`${label}: four markers`, count === 4, `${count}`);
@@ -906,8 +1093,9 @@ const checkMarker = async (record, scope, label) => {
 	const variants = await markers.evaluateAll((nodes) =>
 		nodes.map((node) => ({ name: node.dataset.case, variant: node.dataset.variant }))
 	);
+	const expected = { base: 'default', separator: 'separator', border: 'border', link: 'default' };
 	const wrongVariant = variants
-		.filter((row) => MARKER_VARIANTS[row.name] !== row.variant)
+		.filter((row) => expected[row.name] !== row.variant)
 		.map((row) => `${row.name}=${row.variant}`);
 	record(
 		`${label}: every marker carries its variant`,
@@ -915,13 +1103,7 @@ const checkMarker = async (record, scope, label) => {
 		wrongVariant.join(', ') || 'all four'
 	);
 
-	const rung = await scope
-		.page()
-		.evaluate(() =>
-			parseFloat(
-				getComputedStyle(document.documentElement).getPropertyValue('--text-sm').trim()
-			)
-		);
+	const rung = await cssLength(page, 'var(--text-sm)');
 	const text = await scope
 		.locator('[data-case="base"] [data-slot="marker-content"]')
 		.evaluate((node) => {
@@ -933,19 +1115,11 @@ const checkMarker = async (record, scope, label) => {
 				color: style.color
 			};
 		});
-	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'color');
 	record(`${label}: marker text is uppercase`, text.transform === 'uppercase', text.transform);
-	record(
-		`${label}: marker letter spacing is ${text.spacing}px`,
-		text.spacing > 0,
-		`${text.spacing}px`
-	);
+	record(`${label}: marker tracking is positive`, text.spacing > 0, `${text.spacing}px`);
 	record(`${label}: marker text is ${rung}px`, text.size === rung, `${text.size}px`);
-	record(
-		`${label}: marker text takes the muted foreground`,
-		text.color === muted,
-		`${text.color} vs ${muted}`
-	);
+	const ink = await surfaceRatio(page, pageBackground, text.color);
+	record(`${label}: marker text reaches 4.5 to 1`, ink >= AA_TEXT_CONTRAST, `${ink.toFixed(2)}:1`);
 
 	const hairlines = await scope.locator('[data-case="separator"]').evaluate((node) => {
 		const before = getComputedStyle(node, '::before');
@@ -957,16 +1131,17 @@ const checkMarker = async (record, scope, label) => {
 			afterPaint: after.backgroundColor
 		};
 	});
-	const border = await computed(scope.locator('[data-oracle="border"]'), 'backgroundColor');
 	record(
 		`${label}: separator paints a 1px hairline on each side`,
 		hairlines.beforeHeight === '1px' && hairlines.afterHeight === '1px',
 		`${hairlines.beforeHeight} / ${hairlines.afterHeight}`
 	);
+	const beforeRatio = await surfaceRatio(page, pageBackground, hairlines.beforePaint);
+	const afterRatio = await surfaceRatio(page, pageBackground, hairlines.afterPaint);
 	record(
-		`${label}: both hairlines take the border paint`,
-		hairlines.beforePaint === border && hairlines.afterPaint === border,
-		`${hairlines.beforePaint} / ${hairlines.afterPaint} vs ${border}`
+		`${label}: both hairlines reach ${SURFACE_FLOOR[scheme]} to 1`,
+		beforeRatio >= SURFACE_FLOOR[scheme] && afterRatio >= SURFACE_FLOOR[scheme],
+		`${beforeRatio.toFixed(2)}:1 / ${afterRatio.toFixed(2)}:1`
 	);
 
 	const edged = await scope.locator('[data-case="border"]').evaluate((node) => ({
@@ -974,10 +1149,11 @@ const checkMarker = async (record, scope, label) => {
 		paint: getComputedStyle(node).borderBottomColor
 	}));
 	record(`${label}: border variant paints a 1px bottom edge`, edged.width === '1px', edged.width);
+	const edgeRatio = await surfaceRatio(page, pageBackground, edged.paint);
 	record(
-		`${label}: bottom edge takes the border paint`,
-		edged.paint === border,
-		`${edged.paint} vs ${border}`
+		`${label}: bottom edge reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		edgeRatio >= SURFACE_FLOOR[scheme],
+		`${edgeRatio.toFixed(2)}:1`
 	);
 
 	const icons = scope.locator('[data-slot="marker-icon"]');
@@ -1016,99 +1192,176 @@ const checkMarker = async (record, scope, label) => {
 const PROGRESS_STOPS = {
 	empty: { now: '0', fraction: -1 },
 	half: { now: '50', fraction: -0.5 },
-	full: { now: '100', fraction: 0 }
+	full: { now: '100', fraction: 0 },
+	thick: { now: '50', fraction: -0.5 }
 };
 
 const checkProgress = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
-	const bars = scope.locator('[role="progressbar"]');
-	const count = await bars.count();
-	record(`${label}: three progress bars`, count === 3, `${count}`);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
 
-	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
-	const primary = await computed(scope.locator('[data-oracle="primary"]'), 'backgroundColor');
-	const rows = await bars.evaluateAll((nodes) =>
+	const cases = await scope.locator('[data-case]').evaluateAll((nodes) =>
 		nodes.map((node) => {
 			const indicator = node.querySelector('[data-slot="progress-indicator"]');
+			const style = getComputedStyle(node);
 			return {
 				name: node.dataset.case,
 				now: node.getAttribute('aria-valuenow'),
 				max: node.getAttribute('aria-valuemax'),
 				height: node.getBoundingClientRect().height,
-				track: getComputedStyle(node).backgroundColor,
+				track: style.backgroundColor,
+				radius: style.borderRadius,
 				indicator: indicator ? getComputedStyle(indicator).backgroundColor : 'missing',
 				transform: indicator ? getComputedStyle(indicator).transform : 'missing',
 				width: indicator ? indicator.getBoundingClientRect().width : 0
 			};
 		})
 	);
-	for (const row of rows) {
+	record(`${label}: four progress cases`, cases.length === 4, `${cases.length}`);
+	for (const row of cases) {
 		const expected = PROGRESS_STOPS[row.name];
 		const fraction = translateFraction(row.transform, row.width);
-		record(
-			`${label}: ${row.name} announces ${expected.now}`,
-			row.now === expected.now,
-			row.now
-		);
+		record(`${label}: ${row.name} announces ${expected.now}`, row.now === expected.now, row.now);
 		record(`${label}: ${row.name} sets max 100`, row.max === '100', row.max);
-		record(
-			`${label}: ${row.name} track takes the muted paint`,
-			row.track === muted,
-			`${row.track} vs ${muted}`
-		);
-		record(
-			`${label}: ${row.name} indicator takes the primary paint`,
-			row.indicator === primary,
-			`${row.indicator} vs ${primary}`
-		);
 		record(
 			`${label}: ${row.name} indicator sits at ${(fraction * 100).toFixed(1)} percent`,
 			near(fraction, expected.fraction),
 			`${(fraction * 100).toFixed(1)}%`
 		);
-		record(`${label}: ${row.name} is 2px tall`, Math.round(row.height) === 2, `${row.height}px`);
 	}
+	const bar = cases.find((row) => row.name === 'half');
+	const thick = cases.find((row) => row.name === 'thick');
+	record(`${label}: the default bar is 2px`, Math.round(bar.height) === 2, `${bar.height}px`);
+	record(
+		`${label}: a caller's h-2 wins over h-0.5`,
+		Math.round(thick.height) === 8,
+		`${thick.height}px`
+	);
+	record(`${label}: the track stays square`, bar.radius === '0px', bar.radius);
+
+	const track = await surfaceRatio(page, pageBackground, bar.track);
+	record(
+		`${label}: track reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		track >= SURFACE_FLOOR[scheme],
+		`${track.toFixed(2)}:1`
+	);
+	const indicator = await surfaceRatio(page, pageBackground, bar.indicator);
+	record(`${label}: indicator reaches 3 to 1`, indicator >= INK_FLOOR, `${indicator.toFixed(2)}:1`);
+
+	const tones = await scope.locator('[data-tone]').evaluateAll((nodes) =>
+		nodes.map((node) => {
+			const bar = node.querySelector('[data-slot="progress-indicator"]');
+			return {
+				tone: node.dataset.tone,
+				fill: bar ? getComputedStyle(bar).backgroundColor : 'missing'
+			};
+		})
+	);
+	record(`${label}: ${TONES.length} tone bars`, tones.length === TONES.length, `${tones.length}`);
+	record(
+		`${label}: every tone paints its own bar`,
+		new Set(tones.map((row) => row.fill)).size === TONES.length,
+		tones.map((row) => `${row.tone}=${row.fill}`).join(', ')
+	);
+	const dim = [];
+	for (const row of tones) {
+		const ratio = await surfaceRatio(page, pageBackground, row.fill);
+		if (ratio < INK_FLOOR) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+	}
+	record(
+		`${label}: every tone bar reaches 3 to 1`,
+		dim.length === 0,
+		dim.join(', ') || `${tones.length} rows`
+	);
 };
 
 const SLIDER_CASES = { single: 1, range: 2, disabled: 1 };
 
 const checkSlider = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
-	const thumbs = scope.locator('[data-slot="slider-thumb"]');
-	const total = await thumbs.count();
-	record(`${label}: four thumbs across three sliders`, total === 4, `${total}`);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
 
 	for (const [name, expected] of Object.entries(SLIDER_CASES)) {
 		const found = await scope.locator(`[data-case="${name}"] [data-slot="slider-thumb"]`).count();
 		record(`${label}: ${name} holds ${expected} thumb`, found === expected, `${found}`);
 	}
 
-	const primary = await computed(scope.locator('[data-oracle="primary"]'), 'backgroundColor');
-	const input = await computed(scope.locator('[data-oracle="input"]'), 'backgroundColor');
-
-	const thumb = await thumbs.first().evaluate((node) => {
-		const style = getComputedStyle(node);
-		return {
-			width: parseFloat(style.width),
-			height: parseFloat(style.height),
-			paint: style.backgroundColor
-		};
-	});
+	const thumb = await scope
+		.locator('[data-case="single"] [data-slot="slider-thumb"]')
+		.evaluate((node) => {
+			const style = getComputedStyle(node);
+			return {
+				width: parseFloat(style.width),
+				height: parseFloat(style.height),
+				radius: parseFloat(style.borderRadius),
+				fill: style.backgroundColor
+			};
+		});
 	record(
 		`${label}: thumb measures 12px`,
 		Math.round(thumb.width) === 12 && Math.round(thumb.height) === 12,
 		`${thumb.width} x ${thumb.height}`
 	);
-	record(`${label}: thumb takes the primary paint`, thumb.paint === primary, `${thumb.paint} vs ${primary}`);
+	record(
+		`${label}: thumb is fully round`,
+		thumb.radius >= thumb.width / 2,
+		`${thumb.radius}px of ${thumb.width / 2}px`
+	);
 
-	const track = await computed(scope.locator('[data-case="single"] [data-slot="slider-track"]'), 'backgroundColor');
-	record(`${label}: track takes the input paint`, track === input, `${track} vs ${input}`);
+	const track = await computed(
+		scope.locator('[data-case="single"] [data-slot="slider-track"]'),
+		'backgroundColor'
+	);
+	const trackRatio = await surfaceRatio(page, pageBackground, track);
+	record(
+		`${label}: track reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		trackRatio >= SURFACE_FLOOR[scheme],
+		`${trackRatio.toFixed(2)}:1`
+	);
 
-	const range = await computed(scope.locator('[data-case="single"] [data-slot="slider-range"]'), 'backgroundColor');
-	record(`${label}: range takes the primary paint`, range === primary, `${range} vs ${primary}`);
+	const range = await computed(
+		scope.locator('[data-case="single"] [data-slot="slider-range"]'),
+		'backgroundColor'
+	);
+	const rangeRatio = await surfaceRatio(page, pageBackground, range);
+	record(`${label}: range reaches 3 to 1`, rangeRatio >= INK_FLOOR, `${rangeRatio.toFixed(2)}:1`);
+	const thumbRatio = await surfaceRatio(page, pageBackground, thumb.fill);
+	record(`${label}: thumb reaches 3 to 1`, thumbRatio >= INK_FLOOR, `${thumbRatio.toFixed(2)}:1`);
 
 	const disabled = await computed(scope.locator('[data-case="disabled"]'), 'opacity');
 	record(`${label}: disabled slider dims to 50 percent`, disabled === '0.5', disabled);
+
+	const tones = await scope.locator('[data-tone]').evaluateAll((nodes) =>
+		nodes.map((node) => {
+			const thumb = node.querySelector('[data-slot="slider-thumb"]');
+			const range = node.querySelector('[data-slot="slider-range"]');
+			return {
+				tone: node.dataset.tone,
+				thumb: thumb ? getComputedStyle(thumb).backgroundColor : 'missing',
+				range: range ? getComputedStyle(range).backgroundColor : 'missing'
+			};
+		})
+	);
+	record(`${label}: ${TONES.length} tone sliders`, tones.length === TONES.length, `${tones.length}`);
+	record(
+		`${label}: every tone paints its own thumb`,
+		new Set(tones.map((row) => row.thumb)).size === TONES.length,
+		tones.map((row) => `${row.tone}=${row.thumb}`).join(', ')
+	);
+	const dim = [];
+	for (const row of tones) {
+		const ratio = await surfaceRatio(page, pageBackground, row.thumb);
+		if (ratio < INK_FLOOR) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+	}
+	record(
+		`${label}: every tone thumb reaches 3 to 1`,
+		dim.length === 0,
+		dim.join(', ') || `${tones.length} rows`
+	);
 
 	const first = scope.locator('[data-case="single"] [data-slot="slider-thumb"]');
 	const reached = await tabTo(first);
@@ -1128,15 +1381,21 @@ const SCROLL_CASES = {
 
 const checkScrollArea = async (record, scope, label) => {
 	await checkSchemeHeading(record, scope, label);
-	const viewports = await scope.locator('[data-slot="scroll-area-viewport"]').evaluateAll((nodes) =>
-		nodes.map((node) => ({
-			name: node.closest('[data-case]')?.dataset.case,
-			clientWidth: node.clientWidth,
-			clientHeight: node.clientHeight,
-			scrollWidth: node.scrollWidth,
-			scrollHeight: node.scrollHeight
-		}))
-	);
+	const page = scope.page();
+	const scheme = await schemeOf(scope);
+	const pageBackground = await backdropOf(scope);
+
+	const viewports = await scope
+		.locator('[data-slot="scroll-area-viewport"]')
+		.evaluateAll((nodes) =>
+			nodes.map((node) => ({
+				name: node.closest('[data-case]')?.dataset.case,
+				clientWidth: node.clientWidth,
+				clientHeight: node.clientHeight,
+				scrollWidth: node.scrollWidth,
+				scrollHeight: node.scrollHeight
+			}))
+		);
 	record(`${label}: three viewports`, viewports.length === 3, `${viewports.length}`);
 
 	for (const view of viewports) {
@@ -1155,16 +1414,31 @@ const checkScrollArea = async (record, scope, label) => {
 	await settle();
 	const scrollbars = vertical.locator('[data-slot="scroll-area-scrollbar"]');
 	const mounted = await scrollbars.count();
-	const border = await computed(scope.locator('[data-oracle="border"]'), 'backgroundColor');
 	const thumbPaint =
 		mounted === 1
 			? await computed(scrollbars.first().locator('[data-slot="scroll-area-thumb"]'), 'backgroundColor')
 			: 'missing';
 	record(`${label}: hovering mounts a scrollbar`, mounted === 1, `${mounted}`);
+	const thumbRatio = mounted === 1 ? await surfaceRatio(page, pageBackground, thumbPaint) : 0;
 	record(
-		`${label}: scrollbar thumb takes the border paint`,
-		thumbPaint === border,
-		`${thumbPaint} vs ${border}`
+		`${label}: scrollbar thumb reaches ${SURFACE_FLOOR[scheme]} to 1`,
+		thumbRatio >= SURFACE_FLOOR[scheme],
+		`${thumbRatio.toFixed(2)}:1`
+	);
+	const thumbRadius =
+		mounted === 1
+			? await scrollbars.first().locator('[data-slot="scroll-area-thumb"]').evaluate((node) => {
+					const style = getComputedStyle(node);
+					return {
+						radius: parseFloat(style.borderRadius),
+						width: node.getBoundingClientRect().width
+					};
+				})
+			: { radius: 0, width: 0 };
+	record(
+		`${label}: scrollbar thumb is fully round`,
+		thumbRadius.radius >= thumbRadius.width / 2 && thumbRadius.width > 0,
+		`${thumbRadius.radius}px of ${thumbRadius.width / 2}px`
 	);
 
 	const viewport = vertical.locator('[data-slot="scroll-area-viewport"]');
@@ -1177,7 +1451,7 @@ const checkScrollArea = async (record, scope, label) => {
 	record(`${label}: Tab reaches the viewport`, reached, reached ? 'focused' : 'not reachable');
 	record(`${label}: viewport focus ring is 3px`, near(ringWidth, 3), `${ringWidth}px`);
 	record(
-		`${label}: viewport ring alpha is 30 percent, measured ${Math.round(ringAlpha * 100)} percent`,
+		`${label}: viewport ring alpha is 30 percent`,
 		near(ringAlpha, 0.3),
 		`${Math.round(ringAlpha * 100)}%`
 	);
@@ -1344,7 +1618,6 @@ const checkLabel = async (record, scope, label) => {
 	await checkLabelDisabled(record, scope, label);
 	await checkLabelField(record, scope, label, tokens);
 };
-
 
 const atomJourney = (kind, probe, check) => async (page, record) => {
 	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });

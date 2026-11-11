@@ -1,12 +1,12 @@
 <script lang="ts" module>
 	const KBD_TONES = {
-		default: "bg-primary/15 dark:bg-primary/25 text-foreground border-b-2 border-primary/60 dark:border-primary/60 rounded-sm",
-		secondary: "bg-secondary-foreground/15 dark:bg-secondary/25 text-foreground border-b-2 border-secondary-foreground/60 dark:border-secondary/60 rounded-sm",
-		success: "bg-success/15 dark:bg-success/25 text-foreground border-b-2 border-success/60 dark:border-success/60 rounded-sm",
-		warning: "bg-warning/15 dark:bg-warning/25 text-foreground border-b-2 border-warning/60 dark:border-warning/60 rounded-sm",
-		info: "bg-info/15 dark:bg-info/25 text-foreground border-b-2 border-info/60 dark:border-info/60 rounded-sm",
-		destructive: "bg-destructive/15 dark:bg-destructive/25 text-foreground border-b-2 border-destructive/60 dark:border-destructive/60 rounded-sm",
-		blackwhite: "bg-blackwhite/15 dark:bg-blackwhite/25 text-foreground border-b-2 border-blackwhite/60 dark:border-blackwhite/60 rounded-sm",
+		default: "bg-primary/25 dark:bg-primary/30 text-foreground border-b-2 border-primary/60 dark:border-primary/60 rounded-sm",
+		secondary: "bg-secondary-foreground/25 dark:bg-secondary/30 text-foreground border-b-2 border-secondary-foreground/60 dark:border-secondary/60 rounded-sm",
+		success: "bg-success/25 dark:bg-success/30 text-foreground border-b-2 border-success/60 dark:border-success/60 rounded-sm",
+		warning: "bg-warning/25 dark:bg-warning/30 text-foreground border-b-2 border-warning/60 dark:border-warning/60 rounded-sm",
+		info: "bg-info/25 dark:bg-info/30 text-foreground border-b-2 border-info/60 dark:border-info/60 rounded-sm",
+		destructive: "bg-destructive/25 dark:bg-destructive/50 text-foreground border-b-2 border-destructive/60 dark:border-destructive/60 rounded-sm",
+		blackwhite: "bg-blackwhite/25 dark:bg-blackwhite/30 text-foreground border-b-2 border-blackwhite/60 dark:border-blackwhite/60 rounded-sm",
 	} as const;
 
 	export type KbdVariant = keyof typeof KBD_TONES;

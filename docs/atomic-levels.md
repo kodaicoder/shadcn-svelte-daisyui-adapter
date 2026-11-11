@@ -8,7 +8,8 @@ The rule used here is composition and role, not file size.
 - **Template**: the page shell that places regions.
 - **Page**: a route with real content.
 
-`Target` marks the components the adapter's fixer patches today (the 28 component directories in `KNOWN_COMPONENTS`; `input-group-button` is a file inside `input-group`, not its own directory).
+`Target` marks the components the adapter's fixer patches today (the 56 names in `KNOWN_COMPONENTS`;
+most are directories, and `input-group-button` is a file inside `input-group`).
 
 ## Atoms (19)
 
@@ -20,21 +21,21 @@ The rule used here is composition and role, not file size.
 | button | yes | |
 | checkbox | yes | |
 | input | yes | |
-| kbd | no | |
-| label | no | |
-| marker | no | icon plus content, one unit |
+| kbd | yes | seven tones, selector radius, bottom edge |
+| label | yes | rung and disabled cursor |
+| marker | yes | icon plus content, one unit |
 | native-select | yes | |
-| progress | no | |
-| scroll-area | no | a wrapper around one scroll container |
-| separator | no | |
-| skeleton | no | |
-| slider | no | |
-| spinner | no | |
+| progress | yes | seven tones, 2px bar |
+| scroll-area | yes | a wrapper around one scroll container |
+| separator | yes | eight line tones |
+| skeleton | yes | eight surface tones, selector radius |
+| slider | yes | seven tones, round thumb |
+| spinner | yes | seven tones, four sizes |
 | switch | yes | |
 | textarea | yes | |
 | toggle | yes | |
 
-Untargeted: aspect-ratio, avatar, kbd, label, marker, progress, scroll-area, separator, skeleton, slider, spinner (11).
+Untargeted: aspect-ratio, avatar (2).
 
 ## Molecules (26)
 
@@ -106,14 +107,14 @@ Untargeted: alert-dialog, carousel, questionnaire, sidebar, sonner (5).
 
 | level | count | targeted | untargeted |
 | --- | --- | --- | --- |
-| atoms | 19 | 8 | 11 |
+| atoms | 19 | 17 | 2 |
 | molecules | 26 | 7 | 19 |
 | organisms | 18 | 13 | 5 |
-| total | 63 | 28 | 35 |
+| total | 63 | 37 | 26 |
 
 ## A refinement order
 
-1. **Atoms.** Finish token consumption on the eight targeted atoms first: radius, border, focus ring, disabled and invalid. Then take the eleven untargeted atoms, starting with `label`, `separator`, `progress`, `slider` and `spinner`, because the molecules above them read their tokens.
+1. **Atoms.** Seventeen are targeted: radius, border, focus ring, disabled and invalid, plus the seven tones on the six atoms that carry them. `aspect-ratio` and `avatar` stay untargeted until their own review.
 2. **Molecules.** The targeted seven are close. Then `field`, `form`, `item`, `tabs`, `toggle-group`, `breadcrumb` and `pagination`, which use the atoms directly.
 3. **Organisms.** The overlay set is targeted and shares one state model. `sidebar`, `carousel`, `alert-dialog`, `questionnaire` and `sonner` are the uncovered five.
 4. **Templates and pages.** The shell last, once the blocks below it are stable.

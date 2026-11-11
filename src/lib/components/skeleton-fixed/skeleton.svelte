@@ -1,13 +1,13 @@
 <script lang="ts" module>
 	const SKELETON_TONES = {
-		neutral: "bg-foreground/10 dark:bg-foreground/15",
-		default: "bg-primary/15 dark:bg-primary/25",
-		secondary: "bg-secondary-foreground/15 dark:bg-secondary/25",
-		success: "bg-success/15 dark:bg-success/25",
-		warning: "bg-warning/15 dark:bg-warning/25",
-		info: "bg-info/15 dark:bg-info/25",
-		destructive: "bg-destructive/15 dark:bg-destructive/25",
-		blackwhite: "bg-blackwhite/15 dark:bg-blackwhite/25",
+		neutral: "bg-foreground/15 dark:bg-foreground/20",
+		default: "bg-primary/25 dark:bg-primary/30",
+		secondary: "bg-secondary-foreground/25 dark:bg-secondary/30",
+		success: "bg-success/25 dark:bg-success/30",
+		warning: "bg-warning/25 dark:bg-warning/30",
+		info: "bg-info/25 dark:bg-info/30",
+		destructive: "bg-destructive/25 dark:bg-destructive/50",
+		blackwhite: "bg-blackwhite/25 dark:bg-blackwhite/30",
 	} as const;
 
 	export type SkeletonVariant = keyof typeof SKELETON_TONES;

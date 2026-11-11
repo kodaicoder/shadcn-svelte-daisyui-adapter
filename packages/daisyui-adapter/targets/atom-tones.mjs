@@ -29,14 +29,49 @@ const TONE_TOKENS = {
 
 const TONE_KEYS = Object.keys(TONE_TOKENS);
 
-const softRow = (light, dark) => `bg-${light}/15 dark:bg-${dark}/25`;
+// A tint has to clear the measured floor against the page, and a bright tone on white cannot reach
+// the dark floor without turning into a solid block. 25 percent in light keeps every tone above 1.1
+// to 1 on white; 30 percent in dark keeps every tone above 1.3 except destructive, whose dark token
+// is itself dark, so it takes 50.
+// A stroke, bar or thumb is a thin graphic with no text of its own, so it has to clear 3 to 1 on
+// its own. The derived `-text` tokens are the ones built for that, and they are what the field
+// borders already use; the raw tone is kept for surfaces, where the tint is the message, not the
+// only signal.
+const ACCENT_TOKENS = {
+	default: ['primary', 'primary'],
+	secondary: ['secondary-foreground', 'secondary'],
+	success: ['success-text', 'success-text'],
+	warning: ['warning-text', 'warning-text'],
+	info: ['info-text', 'info-text'],
+	destructive: ['destructive-text', 'destructive-text'],
+	blackwhite: ['blackwhite', 'blackwhite']
+};
+
+const accentRows = (build) =>
+	Object.fromEntries(TONE_KEYS.map((key) => [key, build(...ACCENT_TOKENS[key])]));
+
+const SOFT_LIGHT = 25;
+const SOFT_DARK = {
+	default: 30,
+	secondary: 30,
+	success: 30,
+	warning: 30,
+	info: 30,
+	destructive: 50,
+	blackwhite: 30
+};
+
+const softRow = (tone) => {
+	const [light, dark] = TONE_TOKENS[tone];
+	return `bg-${light}/${SOFT_LIGHT} dark:bg-${dark}/${SOFT_DARK[tone]}`;
+};
 
 const solidRow = (light, dark) => (light === dark ? `bg-${light}` : `bg-${light} dark:bg-${dark}`);
 
 const textRow = (light, dark) => (light === dark ? `text-${light}` : `text-${light} dark:text-${dark}`);
 
 const rowsFor = (keys, build) =>
-	Object.fromEntries(keys.map((key) => [key, build(...TONE_TOKENS[key])]));
+	Object.fromEntries(keys.map((key) => [key, build(...TONE_TOKENS[key], key)]));
 
 const tableOf = (name, type, rows) =>
 	[
@@ -76,11 +111,11 @@ const variantTypeSite = (id, component, file, stock, typeName) =>
 
 const KBD_ROWS = rowsFor(
 	TONE_KEYS,
-	(light, dark) =>
-		`${softRow(light, dark)} text-foreground border-b-2 border-${light}/60 dark:border-${dark}/60 rounded-sm`
+	(light, dark, tone) =>
+		`${softRow(tone)} text-foreground border-b-2 border-${light}/60 dark:border-${dark}/60 rounded-sm`
 );
 
-const NEUTRAL_SURFACE = 'bg-foreground/10 dark:bg-foreground/15';
+const NEUTRAL_SURFACE = 'bg-foreground/15 dark:bg-foreground/20';
 const NEUTRAL_LINE = 'bg-foreground/20 dark:bg-foreground/25';
 
 const SEPARATOR_ROWS = {
@@ -90,14 +125,14 @@ const SEPARATOR_ROWS = {
 
 const SKELETON_ROWS = {
 	neutral: NEUTRAL_SURFACE,
-	...rowsFor(TONE_KEYS, (light, dark) => softRow(light, dark))
+	...rowsFor(TONE_KEYS, (light, dark, tone) => softRow(tone))
 };
 
-const SPINNER_ROWS = rowsFor(TONE_KEYS, (light, dark) => textRow(light, dark));
+const SPINNER_ROWS = accentRows((light, dark) => textRow(light, dark));
 
-const PROGRESS_ROWS = rowsFor(TONE_KEYS, (light, dark) => solidRow(light, dark));
+const PROGRESS_ROWS = accentRows((light, dark) => solidRow(light, dark));
 
-const SLIDER_ROWS = rowsFor(TONE_KEYS, (light, dark) => solidRow(light, dark));
+const SLIDER_ROWS = accentRows((light, dark) => solidRow(light, dark));
 
 const SPINNER_SIZES = {
 	sm: 'size-3',
@@ -247,7 +282,7 @@ export const ATOM_TONES = [
 		component: 'progress',
 		file: 'progress/progress.svelte',
 		stock: '"bg-muted h-0.5 rounded-none relative',
-		fixed: '"bg-foreground/10 dark:bg-foreground/15 h-0.5 rounded-none relative'
+		fixed: '"bg-foreground/15 dark:bg-foreground/20 h-0.5 rounded-none relative'
 	}),
 	replaceSite({
 		id: 'progress-atom-tone-class',
@@ -273,7 +308,7 @@ export const ATOM_TONES = [
 		component: 'slider',
 		file: 'slider/slider.svelte',
 		stock: '"bg-input/50 data-horizontal:h-0.5',
-		fixed: '"bg-foreground/10 dark:bg-foreground/15 data-horizontal:h-0.5'
+		fixed: '"bg-foreground/15 dark:bg-foreground/20 data-horizontal:h-0.5'
 	}),
 	replaceSite({
 		id: 'slider-atom-range-tone',

@@ -15,11 +15,7 @@
 				</div>
 				<div class="space-y-1">
 					<span class="text-sm text-muted-foreground">large</span>
-					<Spinner data-case="large" class="text-primary size-6" aria-label="Loading" />
-				</div>
-				<div class="space-y-1">
-					<span class="text-sm text-muted-foreground">primary</span>
-					<div class="text-primary size-4" data-oracle="primary"></div>
+					<Spinner data-case="large" size="lg" aria-label="Loading" />
 				</div>
 			</div>
 			<div class="space-y-2">
