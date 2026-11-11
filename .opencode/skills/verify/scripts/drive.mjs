@@ -303,6 +303,16 @@ const ringOf = (shadow) =>
 				.map((layer) => layer.trim())
 				.find((layer) => /\s[1-9][\d.]*px$/.test(layer)) ?? '');
 
+const alphaOf = (color) => {
+	const slash = /\/\s*([\d.]+)\s*\)/.exec(color);
+	if (slash) return Number(slash[1]);
+	const rgba = /rgba?\([^)]*,\s*([\d.]+)\s*\)/.exec(color);
+	if (rgba) return Number(rgba[1]);
+	return 1;
+};
+
+const near = (value, target) => Math.abs(value - target) < 0.02;
+
 const fieldState = (locator) =>
 	locator.evaluate((node) => {
 		const style = getComputedStyle(node);
@@ -408,8 +418,8 @@ const checkFocusField = async (record, scope, label, baseState) => {
 	record(`${label}: focus is visible`, visible, 'focus-visible');
 	record(`${label}: focus paints a ring`, ring !== '', ring || state.shadow);
 	record(
-		`${label}: focus keeps the border`,
-		state.border === baseState.border,
+		`${label}: focus raises the border to full opacity`,
+		!near(alphaOf(state.border), alphaOf(baseState.border)) && near(alphaOf(state.border), 1),
 		`${state.border} vs ${baseState.border}`
 	);
 	return ring;
@@ -426,21 +436,30 @@ const checkFieldTones = async (record, scope, label) => {
 		}))
 	);
 	const borderMismatch = [];
+	const idleAlphaMismatch = [];
 	for (const row of idle) {
 		const expected = await computed(
 			scope.locator(`[data-tone-border="${row.tone}"]`),
 			'borderTopColor'
 		);
 		if (row.border !== expected) borderMismatch.push(`${row.tone}:${row.border} vs ${expected}`);
+		if (!near(alphaOf(row.border), 0.8))
+			idleAlphaMismatch.push(`${row.tone}:${alphaOf(row.border)}`);
 	}
 	record(
 		`${label}: every idle border is its tone`,
 		borderMismatch.length === 0,
 		borderMismatch.join(', ')
 	);
+	record(
+		`${label}: every idle border is 80 percent`,
+		idleAlphaMismatch.length === 0,
+		idleAlphaMismatch.join(', ')
+	);
 
 	const rings = [];
 	const focusMismatch = [];
+	const focusAlphaMismatch = [];
 	const ringMismatch = [];
 	for (const row of idle) {
 		const control = scope.locator(`[data-tone="${row.tone}"]`).first();
@@ -449,17 +468,28 @@ const checkFieldTones = async (record, scope, label) => {
 		const state = await fieldState(control);
 		const ring = ringOf(state.shadow);
 		rings.push(ring);
-		const oracle = ringOf(
+		const ringOracle = ringOf(
 			await computed(scope.locator(`[data-tone-ring="${row.tone}"]`), 'boxShadow')
 		);
-		if (ring !== oracle) ringMismatch.push(`${row.tone}:${ring} vs ${oracle}`);
-		if (state.border !== row.border)
-			focusMismatch.push(`${row.tone}:${state.border} vs ${row.border}`);
+		if (ring !== ringOracle) ringMismatch.push(`${row.tone}:${ring} vs ${ringOracle}`);
+		const focusOracle = await computed(
+			scope.locator(`[data-tone-focus="${row.tone}"]`),
+			'borderTopColor'
+		);
+		if (state.border !== focusOracle)
+			focusMismatch.push(`${row.tone}:${state.border} vs ${focusOracle}`);
+		if (!near(alphaOf(state.border), 1))
+			focusAlphaMismatch.push(`${row.tone}:${alphaOf(state.border)}`);
 	}
 	record(
-		`${label}: focus keeps the tone border`,
+		`${label}: focus raises the border to its tone`,
 		focusMismatch.length === 0,
 		focusMismatch.join(', ')
+	);
+	record(
+		`${label}: focus border is 100 percent`,
+		focusAlphaMismatch.length === 0,
+		focusAlphaMismatch.join(', ')
 	);
 	record(
 		`${label}: every tone ring is its token at 2px`,

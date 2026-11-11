@@ -6,17 +6,34 @@ import { insertSite, replaceSite } from './site.mjs';
 // native-select applies the caller's class to its wrapper.
 export const FIELD_VARIANT_COMPONENTS = ['input', 'textarea', 'native-select'];
 
-const TONES = {
-	default: 'border-primary focus-visible:border-primary focus-visible:ring-primary/30',
-	secondary:
-		'border-secondary-foreground dark:border-secondary focus-visible:border-secondary-foreground dark:focus-visible:border-secondary focus-visible:ring-secondary/30',
-	success: 'border-success-text focus-visible:border-success-text focus-visible:ring-success/30',
-	warning: 'border-warning-text focus-visible:border-warning-text focus-visible:ring-warning/30',
-	info: 'border-info-text focus-visible:border-info-text focus-visible:ring-info/30',
-	destructive:
-		'border-destructive-text focus-visible:border-destructive-text focus-visible:ring-destructive/30',
-	blackwhite: 'border-blackwhite focus-visible:border-blackwhite focus-visible:ring-blackwhite/30'
+const TONE_ROWS = {
+	default: { idle: 'border-primary/80', focus: 'border-primary', ring: 'ring-primary/30' },
+	secondary: { idle: 'border-secondary/80', focus: 'border-secondary', ring: 'ring-secondary/30' },
+	success: {
+		idle: 'border-success-text/80',
+		focus: 'border-success-text',
+		ring: 'ring-success/30'
+	},
+	warning: { idle: 'border-warning/80', focus: 'border-warning', ring: 'ring-warning/30' },
+	info: { idle: 'border-info-text/80', focus: 'border-info-text', ring: 'ring-info/30' },
+	destructive: {
+		idle: 'border-destructive/80',
+		focus: 'border-destructive',
+		ring: 'ring-destructive/30'
+	},
+	blackwhite: {
+		idle: 'border-blackwhite/80',
+		focus: 'border-blackwhite',
+		ring: 'ring-blackwhite/30'
+	}
 };
+
+const TONES = Object.fromEntries(
+	Object.entries(TONE_ROWS).map(([tone, row]) => [
+		tone,
+		`${row.idle} focus-visible:${row.focus} focus-visible:${row.ring}`
+	])
+);
 
 const TONE_MAP = [
 	'\tconst FIELD_TONES = {',

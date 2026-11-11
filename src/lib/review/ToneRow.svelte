@@ -14,7 +14,8 @@
 	</div>
 	<div class="flex flex-wrap items-center gap-2">
 		{#each TONE_NAMES as tone (tone)}
-			<span data-tone-border={tone} class="size-4 rounded-sm border-2 {TONES[tone].border}"></span>
+			<span data-tone-border={tone} class="size-4 rounded-sm border-2 {TONES[tone].fieldIdle}"
+			></span>
 		{/each}
 		<span
 			data-oracle="invalid-border"
@@ -22,6 +23,10 @@
 		></span>
 	</div>
 	<div class="flex flex-wrap items-center gap-2">
+		{#each TONE_NAMES as tone (tone)}
+			<span data-tone-focus={tone} class="size-4 rounded-sm border-2 {TONES[tone].fieldFocus}"
+			></span>
+		{/each}
 		{#each TONE_NAMES as tone (tone)}
 			<span data-tone-ring={tone} class="size-4 rounded-sm ring-2 {TONES[tone].ring}"></span>
 		{/each}

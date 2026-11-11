@@ -1,12 +1,12 @@
 <script lang="ts" module>
 	const FIELD_TONES = {
-		default: "border-primary focus-visible:border-primary focus-visible:ring-primary/30",
-		secondary: "border-secondary-foreground dark:border-secondary focus-visible:border-secondary-foreground dark:focus-visible:border-secondary focus-visible:ring-secondary/30",
-		success: "border-success-text focus-visible:border-success-text focus-visible:ring-success/30",
-		warning: "border-warning-text focus-visible:border-warning-text focus-visible:ring-warning/30",
-		info: "border-info-text focus-visible:border-info-text focus-visible:ring-info/30",
-		destructive: "border-destructive-text focus-visible:border-destructive-text focus-visible:ring-destructive/30",
-		blackwhite: "border-blackwhite focus-visible:border-blackwhite focus-visible:ring-blackwhite/30",
+		default: "border-primary/80 focus-visible:border-primary focus-visible:ring-primary/30",
+		secondary: "border-secondary/80 focus-visible:border-secondary focus-visible:ring-secondary/30",
+		success: "border-success-text/80 focus-visible:border-success-text focus-visible:ring-success/30",
+		warning: "border-warning/80 focus-visible:border-warning focus-visible:ring-warning/30",
+		info: "border-info-text/80 focus-visible:border-info-text focus-visible:ring-info/30",
+		destructive: "border-destructive/80 focus-visible:border-destructive focus-visible:ring-destructive/30",
+		blackwhite: "border-blackwhite/80 focus-visible:border-blackwhite focus-visible:ring-blackwhite/30",
 	} as const;
 
 	export type FieldVariant = keyof typeof FIELD_TONES;

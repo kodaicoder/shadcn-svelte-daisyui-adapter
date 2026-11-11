@@ -2,6 +2,8 @@ export type ToneClasses = {
 	fill: string;
 	foreground: string;
 	border: string;
+	fieldIdle: string;
+	fieldFocus: string;
 	ring: string;
 	soft: string;
 	strong: string;
@@ -15,6 +17,8 @@ export const TONES = {
 		fill: 'bg-primary',
 		foreground: 'text-primary-foreground',
 		border: 'border-primary',
+		fieldIdle: 'border-primary/80',
+		fieldFocus: 'border-primary',
 		ring: 'ring-primary/30',
 		soft: 'bg-primary/10',
 		strong: 'bg-primary/20'
@@ -23,6 +27,8 @@ export const TONES = {
 		fill: 'bg-secondary',
 		foreground: 'text-secondary-foreground',
 		border: 'border-secondary-foreground dark:border-secondary',
+		fieldIdle: 'border-secondary/80',
+		fieldFocus: 'border-secondary',
 		ring: 'ring-secondary/30',
 		soft: 'bg-secondary/10',
 		strong: 'bg-secondary/20'
@@ -31,6 +37,8 @@ export const TONES = {
 		fill: 'bg-success',
 		foreground: 'text-success-foreground',
 		border: 'border-success-text',
+		fieldIdle: 'border-success-text/80',
+		fieldFocus: 'border-success-text',
 		ring: 'ring-success/30',
 		soft: 'bg-success/10',
 		strong: 'bg-success/20'
@@ -39,6 +47,8 @@ export const TONES = {
 		fill: 'bg-warning',
 		foreground: 'text-warning-foreground',
 		border: 'border-warning-text',
+		fieldIdle: 'border-warning/80',
+		fieldFocus: 'border-warning',
 		ring: 'ring-warning/30',
 		soft: 'bg-warning/10',
 		strong: 'bg-warning/20'
@@ -47,6 +57,8 @@ export const TONES = {
 		fill: 'bg-info',
 		foreground: 'text-info-foreground',
 		border: 'border-info-text',
+		fieldIdle: 'border-info-text/80',
+		fieldFocus: 'border-info-text',
 		ring: 'ring-info/30',
 		soft: 'bg-info/10',
 		strong: 'bg-info/20'
@@ -55,6 +67,8 @@ export const TONES = {
 		fill: 'bg-destructive',
 		foreground: 'text-destructive-foreground',
 		border: 'border-destructive-text',
+		fieldIdle: 'border-destructive/80',
+		fieldFocus: 'border-destructive',
 		ring: 'ring-destructive/30',
 		soft: 'bg-destructive/10',
 		strong: 'bg-destructive/20'
@@ -63,6 +77,8 @@ export const TONES = {
 		fill: 'bg-blackwhite',
 		foreground: 'text-blackwhite-foreground',
 		border: 'border-blackwhite',
+		fieldIdle: 'border-blackwhite/80',
+		fieldFocus: 'border-blackwhite',
 		ring: 'ring-blackwhite/30',
 		soft: 'bg-blackwhite/10',
 		strong: 'bg-blackwhite/20'
