@@ -2,10 +2,10 @@
 	const SPINNER_TONES = {
 		default: "text-primary",
 		secondary: "text-secondary-foreground dark:text-secondary",
-		success: "text-success-text",
-		warning: "text-warning-text",
-		info: "text-info-text",
-		destructive: "text-destructive-text",
+		success: "text-success",
+		warning: "text-warning",
+		info: "text-info",
+		destructive: "text-destructive",
 		blackwhite: "text-blackwhite",
 	} as const;
 

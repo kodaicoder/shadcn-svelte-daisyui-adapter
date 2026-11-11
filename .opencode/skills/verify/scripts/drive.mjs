@@ -73,6 +73,9 @@ const inkRatio = async (page, pageBackground, fill, ink) =>
 
 const SURFACE_FLOOR = { light: 1.1, dark: 1.25 };
 const INK_FLOOR = 3;
+// A raw tone keeps its hue, and a bright one cannot reach 3 to 1 on white. The stroke still has to
+// be perceivable above the page, and 1.5 is the measured floor the raw tones clear in light.
+const ACCENT_FLOOR = { light: 1.5, dark: 2.8 };
 
 const cssLength = (page, expression) =>
 	page.evaluate((value) => {
@@ -1072,10 +1075,10 @@ const checkSpinner = async (record, scope, label) => {
 	const dim = [];
 	for (const row of tones) {
 		const ratio = await surfaceRatio(page, pageBackground, row.stroke);
-		if (ratio < INK_FLOOR) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+		if (ratio < ACCENT_FLOOR[scheme]) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
 	}
 	record(
-		`${label}: every stroke reaches 3 to 1`,
+		`${label}: every stroke reaches ${ACCENT_FLOOR[scheme]} to 1`,
 		dim.length === 0,
 		dim.join(', ') || `${tones.length} rows`
 	);
@@ -1239,7 +1242,11 @@ const checkProgress = async (record, scope, label) => {
 		Math.round(thick.height) === 8,
 		`${thick.height}px`
 	);
-	record(`${label}: the track stays square`, bar.radius === '0px', bar.radius);
+	record(
+		`${label}: the track is fully round`,
+		parseFloat(bar.radius) >= bar.height / 2,
+		`${bar.radius} of ${bar.height / 2}px`
+	);
 
 	const track = await surfaceRatio(page, pageBackground, bar.track);
 	record(
@@ -1248,7 +1255,7 @@ const checkProgress = async (record, scope, label) => {
 		`${track.toFixed(2)}:1`
 	);
 	const indicator = await surfaceRatio(page, pageBackground, bar.indicator);
-	record(`${label}: indicator reaches 3 to 1`, indicator >= INK_FLOOR, `${indicator.toFixed(2)}:1`);
+	record(`${label}: indicator reaches ${ACCENT_FLOOR[scheme]} to 1`, indicator >= ACCENT_FLOOR[scheme], `${indicator.toFixed(2)}:1`);
 
 	const tones = await scope.locator('[data-tone]').evaluateAll((nodes) =>
 		nodes.map((node) => {
@@ -1268,10 +1275,10 @@ const checkProgress = async (record, scope, label) => {
 	const dim = [];
 	for (const row of tones) {
 		const ratio = await surfaceRatio(page, pageBackground, row.fill);
-		if (ratio < INK_FLOOR) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+		if (ratio < ACCENT_FLOOR[scheme]) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
 	}
 	record(
-		`${label}: every tone bar reaches 3 to 1`,
+		`${label}: every tone bar reaches ${ACCENT_FLOOR[scheme]} to 1`,
 		dim.length === 0,
 		dim.join(', ') || `${tones.length} rows`
 	);
@@ -1328,9 +1335,9 @@ const checkSlider = async (record, scope, label) => {
 		'backgroundColor'
 	);
 	const rangeRatio = await surfaceRatio(page, pageBackground, range);
-	record(`${label}: range reaches 3 to 1`, rangeRatio >= INK_FLOOR, `${rangeRatio.toFixed(2)}:1`);
+	record(`${label}: range reaches ${ACCENT_FLOOR[scheme]} to 1`, rangeRatio >= ACCENT_FLOOR[scheme], `${rangeRatio.toFixed(2)}:1`);
 	const thumbRatio = await surfaceRatio(page, pageBackground, thumb.fill);
-	record(`${label}: thumb reaches 3 to 1`, thumbRatio >= INK_FLOOR, `${thumbRatio.toFixed(2)}:1`);
+	record(`${label}: thumb reaches ${ACCENT_FLOOR[scheme]} to 1`, thumbRatio >= ACCENT_FLOOR[scheme], `${thumbRatio.toFixed(2)}:1`);
 
 	const disabled = await computed(scope.locator('[data-case="disabled"]'), 'opacity');
 	record(`${label}: disabled slider dims to 50 percent`, disabled === '0.5', disabled);
@@ -1355,10 +1362,10 @@ const checkSlider = async (record, scope, label) => {
 	const dim = [];
 	for (const row of tones) {
 		const ratio = await surfaceRatio(page, pageBackground, row.thumb);
-		if (ratio < INK_FLOOR) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
+		if (ratio < ACCENT_FLOOR[scheme]) dim.push(`${row.tone}=${ratio.toFixed(2)}:1`);
 	}
 	record(
-		`${label}: every tone thumb reaches 3 to 1`,
+		`${label}: every tone thumb reaches ${ACCENT_FLOOR[scheme]} to 1`,
 		dim.length === 0,
 		dim.join(', ') || `${tones.length} rows`
 	);

@@ -2,10 +2,10 @@
 	const PROGRESS_TONES = {
 		default: "bg-primary",
 		secondary: "bg-secondary-foreground dark:bg-secondary",
-		success: "bg-success-text",
-		warning: "bg-warning-text",
-		info: "bg-info-text",
-		destructive: "bg-destructive-text",
+		success: "bg-success",
+		warning: "bg-warning",
+		info: "bg-info",
+		destructive: "bg-destructive",
 		blackwhite: "bg-blackwhite",
 	} as const;
 
@@ -29,7 +29,7 @@
 <ProgressPrimitive.Root
 	bind:ref
 	data-slot="progress"
-	class={cn("bg-foreground/15 dark:bg-foreground/20 h-0.5 rounded-none relative flex w-full items-center overflow-x-hidden", className)}
+	class={cn("bg-foreground/15 dark:bg-foreground/20 h-0.5 rounded-full relative flex w-full items-center overflow-x-hidden", className)}
 	{value}
 	{max}
 	{...restProps}

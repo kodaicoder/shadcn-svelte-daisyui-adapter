@@ -2,10 +2,10 @@
 	const SLIDER_TONES = {
 		default: "bg-primary",
 		secondary: "bg-secondary-foreground dark:bg-secondary",
-		success: "bg-success-text",
-		warning: "bg-warning-text",
-		info: "bg-info-text",
-		destructive: "bg-destructive-text",
+		success: "bg-success",
+		warning: "bg-warning",
+		info: "bg-info",
+		destructive: "bg-destructive",
 		blackwhite: "bg-blackwhite",
 	} as const;
 
@@ -46,7 +46,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 			data-slot="slider-track"
 			data-orientation={orientation}
 			class={cn(
-				"bg-foreground/15 dark:bg-foreground/20 data-horizontal:h-0.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-0.5 relative grow overflow-hidden data-horizontal:w-full data-vertical:h-full"
+				"bg-foreground/15 dark:bg-foreground/20 rounded-full data-horizontal:h-0.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-0.5 relative grow overflow-hidden data-horizontal:w-full data-vertical:h-full"
 			)}
 		>
 			<SliderPrimitive.Range

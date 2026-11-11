@@ -33,17 +33,18 @@ const TONE_KEYS = Object.keys(TONE_TOKENS);
 // the dark floor without turning into a solid block. 25 percent in light keeps every tone above 1.1
 // to 1 on white; 30 percent in dark keeps every tone above 1.3 except destructive, whose dark token
 // is itself dark, so it takes 50.
-// A stroke, bar or thumb is a thin graphic with no text of its own, so it has to clear 3 to 1 on
-// its own. The derived `-text` tokens are the ones built for that, and they are what the field
-// borders already use; the raw tone is kept for surfaces, where the tint is the message, not the
-// only signal.
+// A stroke, bar or thumb is a thin graphic with no text of its own, so the tone has to read as
+// itself. The derived `-text` tokens were tried first and measured wrong: they mix 60 percent
+// foreground into the tone, which drags every hue toward the foreground's blue, so success painted
+// cyan and destructive painted violet. The raw tone keeps its hue; only `secondary` swaps, because
+// its light token is a near-white surface.
 const ACCENT_TOKENS = {
 	default: ['primary', 'primary'],
 	secondary: ['secondary-foreground', 'secondary'],
-	success: ['success-text', 'success-text'],
-	warning: ['warning-text', 'warning-text'],
-	info: ['info-text', 'info-text'],
-	destructive: ['destructive-text', 'destructive-text'],
+	success: ['success', 'success'],
+	warning: ['warning', 'warning'],
+	info: ['info', 'info'],
+	destructive: ['destructive', 'destructive'],
 	blackwhite: ['blackwhite', 'blackwhite']
 };
 
@@ -282,7 +283,7 @@ export const ATOM_TONES = [
 		component: 'progress',
 		file: 'progress/progress.svelte',
 		stock: '"bg-muted h-0.5 rounded-none relative',
-		fixed: '"bg-foreground/15 dark:bg-foreground/20 h-0.5 rounded-none relative'
+		fixed: '"bg-foreground/15 dark:bg-foreground/20 h-0.5 rounded-full relative'
 	}),
 	replaceSite({
 		id: 'progress-atom-tone-class',
@@ -308,7 +309,7 @@ export const ATOM_TONES = [
 		component: 'slider',
 		file: 'slider/slider.svelte',
 		stock: '"bg-input/50 data-horizontal:h-0.5',
-		fixed: '"bg-foreground/15 dark:bg-foreground/20 data-horizontal:h-0.5'
+		fixed: '"bg-foreground/15 dark:bg-foreground/20 rounded-full data-horizontal:h-0.5'
 	}),
 	replaceSite({
 		id: 'slider-atom-range-tone',
