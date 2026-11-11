@@ -162,6 +162,7 @@ const warnBareRamp = (key) => {
 
 const rebuild = (current, fallback, scheme, name) => {
 	const lines = [];
+	if (name === 'dark') lines.push('\tcolor-scheme: dark;');
 	const staticKeys = new Set([
 		...Object.keys(STATIC_TOKENS.light),
 		...Object.keys(STATIC_TOKENS.dark)
