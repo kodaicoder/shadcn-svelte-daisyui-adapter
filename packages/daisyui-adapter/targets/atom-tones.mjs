@@ -83,6 +83,13 @@ const tableOf = (name, type, rows) =>
 		`\texport type ${type} = keyof typeof ${name};`
 	].join('\n');
 
+const objectTableOf = (name, rows) =>
+	[
+		`\tconst ${name} = {`,
+		...Object.entries(rows).map(([key, row]) => `\t\t${key}: "${row}",`),
+		'\t} as const;'
+	].join('\n');
+
 const moduleSite = (id, component, file, tables) =>
 	insertSite({
 		id,
@@ -135,6 +142,13 @@ const PROGRESS_ROWS = accentRows((light, dark) => solidRow(light, dark));
 
 const SLIDER_ROWS = accentRows((light, dark) => solidRow(light, dark));
 
+// The thumb's hover and focus rings take the tone too, otherwise every slider in the set paints the
+// default ring colour and the tone only reaches the dot.
+const SLIDER_THUMB_ROWS = accentRows(
+	(light, dark) =>
+		`${solidRow(light, dark)} ${light === dark ? `ring-${light}/30` : `ring-${light}/30 dark:ring-${dark}/30`}`
+);
+
 const SPINNER_SIZES = {
 	sm: 'size-3',
 	default: 'size-4',
@@ -146,7 +160,7 @@ const SLIDER_THUMB_STOCK =
 	'class="size-3 border-none bg-primary transition-colors hover:ring-2 hover:ring-ring/30 focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50"';
 
 const SLIDER_THUMB_FIXED =
-	'class={cn("size-3 border-none rounded-full transition-colors hover:ring-2 hover:ring-ring/30 focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50", SLIDER_TONES[variant])}';
+	'class={cn("size-3 border-none rounded-full transition-colors hover:ring-2 focus-visible:ring-2 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50", SLIDER_THUMBS[variant])}';
 
 const SLIDER_RANGE_STOCK = `class={cn(
 					"bg-primary absolute select-none data-horizontal:h-full data-vertical:w-full"
@@ -294,7 +308,8 @@ export const ATOM_TONES = [
 	}),
 
 	moduleSite('slider-atom-tones', 'slider', 'slider/slider.svelte', [
-		tableOf('SLIDER_TONES', 'SliderVariant', SLIDER_ROWS)
+		tableOf('SLIDER_TONES', 'SliderVariant', SLIDER_ROWS),
+		objectTableOf('SLIDER_THUMBS', SLIDER_THUMB_ROWS)
 	]),
 	variantPropSite('slider-atom-variant-prop', 'slider', 'slider/slider.svelte', 'class: className,'),
 	variantTypeSite(

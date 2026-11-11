@@ -10,6 +10,16 @@
 	} as const;
 
 	export type SliderVariant = keyof typeof SLIDER_TONES;
+
+	const SLIDER_THUMBS = {
+		default: "bg-primary ring-primary/30",
+		secondary: "bg-secondary-foreground dark:bg-secondary ring-secondary-foreground/30 dark:ring-secondary/30",
+		success: "bg-success ring-success/30",
+		warning: "bg-warning ring-warning/30",
+		info: "bg-info ring-info/30",
+		destructive: "bg-destructive ring-destructive/30",
+		blackwhite: "bg-blackwhite ring-blackwhite/30",
+	} as const;
 </script>
 
 <script lang="ts">
@@ -61,7 +71,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 			<SliderPrimitive.Thumb
 				data-slot="slider-thumb"
 				index={thumb.index}
-				class={cn("size-3 border-none rounded-full transition-colors hover:ring-2 hover:ring-ring/30 focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50", SLIDER_TONES[variant])}
+				class={cn("size-3 border-none rounded-full transition-colors hover:ring-2 focus-visible:ring-3 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50", SLIDER_THUMBS[variant])}
 			/>
 		{/each}
 	{/snippet}

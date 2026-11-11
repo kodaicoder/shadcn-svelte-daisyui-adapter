@@ -1346,10 +1346,12 @@ const checkSlider = async (record, scope, label) => {
 		nodes.map((node) => {
 			const thumb = node.querySelector('[data-slot="slider-thumb"]');
 			const range = node.querySelector('[data-slot="slider-range"]');
+			const thumbStyle = thumb ? getComputedStyle(thumb) : null;
 			return {
 				tone: node.dataset.tone,
-				thumb: thumb ? getComputedStyle(thumb).backgroundColor : 'missing',
-				range: range ? getComputedStyle(range).backgroundColor : 'missing'
+				thumb: thumbStyle ? thumbStyle.backgroundColor : 'missing',
+				range: range ? getComputedStyle(range).backgroundColor : 'missing',
+				ring: thumbStyle ? thumbStyle.getPropertyValue('--tw-ring-color').trim() : 'missing'
 			};
 		})
 	);
@@ -1358,6 +1360,12 @@ const checkSlider = async (record, scope, label) => {
 		`${label}: every tone paints its own thumb`,
 		new Set(tones.map((row) => row.thumb)).size === TONES.length,
 		tones.map((row) => `${row.tone}=${row.thumb}`).join(', ')
+	);
+	record(
+		`${label}: every tone ring follows its thumb`,
+		new Set(tones.map((row) => row.ring)).size === TONES.length &&
+			tones.every((row) => row.ring !== '' && row.ring !== 'missing'),
+		tones.map((row) => `${row.tone}=${row.ring || 'none'}`).join(', ')
 	);
 	const dim = [];
 	for (const row of tones) {
