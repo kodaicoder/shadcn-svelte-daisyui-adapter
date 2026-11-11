@@ -1,3 +1,17 @@
+<script lang="ts" module>
+	const SLIDER_TONES = {
+		default: "bg-primary",
+		secondary: "bg-secondary-foreground dark:bg-secondary",
+		success: "bg-success",
+		warning: "bg-warning",
+		info: "bg-info",
+		destructive: "bg-destructive",
+		blackwhite: "bg-blackwhite",
+	} as const;
+
+	export type SliderVariant = keyof typeof SLIDER_TONES;
+</script>
+
 <script lang="ts">
 	import { Slider as SliderPrimitive } from "bits-ui";
 	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
@@ -6,9 +20,10 @@
 		ref = $bindable(null),
 		value = $bindable(),
 		orientation = "horizontal",
+		variant = "default",
 		class: className,
 		...restProps
-	}: WithoutChildrenOrChild<SliderPrimitive.RootProps> = $props();
+	}: WithoutChildrenOrChild<SliderPrimitive.RootProps> & { variant?: SliderVariant } = $props();
 </script>
 
 <!--
@@ -31,13 +46,14 @@ get along, so we shut typescript up by casting `value` to `never`.
 			data-slot="slider-track"
 			data-orientation={orientation}
 			class={cn(
-				"bg-input/50 data-horizontal:h-0.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-0.5 relative grow overflow-hidden data-horizontal:w-full data-vertical:h-full"
+				"bg-foreground/10 dark:bg-foreground/15 data-horizontal:h-0.5 data-horizontal:w-full data-vertical:h-full data-vertical:w-0.5 relative grow overflow-hidden data-horizontal:w-full data-vertical:h-full"
 			)}
 		>
 			<SliderPrimitive.Range
 				data-slot="slider-range"
 				class={cn(
-					"bg-primary absolute select-none data-horizontal:h-full data-vertical:w-full"
+					"absolute select-none data-horizontal:h-full data-vertical:w-full",
+					SLIDER_TONES[variant]
 				)}
 			/>
 		</span>
@@ -45,7 +61,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 			<SliderPrimitive.Thumb
 				data-slot="slider-thumb"
 				index={thumb.index}
-				class="size-3 border-none bg-primary transition-colors hover:ring-2 hover:ring-ring/30 focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50"
+				class={cn("size-3 border-none rounded-full transition-colors hover:ring-2 hover:ring-ring/30 focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:outline-hidden block shrink-0 select-none disabled:pointer-events-none disabled:opacity-50", SLIDER_TONES[variant])}
 			/>
 		{/each}
 	{/snippet}

@@ -1,5 +1,5 @@
 import Root from './scroll-area.svelte';
-import { Scrollbar } from '../ui/scroll-area/index.js';
+import Scrollbar from './scroll-area-scrollbar.svelte';
 
 export {
 	Root,

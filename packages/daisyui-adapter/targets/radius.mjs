@@ -18,7 +18,8 @@ export const RADIUS_COMPONENTS = [
 	'input-group-button',
 	'checkbox',
 	'radio-group',
-	'switch'
+	'switch',
+	'skeleton'
 ];
 
 export const ROLE_STEPS = { selector: 'sm', field: 'md', box: 'lg' };
@@ -263,5 +264,14 @@ export const RADIUS = [
 		step: 'md',
 		stock: 'shrink-0 rounded-full border border-transparent',
 		fixed: 'shrink-0 border border-transparent rounded-full'
+	},
+	{
+		id: 'skeleton-selector',
+		component: 'skeleton',
+		file: 'skeleton/skeleton.svelte',
+		role: 'selector',
+		step: 'sm',
+		stock: 'animate-pulse",',
+		fixed: 'animate-pulse rounded-sm",'
 	}
 ].map(replaceSite);

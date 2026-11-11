@@ -6,8 +6,8 @@
 		variants: {
 			variant: {
 				default: "",
-				separator: "before:h-px before:min-w-0 before:flex-1 before:bg-border after:h-px after:min-w-0 after:flex-1 after:bg-border before:mr-1 after:ml-1",
-				border: "border-b border-border pb-2",
+				separator: "before:h-px before:min-w-0 before:flex-1 before:bg-foreground/25 after:h-px after:min-w-0 after:flex-1 after:bg-foreground/25 before:mr-1 after:ml-1",
+				border: "border-b border-foreground/25 pb-2",
 			},
 		},
 		defaultVariants: {

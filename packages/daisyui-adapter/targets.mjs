@@ -22,12 +22,15 @@ import {
 	VARIANTS
 } from './targets/variants.mjs';
 import { BINARY_COMPONENTS, BINARY_SITES } from './targets/binary.mjs';
+import { ATOM_TONE_COMPONENTS, ATOM_TONES } from './targets/atom-tones.mjs';
 import { CURSOR_COMPONENTS, CURSOR_SITES } from './targets/cursor.mjs';
 import { CREATES } from './targets/site.mjs';
 import { TEXT_RUNGS } from './targets/text-rungs.mjs';
 
 export {
 	ALERT_VARIANTS,
+	ATOM_TONE_COMPONENTS,
+	ATOM_TONES,
 	BADGE_VARIANTS,
 	BINARY_COMPONENTS,
 	BINARY_SITES,
@@ -66,6 +69,7 @@ const BASE_TABLES = [
 	{ sites: SITES, components: COMPONENTS },
 	{ sites: SIZES, components: SIZE_COMPONENTS },
 	{ sites: FIELD_VARIANTS, components: FIELD_VARIANT_COMPONENTS },
+	{ sites: ATOM_TONES, components: ATOM_TONE_COMPONENTS },
 	{ sites: RADIUS, components: RADIUS_COMPONENTS },
 	{ sites: SURFACES, components: SURFACE_COMPONENTS },
 	{ sites: VARIANTS, components: VARIANT_COMPONENTS },
