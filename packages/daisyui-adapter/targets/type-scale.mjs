@@ -1,6 +1,3 @@
-// The rung names are Tailwind's, and each holds the px the old name held before the type scale:
-// `sm` is the old `xs` 12, `base` the old `sm` 14. A `fixed:` string therefore names one rung above
-// its old name while its rendered px stays put.
 export const TYPE_SCALE = [
 	{ name: 'xs', size: 10, lineHeight: 14 },
 	{ name: 'sm', size: 12, lineHeight: 16 },
@@ -22,9 +19,7 @@ export const scaleValue = (rung, factor) => `[calc(var(--text-${rung})*${factor}
 
 const RUNG_ABOVE = { xs: 'sm', sm: 'base', base: 'lg', lg: 'xl', xl: '2xl' };
 
-// One pass, so a shifted name is never read again: `text-xs` becomes `text-sm` and stays there. A
-// prefix (`hover:`, `file:`, `peer-data-[slot=checkbox]:`) and a modifier (`/relaxed`) are outside the
-// match, and the lookahead skips a longer name such as `text-balance` while keeping `2xl` at the top.
+// One pass, so a shifted name is never read again.
 export const shiftRungs = (text) =>
 	text.replace(
 		/text-(xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/g,

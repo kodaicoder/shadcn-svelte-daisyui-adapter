@@ -5,10 +5,6 @@ import { scaleValue } from './type-scale.mjs';
 // entry here stays independent of the radius anchor and a second `fix` run still reports `fixed`.
 export const SIZE_COMPONENTS = ['input', 'textarea', 'native-select'];
 
-// The box and the padding are multiples of the text token that owns the size: the height is 2×, the
-// textarea's `min-h` is 4× and the inline padding is 0.5×. `sm`, `default` and `lg` read the `sm`,
-// `base` and `lg` rungs, so one change to `--text-base` moves the default field's text, box and
-// padding together and leaves the other two alone.
 const INPUT_TEXT = [
 	'border px-2 py-0.5',
 	`data-[size=sm]:h-${scaleValue('sm', 2)} data-[size=sm]:px-${scaleValue('sm', 0.5)} data-[size=sm]:text-sm`,

@@ -1,45 +1,20 @@
-// Regenerates `targets/text-rungs.mjs`, the table that moves every stock rung name one step up the
-// type scale. The rows are read off the pinned `ui` snapshot and the hand-written tables, so a pin
-// move or a table edit is followed by a rerun instead of a hand edit.
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { applySite } from '../component-fix.mjs';
-import { BINARY_SITES } from '../targets/binary.mjs';
-import { SITES } from '../targets/contrast.mjs';
-import { CURSOR_SITES } from '../targets/cursor.mjs';
-import { FIELD_VARIANTS } from '../targets/field-variants.mjs';
-import { RADIUS } from '../targets/radius.mjs';
-import { RINGS } from '../targets/rings.mjs';
-import { SIZES } from '../targets/sizes.mjs';
-import { SURFACES } from '../targets/surfaces.mjs';
+import { BASE_SITES } from '../targets.mjs';
 import { shiftRungs } from '../targets/type-scale.mjs';
-import { VARIANTS } from '../targets/variants.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
 const UI = join(ROOT, 'src', 'lib', 'components', 'ui');
 const OUT = join(ROOT, 'packages', 'daisyui-adapter', 'targets', 'text-rungs.mjs');
 
-// Same order as `TABLES` in targets.mjs, without importing it: the module it exports re-exports this
-// file, and a cycle here would read a half-built table.
-const TABLE_SITES = [
-	...SITES,
-	...SIZES,
-	...FIELD_VARIANTS,
-	...RADIUS,
-	...SURFACES,
-	...VARIANTS,
-	...BINARY_SITES,
-	...CURSOR_SITES,
-	...RINGS
-];
-
 const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
 const QUOTED = /"([^"\n]*)"/g;
 const PRINT_WIDTH = 100;
-// Prettier counts a tab as `tabWidth` (2 by default) when it measures a line.
-const lineWidth = (line) => line.replace(/\t/g, '  ').length;
+const TAB_WIDTH = 2;
+const lineWidth = (line) => line.replace(/\t/g, ' '.repeat(TAB_WIDTH)).length;
 
 const walk = (directory) =>
 	readdirSync(directory, { withFileTypes: true })
@@ -53,7 +28,7 @@ const walk = (directory) =>
 		);
 
 const rowsFor = (file, stock) => {
-	const sites = TABLE_SITES.filter((site) => site.file === file);
+	const sites = BASE_SITES.filter((site) => site.file === file);
 	const apply = (sites, content) => sites.reduce((text, site) => applySite(text, site), content);
 	const current = apply(sites, stock);
 	const target = apply(
@@ -73,9 +48,6 @@ const rowsFor = (file, stock) => {
 	return rows;
 };
 
-// Prettier's `singleQuote` picks the quote that needs fewer escapes, and `trailingComma: none` plus a
-// preserved first-line break keep every row expanded. Emitting that shape keeps the generated file
-// clean under `prettier --check` without running prettier on it.
 const quote = (text) => {
 	const singles = text.split("'").length - 1;
 	const doubles = text.split('"').length - 1;
@@ -90,8 +62,6 @@ const property = (key, value, last = false) => {
 	return lineWidth(line) <= PRINT_WIDTH ? [line] : [`\t\t${key}:`, `\t\t\t${value}${tail}`];
 };
 
-// One chunk per row, with the file's comment folded into its first row so the comma that separates rows
-// always lands on the row itself.
 const chunk = (file, row, first) => {
 	const lines = [
 		'\treplaceSite({',

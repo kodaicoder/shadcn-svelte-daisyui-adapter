@@ -388,9 +388,6 @@ const checkBaseField = async (record, scope, label) => {
 	return { base, state };
 };
 
-// The contract the field journey asserts: each size names one rung, the box is 2× that rung's px,
-// the textarea's `min-h` is 4× and the inline padding is 0.5×. Reading the tokens means a change to
-// the table moves the assertion with it.
 const FIELD_SIZES = [
 	{ size: 'sm', rung: 'sm', radius: 'sm' },
 	{ size: 'default', rung: 'base', radius: 'md' },

@@ -37,8 +37,6 @@ const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
 const UI = join(ROOT, 'src', 'lib', 'components', 'ui');
 const COMPONENT_DIR = join(ROOT, 'src', 'lib', 'components');
 
-// A failing check reports one short line per file: the first line where the two versions part, and the
-// window around the character that parts them.
 const firstDifference = (want, got) => {
 	const wanted = want.split('\n');
 	const actual = got.split('\n');
@@ -111,9 +109,7 @@ check(
 	sizeCoupling.length === 0,
 	sizeCoupling.map((site) => site.id).join(', ')
 );
-// The smallest component rung is 12px: `text-xs` is 10px on the type scale, so a class left on it is
-// a component a rung behind. The fixed copies are scanned too, because the fixer only owns the sites
-// and a regeneration would otherwise bring a stock `text-xs` back without a failure.
+// The smallest component rung is 12px; `text-xs` is the rung below it.
 const TEXT_XS = /\btext-xs\b/;
 const onXs = [
 	...ALL_SITES.filter((site) => TEXT_XS.test(site.fixed)).map((site) => site.id),
@@ -132,8 +128,6 @@ for (const { dir, file } of copyNames) {
 }
 check('no fixed string, variant row, or fixed copy names text-xs', onXs.length === 0, onXs.join(', '));
 
-// A copy is the review surface for one component, so it has to be exactly what the manifest produces
-// from the pin. A hand edit that shifts one class here and not in the table is what this catches.
 const copyDrift = [];
 const copies = readdirSync(COMPONENT_DIR, { withFileTypes: true })
 	.filter((entry) => entry.isDirectory() && entry.name.endsWith('-fixed'))
@@ -244,9 +238,6 @@ check(
 	missingStock.join(', ')
 );
 
-// The shift is complete when the manifest is the whole difference between the pin and the new scale:
-// every file it names has to reach the stock with each rung the tables leave alone moved one step up.
-// A stock class no site shifts fails here, which is what makes completeness a computed property.
 const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
 const unnamedRungs = [];
 const walkUi = (directory) =>

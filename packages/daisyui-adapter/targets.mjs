@@ -62,7 +62,7 @@ export {
 // only the components the hand-written tables happen to touch.
 export const TEXT_RUNG_COMPONENTS = [...new Set(TEXT_RUNGS.map((site) => site.component))];
 
-const TABLES = [
+const BASE_TABLES = [
 	{ sites: SITES, components: COMPONENTS },
 	{ sites: SIZES, components: SIZE_COMPONENTS },
 	{ sites: FIELD_VARIANTS, components: FIELD_VARIANT_COMPONENTS },
@@ -71,10 +71,12 @@ const TABLES = [
 	{ sites: VARIANTS, components: VARIANT_COMPONENTS },
 	{ sites: BINARY_SITES, components: BINARY_COMPONENTS },
 	{ sites: CURSOR_SITES, components: CURSOR_COMPONENTS },
-	{ sites: RINGS, components: RING_COMPONENTS },
-	{ sites: TEXT_RUNGS, components: TEXT_RUNG_COMPONENTS }
+	{ sites: RINGS, components: RING_COMPONENTS }
 ];
 
+const TABLES = [...BASE_TABLES, { sites: TEXT_RUNGS, components: TEXT_RUNG_COMPONENTS }];
+
+export const BASE_SITES = BASE_TABLES.flatMap((table) => table.sites);
 export const ALL_SITES = TABLES.flatMap((table) => table.sites);
 export const KNOWN_COMPONENTS = [...new Set(TABLES.flatMap((table) => table.components))];
 

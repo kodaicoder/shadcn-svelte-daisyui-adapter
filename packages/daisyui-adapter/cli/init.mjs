@@ -251,8 +251,6 @@ const insertThemeEntries = (source, entries) => {
 };
 
 // The plain block is the one that emits the tokens; `@theme inline` resolves its variables away.
-// A run rebuilds the body from the table and keeps a foreign declaration where it was, so a second
-// map is byte-identical.
 const writeTypeScale = (source) => {
 	const owned = typeScaleDeclarations().map(({ prop, value }) => `\t${prop}: ${value};`);
 	const bounds = blockBounds(source, '@theme');
