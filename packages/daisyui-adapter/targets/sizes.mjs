@@ -50,8 +50,8 @@ export const SIZES = [
 		id: 'input-size-md',
 		component: 'input',
 		file: 'input/input.svelte',
-		stock: 'aria-invalid:ring-2 md:text-xs/relaxed',
-		fixed: 'aria-invalid:ring-2'
+		stock: ' md:text-xs/relaxed',
+		fixed: ''
 	}),
 	replaceSite({
 		id: 'input-size-file',
@@ -101,8 +101,8 @@ export const SIZES = [
 		id: 'textarea-size-md',
 		component: 'textarea',
 		file: 'textarea/textarea.svelte',
-		stock: 'aria-invalid:ring-2 md:text-xs/relaxed',
-		fixed: 'aria-invalid:ring-2'
+		stock: ' md:text-xs/relaxed',
+		fixed: ''
 	}),
 	replaceSite({
 		id: 'native-select-size-type',

@@ -83,6 +83,15 @@ const ringWidthSite = (component, file) =>
 		fixed: 'focus-visible:ring-3'
 	});
 
+const invalidRingSite = (component, file) =>
+	replaceSite({
+		id: `${component}-invalid-ring-width`,
+		component,
+		file,
+		stock: 'aria-invalid:ring-2',
+		fixed: 'aria-invalid:ring-3'
+	});
+
 const readonlySite = (component, file, stock) =>
 	replaceSite({
 		id: `${component}-readonly-surface`,
@@ -113,6 +122,7 @@ export const FIELD_VARIANTS = [
 	}),
 	disabledSite('input', 'input/input.svelte'),
 	ringWidthSite('input', 'input/input.svelte'),
+	invalidRingSite('input', 'input/input.svelte'),
 	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6'),
 
 	toneMapSite('textarea', 'textarea/textarea.svelte'),
@@ -132,6 +142,7 @@ export const FIELD_VARIANTS = [
 		fixed: '",\n\t\tFIELD_TONES[variant],\n\t\tclassName'
 	}),
 	ringWidthSite('textarea', 'textarea/textarea.svelte'),
+	invalidRingSite('textarea', 'textarea/textarea.svelte'),
 	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-3'),
 
 	toneMapSite('native-select', 'native-select/native-select.svelte'),
@@ -162,6 +173,7 @@ export const FIELD_VARIANTS = [
 	}),
 	disabledSite('native-select', 'native-select/native-select.svelte'),
 	ringWidthSite('native-select', 'native-select/native-select.svelte'),
+	invalidRingSite('native-select', 'native-select/native-select.svelte'),
 	replaceSite({
 		id: 'native-select-disabled-hover',
 		component: 'native-select',

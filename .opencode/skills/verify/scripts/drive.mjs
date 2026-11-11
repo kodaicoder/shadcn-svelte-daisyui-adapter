@@ -529,6 +529,7 @@ const checkInvalidField = async (record, scope, label, focusRing) => {
 		`${state.border} vs ${expected}`
 	);
 	record(`${label}: invalid paints a ring`, ring !== '', ring || state.shadow);
+	record(`${label}: invalid ring is 3px`, /\s3px$/.test(ring), ring);
 	record(
 		`${label}: invalid ring differs from the focus ring`,
 		ring !== focusRing,
