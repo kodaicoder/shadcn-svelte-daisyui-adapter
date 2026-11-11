@@ -330,6 +330,15 @@ const TRANSPARENT = new Set(['transparent', 'rgba(0, 0, 0, 0)']);
 
 const settle = () => new Promise((resolve) => setTimeout(resolve, 250));
 
+const tabTo = async (locator, max = 120) => {
+	const page = locator.page();
+	for (let press = 0; press < max; press += 1) {
+		await page.keyboard.press('Tab');
+		if (await locator.evaluate((node) => node === document.activeElement)) return true;
+	}
+	return false;
+};
+
 const ringOf = (shadow) =>
 	shadow === 'none'
 		? ''
@@ -347,6 +356,13 @@ const alphaOf = (color) => {
 };
 
 const near = (value, target) => Math.abs(value - target) < 0.02;
+
+const translateFraction = (transform, width) => {
+	if (transform === 'none') return 0;
+	const match = /matrix\(([^)]+)\)/.exec(transform);
+	if (!match || width === 0) return NaN;
+	return Number(match[1].split(',')[4]) / width;
+};
 
 const fieldState = (locator) =>
 	locator.evaluate((node) => {
@@ -882,6 +898,303 @@ const checkSpinner = async (record, scope, label) => {
 	);
 };
 
+const MARKER_VARIANTS = { base: 'default', separator: 'separator', border: 'border', link: 'default' };
+
+const checkMarker = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const markers = scope.locator('[data-slot="marker"]');
+	const count = await markers.count();
+	record(`${label}: four markers`, count === 4, `${count}`);
+
+	const variants = await markers.evaluateAll((nodes) =>
+		nodes.map((node) => ({ name: node.dataset.case, variant: node.dataset.variant }))
+	);
+	const wrongVariant = variants
+		.filter((row) => MARKER_VARIANTS[row.name] !== row.variant)
+		.map((row) => `${row.name}=${row.variant}`);
+	record(
+		`${label}: every marker carries its variant`,
+		wrongVariant.length === 0,
+		wrongVariant.join(', ') || 'all four'
+	);
+
+	const rung = await scope
+		.page()
+		.evaluate(() =>
+			parseFloat(
+				getComputedStyle(document.documentElement).getPropertyValue('--text-sm').trim()
+			)
+		);
+	const text = await scope
+		.locator('[data-case="base"] [data-slot="marker-content"]')
+		.evaluate((node) => {
+			const style = getComputedStyle(node);
+			return {
+				transform: style.textTransform,
+				spacing: parseFloat(style.letterSpacing),
+				size: parseFloat(style.fontSize),
+				color: style.color
+			};
+		});
+	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'color');
+	record(`${label}: marker text is uppercase`, text.transform === 'uppercase', text.transform);
+	record(
+		`${label}: marker letter spacing is ${text.spacing}px`,
+		text.spacing > 0,
+		`${text.spacing}px`
+	);
+	record(`${label}: marker text is ${rung}px`, text.size === rung, `${text.size}px`);
+	record(
+		`${label}: marker text takes the muted foreground`,
+		text.color === muted,
+		`${text.color} vs ${muted}`
+	);
+
+	const hairlines = await scope.locator('[data-case="separator"]').evaluate((node) => {
+		const before = getComputedStyle(node, '::before');
+		const after = getComputedStyle(node, '::after');
+		return {
+			beforeHeight: before.height,
+			afterHeight: after.height,
+			beforePaint: before.backgroundColor,
+			afterPaint: after.backgroundColor
+		};
+	});
+	const border = await computed(scope.locator('[data-oracle="border"]'), 'backgroundColor');
+	record(
+		`${label}: separator paints a 1px hairline on each side`,
+		hairlines.beforeHeight === '1px' && hairlines.afterHeight === '1px',
+		`${hairlines.beforeHeight} / ${hairlines.afterHeight}`
+	);
+	record(
+		`${label}: both hairlines take the border paint`,
+		hairlines.beforePaint === border && hairlines.afterPaint === border,
+		`${hairlines.beforePaint} / ${hairlines.afterPaint} vs ${border}`
+	);
+
+	const edged = await scope.locator('[data-case="border"]').evaluate((node) => ({
+		width: getComputedStyle(node).borderBottomWidth,
+		paint: getComputedStyle(node).borderBottomColor
+	}));
+	record(`${label}: border variant paints a 1px bottom edge`, edged.width === '1px', edged.width);
+	record(
+		`${label}: bottom edge takes the border paint`,
+		edged.paint === border,
+		`${edged.paint} vs ${border}`
+	);
+
+	const icons = scope.locator('[data-slot="marker-icon"]');
+	const iconCount = await icons.count();
+	const icon = await icons.first().evaluate((node) => {
+		const style = getComputedStyle(node);
+		return {
+			ariaHidden: node.getAttribute('aria-hidden'),
+			width: parseFloat(style.width),
+			height: parseFloat(style.height)
+		};
+	});
+	record(`${label}: one icon`, iconCount === 1, `${iconCount}`);
+	record(
+		`${label}: icon stays out of the accessibility tree`,
+		icon.ariaHidden === 'true',
+		icon.ariaHidden
+	);
+	record(
+		`${label}: icon measures 16px`,
+		Math.round(icon.width) === 16 && Math.round(icon.height) === 16,
+		`${icon.width} x ${icon.height}`
+	);
+
+	const anchors = scope.locator('[data-case="link"] a');
+	const anchorCount = await anchors.count();
+	const decoration =
+		anchorCount === 1 ? await computed(anchors.first(), 'textDecorationLine') : 'missing';
+	record(
+		`${label}: link case holds one underlined anchor`,
+		anchorCount === 1 && decoration.includes('underline'),
+		`${anchorCount} / ${decoration}`
+	);
+};
+
+const PROGRESS_STOPS = {
+	empty: { now: '0', fraction: -1 },
+	half: { now: '50', fraction: -0.5 },
+	full: { now: '100', fraction: 0 }
+};
+
+const checkProgress = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const bars = scope.locator('[role="progressbar"]');
+	const count = await bars.count();
+	record(`${label}: three progress bars`, count === 3, `${count}`);
+
+	const muted = await computed(scope.locator('[data-oracle="muted"]'), 'backgroundColor');
+	const primary = await computed(scope.locator('[data-oracle="primary"]'), 'backgroundColor');
+	const rows = await bars.evaluateAll((nodes) =>
+		nodes.map((node) => {
+			const indicator = node.querySelector('[data-slot="progress-indicator"]');
+			return {
+				name: node.dataset.case,
+				now: node.getAttribute('aria-valuenow'),
+				max: node.getAttribute('aria-valuemax'),
+				height: node.getBoundingClientRect().height,
+				track: getComputedStyle(node).backgroundColor,
+				indicator: indicator ? getComputedStyle(indicator).backgroundColor : 'missing',
+				transform: indicator ? getComputedStyle(indicator).transform : 'missing',
+				width: indicator ? indicator.getBoundingClientRect().width : 0
+			};
+		})
+	);
+	for (const row of rows) {
+		const expected = PROGRESS_STOPS[row.name];
+		const fraction = translateFraction(row.transform, row.width);
+		record(
+			`${label}: ${row.name} announces ${expected.now}`,
+			row.now === expected.now,
+			row.now
+		);
+		record(`${label}: ${row.name} sets max 100`, row.max === '100', row.max);
+		record(
+			`${label}: ${row.name} track takes the muted paint`,
+			row.track === muted,
+			`${row.track} vs ${muted}`
+		);
+		record(
+			`${label}: ${row.name} indicator takes the primary paint`,
+			row.indicator === primary,
+			`${row.indicator} vs ${primary}`
+		);
+		record(
+			`${label}: ${row.name} indicator sits at ${(fraction * 100).toFixed(1)} percent`,
+			near(fraction, expected.fraction),
+			`${(fraction * 100).toFixed(1)}%`
+		);
+		record(`${label}: ${row.name} is 2px tall`, Math.round(row.height) === 2, `${row.height}px`);
+	}
+};
+
+const SLIDER_CASES = { single: 1, range: 2, disabled: 1 };
+
+const checkSlider = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const thumbs = scope.locator('[data-slot="slider-thumb"]');
+	const total = await thumbs.count();
+	record(`${label}: four thumbs across three sliders`, total === 4, `${total}`);
+
+	const COUNTS = { single: 1, range: 2, disabled: 1 };
+	for (const [name, expected] of Object.entries(SLIDER_CASES)) {
+		const found = await scope.locator(`[data-case="${name}"] [data-slot="slider-thumb"]`).count();
+		record(`${label}: ${name} holds ${expected} thumb`, found === expected, `${found}`);
+	}
+
+	const primary = await computed(scope.locator('[data-oracle="primary"]'), 'backgroundColor');
+	const input = await computed(scope.locator('[data-oracle="input"]'), 'backgroundColor');
+
+	const thumb = await thumbs.first().evaluate((node) => {
+		const style = getComputedStyle(node);
+		return {
+			width: parseFloat(style.width),
+			height: parseFloat(style.height),
+			paint: style.backgroundColor
+		};
+	});
+	record(
+		`${label}: thumb measures 12px`,
+		Math.round(thumb.width) === 12 && Math.round(thumb.height) === 12,
+		`${thumb.width} x ${thumb.height}`
+	);
+	record(`${label}: thumb takes the primary paint`, thumb.paint === primary, `${thumb.paint} vs ${primary}`);
+
+	const track = await computed(scope.locator('[data-case="single"] [data-slot="slider-track"]'), 'backgroundColor');
+	record(`${label}: track takes the input paint`, track === input, `${track} vs ${input}`);
+
+	const range = await computed(scope.locator('[data-case="single"] [data-slot="slider-range"]'), 'backgroundColor');
+	record(`${label}: range takes the primary paint`, range === primary, `${range} vs ${primary}`);
+
+	const disabled = await computed(scope.locator('[data-case="disabled"]'), 'opacity');
+	record(`${label}: disabled slider dims to 50 percent`, disabled === '0.5', disabled);
+
+	const first = scope.locator('[data-case="single"] [data-slot="slider-thumb"]');
+	const reached = await tabTo(first);
+	await settle();
+	const shadow = await computed(first, 'boxShadow');
+	const ring = ringOf(shadow);
+	const ringWidth = ring ? Number(/([\d.]+)px$/.exec(ring)?.[1] ?? 0) : 0;
+	record(`${label}: Tab reaches the thumb`, reached, reached ? 'focused' : 'not reachable');
+	record(
+		`${label}: thumb focus ring is 3px, measured ${ringWidth}px`,
+		/\s3px$/.test(ring),
+		ring || shadow
+	);
+};
+
+const SCROLL_CASES = {
+	vertical: { x: false, y: true, axis: 'the y axis' },
+	horizontal: { x: true, y: false, axis: 'the x axis' },
+	both: { x: true, y: true, axis: 'both axes' }
+};
+
+const checkScrollArea = async (record, scope, label) => {
+	await checkSchemeHeading(record, scope, label);
+	const viewports = await scope.locator('[data-slot="scroll-area-viewport"]').evaluateAll((nodes) =>
+		nodes.map((node) => ({
+			name: node.closest('[data-case]')?.dataset.case,
+			clientWidth: node.clientWidth,
+			clientHeight: node.clientHeight,
+			scrollWidth: node.scrollWidth,
+			scrollHeight: node.scrollHeight
+		}))
+	);
+	record(`${label}: three viewports`, viewports.length === 3, `${viewports.length}`);
+
+	for (const view of viewports) {
+		const spec = SCROLL_CASES[view.name];
+		const overflowsX = view.scrollWidth > view.clientWidth;
+		const overflowsY = view.scrollHeight > view.clientHeight;
+		record(
+			`${label}: ${view.name} overflows on ${spec.axis}`,
+			overflowsX === spec.x && overflowsY === spec.y,
+			`${view.scrollWidth} x ${view.scrollHeight} in ${view.clientWidth} x ${view.clientHeight}`
+		);
+	}
+
+	const vertical = scope.locator('[data-case="vertical"]');
+	await vertical.hover();
+	await settle();
+	const scrollbars = vertical.locator('[data-slot="scroll-area-scrollbar"]');
+	const mounted = await scrollbars.count();
+	const border = await computed(scope.locator('[data-oracle="border"]'), 'backgroundColor');
+	const thumbPaint =
+		mounted === 1
+			? await computed(scrollbars.first().locator('[data-slot="scroll-area-thumb"]'), 'backgroundColor')
+			: 'missing';
+	record(`${label}: hovering mounts a scrollbar`, mounted === 1, `${mounted}`);
+	record(
+		`${label}: scrollbar thumb takes the border paint`,
+		thumbPaint === border,
+		`${thumbPaint} vs ${border}`
+	);
+
+	const viewport = vertical.locator('[data-slot="scroll-area-viewport"]');
+	const reached = await tabTo(viewport);
+	await settle();
+	const shadow = await computed(viewport, 'boxShadow');
+	const ring = ringOf(shadow);
+	const ringWidth = ring ? Number(/([\d.]+)px$/.exec(ring)?.[1] ?? 0) : 0;
+	const ringAlpha = ring ? alphaOf(ring) : 0;
+	record(`${label}: Tab reaches the viewport`, reached, reached ? 'focused' : 'not reachable');
+	record(
+		`${label}: viewport focus ring is 3px, measured ${ringWidth}px`,
+		/\s3px$/.test(ring),
+		ring || shadow
+	);
+	record(
+		`${label}: viewport ring alpha is 30 percent, measured ${Math.round(ringAlpha * 100)} percent`,
+		near(ringAlpha, 0.3),
+		`${Math.round(ringAlpha * 100)}%`
+	);
+};
+
 const atomJourney = (kind, probe, check) => async (page, record) => {
 	const response = await page.goto(`${BASE}review/${kind}`, { waitUntil: 'networkidle' });
 	record('http 200', response?.status() === 200, `got ${response?.status()}`);
@@ -1132,7 +1445,11 @@ const journeys = {
 	kbd: atomJourney('kbd', '[data-slot="kbd"]', checkKbd),
 	separator: atomJourney('separator', '[data-slot="separator"]', checkSeparator),
 	skeleton: atomJourney('skeleton', '[data-slot="skeleton"]', checkSkeleton),
-	spinner: atomJourney('spinner', '[role="status"]', checkSpinner)
+	spinner: atomJourney('spinner', '[role="status"]', checkSpinner),
+	marker: atomJourney('marker', '[data-slot="marker"]', checkMarker),
+	progress: atomJourney('progress', '[role="progressbar"]', checkProgress),
+	slider: atomJourney('slider', '[data-slot="slider"]', checkSlider),
+	'scroll-area': atomJourney('scroll-area', '[data-slot="scroll-area"]', checkScrollArea)
 };
 
 const journey = process.argv[2];
