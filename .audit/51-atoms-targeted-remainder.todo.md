@@ -183,7 +183,7 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 - `pnpm check` 0 errors, 0 warnings. Drift 18 checks pass, including the variant count, the component
   membership and the radius-anchor guard.
 - Journeys: input 90, native-select 84, textarea 92; the other nine unchanged; all pass.
-- Operator review of `/review/input`: the idle border is 80 percent and focus 100 percent, and
+- Operator review of `/review/input`: the idle border is 70 percent and focus 100 percent, and
   `secondary`, `warning` and `destructive` use the raw tone so the border matches the ring; `success`
   and `info` keep the text token. The journeys assert both alphas and the focus oracle.
 - The tone checks cover seven idle borders against the tone oracles, the focused border equal to the

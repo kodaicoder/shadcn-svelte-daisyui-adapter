@@ -49,7 +49,7 @@ the destructive border and ring. This round also closes finding 60 and finding 6
 - [x] `variant` on `input`, `textarea` and `native-select` with the seven tone keys; `default` uses the
       primary tone
 - [x] the idle border and the focused border both take the tone colour; `focus-visible:ring-<tone>/30`
-- [x] the idle border is 80 percent and the focused border is 100 percent; `secondary`, `warning` and
+- [x] the idle border is 70 percent and the focused border is 100 percent; `secondary`, `warning` and
       `destructive` use the raw tone, `success` and `info` keep their text token
 - [x] `aria-invalid` keeps the destructive border and ring over the tone
 - [x] `disabled:pointer-events-none` removed from `input` and `native-select` so `not-allowed` shows

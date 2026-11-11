@@ -7,22 +7,22 @@ import { insertSite, replaceSite } from './site.mjs';
 export const FIELD_VARIANT_COMPONENTS = ['input', 'textarea', 'native-select'];
 
 const TONE_ROWS = {
-	default: { idle: 'border-primary/80', focus: 'border-primary', ring: 'ring-primary/30' },
-	secondary: { idle: 'border-secondary/80', focus: 'border-secondary', ring: 'ring-secondary/30' },
+	default: { idle: 'border-primary/70', focus: 'border-primary', ring: 'ring-primary/30' },
+	secondary: { idle: 'border-secondary/70', focus: 'border-secondary', ring: 'ring-secondary/30' },
 	success: {
-		idle: 'border-success-text/80',
+		idle: 'border-success-text/70',
 		focus: 'border-success-text',
 		ring: 'ring-success/30'
 	},
-	warning: { idle: 'border-warning/80', focus: 'border-warning', ring: 'ring-warning/30' },
-	info: { idle: 'border-info-text/80', focus: 'border-info-text', ring: 'ring-info/30' },
+	warning: { idle: 'border-warning/70', focus: 'border-warning', ring: 'ring-warning/30' },
+	info: { idle: 'border-info-text/70', focus: 'border-info-text', ring: 'ring-info/30' },
 	destructive: {
-		idle: 'border-destructive/80',
+		idle: 'border-destructive/70',
 		focus: 'border-destructive',
 		ring: 'ring-destructive/30'
 	},
 	blackwhite: {
-		idle: 'border-blackwhite/80',
+		idle: 'border-blackwhite/70',
 		focus: 'border-blackwhite',
 		ring: 'ring-blackwhite/30'
 	}

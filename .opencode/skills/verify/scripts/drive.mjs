@@ -443,7 +443,7 @@ const checkFieldTones = async (record, scope, label) => {
 			'borderTopColor'
 		);
 		if (row.border !== expected) borderMismatch.push(`${row.tone}:${row.border} vs ${expected}`);
-		if (!near(alphaOf(row.border), 0.8))
+		if (!near(alphaOf(row.border), 0.7))
 			idleAlphaMismatch.push(`${row.tone}:${alphaOf(row.border)}`);
 	}
 	record(
@@ -452,7 +452,7 @@ const checkFieldTones = async (record, scope, label) => {
 		borderMismatch.join(', ')
 	);
 	record(
-		`${label}: every idle border is 80 percent`,
+		`${label}: every idle border is 70 percent`,
 		idleAlphaMismatch.length === 0,
 		idleAlphaMismatch.join(', ')
 	);
