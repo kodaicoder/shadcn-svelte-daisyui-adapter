@@ -5,9 +5,9 @@ import { insertSite, replaceSite } from './site.mjs';
 export const SIZE_COMPONENTS = ['input', 'textarea', 'native-select'];
 
 const INPUT_TEXT =
-	'border px-2 py-0.5 data-[size=sm]:h-6 data-[size=sm]:px-1.5 data-[size=sm]:text-xs data-[size=default]:px-[0.4375rem] data-[size=lg]:h-8 data-[size=lg]:text-base text-sm';
+	'border px-2 py-0.5 data-[size=sm]:h-6 data-[size=sm]:px-1.5 data-[size=sm]:text-sm data-[size=default]:px-[0.4375rem] data-[size=lg]:h-8 data-[size=lg]:text-lg text-base';
 const TEXTAREA_TEXT =
-	'px-2 py-2 data-[size=sm]:min-h-12 data-[size=sm]:px-1.5 data-[size=sm]:text-xs data-[size=default]:px-[0.4375rem] data-[size=lg]:min-h-16 data-[size=lg]:text-base text-sm';
+	'px-2 py-2 data-[size=sm]:min-h-12 data-[size=sm]:px-1.5 data-[size=sm]:text-sm data-[size=default]:px-[0.4375rem] data-[size=lg]:min-h-16 data-[size=lg]:text-lg text-base';
 
 export const SIZES = [
 	insertSite({
@@ -59,7 +59,7 @@ export const SIZES = [
 		file: 'input/input.svelte',
 		stock: 'file:h-6 file:text-xs/relaxed file:font-medium',
 		fixed:
-			'file:h-6 file:text-xs/relaxed data-[size=sm]:file:text-[0.625rem] data-[size=lg]:file:text-sm file:font-medium'
+			'file:h-6 file:text-sm/relaxed data-[size=sm]:file:text-[0.625rem] data-[size=lg]:file:text-base file:font-medium'
 	}),
 	insertSite({
 		id: 'textarea-size-prop',
@@ -116,7 +116,7 @@ export const SIZES = [
 		component: 'native-select',
 		file: 'native-select/native-select.svelte',
 		stock: 'text-xs/relaxed transition-colors select-none',
-		fixed: 'text-sm transition-colors select-none'
+		fixed: 'text-base transition-colors select-none'
 	}),
 	replaceSite({
 		id: 'native-select-size-steps',
@@ -124,6 +124,6 @@ export const SIZES = [
 		file: 'native-select/native-select.svelte',
 		stock: 'data-[size=sm]:h-6 data-[size=sm]:text-[0.625rem] outline-none',
 		fixed:
-			'data-[size=sm]:h-6 data-[size=sm]:pl-1.5 data-[size=sm]:text-xs data-[size=default]:pl-[0.4375rem] data-[size=lg]:h-8 data-[size=lg]:text-base outline-none'
+			'data-[size=sm]:h-6 data-[size=sm]:pl-1.5 data-[size=sm]:text-sm data-[size=default]:pl-[0.4375rem] data-[size=lg]:h-8 data-[size=lg]:text-lg outline-none'
 	})
 ];

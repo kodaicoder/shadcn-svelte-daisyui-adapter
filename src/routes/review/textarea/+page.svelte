@@ -15,39 +15,39 @@
 		{#snippet controls()}
 			<div class="grid gap-6 sm:grid-cols-2">
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">base</span>
+					<span class="text-sm text-muted-foreground">base</span>
 					<Textarea data-case="base" bind:value={base} placeholder="Placeholder"></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">filled</span>
+					<span class="text-sm text-muted-foreground">filled</span>
 					<Textarea data-case="filled" bind:value={filled}></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">focus</span>
+					<span class="text-sm text-muted-foreground">focus</span>
 					<Textarea data-case="focus" bind:value={focus}></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">invalid</span>
+					<span class="text-sm text-muted-foreground">invalid</span>
 					<Textarea data-case="invalid" aria-invalid="true" bind:value={invalid}></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">disabled</span>
+					<span class="text-sm text-muted-foreground">disabled</span>
 					<Textarea data-case="disabled" disabled bind:value={disabled}></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">readonly</span>
+					<span class="text-sm text-muted-foreground">readonly</span>
 					<Textarea data-case="readonly" readonly bind:value={readonly}></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">size-sm</span>
+					<span class="text-sm text-muted-foreground">size-sm</span>
 					<Textarea data-case="size-sm" size="sm"></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">size-default</span>
+					<span class="text-sm text-muted-foreground">size-default</span>
 					<Textarea data-case="size-default" size="default"></Textarea>
 				</label>
 				<label class="space-y-1">
-					<span class="text-xs text-muted-foreground">size-lg</span>
+					<span class="text-sm text-muted-foreground">size-lg</span>
 					<Textarea data-case="size-lg" size="lg"></Textarea>
 				</label>
 				<div class="flex items-end gap-2">

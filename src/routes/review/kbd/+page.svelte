@@ -8,18 +8,18 @@
 		{#snippet controls()}
 			<div class="flex flex-wrap items-start gap-6">
 				<div class="space-y-1">
-					<span class="text-xs text-muted-foreground">base</span>
+					<span class="text-sm text-muted-foreground">base</span>
 					<div><Kbd data-case="base">Ctrl</Kbd></div>
 				</div>
 				<div class="space-y-1">
-					<span class="text-xs text-muted-foreground">group</span>
+					<span class="text-sm text-muted-foreground">group</span>
 					<KbdGroup data-case="group">
 						<Kbd>Ctrl</Kbd>
 						<Kbd>K</Kbd>
 					</KbdGroup>
 				</div>
 				<div class="space-y-1">
-					<span class="text-xs text-muted-foreground">muted</span>
+					<span class="text-sm text-muted-foreground">muted</span>
 					<div class="bg-muted size-4 rounded-sm" data-oracle="muted"></div>
 				</div>
 			</div>

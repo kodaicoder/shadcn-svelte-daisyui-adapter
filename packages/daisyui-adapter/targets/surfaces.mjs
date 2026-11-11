@@ -120,7 +120,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs',
-		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs'
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-sm'
 	},
 	{
 		id: 'context-content',
@@ -174,7 +174,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs',
-		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs'
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-sm'
 	},
 	{
 		id: 'menubar-root',
@@ -220,7 +220,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs/relaxed',
-		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs/relaxed'
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-sm/relaxed'
 	},
 	{
 		id: 'menubar-checkbox-item',
@@ -247,7 +247,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'min-h-7 gap-2 rounded-md px-2 py-1 text-xs',
-		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-xs'
+		fixed: 'min-h-7 gap-2 rounded-lg px-2 py-1 text-sm'
 	},
 	{
 		id: 'sheet-content',
@@ -301,7 +301,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: `rounded-lg p-2 text-xs/relaxed transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 in-data-[slot=navigation-menu-content]:rounded-md`,
-		fixed: `rounded-lg p-2 text-xs/relaxed transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 in-data-[slot=navigation-menu-content]:rounded-lg`
+		fixed: `rounded-lg p-2 text-sm/relaxed transition-all outline-none focus-visible:ring-2 focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4 in-data-[slot=navigation-menu-content]:rounded-lg`
 	},
 	{
 		id: 'nav-trigger',
@@ -332,7 +332,7 @@ export const SURFACES = [
 		stock:
 			'gap-2 rounded-md px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-md',
 		fixed:
-			'gap-2 rounded-lg px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg'
+			'gap-2 rounded-lg px-2.5 py-1.5 text-sm/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg'
 	},
 	{
 		id: 'command-link-item',
@@ -343,7 +343,7 @@ export const SURFACES = [
 		stock:
 			'gap-2 rounded-md px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-md',
 		fixed:
-			'gap-2 rounded-lg px-2.5 py-1.5 text-xs/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg'
+			'gap-2 rounded-lg px-2.5 py-1.5 text-sm/relaxed outline-hidden select-none in-data-[slot=dialog-content]:rounded-lg'
 	},
 	{
 		id: 'hover-card-content',
@@ -361,7 +361,7 @@ export const SURFACES = [
 		role: 'box',
 		step: 'lg',
 		stock: 'cn("w-full caption-bottom text-xs"',
-		fixed: 'cn("w-full rounded-lg caption-bottom text-xs"'
+		fixed: 'cn("w-full rounded-lg caption-bottom text-sm"'
 	},
 	{
 		id: 'calendar-head-cell',

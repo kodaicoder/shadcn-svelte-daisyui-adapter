@@ -11,6 +11,6 @@
 		? 'dark bg-background text-foreground'
 		: ''}"
 >
-	<h3 class="text-xs tracking-widest text-muted-foreground uppercase">{scheme}</h3>
+	<h3 class="text-sm tracking-widest text-muted-foreground uppercase">{scheme}</h3>
 	{@render children?.()}
 </div>

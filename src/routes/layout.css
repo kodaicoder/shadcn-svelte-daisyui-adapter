@@ -1,4 +1,4 @@
-/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 58 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
+/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 61 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */
 @import 'tailwindcss';
 @import "tw-animate-css";
 @import "shadcn-svelte/tailwind.css";
@@ -187,6 +187,21 @@
 	--color-blackwhite: var(--blackwhite);
 	--color-blackwhite-foreground: var(--blackwhite-foreground);
 	--default-border-width: var(--daisy-border, 1px);
+}
+
+@theme {
+	--text-xs: 10px;
+	--text-xs--line-height: 14px;
+	--text-sm: 12px;
+	--text-sm--line-height: 16px;
+	--text-base: 14px;
+	--text-base--line-height: 20px;
+	--text-lg: 16px;
+	--text-lg--line-height: 24px;
+	--text-xl: 18px;
+	--text-xl--line-height: 28px;
+	--text-2xl: 20px;
+	--text-2xl--line-height: 28px;
 }
 
 @layer base {

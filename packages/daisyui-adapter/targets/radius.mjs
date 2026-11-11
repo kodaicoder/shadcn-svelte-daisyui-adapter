@@ -107,7 +107,7 @@ export const RADIUS = [
 		size: 'default',
 		step: 'md',
 		stock: 'gap-1 rounded-md text-xs font-medium',
-		fixed: 'gap-1 rounded-md text-xs font-medium'
+		fixed: 'gap-1 rounded-md text-sm font-medium'
 	},
 	{
 		id: 'toggle-sm',
@@ -226,7 +226,7 @@ export const RADIUS = [
 		size: 'xs',
 		step: 'sm',
 		stock: 'gap-2 rounded-md text-xs/relaxed flex',
-		fixed: 'gap-2 rounded-sm text-xs/relaxed flex'
+		fixed: 'gap-2 rounded-sm text-sm/relaxed flex'
 	},
 	{
 		id: 'input-group-button-xs',

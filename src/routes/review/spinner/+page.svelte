@@ -8,15 +8,15 @@
 		{#snippet controls()}
 			<div class="flex flex-wrap items-start gap-6">
 				<div class="space-y-1">
-					<span class="text-xs text-muted-foreground">base</span>
+					<span class="text-sm text-muted-foreground">base</span>
 					<Spinner data-case="base" aria-label="Loading" />
 				</div>
 				<div class="space-y-1">
-					<span class="text-xs text-muted-foreground">large</span>
+					<span class="text-sm text-muted-foreground">large</span>
 					<Spinner data-case="large" class="text-primary size-6" aria-label="Loading" />
 				</div>
 				<div class="space-y-1">
-					<span class="text-xs text-muted-foreground">primary</span>
+					<span class="text-sm text-muted-foreground">primary</span>
 					<div class="text-primary size-4" data-oracle="primary"></div>
 				</div>
 			</div>

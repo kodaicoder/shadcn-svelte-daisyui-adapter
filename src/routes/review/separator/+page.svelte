@@ -8,19 +8,19 @@
 		{#snippet controls()}
 			<div class="space-y-6">
 				<div class="space-y-2">
-					<span class="text-xs text-muted-foreground">horizontal</span>
+					<span class="text-sm text-muted-foreground">horizontal</span>
 					<Separator data-case="horizontal" />
 				</div>
 				<div class="space-y-2">
-					<span class="text-xs text-muted-foreground">vertical</span>
+					<span class="text-sm text-muted-foreground">vertical</span>
 					<div class="flex h-16 items-center gap-4">
-						<span class="text-sm">Left</span>
+						<span class="text-base">Left</span>
 						<Separator data-case="vertical" orientation="vertical" />
-						<span class="text-sm">Right</span>
+						<span class="text-base">Right</span>
 					</div>
 				</div>
 				<div class="space-y-2">
-					<span class="text-xs text-muted-foreground">decorative</span>
+					<span class="text-sm text-muted-foreground">decorative</span>
 					<Separator data-case="decorative" decorative />
 				</div>
 			</div>

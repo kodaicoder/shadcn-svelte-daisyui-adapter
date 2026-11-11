@@ -6,7 +6,7 @@
 	let { kind, title, controls }: { kind: string; title: string; controls: Snippet } = $props();
 </script>
 
-<h1 class="text-lg font-semibold">{title}</h1>
+<h1 class="text-xl font-semibold">{title}</h1>
 
 <section id={kind} data-control={kind} class="space-y-4">
 	{#each SCHEMES as scheme (scheme)}

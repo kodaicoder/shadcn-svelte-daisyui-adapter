@@ -6,7 +6,7 @@
 </script>
 
 <div class="space-y-2 sm:col-span-2">
-	<span class="text-xs text-muted-foreground">tones</span>
+	<span class="text-sm text-muted-foreground">tones</span>
 	<div class="flex flex-wrap items-end gap-2">
 		{#each TONE_NAMES as tone (tone)}
 			{@render control(tone)}

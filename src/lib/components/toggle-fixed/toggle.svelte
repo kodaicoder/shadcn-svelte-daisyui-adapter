@@ -2,7 +2,7 @@
 	import { type VariantProps, tv } from "tailwind-variants";
 
 	export const toggleVariants = tv({
-		base: "aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-3 aria-invalid:border-destructive gap-1 rounded-md text-xs font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex cursor-pointer items-center justify-center whitespace-nowrap outline-none enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+		base: "aria-pressed:bg-primary aria-pressed:text-primary-foreground aria-pressed:border-primary aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:ring-3 aria-invalid:border-destructive gap-1 rounded-md text-sm font-medium transition-all [&_svg:not([class*='size-'])]:size-4 group/toggle inline-flex cursor-pointer items-center justify-center whitespace-nowrap outline-none enabled:aria-pressed:hover:bg-primary/80 focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
 		variants: {
 			variant: {
 				default: "bg-transparent enabled:aria-[pressed=false]:hover:bg-primary/20 focus-visible:ring-primary/30",

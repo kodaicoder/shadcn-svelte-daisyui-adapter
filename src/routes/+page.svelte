@@ -33,10 +33,10 @@
 {/snippet}
 
 <div class="space-y-10 p-6">
-	<h1 class="text-lg font-semibold">Binary control tones</h1>
+	<h1 class="text-xl font-semibold">Binary control tones</h1>
 
 	<section id="cursor" data-control="cursor" class="space-y-3">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Cursor</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Cursor</h2>
 		<div class="flex flex-wrap items-center gap-4">
 			<Button data-cursor="button">Button</Button>
 			<Button data-cursor="button-disabled" disabled>Disabled button</Button>
@@ -48,7 +48,7 @@
 	</section>
 
 	<section id="disabled-label" data-control="disabled-label" class="space-y-3">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Disabled label</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Disabled label</h2>
 		<div class="flex flex-wrap items-center gap-8">
 			<div class="flex items-center gap-2">
 				<Checkbox id="label-sibling" disabled />
@@ -66,7 +66,7 @@
 	</section>
 
 	<section id="field-label" data-control="field-label" class="space-y-4">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Field.Label focus</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Field.Label focus</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
 				<div class="flex flex-wrap items-center gap-6">
@@ -78,7 +78,7 @@
 								data-field-control="checkbox"
 								data-field-tone={tone}
 							/>
-							<span class="text-xs">{tone}</span>
+							<span class="text-sm">{tone}</span>
 						</FieldLabel>
 					{/each}
 				</div>
@@ -86,7 +86,7 @@
 					{#each TONE_NAMES as tone (tone)}
 						<FieldLabel class="gap-1">
 							<Switch variant={tone} checked data-field-control="switch" data-field-tone={tone} />
-							<span class="text-xs">{tone}</span>
+							<span class="text-sm">{tone}</span>
 						</FieldLabel>
 					{/each}
 				</div>
@@ -100,7 +100,7 @@
 									data-field-tone={tone}
 								/>
 							</RadioGroup>
-							<span class="text-xs">{tone}</span>
+							<span class="text-sm">{tone}</span>
 						</FieldLabel>
 					{/each}
 				</div>
@@ -109,27 +109,27 @@
 	</section>
 
 	<section id="checkbox" data-control="checkbox" class="space-y-4">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Checkbox</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Checkbox</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
-						<label class="flex items-center gap-2 text-xs">
+						<label class="flex items-center gap-2 text-sm">
 							<Checkbox variant={tone} checked data-tone={tone} />
 							{tone}
 						</label>
 					{/each}
 				</div>
 				<div class="flex flex-wrap items-center gap-4">
-					<label class="flex items-center gap-2 text-xs">
+					<label class="flex items-center gap-2 text-sm">
 						<Checkbox data-case="focus" aria-label="Focus tone" />
 						focus
 					</label>
-					<label class="flex items-center gap-2 text-xs">
+					<label class="flex items-center gap-2 text-sm">
 						<Checkbox data-case="invalid" aria-invalid="true" aria-label="Invalid tone" />
 						invalid
 					</label>
-					<label class="flex items-center gap-2 text-xs">
+					<label class="flex items-center gap-2 text-sm">
 						<Checkbox data-case="disabled" disabled aria-label="Disabled tone" />
 						disabled
 					</label>
@@ -140,27 +140,27 @@
 	</section>
 
 	<section id="switch" data-control="switch" class="space-y-4">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Switch</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Switch</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
-						<label class="flex items-center gap-2 text-xs">
+						<label class="flex items-center gap-2 text-sm">
 							<Switch variant={tone} checked data-tone={tone} />
 							{tone}
 						</label>
 					{/each}
 				</div>
 				<div class="flex flex-wrap items-center gap-4">
-					<label class="flex items-center gap-2 text-xs">
+					<label class="flex items-center gap-2 text-sm">
 						<Switch data-case="focus" aria-label="Focus tone" />
 						focus
 					</label>
-					<label class="flex items-center gap-2 text-xs">
+					<label class="flex items-center gap-2 text-sm">
 						<Switch data-case="invalid" aria-invalid="true" aria-label="Invalid tone" />
 						invalid
 					</label>
-					<label class="flex items-center gap-2 text-xs">
+					<label class="flex items-center gap-2 text-sm">
 						<Switch data-case="disabled" disabled aria-label="Disabled tone" />
 						disabled
 					</label>
@@ -171,12 +171,12 @@
 	</section>
 
 	<section id="radio-group" data-control="radio-group" class="space-y-4">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Radio group</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Radio group</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
 				<div class="flex flex-wrap items-center gap-4">
 					{#each TONE_NAMES as tone (tone)}
-						<span class="flex items-center gap-2 text-xs">
+						<span class="flex items-center gap-2 text-sm">
 							<RadioGroup value="on" variant={tone} aria-label="Radio {tone}">
 								<RadioGroupItem value="on" data-tone={tone} />
 								<RadioGroupItem value="off" data-unchecked-tone={tone} />
@@ -184,7 +184,7 @@
 							{tone}
 						</span>
 					{/each}
-					<span class="flex items-center gap-2 text-xs">
+					<span class="flex items-center gap-2 text-sm">
 						<RadioGroup value="on" variant="success" aria-label="Radio override">
 							<RadioGroupItem value="on" variant="destructive" data-override="radio-group" />
 						</RadioGroup>
@@ -192,19 +192,19 @@
 					</span>
 				</div>
 				<div class="flex flex-wrap items-center gap-4">
-					<span class="flex items-center gap-2 text-xs">
+					<span class="flex items-center gap-2 text-sm">
 						<RadioGroup value="on" aria-label="Radio focus">
 							<RadioGroupItem value="on" data-case="focus" />
 						</RadioGroup>
 						focus
 					</span>
-					<span class="flex items-center gap-2 text-xs">
+					<span class="flex items-center gap-2 text-sm">
 						<RadioGroup value="off" aria-label="Radio invalid">
 							<RadioGroupItem value="on" aria-invalid="true" data-case="invalid" />
 						</RadioGroup>
 						invalid
 					</span>
-					<span class="flex items-center gap-2 text-xs">
+					<span class="flex items-center gap-2 text-sm">
 						<RadioGroup value="off" aria-label="Radio disabled">
 							<RadioGroupItem value="on" disabled data-case="disabled" />
 						</RadioGroup>
@@ -217,7 +217,7 @@
 	</section>
 
 	<section id="toggle" data-control="toggle" class="space-y-4">
-		<h2 class="text-sm font-semibold tracking-widest uppercase">Toggle</h2>
+		<h2 class="text-base font-semibold tracking-widest uppercase">Toggle</h2>
 		{#each SCHEMES as scheme (scheme)}
 			<Scheme {scheme}>
 				<div class="flex flex-wrap items-center gap-4">
