@@ -29,6 +29,7 @@ import {
 	contrastWarnings
 } from '../dist/contrast.mjs';
 import { parseTheme, themePath } from '../dist/index.mjs';
+import { typeScaleDeclarations } from '../targets/type-scale.mjs';
 import { fix, scan } from '../component-fix.mjs';
 
 const manifest = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
@@ -249,6 +250,28 @@ const insertThemeEntries = (source, entries) => {
 	return `${source.slice(0, bounds.close)}${missing.map((entry) => `\t${entry}\n`).join('')}${source.slice(bounds.close)}`;
 };
 
+// The plain block is the one that emits the tokens; `@theme inline` resolves its variables away.
+// A run rebuilds the body from the table and keeps a foreign declaration where it was, so a second
+// map is byte-identical.
+const writeTypeScale = (source) => {
+	const owned = typeScaleDeclarations().map(({ prop, value }) => `\t${prop}: ${value};`);
+	const bounds = blockBounds(source, '@theme');
+	const body = bounds
+		? [
+				...declarations(source.slice(bounds.open + 1, bounds.close))
+					.filter(({ prop }) => !prop.startsWith('--text-'))
+					.map(({ prop, value }) => `\t${prop}: ${value};`),
+				...owned
+			]
+		: owned;
+	if (bounds) return replaceBlock(source, '@theme', body.join('\n'));
+	const inline = blockBounds(source, '@theme inline');
+	if (inline) {
+		return `${source.slice(0, inline.close + 1)}\n\n@theme {\n${body.join('\n')}\n}${source.slice(inline.close + 1)}`;
+	}
+	return insertAfterLastImport(source, `\n@theme {\n${body.join('\n')}\n}`);
+};
+
 const installLine = (spec) => {
 	const local = resolve('node_modules', ...PKG.split('/'), 'package.json');
 	if (existsSync(local)) {
@@ -436,6 +459,7 @@ const init = ({ withFix = true } = {}) => {
 	);
 	if (themes) css = insertAfterLastImport(css, PLUGIN);
 	css = insertThemeEntries(css, themes ? [...aliases, BORDER_ENTRY] : aliases);
+	css = writeTypeScale(css);
 
 	// The fixer runs before the stylesheet is written: a refused version must leave the
 	// project untouched, so the map waits in memory until the guard has passed. A map-only run
