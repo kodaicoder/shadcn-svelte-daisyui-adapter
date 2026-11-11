@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Slider } from '#lib/components/slider-fixed/index.js';
-	import { ReviewPage } from '#lib/review/index.js';
+	import { ReviewPage, TONE_NAMES } from '#lib/review/index.js';
 
 	let single = $state(40);
 	let range = $state([25, 75]);
@@ -22,6 +22,14 @@
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">disabled</span>
 					<Slider data-case="disabled" type="single" disabled bind:value={disabled} />
+				</div>
+				<div class="space-y-2">
+					<span class="text-sm text-muted-foreground">tones</span>
+					<div class="flex flex-wrap items-center gap-2">
+						{#each TONE_NAMES as tone (tone)}
+							<Slider data-tone={tone} variant={tone} type="single" value={40} class="w-40" />
+						{/each}
+					</div>
 				</div>
 				<div class="flex items-end gap-4">
 					<div class="space-y-1">

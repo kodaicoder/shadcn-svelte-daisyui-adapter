@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Progress } from '#lib/components/ui/progress/index.js';
-	import { ReviewPage } from '#lib/review/index.js';
+	import { Progress } from '#lib/components/progress-fixed/index.js';
+	import { ReviewPage, TONE_NAMES } from '#lib/review/index.js';
 </script>
 
 <div class="space-y-6 p-6">
@@ -18,6 +18,18 @@
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">full</span>
 					<Progress data-case="full" value={100} max={100} />
+				</div>
+				<div class="space-y-2">
+					<span class="text-sm text-muted-foreground">thick</span>
+					<Progress data-case="thick" value={50} max={100} class="h-2" />
+				</div>
+				<div class="space-y-2">
+					<span class="text-sm text-muted-foreground">tones</span>
+					<div class="flex flex-wrap items-center gap-2">
+						{#each TONE_NAMES as tone (tone)}
+							<Progress data-tone={tone} variant={tone} value={60} class="w-24" />
+						{/each}
+					</div>
 				</div>
 				<div class="flex items-end gap-4">
 					<div class="space-y-1">
