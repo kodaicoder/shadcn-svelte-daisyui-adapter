@@ -1,4 +1,7 @@
 # 62: The native select option list ignores the dark scheme
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** make the open option list follow the scheme. The `<select>` is themed, but its
 `<option>` carries `bg-[Canvas] text-[CanvasText]`, and neither `.dark` nor the daisy theme sets

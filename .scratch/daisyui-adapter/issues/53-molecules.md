@@ -1,4 +1,7 @@
 # 53: Molecules
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** review the 26 molecules. Start with the seven targeted ones, which carry the tokens:
 `alert`, `bubble`, `card`, `hover-card`, `input-group`, `popover` and `radio-group`. `radio-group` passed

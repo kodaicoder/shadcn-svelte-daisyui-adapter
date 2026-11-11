@@ -1,4 +1,7 @@
 # 54: Release 0.4.0
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** cut the molecules release after ticket 53 closes.
 

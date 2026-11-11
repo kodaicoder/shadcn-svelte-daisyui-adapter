@@ -1,4 +1,7 @@
 # 57: Templates and pages
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** review the shell and the pages now that every block below them is stable. The items are
 the app shell (`src/routes/+layout.svelte`), the demo page (`src/routes/+page.svelte`) and the evidence page

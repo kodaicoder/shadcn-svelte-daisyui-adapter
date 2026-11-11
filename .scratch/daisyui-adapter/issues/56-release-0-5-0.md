@@ -1,4 +1,7 @@
 # 56: Release 0.5.0
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** cut the organisms release after ticket 55 closes.
 

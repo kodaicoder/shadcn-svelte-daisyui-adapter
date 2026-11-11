@@ -1,11 +1,14 @@
 # 60: A disabled field hides its not-allowed cursor
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** make the disabled cursor hint reachable, or remove it. `input` and `native-select` set
 `disabled:cursor:not-allowed` on the same element that carries `disabled:pointer-events-none`, so the
 element never receives the hover that would show the cursor. `textarea` sets no `pointer-events-none`,
 so it is the only one of the three whose hint works.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** review, atoms, finding
 **Blocked by:** None
 
@@ -19,3 +22,8 @@ button and toggle removed `pointer-events-none` for exactly this reason.
 - [ ] `input`, `native-select` and `textarea` agree
 - [ ] The journeys assert the contract that `drive.mjs checkField` reads today
 - [ ] `docs/component-color-usage.md` records the choice
+
+## Answer
+
+Resolved in ticket 51. input and 
+ative-select keep pointer events on so cursor: not-allowed shows, and the field journey asserts the disabled pointer, the cursor and the absence of a hover paint.

@@ -1,4 +1,7 @@
 # 55: Organisms
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** review the 18 organisms. The targeted 13 share the token work: `calendar`, `chart`,
 `command`, `context-menu`, `dialog`, `drawer`, `dropdown-menu`, `menubar`, `navigation-menu`,

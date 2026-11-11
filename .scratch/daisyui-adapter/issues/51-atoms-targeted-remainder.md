@@ -1,22 +1,24 @@
 # 51: Atoms, targeted remainder
 Session IDs: ses_e3bf72385ffeFALeHHC2Njjlc7
+Lesson: A field's appearance is one contract; raising the text alone leaves the box, radius and ring behind, so size, tone and state must be derived from the same scale.
+Check: code - the field journeys assert the 12/14/16 text, the 24/28/32 height, the tone border alpha at 70 and 100, and the 3 px focus and invalid rings.
 
 **What to build:** finish the token review on the three targeted atoms that have not been reviewed:
 `input`, `native-select` and `textarea`. The other five targeted atoms passed (badge, button, checkbox,
 switch, toggle).
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** review, atoms
 
-- [ ] `input`: states, sizes, disabled, invalid, readonly, focus ring, cursor; tone coverage is whatever the stock supports
-- [ ] `native-select`: the same checklist, plus the chevron and the option list
-- [ ] `textarea`: the same checklist, plus resize
+- [x] `input`: states, sizes, disabled, invalid, readonly, focus ring, cursor; tone coverage is whatever the stock supports
+- [x] `native-select`: the same checklist, plus the chevron and the option list
+- [x] `textarea`: the same checklist, plus resize
 - [x] each component gets a reviewer page on its own route, `/review/<component>`, so journeys stop going stale
 - [x] replace the old reviewer page's five tone maps and four-times-copied scheme wrapper with one derived map and one snippet (deferred from ticket 50 item 10)
 - [x] each gets a journey that drives the real control and keeps evidence
 - [x] a fixed copy only where the adapter patches the component; otherwise import from `ui`
 - [x] findings become tickets under this feature, never silent edits
-- [ ] the level closes when the operator passes all three
+- [x] the level closes when the operator passes all three
 
 ## Field size variants (added 2026-11-10)
 
@@ -40,9 +42,9 @@ first code edit.
 ## Field tones (added 2026-11-10)
 
 The three fields take the same seven tones as the binary controls, through one `variant` prop. The tone
-sets the border colour in both the idle and the focused state, and the focus ring colour. The ring keeps
-2 px and 30 percent, the border keeps its width and opacity, so only the colour changes. `invalid` keeps
-the destructive border and ring. This round also closes finding 60 and finding 61.
+sets the border colour in both the idle and the focused state, and the focus ring colour. The ring is
+3 px at 30 percent; the border is 70 percent when idle and 100 percent on focus. `invalid` keeps the
+destructive border and ring. This round also closes finding 60 and finding 61.
 
 - [x] spec amendment approved
 - [x] `variant` on `input`, `textarea` and `native-select` with the seven tone keys; `default` uses the
@@ -84,3 +86,14 @@ every DOM-hook check still passed. Check: code - `drive.mjs` asserts one `h3` pe
 
 Reopened on 2026-11-10 because the operator does not pass the three atoms until they carry sizes. The
 tag `t51-atoms-targeted-remainder` was removed; a new tag lands when the size round closes the ticket.
+
+## Closeout
+
+The operator passed all three on 2026-11-11. Rounds: sizes `a5ff5e4`..`8a5faf1`, tones
+`e50c707`..`723aa5d`, with review fixes in both.
+
+Final gates: `pnpm check` clean; drift 18 checks; journeys input 94, native-select 88, textarea 96;
+`ui` and `src/routes/layout.css` stay stock. Findings 60 and 61 were resolved by the tone round; 62
+remains open.
+
+The tag `t51-atoms-targeted-remainder` marks this close.

@@ -1,4 +1,7 @@
 # 59: Full review and 1.0.0
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** re-review every component page against the final tokens, prove the whole surface, then
 cut 1.0.0.

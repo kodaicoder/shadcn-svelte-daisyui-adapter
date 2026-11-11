@@ -1,4 +1,7 @@
 # 52: Atoms, untargeted remainder
+Lesson:
+Check:
+Session IDs: ses_e3bf72385ffeFALeHHC2Njjlc7
 
 **What to build:** review the untargeted atoms. `aspect-ratio` and `avatar` already passed. `label` was
 touched by the disabled-cursor work but has not had a full review.

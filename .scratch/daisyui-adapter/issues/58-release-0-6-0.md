@@ -1,4 +1,7 @@
 # 58: Release 0.6.0
+Session IDs:
+Lesson:
+Check:
 
 **What to build:** cut the templates release after ticket 57 closes. This is the last minor before 1.0.0.
 
