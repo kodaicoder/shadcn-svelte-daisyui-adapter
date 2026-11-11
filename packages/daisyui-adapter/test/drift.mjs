@@ -81,7 +81,7 @@ check(
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
-check('the manifest holds fourteen size sites', SIZES.length === 14, `${SIZES.length}`);
+check('the manifest holds fifteen size sites', SIZES.length === 15, `${SIZES.length}`);
 const sizeCoupling = SIZES.filter(
 	(site) => site.fixed.includes('rounded-') || site.stock.includes('rounded-')
 );

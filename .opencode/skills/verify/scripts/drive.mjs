@@ -354,9 +354,9 @@ const checkBaseField = async (record, scope, label) => {
 };
 
 const FIELD_SIZES = [
-	{ size: 'sm', radius: 'sm', text: '10px', height: '24px', minHeight: '48px' },
-	{ size: 'default', radius: 'md', text: '12px', height: '28px', minHeight: '64px' },
-	{ size: 'lg', radius: 'lg', text: '14px', height: '32px', minHeight: '80px' }
+	{ size: 'sm', radius: 'sm', text: '12px', height: '24px', minHeight: '48px' },
+	{ size: 'default', radius: 'md', text: '14px', height: '28px', minHeight: '56px' },
+	{ size: 'lg', radius: 'lg', text: '16px', height: '32px', minHeight: '64px' }
 ];
 
 const checkFieldSizes = async (record, scope, label, kind) => {
@@ -396,7 +396,7 @@ const checkNarrowFieldText = async (page, record, scope, kind) => {
 		await page.setViewportSize({ width: 400, height: viewport.height });
 		await settle();
 		const text = await computed(scope.locator('[data-case="size-default"]'), 'fontSize');
-		record(`${kind}: default text stays 12px below md`, text === '12px', text);
+		record(`${kind}: default text stays 14px below md`, text === '14px', text);
 	} finally {
 		await page.setViewportSize(viewport);
 		await settle();
@@ -404,7 +404,7 @@ const checkNarrowFieldText = async (page, record, scope, kind) => {
 };
 
 const checkTextarea = (record, label, state) => {
-	record(`${label}: min height is 64px`, state.minHeight === '64px', state.minHeight);
+	record(`${label}: min height is 56px`, state.minHeight === '56px', state.minHeight);
 	record(`${label}: resize is off`, state.resize === 'none', state.resize);
 };
 

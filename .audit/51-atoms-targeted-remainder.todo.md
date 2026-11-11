@@ -141,7 +141,7 @@ Dismissed with a reason:
 - `pnpm check` 0 errors, 0 warnings. Drift 15 checks pass, including the size table count and the
   radius-anchor guard.
 - Journeys: input 64, native-select 64, textarea 66; the other nine unchanged; all pass. The field
-  checks cover 10/12/14 px text, 24/28/32 px height, 48/64/80 px textarea min height, the radius
+  checks cover 12/14/16 px text, 24/28/32 px height, 48/56/64 px textarea min height, the radius
   oracle per size and `data-size`, in both schemes. The 400 px default-text check runs once per field
   journey, after both schemes, and restores the viewport in a `finally`.
 - `input` no longer forwards the HTML `size` attribute; the prop owns the name.
@@ -178,8 +178,8 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
 
 ## Round 3 verification
 
-- `field-variants.mjs` holds 18 sites; `fix` twice reports 35 stock then 35 fixed and 0 stock, `ui`
-  and `layout.css` stay stock.
+- `field-variants.mjs` holds 18 sites and `sizes.mjs` 15; `fix` twice reports 36 stock then 36 fixed
+  and 0 stock, `ui` and `layout.css` stay stock.
 - `pnpm check` 0 errors, 0 warnings. Drift 18 checks pass, including the variant count, the component
   membership and the radius-anchor guard.
 - Journeys: input 90, native-select 84, textarea 92; the other nine unchanged; all pass.
@@ -187,9 +187,12 @@ tone, the disabled cursor visible, and readonly distinct but still focusable.
   `secondary`, `warning` and `destructive` use the raw tone so the border matches the ring; `success`
   and `info` keep the text token. The journeys assert both alphas and the focus oracle.
 - The tone checks cover seven idle borders against the tone oracles, the focused border equal to the
-  idle border, the focused ring equal to a `ring-2 ring-<tone>/30` oracle (2 px and 30 percent), the
-  destructive invalid border while focused, the disabled cursor with pointer events on and no hover
-  paint, and the readonly muted surface with `cursor: default` and focus.
+  focus oracle at 100 percent, the focused ring equal to a `ring-2 ring-<tone>/30` oracle (2 px and 30
+  percent), the destructive invalid border while focused, the disabled cursor with pointer events on
+  and no hover paint, and the readonly muted surface with `cursor: default` and focus.
+- Field size trial 2026-11-11: sm 12, default 14, lg 16; height 24/28/32; textarea min 48/56/64;
+  padding-x 6/7/8. Values use the stock Tailwind tokens for now; the global `--text-*` scale and the
+  rest of the components are a follow-up typography ticket.
 - Review fixes: the disabled native-select hover is gated with `dark:enabled:hover`, the readonly text
   mute is dropped to match the spec, the shared `applySite` serves drift, and the tone row is one
   `ToneRow` component instead of three copies.
