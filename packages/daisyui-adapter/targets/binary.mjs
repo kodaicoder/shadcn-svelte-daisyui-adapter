@@ -23,6 +23,13 @@ const toneBorderClasses = (tone, prefix = '') =>
 			? `${prefix}border-secondary-foreground dark:${prefix}border-secondary`
 			: `${prefix}border-${tone}`;
 
+const toneBorderAlphaClasses = (tone, alpha) =>
+	STATUS_TONES.has(tone)
+		? `border-${tone}-text/${alpha}`
+		: tone === 'secondary'
+			? `border-secondary-foreground/${alpha} dark:border-secondary/${alpha}`
+			: `border-${tone}/${alpha}`;
+
 const toneTextClasses = (tone, prefix = '') =>
 	STATUS_TONES.has(tone)
 		? `${prefix}text-${tone}-text`
@@ -207,7 +214,7 @@ const toggleRow = (tone) =>
 // The pressed label for secondary needs the dark twin: the rest state sets `dark:text-secondary`, and dark
 // outranks a plain `aria-pressed:` rule, so the single-variant pressed colour would lose and vanish.
 const toggleOutlineRow = (tone) =>
-	`border ${toneBorderClasses(tone)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} ${
+	`border ${toneBorderAlphaClasses(tone, 20)} bg-transparent ${toneTextClasses(tone)} aria-pressed:bg-${tone} ${
 		tone === 'secondary'
 			? 'aria-pressed:text-secondary-foreground dark:aria-pressed:text-secondary-foreground'
 			: `aria-pressed:text-${tone}-foreground`

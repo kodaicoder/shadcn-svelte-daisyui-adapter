@@ -128,6 +128,18 @@ const checkOutlinePairs = async (record, scope, label) => {
 		new Set(pairs.map((pair) => pair.border)).size === 7,
 		pairs.map((pair) => `${pair.key}=${pair.border}`).join(', ')
 	);
+	const tonePairs = pairs.filter((pair) => pair.key !== 'outline');
+	record(
+		`${label}: every tone outline border sits at the hover wash alpha`,
+		tonePairs.every((pair) => near(alphaOf(pair.border), 0.2)),
+		tonePairs.map((pair) => `${pair.key}=${alphaOf(pair.border)}`).join(', ')
+	);
+	const defaultPair = pairs.find((pair) => pair.key === 'outline');
+	record(
+		`${label}: the default outline keeps its full border`,
+		defaultPair !== undefined && near(alphaOf(defaultPair.border), 1),
+		defaultPair ? `${alphaOf(defaultPair.border)}` : 'missing'
+	);
 
 	for (const [key, tone] of OUTLINE_TONES) {
 		const pressed = await computed(

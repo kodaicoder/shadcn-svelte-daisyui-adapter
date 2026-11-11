@@ -251,3 +251,27 @@ mixed case. The tone matrix on the reviewer page sets the tone on the group and 
 ### Version
 
 Folds into 0.3.0 with the binary tone amendment.
+
+## Amendment 2026-11-11: outline toggle border alpha
+
+### Problem
+
+The outline toggle keys paint the tone border at full strength while the unpressed hover background is
+the tone at 20 percent. The rest state reads heavier than the hover, and the border does not follow the
+wash.
+
+### Decision
+
+Every `outline-<tone>` key paints its border at 20 percent alpha in the unpressed state, the same alpha
+as the unpressed hover background. The `outline` default keeps its `border-input` border at full
+opacity. The pressed state keeps the full tone border. The border colour token is unchanged: the
+secondary foreground with its dark twin, the text tone for the status tones, and the blackwhite tone.
+
+### Acceptance
+
+- The six `outline-<tone>` keys paint a 1px border at 20 percent alpha at rest in both schemes.
+- The default `outline` keeps its full `border-input` border.
+- Pressing a key restores the full tone border.
+- The toggle journey asserts the rest alpha and the default border.
+- The fixed copy regenerates byte for byte through the fixer.
+
