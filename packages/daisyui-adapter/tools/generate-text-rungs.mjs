@@ -19,13 +19,10 @@ const lineWidth = (line) => line.replace(/\t/g, ' '.repeat(TAB_WIDTH)).length;
 const walk = (directory) =>
 	readdirSync(directory, { withFileTypes: true })
 		.sort((a, b) => a.name.localeCompare(b.name))
-		.flatMap((entry) =>
-			entry.isDirectory()
-				? walk(join(directory, entry.name))
-				: entry.name.endsWith('.svelte')
-					? [join(directory, entry.name)]
-					: []
-		);
+		.flatMap((entry) => {
+			if (entry.isDirectory()) return walk(join(directory, entry.name));
+			return entry.name.endsWith('.svelte') ? [join(directory, entry.name)] : [];
+		});
 
 const rowsFor = (file, stock) => {
 	const sites = BASE_SITES.filter((site) => site.file === file);

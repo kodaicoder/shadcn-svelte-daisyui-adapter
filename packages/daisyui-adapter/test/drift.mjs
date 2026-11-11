@@ -115,20 +115,6 @@ const onXs = [
 	...ALL_SITES.filter((site) => TEXT_XS.test(site.fixed)).map((site) => site.id),
 	...VARIANT_ROWS.filter((row) => TEXT_XS.test(row.class)).map((row) => `${row.component}:${row.key}`)
 ];
-const copyNames = readdirSync(join(ROOT, 'src', 'lib', 'components'), { withFileTypes: true })
-	.filter((entry) => entry.isDirectory() && entry.name.endsWith('-fixed'))
-	.flatMap((entry) =>
-		readdirSync(join(ROOT, 'src', 'lib', 'components', entry.name))
-			.filter((file) => file.endsWith('.svelte'))
-			.map((file) => ({ dir: entry.name, file }))
-	);
-for (const { dir, file } of copyNames) {
-	const text = readFileSync(join(ROOT, 'src', 'lib', 'components', dir, file), 'utf8');
-	if (TEXT_XS.test(text)) onXs.push(`${dir}/${file}`);
-}
-check('no fixed string, variant row, or fixed copy names text-xs', onXs.length === 0, onXs.join(', '));
-
-const copyDrift = [];
 const copies = readdirSync(COMPONENT_DIR, { withFileTypes: true })
 	.filter((entry) => entry.isDirectory() && entry.name.endsWith('-fixed'))
 	.flatMap((entry) =>
@@ -136,6 +122,13 @@ const copies = readdirSync(COMPONENT_DIR, { withFileTypes: true })
 			.filter((file) => file.endsWith('.svelte'))
 			.map((file) => ({ dir: entry.name, file }))
 	);
+for (const { dir, file } of copies) {
+	const text = readFileSync(join(COMPONENT_DIR, dir, file), 'utf8');
+	if (TEXT_XS.test(text)) onXs.push(`${dir}/${file}`);
+}
+check('no fixed string, variant row, or fixed copy names text-xs', onXs.length === 0, onXs.join(', '));
+
+const copyDrift = [];
 for (const { dir, file } of copies) {
 	const component = dir.slice(0, -6);
 	const source = join(UI, component, file);
@@ -241,13 +234,10 @@ check(
 const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
 const unnamedRungs = [];
 const walkUi = (directory) =>
-	readdirSync(directory, { withFileTypes: true }).flatMap((entry) =>
-		entry.isDirectory()
-			? walkUi(join(directory, entry.name))
-			: entry.name.endsWith('.svelte')
-				? [join(directory, entry.name)]
-				: []
-	);
+	readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+		if (entry.isDirectory()) return walkUi(join(directory, entry.name));
+		return entry.name.endsWith('.svelte') ? [join(directory, entry.name)] : [];
+	});
 for (const path of walkUi(UI)) {
 	const file = path.slice(UI.length + 1).replaceAll(sep, '/');
 	if (fileGroups.has(file)) continue;
