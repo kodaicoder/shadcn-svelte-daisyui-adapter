@@ -275,6 +275,77 @@ secondary foreground with its dark twin, the text tone for the status tones, and
 - The toggle journey asserts the rest alpha and the default border.
 - The fixed copy regenerates byte for byte through the fixer.
 
+## Amendment 2026-11-11: a global type scale
+
+### Problem
+
+The system has no type scale of its own. Component text uses Tailwind's default rungs, and the field
+boxes repeat the resulting px as spacing utilities: `h-6` 24, `h-7` 28, `h-8` 32, `min-h-12` 48,
+`min-h-14` 56, `min-h-16` 64, `px-1.5` 6, `px-[0.4375rem]` 7, `px-2` 8. The numbers agree with a
+12/14/16 text scale only by hand. Changing the default font size changes text and leaves every box and
+padding where it was, so the operator has to edit each component to follow a type change.
+
+### Decision
+
+- **One table.** `packages/daisyui-adapter/targets/type-scale.mjs` holds the six rungs and their line
+  heights: `xs` 10/14, `sm` 12/16, `base` 14/20, `lg` 16/24, `xl` 18/28, `2xl` 20/28. The line
+  heights keep the rendered value of the rung that holds the same px today: `sm` 16 is the old `xs`,
+  `base` 20 the old `sm`, `lg` 24 the old `base`, `xl` 28 the old `lg`, `2xl` 28 the old `xl`. The new
+  `xs` takes 14, matching the 1.4 ratio the old `xl` used.
+- **A plain `@theme` block, not `@theme inline`.** `@theme inline` does not emit its variables, so
+  `calc(var(--text-base) * 2)` in a utility would have nothing to resolve and no journey could read
+  the token at runtime. A plain block emits `--text-*` and `--text-*--line-height` on `:root, :host`.
+  Verified by compiling a probe against tailwindcss 4.3.3: the block emits `--text-sm: 12px`, the
+  `.text-base` utility emits `font-size: var(--text-base)` with
+  `line-height: var(--tw-leading, var(--text-base--line-height))`, and
+  `h-[calc(var(--text-base)*2)]` emits `height: calc(var(--text-base) * 2)`.
+- **The block is rebuilt, not appended.** `map` re-emits the `--text-*` declarations from the table,
+  keeps a foreign declaration in the same block, and leaves a second run byte-identical. The block is
+  inserted after `@theme inline` when the stylesheet has none.
+- **Rungs move, px does not.** Every class string moves one rung up, so `text-xs` 12 becomes
+  `text-sm` 12 and `text-sm` 14 becomes `text-base` 14. `stock` strings keep their rung names,
+  because they describe upstream. The move is a generated table, `targets/text-rungs.mjs`, one
+  `replace` site per class string that the other tables do not already shift. It is generated from
+  the pinned `ui` snapshot and the existing tables by `tools/generate-text-rungs.mjs`, and it runs
+  last, so it only sees what the other sites left. A hand-written row per rung was tried first and
+  failed: a class string that another site edits without touching its rung (the label's cursor
+  insert) hides the unshifted rung from a substring match.
+- **Completeness is computed, not listed.** Applying the sites to the stock and applying them to
+  the rung-shifted stock with shifted `stock` strings must produce the same file. The first result
+  is what the fixer writes; the second is what a complete shift produces. A different result names
+  the file and the string still on an old rung, and the drift test fails on it. The `*-fixed` copies
+  are held to the same manifest: each copy must equal applying the sites to its `ui` source, so a
+  hand-edited copy cannot pass as the shipped result again.
+- **Field metrics derive from the token that owns the size.** `sm` reads `--text-sm`, `default`
+  `--text-base`, `lg` `--text-lg`. Height is 2×, textarea `min-h` is 4×, padding-x is 0.5×. The base
+  height is carried as `data-[size=default]:h-[…]` because `h-7` is upstream stock and a `data-*`
+  variant wins over a bare utility in Tailwind's sort order; `data-[size=sm]` already works this way.
+- **The other scales stay.** Radius keeps the step table and the role mapping unchanged, the border
+  stays `--default-border-width` 1px, and page and component spacing stay on the spacing scale.
+- **The journeys read the tokens.** The field journey reads `--text-*` from `:root` and computes text,
+  box and padding-x from it instead of hardcoding 12/14/16 and 24/28/32. A change to the table moves
+  the assertion with it.
+- **The copies stay generated.** The flow is unchanged: `fix` in `ui`, copy the files the fixer changed
+  into `*-fixed`, revert `ui`, normalize to LF, never run prettier over the copies. An `index.ts` that
+  re-exports from `ui` stays hand-maintained.
+
+### Acceptance
+
+- The stylesheet holds one `@theme` block with all six rungs and their line heights, emitted on
+  `:root`, and `map` twice leaves it byte-identical.
+- Every class string is one rung up and every `*-fixed` copy equals the fixer's output for its `ui`
+  source; the rendered px before and after the change is identical for all twelve journeys.
+- No file under `ui` keeps a rung on an old name after a full `fix`, and `kbd` renders from a fixed
+  copy so the review route shows the shifted rung.
+- The three field sizes read their token, and height, textarea `min-h` and padding-x are 2×, 4× and
+  0.5× of it.
+- `--text-base: 15px` moves the default field's text to 15px, its height to 30px and its padding-x to
+  7.5px in one step; restoring 14 returns all three, and the sm and lg fields never move.
+- The light and dark schemes are otherwise unchanged: theme colours, radii, borders and spacing match
+  the pre-change readback.
+- `pnpm check` is clean, `pnpm test:adapter` passes with the new guard, and the twelve journeys pass on
+  a fresh server.
+
 ## Amendment 2026-11-11: native select option list follows the color scheme
 
 ### Problem
