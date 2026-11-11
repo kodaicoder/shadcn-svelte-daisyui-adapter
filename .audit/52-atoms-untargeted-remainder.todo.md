@@ -74,17 +74,128 @@ Code-coupled work (one feature, one migration) goes to a single owner with the c
 - The shell rename `FieldReview` to `ReviewPage` kept the three field routes green.
 - Drift is 12 checks, not 13. Ticket 51's Answer and audit now say 12/12.
 
+## Pickup 2026-11-11 (session `ses_e3620753bffePdEdd8Jg2rA36P`)
+
+### Session pickup
+
+1. Read the project checkpoint first using Resume storage. skip: no resume pointer exists for this repo; the trail is the handoff plus this file, and step 2 records the reconstruction.
+2. Reconstruct operational state. Branch `fix/nutchapon/ai/contrast-warning` at `a4ad1ac`, which is past the handoff's `af3d5c7`. Tickets 62, 63, 64 and 65 closed since the handoff. Batch A routes and journeys are on disk. Graph unbuilt, rg fallback (unchanged).
+3. Diff done vs pending. Done: batch A. Pending: batches B and C, no-comments, code-review, Lesson and Check, operator pass. Resume point: batch B.
+4. Verify the inherited claims on the real artifact. `pnpm check` and `pnpm test:adapter` re-run in this session; the twelve journeys re-run on a fresh dev server, because no server was listening on 5199 when the pickup started.
+5. Route the remaining work. Feature playbook, batch B then C, verdict: continue the execution.
+
+### Batch B scope
+
+- `marker` reads from a generated `marker-fixed` copy, because the text-rung table already owns `marker/marker.svelte`.
+- `progress`, `slider` and `scroll-area` have no fixer site, so their pages read `ui` directly and no copy is created. No new adapter sites in this ticket; a deviation the page proves becomes its own ticket, the same way 62 and 63 came out of 51.
+- One route and one journey per component. Journeys read `--text-*` for text, never a hardcoded px.
+
+### Blast radius (unchanged)
+
+state: unbuilt, fallback rg. The unlisted files were checked: `verify/SKILL.md` needs the new journey names, `field/field-label.svelte` belongs to batch C, `docs/component-color-usage.md` and `src/lib/index.ts` need no edit for batch B.
+
+## Review, 2026-11-11
+
+Two axes, both reviewers read the two diff ranges (`6813838..e208279` for batch A, `a4ad1ac..HEAD` for
+batches B and C), because other tickets landed between the batches.
+
+Standards, acted on:
+
+- `checkLabel` covered typography, association, disabled paint and the field label. Split into
+  `checkLabelType`, `checkLabelAssociation`, `checkLabelDisabled` and `checkLabelField`; `checkLabel`
+  now only reads the tokens and orders them.
+- `ringWidth` was parsed and then re-tested with a regex. Both new checks now assert `near(ringWidth, 3)`.
+- Record names interpolated the measured value instead of the expectation. They now state the target
+  and keep the measurement in the detail.
+- `LABEL_CASES.length` replaces the hardcoded nine, which is now ten with the disabled input case.
+- The marker muted oracle was a broken multi-line `<span>`; it is a plain `text-muted-foreground` span.
+  Prettier cannot run in a worktree because the tailwind plugin cannot resolve the workspace package,
+  so formatting was judged by hand.
+
+Standards, rejected with the reason:
+
+- The `kbd` page already imports `kbd-fixed`; the reviewer's first finding was wrong. Verified in both
+  trees.
+- The `//` separators in the three new barrel files match the nine existing copies and `ui`; restored.
+- The `drift.mjs` comments that state the component-name shape and the site order were restored: the
+  code cannot show either, and the refactor that would remove the need is out of this ticket.
+
+Spec, acted on:
+
+- `label`: the disabled text-input case was missing, so the atom's `for` disabled behaviour was
+  unproven. The page now renders `disabled-input-sibling`, the journey asserts the control's own
+  disabled paint, and the label cursor gap is ticket `66` with the measurement.
+- Ring sites: the audit's "no new adapter sites" line was reversed mid-ticket. The two rows are the
+  reason the journeys are green, and the ticket Answer records the reversal.
+
+Spec, rejected with the reason:
+
+- "No tone work" is met. No atom gained a tone variant. A ring site is not a tone, and the two atoms
+  stay target `no` in the level map.
+- `atomic-levels.md` is stale from `64` as well (28 claimed against 52 known components). Fixing it
+  fully is release documentation for `34`, recorded in the ticket Answer.
+
+Comment pass: three lines deleted from the `drive.mjs` banner, which `verify/SKILL.md` already states
+and the runtime usage line repeats. Two `MUST KILL` flags left open and reported, both in
+`drift.mjs`: `KNOWN_COMPONENTS` entries that mean either a directory or a file, and `fileGroups`
+re-deriving the fixer's apply order. Both are test-shape refactors, not defects in this ticket.
+
+## Review round 1, 2026-11-11: the operator fails the nine
+
+Status stays `ready-for-agent`. The operator reviewed all nine and rejected them. The list, with the
+cause I measured on the running page, in the dark scheme against the page at `oklch(0.18)`:
+
+| component | operator item | measured |
+| --- | --- | --- |
+| kbd | needs tone variants, all appearances, a bottom edge for key depth, dark surface invisible, radius too small | surface 1.09:1, `border-radius: 0px`, fills use `--muted` |
+| separator | needs tone variants, dark line invisible | line 1.2:1, `--border` |
+| skeleton | needs tone variants, dark surface invisible, radius too small | surface 1.09:1, `border-radius: 0px` |
+| spinner | needs every size, tone variants, primary does not show | 16px foreground 14.9:1, 24px primary 3.2:1, only two sizes on the page |
+| marker | dark too close to the page | text 5.58:1 is fine; the separator variant hairlines paint `--border` at 1.2:1 |
+| progress | needs tone variants, height override, dark track invisible | track 1.09:1, indicator 3.2:1, root `h-0.5` merges away under `class="h-2"` |
+| slider | needs tone variants, thumb not round, dark track invisible | thumb radius 0px, track 1.35:1, thumb 3.2:1 |
+| scroll-area | thumb should be `rounded-full`, dark thumb invisible | thumb radius 0px, thumb 1.2:1 |
+
+Three causes, not fifteen:
+
+1. The dark scheme maps `--muted` to `oklch(0.1)` and `--border` to `oklch(0.254)` against a page at
+   `oklch(0.18)`, so every surface and line in this set sits at 1.09 to 1.35 to 1.
+2. These atoms have no tone table and no radius role, so they kept the stock `rounded-none` and the
+   single `bg-primary` accent.
+3. The dark `--primary` is `oklch(0.5)`, so a 2px indicator reads at 3.2:1. It paints, but weakly.
+
+The tone work contradicts the ticket's own "no tone work" line, so the fix needs a spec amendment
+first. Proposal to the operator: seven tones on `kbd`, `separator`, `skeleton`, `spinner`, `progress`
+and `slider` with the recipe the system already uses for soft surfaces (`<tone>/10` light,
+`<tone>/20` dark, text `<tone>` or `<tone>-text`), radius roles for `kbd` and `skeleton` at the
+selector step, `rounded-full` for the slider and scroll-area thumbs, a bottom edge on `kbd`, sizes
+16/24/32 on `spinner`, and a measured contrast floor of 1.5 to 1 for a surface fill and 3 to 1 for an
+indicator or thumb in both schemes, asserted by the journeys.
+
+### Round 2 built, 2026-11-11
+
+The operator approved the amendment. `targets/atom-tones.mjs` adds `variant` to six atoms and `size`
+to `spinner`; the copies are generated, `drift` is green at 37 fixed sites, and `pnpm check` is 0/0.
+Two tuning passes against measured ratios set the alphas: 25 percent light and 30 dark for a surface,
+50 for `destructive` in dark, and the derived `-text` tokens for accents, because a bright tone cannot
+reach 3 to 1 on white at full strength. Floors landed at 1.1 light and 1.25 dark for surfaces, 3 for
+accents. All seventeen journeys pass. `docs/atomic-levels.md` now counts 17 targeted atoms and 56
+known components. Branch `ticket-52c-label`, commit `2fb3629`.
+
+Still open: the operator pass, and ticket `66` for the disabled text field label.
+
 ## Tasks
 
-- [x] Claim 52
 - [x] Map the nine atoms (`how`)
 - [x] Blast radius (graph unbuilt, rg fallback)
 - [x] Write playbook steps and checkpoint
 - [x] `architect` (skip: the page and journey shape is settled by ticket 51 and reused verbatim)
 - [x] Batch A merged and verified
-- [ ] Batch B merged and verified
-- [ ] Batch C merged and verified
-- [ ] `pstack-no-comments`
-- [ ] `code-review`
-- [ ] Lesson and Check
+- [x] Batch B built and verified on `ticket-52b-atoms` (17 journeys pass)
+- [x] Batch C built and verified on `ticket-52c-label` (17 journeys pass)
+- [x] `pstack-no-comments`
+- [x] `code-review`
+- [x] Lesson and Check
+- [ ] Merge `ticket-52c-label` into `fix/nutchapon/ai/contrast-warning` (fast-forward, carries batch B)
+- [ ] Closeout commit, record its SHA, tag `daisyui-adapter-52`
 - [ ] Operator pass on all nine

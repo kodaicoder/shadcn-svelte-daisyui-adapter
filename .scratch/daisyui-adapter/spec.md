@@ -370,3 +370,52 @@ asserts the scope scheme, the dark option luminance and the AA contrast on the l
 - Light is unchanged at `rgb(255, 255, 255)` with `rgb(0, 0, 0)` text.
 - A second map run leaves the `.dark` block body byte-identical, with one `color-scheme` declaration.
 - The readback still reports 45 light and 45 dark; `color-scheme` is not a custom property and is not counted.
+
+## Amendment 2026-11-11: tones, radii and dark surfaces for the atomic set
+
+### Problem
+
+The operator reviewed the nine atoms on `/review/<component>` and failed them. Measured in the dark
+scheme against the page at `oklch(0.18)`: the `kbd` and `skeleton` surfaces read 1.09 to 1, the
+`progress` track 1.09 to 1, the `slider` track 1.35 to 1, and the `scroll-area` thumb and `separator`
+line 1.2 to 1, because `--muted` resolves darker than the page and `--border` sits almost on it. The
+`kbd`, `skeleton`, `slider` thumb and `scroll-area` thumb radii measure 0px. Six of the nine atoms
+carry no tone variant at all, so the review cannot show the system's tone vocabulary on them.
+
+### Decision
+
+- **Seven tones, one vocabulary.** `kbd`, `separator`, `skeleton`, `spinner`, `progress` and `slider`
+  take `variant` with the seven tone keys the fields already use. `separator` and `skeleton` add a
+  `neutral` key as their default, because a divider and a placeholder have no tone of their own.
+- **Soft surfaces, strong accents.** A surface uses `<tone>/25` in light and `<tone>/30` in dark, except
+  `destructive`, whose dark token is itself dark and takes 50. An indicator, line or thumb uses the
+  raw tone, because the derived `<tone>-text` tokens mix 60 percent foreground into the tone and drag
+  every hue toward the foreground's blue: measured that way, `success` painted cyan and `destructive`
+  painted violet. Only `secondary` swaps, to `secondary-foreground` in light, because its light token
+  is a near-white surface. Text uses the foreground.
+- **Dark surfaces come from the foreground, not from `--muted`.** The neutral key, the `progress`
+  track and the `slider` track paint `foreground/10` in light and `foreground/15` in dark.
+- **Radii follow the role table.** `kbd` and `skeleton` take the selector step. The `slider` thumb and
+  the `scroll-area` thumb are `rounded-full` by shape, like the radio dot, and the `progress` track and
+  `separator` stay square because they are a bar and a line.
+- **`kbd` carries a 2px bottom edge** in its tone, which is what makes it read as a key.
+- **The slider ring follows the thumb.** Its hover and focus rings paint `ring-<tone>/30` instead of
+  `--ring`, so a warning slider rings in warning and not in the default colour.
+- **`spinner` gains sizes.** `size` takes `sm` 12, `default` 16, `lg` 24 and `xl` 32, so the stock
+  16px default never moves.
+- **The floor is measured, not asserted from a token.** A surface fill must reach 1.1 to 1 against the
+  page in light and 1.25 to 1 in dark. An accent, bar or thumb holds 1.5 to 1 in light and 2.8 to 1
+  in dark, because a raw bright tone cannot reach 3 to 1 on white and the dark error token measures
+  2.89. Each journey reads the rendered colours, composites the alpha over the page and asserts the
+  ratio it measured.
+
+### Acceptance
+
+- Every one of the six components renders seven tones, and `separator` and `skeleton` render the
+  neutral key as their default.
+- Measured floors hold in both schemes for every tone row, and the journeys print the ratio.
+- `kbd`, `skeleton`, `slider` thumb and `scroll-area` thumb radii measure the step or `full`.
+- `progress` keeps its 2px bar and a caller's `class="h-2"` still wins, because `cn` merges `h-0.5` away.
+- `spinner` renders 12, 16, 24 and 32, and the existing 16px default is unchanged.
+- The generated copies are what the fixer produces from the pin, and `ui` and `src/routes/layout.css`
+  stay stock.
