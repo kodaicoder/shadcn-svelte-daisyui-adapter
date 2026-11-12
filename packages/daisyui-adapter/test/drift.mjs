@@ -2,6 +2,7 @@
 // committed under `src/lib/components/ui`, so a dependency bump that rewrites a class fails here
 // before the manifest can drift past a user's machine.
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -292,6 +293,34 @@ check(
 	'every stock rung the tables leave alone is shifted one step up',
 	shiftDrift.length === 0,
 	shiftDrift.join(' | ')
+);
+
+// layout.css loads the adapter by name, so the app has to declare and resolve every plugin it names.
+const cssPath = join(ROOT, 'src', 'routes', 'layout.css');
+const appManifest = readJson(join(ROOT, 'package.json')) ?? {};
+const resolveFromApp = createRequire(join(ROOT, 'package.json'));
+const plugins = [...readFileSync(cssPath, 'utf8').matchAll(/@plugin\s+["']([^"']+)["']/g)].map(
+	(match) => match[1]
+);
+const undeclared = plugins.filter((name) => !appManifest.devDependencies?.[name]);
+const resolutionFailure = (name) => {
+	try {
+		resolveFromApp.resolve(name);
+		return null;
+	} catch (error) {
+		return `${name} (${error.code ?? 'unresolved'})`;
+	}
+};
+const unresolved = plugins.map(resolutionFailure).filter(Boolean);
+check(
+	'every plugin layout.css names is declared in package.json',
+	plugins.length > 0 && undeclared.length === 0,
+	`${plugins.length} named, undeclared: ${undeclared.join(', ') || 'none'}`
+);
+check(
+	'every plugin layout.css names resolves from the app',
+	plugins.length > 0 && unresolved.length === 0,
+	`${plugins.length} named, unresolved: ${unresolved.join(', ') || 'none'}`
 );
 
 const shadcnVersion = () => {
