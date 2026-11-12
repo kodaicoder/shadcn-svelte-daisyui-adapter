@@ -9,7 +9,7 @@ the atom set is a repetition of a proven shape. It brings the config the repo la
 helper, and `Button` rendered from its shipped copy with autodocs, a Playground and every tone and
 size.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** docs, storybook, atoms
 **Blocked by:** None (can start immediately)
 
