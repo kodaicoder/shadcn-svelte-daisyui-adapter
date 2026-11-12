@@ -1,5 +1,8 @@
 # 67: Storybook runs with the theme toolbar, the args helper and a Button tracer
 Session IDs: ses_e327321b6ffeOE797kkxW963CD
+Lesson: A ported config is only proven for the mechanism it was proven on; the reference's `data-theme` toolbar would paint nothing here, because this repo binds the dark tokens to `.dark`.
+Check: process - `.audit/67-storybook-base-and-button.todo.md` Verification records the html class and the painted background per scheme from the live Storybook, and `.opencode/skills/verify/features/storybook.md` names the `.dark` binding for tickets 68 to 72.
+Closeout: 6d32aea (tag daisyui-adapter-67)
 
 **What to build:** a working Storybook that documents one real component end to end, so the rest of
 the atom set is a repetition of a proven shape. It brings the config the repo lacks, the controls
