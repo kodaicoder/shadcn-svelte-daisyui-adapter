@@ -130,7 +130,8 @@ const copies = readdirSync(COMPONENT_DIR, { withFileTypes: true })
 	.filter((entry) => entry.isDirectory() && entry.name.endsWith('-fixed'))
 	.flatMap((entry) =>
 		readdirSync(join(COMPONENT_DIR, entry.name))
-			.filter((file) => file.endsWith('.svelte'))
+			// The fixer never writes a story; a story beside its component is docs, not a copy.
+			.filter((file) => file.endsWith('.svelte') && !file.endsWith('.stories.svelte'))
 			.map((file) => ({ dir: entry.name, file }))
 	);
 for (const { dir, file } of copies) {
