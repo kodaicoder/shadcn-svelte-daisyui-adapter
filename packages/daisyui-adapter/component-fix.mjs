@@ -171,8 +171,9 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 
 	for (const [file, group] of files) {
 		const path = join(directory, ...file.split('/'));
+		const inScope = scopeFiles.has(file);
 		if (!existsSync(path)) {
-			if (scopeFiles.has(file)) {
+			if (inScope) {
 				for (const site of group) {
 					if (!reportMissing(site)) continue;
 					sites.push({
@@ -189,35 +190,32 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 
 		const raw = readFileSync(path, 'utf8');
 		const crlf = raw.includes('\r\n');
-		let content = crlf ? raw.replace(/\r\n/g, '\n') : raw;
-		const states = group.map((site) => ({ site, state: stateOf(content, site), written: false }));
+		const onDisk = crlf ? raw.replace(/\r\n/g, '\n') : raw;
+		let content = onDisk;
+		let wrote = false;
 
-		if (apply && scopeFiles.has(file)) {
-			for (const entry of states) {
-				if (entry.state !== 'stock') continue;
-				const next = applySite(content, entry.site);
-				if (next === content) continue;
-				content = next;
-				entry.written = true;
+		if (inScope) {
+			// A generated table may target text an earlier site writes, so each site is classified at
+			// its turn. The same walk runs without writing, so a dry run reports what one run applies.
+			for (const site of group) {
+				const state = stateOf(content, site);
+				let written = false;
+				if (state === 'stock') {
+					const next = applySite(content, site);
+					if (next !== content) {
+						content = next;
+						written = apply;
+						if (written) wrote = true;
+					}
+				}
+				sites.push({ id: site.id, component: site.component, file, state, written });
 			}
-			if (states.some((entry) => entry.written)) {
-				writeFileSync(path, crlf ? content.replace(/\n/g, '\r\n') : content);
-			}
+			if (wrote) writeFileSync(path, crlf ? content.replace(/\n/g, '\r\n') : content);
 		}
 
-		if (scopeFiles.has(file)) {
-			for (const entry of states) {
-				sites.push({
-					id: entry.site.id,
-					component: entry.site.component,
-					file,
-					state: entry.state,
-					written: entry.written
-				});
-			}
-		}
-
-		if (group.every((site) => stateOf(content, site) === 'fixed')) fullyFixed += 1;
+		// A scan counts what is on disk; a fix counts what it wrote.
+		const counted = apply && inScope ? content : onDisk;
+		if (group.every((site) => stateOf(counted, site) === 'fixed')) fullyFixed += 1;
 	}
 
 	for (const entry of CREATES) {

@@ -244,8 +244,8 @@ check(
 	missingStock.join(', ')
 );
 
-// The fixer classifies every site before it writes, so a stock an earlier site creates reads
-// customized on the pin (ticket 73).
+// The fixer classifies each site at its turn, because a generated table may target text an earlier
+// site writes. On the clean pin every textarea site must therefore read stock.
 const cleanTextarea = scan({ root: ROOT, names: ['textarea'] });
 const customized = cleanTextarea.sites.filter((site) => site.state === 'customized');
 const readonly = cleanTextarea.sites.find((site) => site.id === 'textarea-readonly-surface');
@@ -256,6 +256,16 @@ check(
 		cleanTextarea.counts.missing === 0 &&
 		readonly?.state === 'stock',
 	`${customized.length} customized, ${cleanTextarea.counts.stock} stock, ${cleanTextarea.counts.missing} missing, readonly ${readonly?.state}`
+);
+
+const cleanPin = scan({ root: ROOT });
+const pinCustomized = cleanPin.sites.filter((site) => site.state === 'customized');
+check(
+	'the clean pin reports no customized site across every component',
+	cleanPin.counts.stock > 0 &&
+		cleanPin.counts.missing === 0 &&
+		cleanPin.counts.customized === 0,
+	`${cleanPin.counts.customized} customized, ${cleanPin.counts.stock} stock, ${cleanPin.counts.missing} missing: ${pinCustomized.map((site) => site.id).join(', ')}`
 );
 
 const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
