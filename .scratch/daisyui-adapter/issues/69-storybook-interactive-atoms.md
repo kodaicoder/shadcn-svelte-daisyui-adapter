@@ -1,12 +1,15 @@
 # 69: Storybook documents the interactive atoms
 
 Session IDs: ses_e31a6f71fffewuA5Tw42WyJ3au
+Lesson: A docs story can only document what the shipped copy exposes; when the copy renders a child the caller cannot reach, the story's workaround documents the gap, not the API, so the gap needs its own ticket.
+Check: code - every tone table is a `Record` keyed on the component's own variant type, and `.verify/prove-69.mjs` fails on a non-distinct tone fill, a ring that is not 3px at 30 percent alpha, or a state count that drifts.
+Closeout: b7c3e57 (tag daisyui-adapter-69)
 
 **What to build:** a story per interactive atom, rendering the shipped copy with autodocs and a
 Playground, and showing the states a reader has to know: every tone, the checked or pressed state,
 disabled, and the focus ring.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** docs, storybook, atoms
 **Blocked by:** 67
 

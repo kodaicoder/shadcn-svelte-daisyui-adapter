@@ -91,7 +91,7 @@ fallback: direct reads of the six copies, both story precedents, `preview.ts`, `
 - [x] `pnpm test:adapter` still clean
 - [x] live proof in both schemes: no console error, no structural axe violation, every tone, state and measurement above
 - [x] static build lists all six titles with a docs entry and a Playground
-- [ ] ticket 69 corrected and closed with Session IDs, Lesson and Check
+- [x] ticket 69 corrected and closed with Session IDs, Lesson and Check
 - [x] verify surface doc updated
 
 ## Verification
@@ -141,3 +141,7 @@ Spec, deferred: the ticket was still open when the review ran, and the closeout 
 ## Findings outside this ticket
 
 Ticket 78, the slider thumb has no accessible name. Filed because the copy gives a caller no way to name a thumb, and the story workaround documents the gap rather than the contract.
+
+## Closeout
+
+b7c3e57 (tag `daisyui-adapter-69`). Ticket 69 carries the Session IDs, Lesson, Check and Closeout.
