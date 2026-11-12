@@ -1482,6 +1482,8 @@ const LABEL_CASES = [
 	'disabled-group',
 	'disabled-wrapped',
 	'disabled-input-sibling',
+	'disabled-native-select',
+	'disabled-textarea',
 	'field-label'
 ];
 
@@ -1590,26 +1592,45 @@ const checkLabelAssociation = async (record, scope, label) => {
 };
 
 const checkLabelDisabled = async (record, scope, label) => {
-	for (const name of ['disabled-sibling', 'disabled-group', 'disabled-wrapped']) {
+	for (const name of [
+		'disabled-sibling',
+		'disabled-group',
+		'disabled-wrapped',
+		'disabled-native-select',
+		'disabled-textarea'
+	]) {
 		const cursor = await computed(scope.locator(`[data-case="${name}"]`), 'cursor');
 		record(`${label}: ${name} label does not invite a click`, cursor === 'not-allowed', cursor);
 	}
 	const group = await computed(scope.locator('[data-case="disabled-group"]'), 'opacity');
 	record(`${label}: disabled group label dims to 0.5`, group === '0.5', group);
 
+	for (const name of ['disabled-native-select', 'disabled-textarea']) {
+		const opacity = await computed(scope.locator(`[data-case="${name}"]`), 'opacity');
+		record(`${label}: ${name} label dims to 0.5`, opacity === '0.5', opacity);
+	}
+
 	const input = await scope.locator('[data-case="disabled-input-sibling"]').evaluate((node) => {
 		const control = node.control;
 		const style = control ? getComputedStyle(control) : null;
+		const labelStyle = getComputedStyle(node);
 		return {
 			found: Boolean(control),
 			cursor: style?.cursor ?? 'missing',
-			opacity: style?.opacity ?? 'missing'
+			opacity: style?.opacity ?? 'missing',
+			labelCursor: labelStyle.cursor,
+			labelOpacity: labelStyle.opacity
 		};
 	});
 	record(
 		`${label}: disabled text input does not invite a click`,
 		input.found && input.cursor === 'not-allowed' && input.opacity === '0.5',
 		`${input.cursor} / ${input.opacity}`
+	);
+	record(
+		`${label}: disabled text input label does not invite a click`,
+		input.labelCursor === 'not-allowed' && input.labelOpacity === '0.5',
+		`${input.labelCursor} / ${input.labelOpacity}`
 	);
 };
 

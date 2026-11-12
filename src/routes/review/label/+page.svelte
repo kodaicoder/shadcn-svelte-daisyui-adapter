@@ -2,8 +2,10 @@
 	import { Checkbox } from '#lib/components/checkbox-fixed/index.js';
 	import { Input } from '#lib/components/input-fixed/index.js';
 	import { Label } from '#lib/components/label-fixed/index.js';
+	import { NativeSelect } from '#lib/components/native-select-fixed/index.js';
 	import { RadioGroup, RadioGroupItem } from '#lib/components/radio-group-fixed/index.js';
 	import { Switch } from '#lib/components/switch-fixed/index.js';
+	import { Textarea } from '#lib/components/textarea-fixed/index.js';
 	import { ReviewPage } from '#lib/review/index.js';
 	import FieldCase from './FieldCase.svelte';
 	import LabelFor from './LabelFor.svelte';
@@ -71,6 +73,26 @@
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">disabled-input-sibling</span>
 					<LabelFor name="disabled-input-sibling" disabled />
+				</div>
+				<div class="space-y-2">
+					<span class="text-sm text-muted-foreground">disabled-native-select</span>
+					<div class="flex items-center gap-2">
+						<NativeSelect id="label-disabled-native-select" disabled class="w-40">
+							<option>Disabled select</option>
+						</NativeSelect>
+						<Label for="label-disabled-native-select" data-case="disabled-native-select">
+							Disabled select label
+						</Label>
+					</div>
+				</div>
+				<div class="space-y-2">
+					<span class="text-sm text-muted-foreground">disabled-textarea</span>
+					<div class="flex items-center gap-2">
+						<Textarea id="label-disabled-textarea" disabled class="h-9 w-40" placeholder="Disabled" />
+						<Label for="label-disabled-textarea" data-case="disabled-textarea">
+							Disabled textarea label
+						</Label>
+					</div>
 				</div>
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">field-label</span>
