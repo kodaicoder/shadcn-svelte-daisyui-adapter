@@ -1,8 +1,9 @@
 # Storybook stories
 
-Component-level browsing for the library. Fifteen story files ship: `Components/Button`, the six
-display atoms, the six interactive atoms, each beside its fixed copy, plus `Components/AspectRatio`
-and `Components/Avatar`, which render `ui` because the fixer writes no copy for them.
+Component-level browsing for the library. Nineteen story files ship: `Components/Button`, the six
+display atoms, the six interactive atoms, the four field atoms, each beside its fixed copy, plus
+`Components/AspectRatio` and `Components/Avatar`, which render `ui` because the fixer writes no copy
+for them.
 
 ## Sub-features
 
@@ -25,6 +26,12 @@ and `Components/Avatar`, which render `ui` because the fixer writes no copy for 
   - `Components/Toggle` from `src/lib/components/toggle-fixed/toggle.stories.svelte`: `Playground`, `Tones` (7 pressed), `Outline` (7 resting, 7 pressed), `Sizes` (24, 28 and 32 px), `States` (5), `Focus` (7 rings)
   - `Components/Progress` from `src/lib/components/progress-fixed/progress.stories.svelte`: `Playground`, `Tones` (7), `Values` (0 to 100), `Thickness` (2px default against a caller `h-2` at 8px)
   - `Components/Slider` from `src/lib/components/slider-fixed/slider.stories.svelte`: `Playground`, `Tones` (7), `Thumbs` (one and two), `Disabled` (one and two), `Focus` (7 rings)
+- the field atoms, each with autodocs, a Controls-driven `Playground` and a `Focus` story driven by
+  real Tab keypresses:
+  - `Components/Input` from `src/lib/components/input-fixed/input.stories.svelte`: `Playground`, `Tones` (7), `Sizes` (24, 28 and 32 px), `States` (idle, invalid, disabled, readonly), `File` (three heights, button text 10, 12 and 14 px), `Focus` (7 rings)
+  - `Components/Textarea` from `src/lib/components/textarea-fixed/textarea.stories.svelte`: `Playground`, `Tones` (7), `Sizes` (minimum 48, 56 and 64 px), `MinHeight` (empty against content-grown), `States` (idle, invalid, disabled, readonly), `Focus` (7 rings)
+  - `Components/NativeSelect` from `src/lib/components/native-select-fixed/native-select.stories.svelte`: `Playground`, `Tones` (7), `Sizes` (24, 28 and 32 px), `States` (idle, invalid, disabled), `Focus` (7 rings)
+  - `Components/Label` from `src/lib/components/label-fixed/label.stories.svelte`: `Playground`, `Association` (`for` on input, textarea and select), `Wrapping`, `Peers` (checkbox, radio and switch), `Disabled` (peer, group and wrapping)
 - the theme toolbar, which switches `light` and `dark` and does it by setting or clearing the `dark`
   class on `<html>`
 - the a11y panel from `@storybook/addon-a11y`, in error mode with the `color-contrast` rule off, so a
@@ -54,13 +61,17 @@ server lifecycle, and it should:
 The ad hoc proof for ticket 68 is `.verify/prove-68.mjs`. It walks every story in both schemes,
 records each check in `.verify/evidence/<stamp>-storybook-display-atoms/`, and measures the spinner
 box with `getComputedStyle`, because `getBoundingClientRect` on an animated element returns the
-rotated bounding box.
+rotated bounding box. `.verify/prove-69.mjs` and `.verify/prove-70.mjs` extend the same shape to the
+interactive and field atoms; both press Tab for the focus rings rather than calling `.focus()`.
 
 Storybook runs on port 6007 so it never collides with the app's 5199 or your own 5173.
 
 ## Gotchas
 
 - Storybook is a second server. `scripts/session.mjs stop` does not own it; stop it yourself.
+- The dev server and the `storybook` vitest project share `node_modules/.cache/storybook`. Running
+  both at once fails story imports with a dynamically imported module error, so stop the dev server
+  before running `pnpm exec vitest --run --project storybook`.
 - Story ids change when a `title` changes. Assert against `/index.json`, not a hardcoded id.
 - Stories render `src/lib/components/*-fixed`, except `aspect-ratio` and `avatar`, which render `ui`
   because they have no fixed copy. Do not put a story under `ui`: the drift test walks every
