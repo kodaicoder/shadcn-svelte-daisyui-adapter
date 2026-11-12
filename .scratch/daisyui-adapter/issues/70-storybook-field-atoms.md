@@ -1,11 +1,14 @@
 # 70: Storybook documents the field atoms
 
 Session IDs: ses_e3124f1b1ffenHWalUU6efubte
+Lesson: A docs story can only show what the shipped copy exposes; when the copy has no readonly state and no tone axis on one of four components, the story matrix follows the copy and the ticket gets corrected instead of stretched.
+Check: code - the three tone tables are `Record<FieldVariant, ...>`, and `.verify/prove-70.mjs` fails on a non-distinct tone border, a height that misses 24/28/32 or 48/56/64, a ring that is not 3px at 30 percent alpha, or a label case that loses its cursor.
+Closeout: 590d0be (tag daisyui-adapter-70)
 
 **What to build:** a story per field atom, rendering the shipped copy with autodocs and a Playground,
 and showing the size scale, the seven tones and the four states a form actually hits.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** docs, storybook, atoms
 **Blocked by:** 67
 

@@ -89,7 +89,7 @@ fallback: direct reads of the four copies, four entry points, the switch, badge 
 - [x] `pnpm test:adapter` still clean
 - [x] live proof in both schemes: no console error, no structural axe violation, every tone, height, size, state, ring and label case
 - [x] static build lists all four titles with a docs entry and a Playground
-- [ ] ticket 70 corrected and closed with Session IDs, Lesson and Check
+- [x] ticket 70 corrected and closed with Session IDs, Lesson and Check
 - [x] verify surface doc updated
 
 ## Verification
@@ -126,4 +126,8 @@ The four story files carry no comments. `rg` over them returns nothing and the d
 ## Findings outside this ticket
 
 None. The `success` and `info` ring and border use different tokens (`--success` against `--success-text`), which is the intended contrast split, not a defect.
+
+## Closeout
+
+590d0be (tag `daisyui-adapter-70`). Ticket 70 carries the Session IDs, Lesson, Check and Closeout.
 
