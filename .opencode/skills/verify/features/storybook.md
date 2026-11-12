@@ -1,8 +1,8 @@
 # Storybook stories
 
-Component-level browsing for the library. Nine story files ship: `Components/Button` and the six
-display atoms that have a fixed copy, each beside that copy, plus `Components/AspectRatio` and
-`Components/Avatar`, which render `ui` because the fixer writes no copy for them.
+Component-level browsing for the library. Fifteen story files ship: `Components/Button`, the six
+display atoms, the six interactive atoms, each beside its fixed copy, plus `Components/AspectRatio`
+and `Components/Avatar`, which render `ui` because the fixer writes no copy for them.
 
 ## Sub-features
 
@@ -17,6 +17,14 @@ display atoms that have a fixed copy, each beside that copy, plus `Components/As
   - `Components/Separator` from `src/lib/components/separator-fixed/separator.stories.svelte`: `Playground`, `Variants` (8, `neutral` first), `Vertical`
   - `Components/Skeleton` from `src/lib/components/skeleton-fixed/skeleton.stories.svelte`: `Playground`, `Variants` (8, `neutral` first), `Shapes`
   - `Components/Spinner` from `src/lib/components/spinner-fixed/spinner.stories.svelte`: `Playground`, `Tones` (7), `Sizes` (12, 16, 24 and 32 px, every one labeled `Loading`)
+- the interactive atoms, each with autodocs, a Controls-driven `Playground` and a `Focus` story
+  except `Progress`, which is not focusable:
+  - `Components/Checkbox` from `src/lib/components/checkbox-fixed/checkbox.stories.svelte`: `Playground`, `Tones` (7), `States` (6, including `indeterminate` and `aria-invalid`), `Focus` (7 rings)
+  - `Components/Switch` from `src/lib/components/switch-fixed/switch.stories.svelte`: `Playground`, `Tones` (7), `States` (5), `Sizes` (24 and 28 px), `Focus` (7 rings)
+  - `Components/RadioGroup` from `src/lib/components/radio-group-fixed/radio-group.stories.svelte`: `Playground`, `Tones` (7 groups), `States` (4 groups), `Override` (3 groups, because a radio paints its tone only when checked), `Focus` (7 rings)
+  - `Components/Toggle` from `src/lib/components/toggle-fixed/toggle.stories.svelte`: `Playground`, `Tones` (7 pressed), `Outline` (7 resting, 7 pressed), `Sizes` (24, 28 and 32 px), `States` (5), `Focus` (7 rings)
+  - `Components/Progress` from `src/lib/components/progress-fixed/progress.stories.svelte`: `Playground`, `Tones` (7), `Values` (0 to 100), `Thickness` (2px default against a caller `h-2` at 8px)
+  - `Components/Slider` from `src/lib/components/slider-fixed/slider.stories.svelte`: `Playground`, `Tones` (7), `Thumbs` (one and two), `Disabled` (one and two), `Focus` (7 rings)
 - the theme toolbar, which switches `light` and `dark` and does it by setting or clearing the `dark`
   class on `<html>`
 - the a11y panel from `@storybook/addon-a11y`, in error mode with the `color-contrast` rule off, so a
@@ -39,7 +47,7 @@ derives from the CSF `title` and story name (`Components/Badge` plus `Tones` bec
 No journey yet. When one is added, it belongs in `scripts/drive.mjs` as `storybook`, with its own
 server lifecycle, and it should:
 
-1. fetch `/index.json` and assert the nine `Components/*` titles still exist
+1. fetch `/index.json` and assert the fifteen `Components/*` titles still exist
 2. open one story iframe and assert the story root renders with no console error
 3. screenshot the iframe, not the manager chrome
 
