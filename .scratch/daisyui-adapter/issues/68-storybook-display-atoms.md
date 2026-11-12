@@ -1,11 +1,14 @@
 # 68: Storybook documents the display atoms
 Session IDs: ses_e31fe7822ffeKZ7ogcqlFrzxLQ
+Lesson: A docs surface built from a hand-copied variant list drifts; keying it on the component's own exported variant type turns the drift into a type error.
+Check: code - the eight `*.stories.svelte` tone tables are `Record<...Variant, ...>`, so `pnpm check` fails when a shipped copy adds a variant.
+Closeout: 3481da6 (tag daisyui-adapter-68)
 
 **What to build:** a story per display atom, each rendering the shipped copy with autodocs and a
 Playground, and showing every tone and size the component carries. A consumer reading the docs sees
 exactly what an install paints.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** docs, storybook, atoms
 **Blocked by:** 67
 
