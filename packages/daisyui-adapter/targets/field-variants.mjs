@@ -74,6 +74,18 @@ const disabledSite = (component, file) =>
 		fixed: 'disabled:cursor-not-allowed'
 	});
 
+// A label's `peer-` variants match only a previous sibling, so `peer` goes on the element the label
+// can see: the control itself, or the native-select wrapper that holds it. The binary controls already
+// write it first.
+const peerSite = (component, file, first) =>
+	replaceSite({
+		id: `${component}-peer`,
+		component,
+		file,
+		stock: `"${first}`,
+		fixed: `"peer ${first}`
+	});
+
 const readonlySite = (component, file, stock) =>
 	replaceSite({
 		id: `${component}-readonly-surface`,
@@ -103,6 +115,7 @@ export const FIELD_VARIANTS = [
 		fixed: '",\n\t\t\tFIELD_TONES[variant],\n\t\t\tclassName'
 	}),
 	disabledSite('input', 'input/input.svelte'),
+	peerSite('input', 'input/input.svelte', 'bg-input/20 dark:bg-input/30'),
 	ringWidthSite('input', 'input/input.svelte'),
 	invalidRingSite('input', 'input/input.svelte'),
 	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6'),
@@ -123,6 +136,7 @@ export const FIELD_VARIANTS = [
 		stock: '",\n\t\tclassName',
 		fixed: '",\n\t\tFIELD_TONES[variant],\n\t\tclassName'
 	}),
+	peerSite('textarea', 'textarea/textarea.svelte', 'border-input bg-input/20'),
 	ringWidthSite('textarea', 'textarea/textarea.svelte'),
 	invalidRingSite('textarea', 'textarea/textarea.svelte'),
 	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-3'),
@@ -154,6 +168,7 @@ export const FIELD_VARIANTS = [
 		fixed: '", FIELD_TONES[variant])}\n\t\t{...restProps}'
 	}),
 	disabledSite('native-select', 'native-select/native-select.svelte'),
+	peerSite('native-select', 'native-select/native-select.svelte', 'group/native-select relative w-fit'),
 	ringWidthSite('native-select', 'native-select/native-select.svelte'),
 	invalidRingSite('native-select', 'native-select/native-select.svelte'),
 	replaceSite({

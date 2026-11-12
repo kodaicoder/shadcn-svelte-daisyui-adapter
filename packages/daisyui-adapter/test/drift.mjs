@@ -93,13 +93,24 @@ check(
 	unnestedInserts.length === 0,
 	unnestedInserts.map((site) => site.id).join(', ')
 );
+// The fixer tells a fixed replace site from a stock one by which string the file holds, so a fixed
+// that still contains its stock reads back as stock forever.
+const nestedReplaces = ALL_SITES.filter(
+	(site) =>
+		site.position === 'replace' && site.stock !== site.fixed && site.fixed.includes(site.stock)
+);
+check(
+	'no replace site hides its stock inside its fixed',
+	nestedReplaces.length === 0,
+	nestedReplaces.map((site) => site.id).join(', ')
+);
 check(
 	'the manifest holds twenty-five binary sites',
 	BINARY_SITES.length === 25,
 	`${BINARY_SITES.length}`
 );
 check('the manifest holds four ring sites', RINGS.length === 4, `${RINGS.length}`);
-check('the manifest holds eight cursor sites', CURSOR_SITES.length === 8, `${CURSOR_SITES.length}`);
+check('the manifest holds nine cursor sites', CURSOR_SITES.length === 9, `${CURSOR_SITES.length}`);
 check('the manifest holds sixteen size sites', SIZES.length === 16, `${SIZES.length}`);
 const sizeCoupling = SIZES.filter(
 	(site) => site.fixed.includes('rounded-') || site.stock.includes('rounded-')
@@ -150,8 +161,8 @@ check(
 );
 
 check(
-	'the manifest holds twenty-four field variant sites',
-	FIELD_VARIANTS.length === 24,
+	'the manifest holds twenty-seven field variant sites',
+	FIELD_VARIANTS.length === 27,
 	`${FIELD_VARIANTS.length}`
 );
 check(

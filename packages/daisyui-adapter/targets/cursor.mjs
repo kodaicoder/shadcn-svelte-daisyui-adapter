@@ -59,6 +59,14 @@ export const CURSOR_SITES = [
 		file: 'label/label.svelte',
 		stock: 'group-data-[disabled=true]:pointer-events-none peer-disabled:cursor-not-allowed',
 		fixed:
-			'group-data-[disabled=true]:cursor-not-allowed peer-disabled:cursor-not-allowed has-[:disabled]:cursor-not-allowed'
+			'group-data-[disabled=true]:cursor-not-allowed peer-disabled:cursor-not-allowed has-[:disabled]:cursor-not-allowed peer-has-[:disabled]:cursor-not-allowed'
+	},
+	{
+		id: 'label-disabled-opacity',
+		component: 'label',
+		file: 'label/label.svelte',
+		stock: 'leading-relaxed group-data-[disabled=true]:opacity-50 peer-disabled:opacity-50',
+		fixed:
+			'leading-relaxed group-data-[disabled=true]:opacity-50 peer-has-[:disabled]:opacity-50 peer-disabled:opacity-50'
 	}
 ].map(replaceSite);

@@ -34,7 +34,7 @@
 
 <div
 	class={cn(
-		"group/native-select relative w-fit has-[select:disabled]:opacity-50",
+		"peer group/native-select relative w-fit has-[select:disabled]:opacity-50",
 		className
 	)}
 	data-slot="native-select-wrapper"
