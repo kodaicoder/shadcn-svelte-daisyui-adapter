@@ -15,7 +15,7 @@ export what it claims.
 | Surface      | What a user touches                                  | Entry                       |
 | ------------ | ---------------------------------------------------- | --------------------------- |
 | Showcase app | the single route `/`, the current component showcase | `pnpm dev`, port 5199       |
-| Storybook    | Button, Header and Page stories                      | `pnpm storybook`, port 6007 |
+| Storybook    | the atom stories, starting with Button               | `pnpm storybook`, port 6007 |
 | Package      | `dist/` consumed by another project                  | `pnpm build`                |
 
 Primary surface is the showcase app. Storybook is secondary and needs its own server.

@@ -1,4 +1,5 @@
 # 67: Storybook runs with the theme toolbar, the args helper and a Button tracer
+Session IDs: ses_e327321b6ffeOE797kkxW963CD
 
 **What to build:** a working Storybook that documents one real component end to end, so the rest of
 the atom set is a repetition of a proven shape. It brings the config the repo lacks, the controls
@@ -17,11 +18,18 @@ The reference project `D:\Workspace\DesignSystem\Project` already solved the the
 select-control problem. Read its `.storybook/preview.ts` and `src/stories/story-args.ts` before
 writing these.
 
-- [ ] the story globs cover `src/stories/**` and every component story directory
-- [ ] the theme toolbar switches `data-theme` between light and dark through `addon-themes`, and no story hardcodes a scheme
-- [ ] `addon-a11y` runs as an error with `color-contrast` disabled, because the adapter's own contrast gate owns that rule
-- [ ] a `selectControl` helper exists and keeps args in the URL, which a raw `control: 'select'` drops
-- [ ] a `Button` story renders from the shipped copy, declares autodocs, and shows all seven tones, every size, disabled and link
-- [ ] the `Playground` story drives the component from Controls and carries non-empty args
-- [ ] composed stories set `asChild`, so the story renders its own markup instead of a wrapper control
-- [ ] `pnpm storybook` serves the story in both schemes with no console error and no a11y violation
+- [x] the story globs cover `src/stories/**` and every component story directory
+- [x] the theme toolbar switches the `dark` class between light and dark through `addon-themes`, and no
+  story hardcodes a scheme
+- [x] `addon-a11y` runs as an error with `color-contrast` disabled, because the adapter's own contrast gate owns that rule
+- [x] a `selectControl` helper exists and keeps args in the URL, which a raw `control: 'select'` drops
+- [x] a `Button` story renders from the shipped copy, declares autodocs, and shows all seven tones,
+  every size, disabled and link
+- [x] the `Playground` story drives the component from Controls and carries non-empty args
+- [x] composed stories set `asChild`, so the story renders its own markup instead of a wrapper control
+- [x] `pnpm storybook` serves the story in both schemes with no console error and no a11y violation
+
+The theme criterion was corrected on 2026-11-12, with the operator's approval before implementation:
+the adapter binds the dark tokens to `.dark` and `layout.css` defines the dark variant as
+`&:is(.dark *)`, so the original `data-theme` wording would paint nothing. The shipped decorator is
+`withThemeByClassName`, the same addon and toolbar.

@@ -1,0 +1,5 @@
+.sb-show-main,
+.docs-story {
+	background: var(--background);
+	color: var(--foreground);
+}
