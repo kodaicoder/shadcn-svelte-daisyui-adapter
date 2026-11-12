@@ -86,15 +86,15 @@ const peerSite = (component, file, first) =>
 		fixed: `"peer ${first}`
 	});
 
-const readonlySite = (component, file, stock) =>
+const readonlySite = (component, file, tail) =>
 	replaceSite({
 		id: `${component}-readonly-surface`,
 		component,
 		file,
-		stock,
+		stock: `transition-colors ${tail}`,
 		// `:read-only` also matches a disabled control, so the surface is gated on `:enabled`; the dark
 		// twin outranks the base `dark:bg-input/30`.
-		fixed: `transition-colors read-only:enabled:cursor-default read-only:enabled:bg-muted/50 dark:read-only:enabled:bg-muted/50 ${stock.replace('transition-colors ', '')}`
+		fixed: `transition-colors read-only:enabled:cursor-default read-only:enabled:bg-muted/50 dark:read-only:enabled:bg-muted/50 ${tail}`
 	});
 
 export const FIELD_VARIANTS = [
@@ -118,7 +118,7 @@ export const FIELD_VARIANTS = [
 	peerSite('input', 'input/input.svelte', 'bg-input/20 dark:bg-input/30'),
 	ringWidthSite('input', 'input/input.svelte'),
 	invalidRingSite('input', 'input/input.svelte'),
-	readonlySite('input', 'input/input.svelte', 'transition-colors file:h-6'),
+	readonlySite('input', 'input/input.svelte', 'file:h-6'),
 
 	toneMapSite('textarea', 'textarea/textarea.svelte'),
 	variantPropSite('textarea', 'textarea/textarea.svelte', 'class: className,'),
@@ -139,7 +139,8 @@ export const FIELD_VARIANTS = [
 	peerSite('textarea', 'textarea/textarea.svelte', 'border-input bg-input/20'),
 	ringWidthSite('textarea', 'textarea/textarea.svelte'),
 	invalidRingSite('textarea', 'textarea/textarea.svelte'),
-	readonlySite('textarea', 'textarea/textarea.svelte', 'transition-colors focus-visible:ring-3'),
+	// The tail stops before the ring width, which the focus-ring site writes later in the run.
+	readonlySite('textarea', 'textarea/textarea.svelte', 'focus-visible:'),
 
 	toneMapSite('native-select', 'native-select/native-select.svelte'),
 	variantPropSite('native-select', 'native-select/native-select.svelte', 'children,'),

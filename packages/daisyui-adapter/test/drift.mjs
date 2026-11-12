@@ -30,7 +30,7 @@ import {
 	VARIANT_COMPONENTS,
 	VARIANT_ROWS
 } from '../targets.mjs';
-import { applySite } from '../component-fix.mjs';
+import { applySite, scan } from '../component-fix.mjs';
 import { shiftRungs } from '../targets/type-scale.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
@@ -241,6 +241,20 @@ check(
 	'every site still finds its stock in its turn',
 	missingStock.length === 0,
 	missingStock.join(', ')
+);
+
+// The fixer classifies every site before it writes, so a stock an earlier site creates reads
+// customized on the pin (ticket 73).
+const cleanTextarea = scan({ root: ROOT, names: ['textarea'] });
+const customized = cleanTextarea.sites.filter((site) => site.state === 'customized');
+const readonly = cleanTextarea.sites.find((site) => site.id === 'textarea-readonly-surface');
+check(
+	'the clean textarea pin reports all 15 sites stock',
+	customized.length === 0 &&
+		cleanTextarea.counts.stock === 15 &&
+		cleanTextarea.counts.missing === 0 &&
+		readonly?.state === 'stock',
+	`${customized.length} customized, ${cleanTextarea.counts.stock} stock, ${cleanTextarea.counts.missing} missing, readonly ${readonly?.state}`
 );
 
 const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
