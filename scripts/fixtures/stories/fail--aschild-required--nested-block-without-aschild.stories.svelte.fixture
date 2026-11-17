@@ -1,0 +1,21 @@
+<script module lang="ts">
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+	import { Label } from './label.svelte';
+
+	const TONES = ['default', 'quiet'];
+
+	const { Story } = defineMeta({ title: 'Fixtures/Markup', component: Label });
+</script>
+
+<Story name="Playground" args={{ text: 'Email' }}>
+	{#snippet template(args)}
+		<Label {...args} />
+	{/snippet}
+</Story>
+
+<!-- expect aschild-required at 17 -->
+<Story name="Tones">
+	{#each TONES as tone}
+		<Label>{tone}</Label>
+	{/each}
+</Story>

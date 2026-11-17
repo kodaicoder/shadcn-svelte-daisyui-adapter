@@ -1,0 +1,17 @@
+<script module lang="ts">
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+	import { Label } from './label.svelte';
+
+	const { Story } = defineMeta({ title: 'Fixtures/Markup', component: Label });
+</script>
+
+<Story name="Playground" args={{ text: 'Email' }}>
+	{#snippet template(args)}
+		<Label {...args} />
+	{/snippet}
+</Story>
+
+<!-- expect aschild-required at 15 -->
+<Story name="Markup">
+	<Label>Email address</Label>
+</Story>

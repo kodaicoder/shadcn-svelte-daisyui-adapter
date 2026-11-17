@@ -1,0 +1,13 @@
+<script module lang="ts">
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+	import { Label } from './label.svelte';
+
+	const { Story } = defineMeta({ title: 'Fixtures/Markup', component: Label });
+</script>
+
+<!-- expect playground-shape at 9 -->
+<Story
+	name="Playground"
+	args={{ text: 'Email' }}
+>
+</Story>

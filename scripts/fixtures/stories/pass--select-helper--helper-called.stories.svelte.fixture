@@ -1,0 +1,22 @@
+<script module lang="ts">
+	import { defineMeta } from '@storybook/addon-svelte-csf';
+	import { selectControl } from '../../../stories/story-args.js';
+	import { Label } from './label.svelte';
+
+	const TONES = ['default', 'quiet'];
+
+	const { Story } = defineMeta({
+		title: 'Fixtures/Select',
+		component: Label,
+		argTypes: {
+			tone: selectControl(TONES),
+			disabled: { control: 'boolean' }
+		}
+	});
+</script>
+
+<Story name="Playground" args={{ text: 'Email' }}>
+	{#snippet template(args)}
+		<Label {...args} />
+	{/snippet}
+</Story>
