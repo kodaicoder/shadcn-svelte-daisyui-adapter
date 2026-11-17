@@ -1,0 +1,103 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { TYPE_SCALE } from '../../../packages/daisyui-adapter/targets/type-scale.mjs'; // `targets.mjs` re-exports no TYPE_SCALE and this ticket may add only one exports entry, so this table comes in by repo path
+
+export const PAGE = {
+	background: 'var(--background)',
+	color: 'var(--foreground)',
+	padding: '1.25rem 1.5rem',
+	borderRadius: 'var(--radius-md)'
+};
+
+export const HEAD = {
+	display: 'grid',
+	gridTemplateColumns: '5rem 7rem 4rem 6rem minmax(12rem, 1fr)',
+	alignItems: 'baseline',
+	gap: '0.75rem',
+	padding: '0.3rem 0',
+	borderBottom: '1px solid var(--foreground)',
+	fontSize: '0.6875rem',
+	letterSpacing: '0.08em',
+	textTransform: 'uppercase',
+	color: 'var(--muted-foreground)'
+};
+
+export const ROW = {
+	display: 'grid',
+	gridTemplateColumns: '5rem 7rem 4rem 6rem minmax(12rem, 1fr)',
+	alignItems: 'baseline',
+	gap: '0.75rem',
+	padding: '0.4rem 0',
+	borderBottom: '1px solid var(--border)'
+};
+
+export const MUTED = { fontSize: '0.8125rem', color: 'var(--muted-foreground)' };
+
+export const Header = () => (
+	<div style={HEAD}>
+		<span>Rung</span>
+		<span>Class</span>
+		<span>Size</span>
+		<span>Line height</span>
+		<span>Specimen</span>
+	</div>
+);
+
+export const Rung = ({ rung }) => (
+	<div style={ROW}>
+		<code>{rung.name}</code>
+		<code>{`text-${rung.name}`}</code>
+		<span style={MUTED}>{`${rung.size}px`}</span>
+		<span style={MUTED}>{`${rung.lineHeight}px`}</span>
+		<span
+			style={{
+				fontSize: `var(--text-${rung.name})`,
+				lineHeight: `var(--text-${rung.name}--line-height)`,
+				maxWidth: '16rem'
+			}}
+		>
+			Aa the quick brown fox jumps over the lazy dog
+		</span>
+	</div>
+);
+
+<Meta title="Tokens/TypeScale" />
+
+<div style={PAGE} className="tokens-page">
+
+<style>{`
+	.tokens-page :is(h1, h2, h3, p) {
+		color: var(--foreground);
+	}
+
+	.tokens-page :is(p) code {
+		background: var(--muted);
+		border-color: var(--border);
+		color: var(--foreground);
+	}
+`}</style>
+
+# The type scale
+
+## The rungs
+
+The scale has {TYPE_SCALE.length} rungs. Each rung answers to a class made of `text-` plus the rung
+name, listed in the second column below.
+
+## Why the scale is named
+
+The rungs are declarations on `:root`, not utilities, so `calc(var(--text-base) * 2)` resolves and
+the class is only a name for the step. The stock component text was shifted one rung up, so a
+component that read the small rung now reads the base rung and still renders at the same px.
+
+## Specimens
+
+Each row renders its rung at the size and line height in the third and fourth columns.
+
+<Header />
+
+{TYPE_SCALE.map((rung) => (
+
+<Rung key={rung.name} rung={rung} />
+))}
+
+</div>

@@ -1,0 +1,197 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import { SINGLE, TEXT_TONE, STATIC_TOKENS } from '@kodaicoder/shadcn-svelte-daisyui-adapter/map';
+import {
+	ATOM_TONES,
+	FIELD_VARIANTS,
+	VARIANT_ROWS,
+	VARIANT_COMPONENTS
+} from '@kodaicoder/shadcn-svelte-daisyui-adapter/tokens';
+
+export const SOFT_SITE = ATOM_TONES.find((site) => site.id === 'skeleton-atom-tones');
+export const BORDER_SITE = FIELD_VARIANTS.find((site) => site.id === 'input-field-tones');
+
+export const rowsOf = (site) => {
+	// The tone tables exist only inside the fixed copies, so rows are read out of their class strings.
+	const rows = [...(site?.fixed ?? '').matchAll(/\t\t(\w+): "([^"]+)"/g)];
+	if (!rows.length) throw new Error(`[tokens/tones] no rows in ${site?.id ?? 'the tone table'}`);
+	return rows.map(([, tone, row]) => ({ tone, row }));
+};
+
+export const rowOf = (site, tone) => {
+	const row = site?.fixed?.match(new RegExp(`\\t\\t${tone}: "([^"]+)"`));
+	if (!row) throw new Error(`[tokens/tones] no ${site?.id ?? 'tone'} row for ${tone}`);
+	return row[1];
+};
+
+export const tokenFor = (tone) => {
+	const token = tone === 'default' ? 'primary' : tone;
+	const mapped = token in SINGLE && Boolean(SINGLE[token].source);
+	const literal = Object.values(STATIC_TOKENS).some((scheme) => `${token}-foreground` in scheme);
+	return mapped || literal ? token : undefined;
+};
+
+export const TONES = rowsOf(BORDER_SITE).map(({ tone, row }) => {
+	const token = tokenFor(tone);
+	if (!token) throw new Error(`[tokens/tones] ${tone} resolves to no token`);
+	return {
+		tone,
+		token,
+		soft: rowOf(SOFT_SITE, tone),
+		// The idle border is the first class token of the row.
+		border: row.split(' ')[0]
+	};
+});
+
+export const NAMES = TONES.map(({ tone }) => tone);
+
+export const TEXT_BORDER_TONES = TONES.filter(({ border }) => border.includes('-text')).map(
+	({ tone }) => tone
+);
+
+export const TEXT_TONES = Object.keys(TEXT_TONE).map((key) => key.replace(/-text$/, ''));
+
+export const PRESENTATIONS = [...new Set(VARIANT_ROWS.map((row) => row.presentation))];
+
+export const PAGE = {
+	background: 'var(--background)',
+	color: 'var(--foreground)',
+	padding: '1.25rem 1.5rem',
+	borderRadius: 'var(--radius-md)'
+};
+
+export const HEAD = {
+	display: 'grid',
+	gridTemplateColumns: 'minmax(9rem, 1fr) repeat(4, 8rem)',
+	alignItems: 'center',
+	gap: '0.75rem',
+	padding: '0.3rem 0',
+	borderBottom: '1px solid var(--foreground)',
+	fontSize: '0.6875rem',
+	letterSpacing: '0.08em',
+	textTransform: 'uppercase',
+	color: 'var(--muted-foreground)'
+};
+
+export const ROW = {
+	display: 'grid',
+	gridTemplateColumns: 'minmax(9rem, 1fr) repeat(4, 8rem)',
+	alignItems: 'center',
+	gap: '0.75rem',
+	padding: '0.35rem 0',
+	borderBottom: '1px solid var(--border)'
+};
+
+export const BOX = { width: '3.5rem', height: '1.5rem', borderRadius: 'var(--radius-sm)' };
+
+export const CELL = {
+	...BOX,
+	border: '1px solid var(--border)'
+};
+
+export const MUTED = { fontSize: '0.75rem', color: 'var(--muted-foreground)' };
+
+export const Header = () => (
+	<div style={HEAD}>
+		<span>Tone</span>
+		<span>Fill</span>
+		<span>Soft</span>
+		<span>Border</span>
+		<span>Foreground</span>
+	</div>
+);
+
+export const Specimen = ({ tone, token, soft, border }) => (
+	<div style={ROW}>
+		<span>
+			<code>{tone}</code>
+			<br />
+			<span style={MUTED}>{`--${token}`}</span>
+		</span>
+		<div style={{ ...CELL, background: `var(--${token})` }} />
+		<div className={soft} style={CELL} />
+		<div
+			className={border}
+			style={{
+				...BOX,
+				// No hairline here: an inline border colour would beat the tone class.
+				borderWidth: '2px',
+				borderStyle: 'solid',
+				borderRadius: 'var(--radius-sm)'
+			}}
+		/>
+		<div
+			style={{
+				...CELL,
+				background: `var(--${token})`,
+				color: `var(--${token}-foreground)`,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				fontSize: '0.75rem',
+				fontWeight: 600
+			}}
+		>
+			Aa
+		</div>
+	</div>
+);
+
+export const ToneText = ({ tone }) => (
+	<div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', padding: '0.3rem 0' }}>
+		<code>{`--${tone}-text`}</code>
+		<span style={{ color: `var(--${tone}-text)`, fontSize: '0.9375rem' }}>Aa body text</span>
+	</div>
+);
+
+<Meta title="Tokens/Tones" />
+
+<div style={PAGE} className="tokens-page">
+
+<style>{`
+	.tokens-page :is(h1, h2, h3, p) {
+		color: var(--foreground);
+	}
+
+	.tokens-page :is(p) code {
+		background: var(--muted);
+		border-color: var(--border);
+		color: var(--foreground);
+	}
+`}</style>
+
+# The seven tones
+
+## Seven tones
+
+A tone is one of {TONES.length} names: <code>{NAMES.join(', ')}</code>. A tone paints with the token of
+the same name, except `default`, which paints with `primary` so the plain control is the brand colour.
+The variant table names that brand tone `primary`; this page calls it `default` because `default` is
+the prop value a consumer writes. The soft and border cells read their class strings from the
+generated copy, so a change to the tone table moves this page.
+
+<Header />
+
+{TONES.map((row) => (
+
+<Specimen key={row.tone} {...row} />
+))}
+
+## Text uses the derived tone
+
+A fill and a soft surface paint with the tone itself. Text paints with the `-text` token, which mixes
+the tone toward the page foreground, because the raw tone reads below AA as text. A border uses the
+tone as well, except for <code>{TEXT_BORDER_TONES.join(' and ')}</code>: those edge classes carry
+`-text` so the hairline clears 3:1 against the page.
+
+{TEXT_TONES.map((tone) => (
+
+<ToneText key={tone} tone={tone} />
+))}
+
+## Presentations above the tones
+
+{VARIANT_COMPONENTS.length} components take a tone above their presentation: {VARIANT_COMPONENTS.join(', ')}.
+The variant table carries {VARIANT_ROWS.length} rows over {PRESENTATIONS.length} presentations
+({PRESENTATIONS.join(', ')}), and every one reuses the tones above.
+
+</div>

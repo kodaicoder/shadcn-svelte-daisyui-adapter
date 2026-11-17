@@ -3,7 +3,7 @@
 Component-level browsing for the library. Nineteen story files ship: `Components/Button`, the six
 display atoms, the six interactive atoms, the four field atoms, each beside its fixed copy, plus
 `Components/AspectRatio` and `Components/Avatar`, which render `ui` because the fixer writes no copy
-for them.
+for them. Four token docs pages ship beside them, under a `Tokens` group, and carry no stories.
 
 ## Sub-features
 
@@ -34,6 +34,18 @@ for them.
   - `Components/Label` from `src/lib/components/label-fixed/label.stories.svelte`: `Playground`, `Association` (`for` on input, textarea and select), `Wrapping`, `Peers` (checkbox, radio and switch), `Disabled` (peer, group and wrapping)
 - the theme toolbar, which switches `light` and `dark` and does it by setting or clearing the `dark`
   class on `<html>`
+- the token docs, four unattached MDX pages under `src/stories/tokens/`, each with a title, prose and
+  specimens whose values come from the adapter tables rather than a hand copy:
+  - `Tokens/ColourRoles` from `colour-roles.mdx`: `SINGLE`, `MIX_KEYS`/`mixSources`, `TEXT_TONE` and
+    `STATIC_TOKENS` through `@kodaicoder/shadcn-svelte-daisyui-adapter/map`, grouped as page, brand,
+    status, sidebar, derived, text-tone and static roles
+  - `Tokens/Tones` from `tones.mdx`: the seven tone names, with fill, soft, border and foreground per
+    tone. The soft and border class strings are parsed out of the `skeleton-atom-tones` and
+    `input-field-tones` site rows through `.../tokens`, so a table edit moves the page
+  - `Tokens/TypeScale` from `type-scale.mdx`: the six rungs with class, px and line height. This one
+    table is imported by repo path because `targets.mjs` does not re-export it
+  - `Tokens/Radius` from `radius.mdx`: `ROLE_STEPS`, `SIZE_STEPS` and the site count per step, plus
+    the `--radius` multipliers read from `src/routes/layout.css`
 - the a11y panel from `@storybook/addon-a11y`, in error mode with the `color-contrast` rule off, so a
   structural violation fails the run and a colour pair does not
 - `Configure.mdx` as the docs intro
@@ -64,6 +76,10 @@ box with `getComputedStyle`, because `getBoundingClientRect` on an animated elem
 rotated bounding box. `.verify/prove-69.mjs` and `.verify/prove-70.mjs` extend the same shape to the
 interactive and field atoms; both press Tab for the focus rings rather than calling `.focus()`.
 
+`.verify/prove-71.mjs` serves the static build from `.verify/build-71` on port 6007 with its own
+`node:http` server, opens each `Tokens/*` page in `viewMode=docs` in both schemes, runs axe with
+`color-contrast` and `region` off, and compares every printed value with the table read in Node.
+
 Storybook runs on port 6007 so it never collides with the app's 5199 or your own 5173.
 
 ## Gotchas
@@ -79,6 +95,14 @@ Storybook runs on port 6007 so it never collides with the app's 5199 or your own
   `src/stories/components/`.
 - The toolbar sets the `dark` class, not `data-theme`, because the adapter binds the dark tokens to
   `.dark` in `src/routes/layout.css`.
+- A docs entry runs no story decorator, so `withThemeByClassName` never puts `dark` on a docs page
+  and the toolbar changes nothing there. Each token page paints its own surface with
+  `var(--background)` and `var(--foreground)` so it reads correctly when the class is present, and
+  `.verify/prove-71.mjs` sets that class on `<html>` itself for the dark pass. Making the toolbar
+  reach docs entries is a `.storybook` change and belongs to its own ticket.
+- A docs page is reachable at `?path=/docs/<id>` and is not covered by the `storybook` vitest project,
+  so the a11y gate that project provides does not see it. Open `iframe.html?id=<id>&viewMode=docs` for
+  a docs-page proof.
 - `pnpm vitest --run --project storybook` is the cheap a11y gate: it runs every story through
   `@storybook/addon-vitest`, so story-level regressions and structural a11y failures surface without
   a browser drive. Use this skill's driver only for what that project cannot see (manager chrome,

@@ -1,0 +1,155 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import layout from '../../../src/routes/layout.css?raw';
+import { ROLE_STEPS, SIZE_STEPS, RADIUS } from '@kodaicoder/shadcn-svelte-daisyui-adapter/tokens';
+
+export const PAGE = {
+	background: 'var(--background)',
+	color: 'var(--foreground)',
+	padding: '1.25rem 1.5rem',
+	borderRadius: 'var(--radius-md)'
+};
+
+export const baseOf = (text) => {
+	const found = text.match(/--radius:\s*([^;]+);/);
+	if (!found) throw new Error('[tokens/radius] no --radius declaration in layout.css');
+	return found[1].trim();
+};
+
+export const BASE = baseOf(layout);
+
+export const DECLARATIONS = [...layout.matchAll(/--radius-(sm|md|lg):\s*([^;]+);/g)].map(
+	([, step, value]) => ({ step, recipe: value.trim() })
+);
+
+export const STEPS = [...new Set(Object.values(ROLE_STEPS))].map((step) => {
+	const found = DECLARATIONS.find((row) => row.step === step);
+	if (!found) throw new Error(`[tokens/radius] no --radius-${step} declaration in layout.css`);
+	return found;
+});
+
+export const ROLES = Object.entries(ROLE_STEPS).map(([role, step]) => ({
+	role,
+	step,
+	sites: RADIUS.filter((row) => row.step === step).length
+}));
+
+export const SIZES = Object.entries(SIZE_STEPS);
+
+export const HEAD = {
+	display: 'grid',
+	gridTemplateColumns: 'minmax(7rem, 1fr) 6rem 8rem 7rem minmax(6rem, 1fr)',
+	alignItems: 'center',
+	gap: '0.75rem',
+	padding: '0.3rem 0',
+	borderBottom: '1px solid var(--foreground)',
+	fontSize: '0.6875rem',
+	letterSpacing: '0.08em',
+	textTransform: 'uppercase',
+	color: 'var(--muted-foreground)'
+};
+
+export const ROW = {
+	display: 'grid',
+	gridTemplateColumns: 'minmax(7rem, 1fr) 6rem 8rem 7rem minmax(6rem, 1fr)',
+	alignItems: 'center',
+	gap: '0.75rem',
+	padding: '0.35rem 0',
+	borderBottom: '1px solid var(--border)'
+};
+
+export const MUTED = { fontSize: '0.8125rem', color: 'var(--muted-foreground)' };
+
+export const Header = () => (
+	<div style={HEAD}>
+		<span>Role</span>
+		<span>Step</span>
+		<span>Property</span>
+		<span>Sites on this step</span>
+		<span>Box</span>
+	</div>
+);
+
+export const Role = ({ role, step, sites }) => (
+	<div style={ROW}>
+		<code>{role}</code>
+		<code>{step}</code>
+		<code>{`--radius-${step}`}</code>
+		<span style={MUTED}>{`${sites} sites`}</span>
+		<div
+			style={{
+				width: '4rem',
+				height: '2rem',
+				background: 'var(--primary)',
+				border: '1px solid var(--border)',
+				borderRadius: `var(--radius-${step})`
+			}}
+		/>
+	</div>
+);
+
+export const Recipe = ({ step, recipe }) => (
+	<div style={{ display: 'flex', gap: '1rem', alignItems: 'baseline', padding: '0.3rem 0' }}>
+		<code>{`--radius-${step}`}</code>
+		<code>{recipe}</code>
+	</div>
+);
+
+export const Size = ({ size, step }) => (
+	<div style={{ display: 'flex', gap: '1rem', alignItems: 'baseline', padding: '0.25rem 0' }}>
+		<code>{size}</code>
+		<span style={MUTED}>{`takes the ${step} step`}</span>
+	</div>
+);
+
+<Meta title="Tokens/Radius" />
+
+<div style={PAGE} className="tokens-page">
+
+<style>{`
+	.tokens-page :is(h1, h2, h3, p) {
+		color: var(--foreground);
+	}
+
+	.tokens-page :is(p) code {
+		background: var(--muted);
+		border-color: var(--border);
+		color: var(--foreground);
+	}
+`}</style>
+
+# The radius roles
+
+## The roles
+
+{ROLES.length} roles cover every rounded edge: {Object.keys(ROLE_STEPS).join(', ')}. Each role names one
+step, and the step is the custom property a consumer writes. The site count is read from the radius
+table.
+
+<Header />
+
+{ROLES.map((row) => (
+
+<Role key={row.role} {...row} />
+))}
+
+## How a step derives from --radius
+
+`--radius` is <code>{BASE}</code>, and the generated stylesheet `src/routes/layout.css` derives
+{STEPS.length} steps from it:
+
+{STEPS.map((row) => (
+
+<Recipe key={row.step} {...row} />
+))}
+
+## Size steps
+
+A component size maps onto a role step, so a small control and a small box round the same way. The
+table also holds one size no site uses yet, which keeps a new site from inventing a step.
+
+{SIZES.map(([size, step]) => (
+
+<Size key={size} size={size} step={step} />
+))}
+
+</div>

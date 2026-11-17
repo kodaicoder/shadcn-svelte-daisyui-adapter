@@ -12,7 +12,8 @@
 			"default": "./dist/index.mjs"
 		},
 		"./map": "./dist/map.mjs",
-		"./ramp": "./dist/ramp.mjs"
+		"./ramp": "./dist/ramp.mjs",
+		"./tokens": "./targets.mjs"
 	},
 	"files": [
 		"dist",

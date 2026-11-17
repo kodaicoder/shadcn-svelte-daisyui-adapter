@@ -1,0 +1,259 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import {
+	SINGLE,
+	MIX_KEYS,
+	mixSources,
+	TEXT_TONE,
+	STATIC_TOKENS
+} from '@kodaicoder/shadcn-svelte-daisyui-adapter/map';
+
+export const PAGE = {
+	background: 'var(--background)',
+	color: 'var(--foreground)',
+	padding: '1.25rem 1.5rem',
+	borderRadius: 'var(--radius-md)'
+};
+
+export const ROW = {
+	display: 'grid',
+	gridTemplateColumns: 'minmax(11rem, 1.2fr) minmax(10rem, 1fr) 7rem',
+	alignItems: 'center',
+	gap: '0.75rem',
+	padding: '0.3rem 0',
+	borderBottom: '1px solid var(--border)'
+};
+
+export const MUTED = { fontSize: '0.8125rem', color: 'var(--muted-foreground)' };
+
+export const SWATCH = {
+	height: '1.5rem',
+	border: '1px solid var(--border)',
+	borderRadius: 'var(--radius-sm)',
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	fontSize: '0.75rem',
+	fontWeight: 600
+};
+
+export const sourceOf = (role) => {
+	// A role prints the source the map binds it to, so a renamed row fails here, not on the page.
+	if (MIX_KEYS.includes(role)) return mixSources(role).join(' over ');
+	if (!(role in SINGLE)) throw new Error(`[tokens/colour-roles] no map row for ${role}`);
+	if (!SINGLE[role].source) throw new Error(`[tokens/colour-roles] ${role} is no source row`);
+	return SINGLE[role].source;
+};
+
+export const PAGE_ROLES = [
+	'background',
+	'foreground',
+	'card',
+	'card-foreground',
+	'popover',
+	'popover-foreground',
+	'muted',
+	'muted-foreground',
+	'border',
+	'input'
+];
+
+export const BRAND_ROLES = [
+	...['primary', 'secondary', 'accent'].flatMap((tone) => [tone, `${tone}-foreground`]),
+	'ring'
+];
+
+export const STATUS_ROLES = ['destructive', 'success', 'warning', 'info'].flatMap((tone) => [
+	tone,
+	`${tone}-foreground`
+]);
+
+export const SIDEBAR_ROLES = [
+	'sidebar',
+	'sidebar-foreground',
+	'sidebar-primary',
+	'sidebar-primary-foreground',
+	'sidebar-accent',
+	'sidebar-accent-foreground',
+	'sidebar-ring'
+];
+
+export const DERIVED_ROLES = [...MIX_KEYS];
+
+export const TEXT_TONES = Object.keys(TEXT_TONE);
+
+export const STATIC_ROLES = Object.keys(STATIC_TOKENS.light);
+
+export const DIRECT_ROLES = Object.keys(SINGLE).filter(
+	(role) => role !== 'radius' && !MIX_KEYS.includes(role)
+);
+
+export const COVERAGE = (() => {
+	const placed = [...PAGE_ROLES, ...BRAND_ROLES, ...STATUS_ROLES, ...SIDEBAR_ROLES];
+	const missing = [
+		...DIRECT_ROLES.filter((role) => !placed.includes(role)).map((role) => `unplaced ${role}`),
+		...MIX_KEYS.filter((role) => !DERIVED_ROLES.includes(role)).map((role) => `unrendered ${role}`),
+		...Object.keys(TEXT_TONE)
+			.filter((key) => !TEXT_TONES.includes(key))
+			.map((key) => `unrendered ${key}`),
+		...Object.keys(STATIC_TOKENS.light)
+			.filter((key) => !STATIC_ROLES.includes(key))
+			.map((key) => `unrendered ${key}`)
+	];
+	if (missing.length) throw new Error(`[tokens/colour-roles] ${missing.join(', ')}`);
+	return placed;
+})();
+
+export const Header = () => (
+	<div
+		style={{
+			...ROW,
+			borderBottom: '1px solid var(--foreground)',
+			fontSize: '0.6875rem',
+			letterSpacing: '0.08em',
+			textTransform: 'uppercase',
+			color: 'var(--muted-foreground)'
+		}}
+	>
+		<span>Role</span>
+		<span>Source</span>
+		<span>On the page</span>
+	</div>
+);
+
+export const Role = ({ role, caption }) => {
+	const base = role.replace(/-foreground$/, '');
+	const isForeground = base !== role;
+	return (
+		<div style={ROW}>
+			<code>{`--${role}`}</code>
+			<span style={MUTED}>{caption ?? sourceOf(role)}</span>
+			<div style={{ ...SWATCH, background: `var(--${isForeground ? base : role})` }}>
+				{isForeground ? <span style={{ color: `var(--${role})` }}>Aa</span> : null}
+			</div>
+		</div>
+	);
+};
+
+export const TextTone = ({ tone }) => {
+	const [from, fromShare, to, toShare] = TEXT_TONE[tone];
+	return (
+		<div style={ROW}>
+			<code>{`--${tone}`}</code>
+			<span style={MUTED}>{`${fromShare} percent ${from}, ${toShare} percent ${to}`}</span>
+			<span style={{ color: `var(--${tone})`, fontSize: '0.9375rem' }}>Aa body text</span>
+		</div>
+	);
+};
+
+<Meta title="Tokens/ColourRoles" />
+
+<div style={PAGE} className="tokens-page">
+
+<style>{`
+	.tokens-page :is(h1, h2, h3, p) {
+		color: var(--foreground);
+	}
+
+	.tokens-page :is(p) code {
+		background: var(--muted);
+		border-color: var(--border);
+		color: var(--foreground);
+	}
+`}</style>
+
+# Colour roles
+
+## How a role resolves
+
+Each role is one custom property, written once for light and once inside the `dark` block. The
+specimens read the live token, so they render correctly in whichever scheme the page is in. A role
+either reads one daisyUI source colour or mixes two of them.
+
+## Page roles
+
+The surfaces a page paints with: the page itself, the cards and popovers that sit on it, the muted
+surface behind secondary text, and the hairlines a form draws.
+
+<Header />
+
+{PAGE_ROLES.map((role) => (
+
+<Role key={role} role={role} />
+))}
+
+## Brand roles
+
+The brand colours and the accent, each with the content colour daisyUI pairs it with. A focus ring is
+on brand by default.
+
+<Header />
+
+{BRAND_ROLES.map((role) => (
+
+<Role key={role} role={role} />
+))}
+
+## Status roles
+
+Feedback roles, each with the content colour to put on top of it.
+
+<Header />
+
+{STATUS_ROLES.map((role) => (
+
+<Role key={role} role={role} />
+))}
+
+## Sidebar roles
+
+A sidebar is a second surface with its own roles, so it can sit a step deeper than the page while
+its text and accent stay on brand.
+
+<Header />
+
+{SIDEBAR_ROLES.map((role) => (
+
+<Role key={role} role={role} />
+))}
+
+## Derived roles
+
+These roles are mixed, not read. The adapter emits the recipe, so an edit to the mix moves every use
+site.
+
+<Header />
+
+{DERIVED_ROLES.map((role) => (
+
+<Role key={role} role={role} />
+))}
+
+## Text tones
+
+A status colour used as text is mixed toward the page foreground, because the raw tone reads below
+AA on the page. Use the `-text` role for text and the base role for a fill.
+
+<Header />
+
+{TEXT_TONES.map((tone) => (
+
+<TextTone key={tone} tone={tone} />
+))}
+
+## Black and white
+
+These have no daisyUI source, so the stylesheet writes a literal value for each scheme. Use them for
+the control that must hold the page's own extreme whatever the theme.
+
+<Header />
+
+{STATIC_ROLES.map((token) => (
+
+<Role
+	key={token}
+	role={token}
+	caption={`${STATIC_TOKENS.light[token]} in light, ${STATIC_TOKENS.dark[token]} in dark`}
+/>
+))}
+
+</div>
