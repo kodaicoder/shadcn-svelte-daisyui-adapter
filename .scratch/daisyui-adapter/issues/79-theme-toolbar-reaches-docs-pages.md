@@ -1,6 +1,9 @@
 # 79: The theme toolbar reaches the token docs pages
 
 Session IDs: ses_e18bb5a7bffeKzAnGdTEl5lwlM
+Lesson: A Storybook addon that ships a decorator only reaches stories. A docs entry runs no story decorator, so any state a docs page needs must come from a preview-level channel listener.
+Check: code - `.storybook/preview.ts` subscribes to `setGlobals` and `globalsUpdated` and toggles `dark` on `<html>` for every view mode; a live manager click flips a docs page and a story, and `.verify/prove-71.mjs` stays 233/233 against a fresh static build.
+Closeout: 9809d87 (tag daisyui-adapter-79)
 
 **What to build:** make the Storybook theme toolbar switch the four `Tokens/*` docs pages between
 light and dark, the way it already switches every story.
