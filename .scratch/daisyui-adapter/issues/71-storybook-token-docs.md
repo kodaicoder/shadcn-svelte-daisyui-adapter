@@ -1,12 +1,15 @@
 # 71: Storybook explains the token layer
 
 Session IDs: ses_e18bb5a7bffeKzAnGdTEl5lwlM
+Lesson: A docs entry is not a story: no story decorator runs and the docs container owns the surface and the text colour, so a token page has to paint its own surface and every value it prints has to come from a source it can read, the generated stylesheet included.
+Check: code - `.verify/prove-71.mjs` asserts per page per scheme that `div.tokens-page` paints `var(--background)` with `var(--foreground)`, that one visible h1 matches the title, and that every printed value equals the Node-read table, so dropping the wrapper, the h1 or the parsed radius recipe fails the run.
+Closeout: 807cb39 (tag daisyui-adapter-71)
 
 **What to build:** documentation pages for the things a consumer needs before they use any component:
 the colour roles, the seven tones and how a tone is painted, the type scale, and the radius roles.
 Prose plus live specimens, so a reader can copy a class name they have just seen render.
 
-**Status:** ready-for-agent
+**Status:** resolved
 **Labels:** docs, storybook, tokens
 **Blocked by:** 67
 

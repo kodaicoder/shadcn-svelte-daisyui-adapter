@@ -73,8 +73,9 @@ Code-coupled work: one owner per unit, checkpoint inline.
 - [x] proof script
 - [x] gates: check, prettier, eslint, storybook vitest, test:adapter, prepack, static build, live proof
 - [x] review round, Standards and Spec
-- [ ] round 4 fixes, rebuild and re-prove
-- [ ] commit, tag, Lesson, Check
+- [x] round 4 fixes, rebuild and re-prove (233/233 checks)
+- [x] commit 807cb39, tag daisyui-adapter-71
+- [ ] close commit with Lesson and Check
 
 ## Findings and decisions from implementation
 
