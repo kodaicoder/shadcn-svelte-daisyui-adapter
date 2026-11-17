@@ -95,11 +95,11 @@ Storybook runs on port 6007 so it never collides with the app's 5199 or your own
   `src/stories/components/`.
 - The toolbar sets the `dark` class, not `data-theme`, because the adapter binds the dark tokens to
   `.dark` in `src/routes/layout.css`.
-- A docs entry runs no story decorator, so `withThemeByClassName` never puts `dark` on a docs page
-  and the toolbar changes nothing there. Each token page paints its own surface with
-  `var(--background)` and `var(--foreground)` so it reads correctly when the class is present, and
-  `.verify/prove-71.mjs` sets that class on `<html>` itself for the dark pass. Making the toolbar
-  reach docs entries is a `.storybook` change and belongs to its own ticket.
+- A docs entry runs no story decorator, so `withThemeByClassName` alone never puts `dark` on a docs
+  page. `.storybook/preview.ts` listens to `setGlobals` and `globalsUpdated` and writes the same class
+  for every view mode (ticket 79), so the toolbar switches a docs page like a story. The token pages
+  still paint their own surface from `var(--background)`, and `.verify/prove-71.mjs` sets the class
+  itself so the proof never depends on the manager.
 - A docs page is reachable at `?path=/docs/<id>` and is not covered by the `storybook` vitest project,
   so the a11y gate that project provides does not see it. Open `iframe.html?id=<id>&viewMode=docs` for
   a docs-page proof.
