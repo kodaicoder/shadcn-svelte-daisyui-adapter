@@ -174,3 +174,7 @@ registry served. `git show -s --format='%H %G? %s' v0.3.0` prints
 `68cc4ffe01e63b3c521881dac0be1d20868c9cc0 G docs(daisyui-adapter): 📚 name the slider prop in the 0.3.0 notes (ticket 34)`,
 and `git ls-remote --tags origin v0.3.0` prints `e2ff83eaefe9e97058bf359916efcdcab7f5f9ac refs/tags/v0.3.0`, the
 same object as the local tag.
+
+After the verdict, the sixteen template images under `src/stories/assets` were removed. Nothing referenced them,
+and `pnpm check:docs-build` still prints `111 files` per build with `sha256:51f31a15…` on both and
+`result identical`, so the build under review is byte for byte the same.
