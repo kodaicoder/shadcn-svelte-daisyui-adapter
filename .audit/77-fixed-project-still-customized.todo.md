@@ -40,7 +40,17 @@ fallback: rg `stateOf`, read `component-fix.mjs:102-121` and `component-fix.mjs:
 
 ## Review
 
-Pending.
+Both axes ran on `390992e`, and their findings landed in `f62076f`.
+
+- Standards accepted: assert `missing === 0` too, so a skipped file cannot pass as fixed; hash the
+  `CREATES` output as well and assert no site reports `written`, so "writes nothing" covers what the
+  message claims; move `cpSync` inside the `try`; copy the pin's `package.json` into the temp root so
+  the version guard runs instead of warning on every run; rename the `stateOf` parameter to
+  `survivingText`, since `surviving` names the array.
+- Standards and Spec both flagged that `surrounds` changed an unreachable insert path from `fixed` to
+  `stock`. Restored the original expression, so the declared fixed text and the surviving text are the
+  only behaviour change this ticket carries.
+- Spec: no gap against the four checkboxes, and the blast radius is exactly the two ids.
 
 ## Verification
 
@@ -49,10 +59,11 @@ Pending.
   second `fix` reported `0 stock, 313 fixed, 2 customized` with no byte change.
 - After the change, the same temp copy: `scan` reports `0 customized`, and the second `fix` reports
   `0 stock, 315 fixed, 0 customized` with no byte change.
-- New drift check fails without the fixer change, with the two ids from the ticket:
-  `FAIL  a fixed temp project reports no customized site :: 2 customized, 0 stock, 313 fixed:
-  skeleton-atom-surface, slider-atom-thumb-tone`. It passes with the change:
-  `ok  a fixed temp project reports no customized site :: 0 customized, 0 stock, 315 fixed`.
+- New drift check fails against the fixer as it was before this commit, with the two ids from the
+  ticket: `FAIL  a fixed temp project reports no customized site :: 2 customized, 0 stock, 0 missing,
+  313 fixed: skeleton-atom-surface, slider-atom-thumb-tone`. It passes with the change:
+  `ok  a fixed temp project reports no customized site :: 0 customized, 0 stock, 0 missing, 315 fixed`
+  and `ok  a second fix on the fixed temp project writes nothing :: 0 stock, 315 fixed, 0 written`.
 - `pnpm test:adapter` all 30 checks pass, including `every fixed copy is what the manifest produces
   from the pin`.
 - CLI on a fixed temp project: `fix` prints `fix: 293 stock, 22 fixed, 0 customized, 0 missing`,
