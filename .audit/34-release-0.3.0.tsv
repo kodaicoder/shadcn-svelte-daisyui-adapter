@@ -16,3 +16,4 @@ when	step	decision	why	evidence	result
 2026-11-18	verdict	record the operator's words, not a page list	only the operator saw the pages	"it look good for me now for 0.3.0"	accepted
 2026-11-18	tag	tag the published commit, not the tip	the tag must name the tree the registry served	shasum 497e32ef… equals the pack	v0.3.0 on 68cc4ff, G
 2026-11-18	tag	read the pushed tag back	shipping read-back rule	git ls-remote v0.3.0	e2ff83ea… matches local
+2026-11-18	merge	record the operator's confirmation before merging	a record written after the push describes nothing if the push fails	origin/main is an ancestor at f4fe8a5, 0 commits its own	fast-forward planned

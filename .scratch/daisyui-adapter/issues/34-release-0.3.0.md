@@ -178,3 +178,7 @@ same object as the local tag.
 After the verdict, the sixteen template images under `src/stories/assets` were removed. Nothing referenced them,
 and `pnpm check:docs-build` still prints `111 files` per build with `sha256:51f31a15…` on both and
 `result identical`, so the build under review is byte for byte the same.
+
+The operator confirmed the release merge to `main` on 2026-11-18, after the verdict and the asset cleanup.
+`origin/main` was an ancestor of this branch at `f4fe8a5`, with `0` commits of its own, so the merge is a
+fast-forward and the tree on `main` is the tree the tag names.
