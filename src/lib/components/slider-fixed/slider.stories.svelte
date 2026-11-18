@@ -18,13 +18,6 @@
 
 	type PlaygroundArgs = { variant: SliderVariant; value: number };
 
-	// bits-ui renders the thumb unnamed and the copy forwards no thumb props, so the story supplies the label a consumer cannot; ticket 78 tracks the fix in the copy.
-	const labelThumbs = (labels: string[]) => (node: HTMLElement) => {
-		node.querySelectorAll<HTMLElement>('[role="slider"]').forEach((thumb, index) => {
-			thumb.setAttribute('aria-label', labels[index] ?? labels[0]);
-		});
-	};
-
 	const { Story } = defineMeta({
 		title: 'Components/Slider',
 		component: Slider,
@@ -38,7 +31,7 @@
 
 <Story name="Playground" args={{ variant: 'default', value: 40 }}>
 	{#snippet template(args)}
-		<div class="w-64" {@attach labelThumbs(['Volume'])}>
+		<div class="w-64">
 			<Slider {...args as PlaygroundArgs} type="single" />
 		</div>
 	{/snippet}
@@ -49,7 +42,7 @@
 		{#each TONE_ROWS as tone (tone)}
 			<div class="grid gap-1">
 				<span class="text-sm text-muted-foreground">{tone}</span>
-				<div class="w-64" {@attach labelThumbs([tone])}>
+				<div class="w-64">
 					<Slider variant={tone} value={40} type="single" />
 				</div>
 			</div>
@@ -61,13 +54,13 @@
 	<div class="grid max-w-md gap-6">
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">One thumb</span>
-			<div class="w-64" {@attach labelThumbs(['Volume'])}>
+			<div class="w-64">
 				<Slider value={30} type="single" />
 			</div>
 		</div>
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">Two thumbs</span>
-			<div class="w-64" {@attach labelThumbs(['Minimum', 'Maximum'])}>
+			<div class="w-64">
 				<Slider value={[25, 75]} type="multiple" />
 			</div>
 		</div>
@@ -78,13 +71,13 @@
 	<div class="grid max-w-md gap-6">
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">One thumb</span>
-			<div class="w-64" {@attach labelThumbs(['Volume'])}>
+			<div class="w-64">
 				<Slider value={30} type="single" disabled />
 			</div>
 		</div>
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">Two thumbs</span>
-			<div class="w-64" {@attach labelThumbs(['Minimum', 'Maximum'])}>
+			<div class="w-64">
 				<Slider value={[25, 75]} type="multiple" disabled />
 			</div>
 		</div>
@@ -94,7 +87,7 @@
 <Story name="Focus" asChild>
 	<div class="grid max-w-md gap-3">
 		{#each TONE_ROWS as tone (tone)}
-			<div class="w-64" {@attach labelThumbs([tone])}>
+			<div class="w-64">
 				<Slider variant={tone} value={40} type="single" />
 			</div>
 		{/each}
