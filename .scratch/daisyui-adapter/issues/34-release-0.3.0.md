@@ -104,7 +104,14 @@ npm view @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 version
 npm view @kodaicoder/shadcn-svelte-daisyui-adapter dist-tags.latest
 ```
 
-Both must print `0.3.0`. Then the registry proof, which runs the literal
+Both must print `0.3.0`.
+
+Published 2026-11-18. `npm view …@0.3.0 version` printed `0.3.0`, `dist-tags` printed `{"latest":"0.3.0"}`, and
+the packument's `time.modified` moved to `2026-11-18T06:13:26Z`. The registry's `0.3.0` shasum is
+`497e32ef6e1a2960b8bbf50767b27d1250f12de4`, which is the same shasum `npm pack` gave on the committed tree,
+so the published bytes are the packed bytes and they carry the `thumbLabels` sentences.
+
+Then the registry proof, which runs the literal
 `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` on a fresh scaffold and then builds and
 renders it, keeping the evidence under `.scratch/daisyui-adapter/evidence/34-release-0.3.0/`:
 
@@ -116,6 +123,14 @@ node .scratch/daisyui-adapter/harness/run.mjs --pin-registry \
 `--pin-registry` points the app's adds at the repo's pinned components, because the live shadcn registry has
 moved past the pin; it reaches prove's own add through `COMPONENTS_REGISTRY_URL`.
 
+The first attempt failed before the adapter ran. `run.mjs` serves the pinned registry from its own process and
+then ran the baseline `add button` through `execFileSync`, which blocks the event loop that answers that
+server, so the CLI's fetch timed out with `HeadersTimeoutError: Headers Timeout Error`. The baseline add now
+uses the async `runCapture`, the path the targets branch already used, and keeps `add-baseline.log`. This is
+the proof tool, not the published package, so the fix does not change the artifact.
+
 The operator's visual check is `pnpm check:docs-build --serve 6007`, read at `http://127.0.0.1:6007/` in light
-and dark, over the components and the four token pages. The tag is created only after the registry reads
-0.3.0, points at this ticket's release commit, and is pushed as a tag alone.
+and dark, over the components and the four token pages. The same bytes are packaged for IIS at
+`.verify/docs-build-34` and `.verify/docs-build-34.zip`, both gitignored, copied from build a and given a
+`web.config` for static hosting plus `checklist.md`. The tag is created only after the registry reads 0.3.0,
+points at this ticket's release commit, and is pushed as a tag alone.

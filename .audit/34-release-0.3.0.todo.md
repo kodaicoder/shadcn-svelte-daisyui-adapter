@@ -138,8 +138,9 @@ Skipped: steps 9 to 12 run only after the operator's publish succeeds. Steps 1 t
 - [x] prior run's todolist preserved at `.audit/34-release-0.3.0.2026-11-05.todo.md`
 - [ ] commit the documentation edit and the ticket corrections
 - [ ] hand the operator the publish command and wait
-- [ ] registry read-back after publish
-- [ ] registry proof with `prove.mjs --registry` and the kept evidence
+- [x] operator published 0.3.0
+- [x] registry read-back: `0.3.0`, `latest: 0.3.0`, shasum `497e32ef…` equal to the local pack
+- [ ] registry proof with `prove.mjs --registry` and the kept evidence (running)
 - [ ] operator visual verdict
 - [ ] tag `v0.3.0`, push the tag, read it back
 - [ ] close the ticket with Lesson, Check and Closeout

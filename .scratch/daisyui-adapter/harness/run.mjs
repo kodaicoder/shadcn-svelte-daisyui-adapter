@@ -267,7 +267,14 @@ export default defineConfig({
 		}
 		report.components = COMPONENTS;
 	} else {
-		run(PNPM, ['dlx', SHADCN, 'add', 'button', '-y'], APP);
+		// The pin registry is served by this process, and a synchronous child would block the event
+		// loop that answers it, so the add has to stay async.
+		const baseline = await runCapture(PNPM, ['dlx', SHADCN, 'add', 'button', '-y'], APP);
+		write(join(EVIDENCE, 'add-baseline.log'), baseline.output);
+		report.addBaselineExitCode = baseline.code;
+		if (baseline.code !== 0) {
+			throw new Error(`add of the baseline button failed, see ${join(EVIDENCE, 'add-baseline.log')}`);
+		}
 	}
 	write(
 		join(APP, 'src', 'routes', '+page.svelte'),

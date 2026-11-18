@@ -199,6 +199,10 @@ DAISYUI_ADAPTER_INSTALL_SPEC=./kodaicoder-shadcn-svelte-daisyui-adapter-0.3.0.tg
 
 The CLI prints `installed ./kodaicoder-shadcn-svelte-daisyui-adapter-0.3.0.tgz`. Without the variable it installs `@kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0` from the registry.
 
+## Milestones
+
+0.3.0 completes the token layer and the atom layer: the eleven bindings, the radius roles, the type scale, the tone variants on the single-element controls, and the fixer that paints them. The ten repaired contrast pairs reach into the overlays and the chart tooltip, and a full pass over molecules, organisms, templates and pages follows in later minors, with 1.0.0 as the full review.
+
 ## What it does not do
 
 - It does not apply daisyUI component skins.

@@ -10,3 +10,5 @@ when	step	decision	why	evidence	result
 2026-11-18	correction 3	one sentence in each surface	thumbLabels is a breaking prop for a copied slider	CHANGELOG 0.3.0 and README Variants	both written
 2026-11-18	correction 4	record 401 and stop	npm whoami still returns E401	whoami output	operator login is a gate
 2026-11-18	gates	run all three on the edited tree	the tagged commit must be the measured one	check:stories, check:docs-build, test:adapter	all exit 0
+2026-11-18	publish	operator runs npm publish	OTP never passes through this session	registry shasum 497e32ef…	0.3.0 is latest
+2026-11-18	proof	fix the harness before rerunning	the baseline add blocked the event loop that served the pin registry	HeadersTimeoutError in the first attempt	now awaits runCapture
