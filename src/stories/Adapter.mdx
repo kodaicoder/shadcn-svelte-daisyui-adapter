@@ -1,0 +1,49 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Adapter" />
+
+# Using the adapter
+
+`@kodaicoder/shadcn-svelte-daisyui-adapter` turns a daisyUI v5 theme into a shadcn-svelte token set at build time, with no daisyUI runtime dependency. This Storybook is the reference for what it writes. The token pages show the values it emits, and the component pages show the painted result in light and dark.
+
+## What it writes
+
+Each `:root` and `.dark` block is rewritten so every shadcn token reads a daisyUI value, with the value already in the file kept as the fallback. The CLI also writes the `@plugin` line and the chart ramp.
+
+`init` maps the stylesheet, then patches the stock component classes on disk. Every replacement site has four states: `missing`, `stock`, `fixed` and `customized`. It patches `stock`, leaves `fixed`, reports `customized` and still applies the other sites in the same file, so a second run is byte identical. The header comment records the version that wrote the stylesheet and how many component files are fully fixed.
+
+## Install
+
+```bash
+# 1. paste one light and one dark block from the daisyUI theme generator
+#    into src/daisyui-theme.css
+
+# 2. set up shadcn-svelte through step 4 of its guide
+pnpm dlx shadcn-svelte@1.8 init
+
+# 3. add the components you use
+pnpm dlx shadcn-svelte@1.8 add <components you use>
+
+# 4. map the stylesheet and fix those components
+pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init
+
+# 5. the gate
+pnpm build
+```
+
+Add the components before `init`, because `init` fixes what is already on disk. A component added later needs `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 fix <component>`.
+
+## The header
+
+The first line of the stylesheet names the version that wrote it:
+
+```
+/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components <n> fixed | re-run ... */
+```
+
+`n` counts the component files whose every replacement site is `fixed`, not the files changed in the run. A run that writes refuses when the header names a newer version than the CLI, because an older CLI would undo bindings a newer one wrote.
+
+## Where to look
+
+- **Tokens/ColourRoles**, **Tokens/Radius**, **Tokens/Tones** and **Tokens/TypeScale** show the values the CLI emits.
+- **Components** shows the painted result. The theme toolbar switches light and dark, and the accessibility gate runs on every story in CI.
