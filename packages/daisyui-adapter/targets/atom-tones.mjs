@@ -341,6 +341,32 @@ export const ATOM_TONES = [
 		fixed: SLIDER_THUMB_FIXED
 	}),
 
+	// The slider's prop and thumb rows live here because the variant prop and the thumb class already
+	// do. A thumb is a form control with no text of its own, so its name comes from the caller. The
+	// array is keyed by the index `thumbItems` already gives each thumb, which is what names both ends
+	// of a range; `Value` keeps a consumer that passes nothing from shipping an unnamed thumb.
+	insertSite({
+		id: 'slider-atom-thumb-labels-prop',
+		component: 'slider',
+		file: 'slider/slider.svelte',
+		stock: 'class: className,',
+		fixed: 'thumbLabels = [],\n\t\tclass: className,'
+	}),
+	replaceSite({
+		id: 'slider-atom-thumb-labels-type',
+		component: 'slider',
+		file: 'slider/slider.svelte',
+		stock: '{ variant?: SliderVariant } = $props();',
+		fixed: '{ variant?: SliderVariant; thumbLabels?: string[] } = $props();'
+	}),
+	insertSite({
+		id: 'slider-atom-thumb-labels-name',
+		component: 'slider',
+		file: 'slider/slider.svelte',
+		stock: 'index={thumb.index}',
+		fixed: "index={thumb.index}\n\t\t\t\taria-label={thumbLabels[thumb.index] ?? 'Value'}"
+	}),
+
 	// The scrollbar thumb is a shape, not a tone: a scroller reads the same in every tone.
 	replaceSite({
 		id: 'scroll-area-thumb-shape',

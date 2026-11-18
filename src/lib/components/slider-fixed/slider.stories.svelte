@@ -32,7 +32,7 @@
 <Story name="Playground" args={{ variant: 'default', value: 40 }}>
 	{#snippet template(args)}
 		<div class="w-64">
-			<Slider {...args as PlaygroundArgs} type="single" />
+			<Slider {...args as PlaygroundArgs} type="single" thumbLabels={['Volume']} />
 		</div>
 	{/snippet}
 </Story>
@@ -43,7 +43,7 @@
 			<div class="grid gap-1">
 				<span class="text-sm text-muted-foreground">{tone}</span>
 				<div class="w-64">
-					<Slider variant={tone} value={40} type="single" />
+					<Slider variant={tone} value={40} type="single" thumbLabels={['Volume']} />
 				</div>
 			</div>
 		{/each}
@@ -55,13 +55,13 @@
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">One thumb</span>
 			<div class="w-64">
-				<Slider value={30} type="single" />
+				<Slider value={30} type="single" thumbLabels={['Volume']} />
 			</div>
 		</div>
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">Two thumbs</span>
 			<div class="w-64">
-				<Slider value={[25, 75]} type="multiple" />
+				<Slider value={[25, 75]} type="multiple" thumbLabels={['Minimum', 'Maximum']} />
 			</div>
 		</div>
 	</div>
@@ -72,13 +72,13 @@
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">One thumb</span>
 			<div class="w-64">
-				<Slider value={30} type="single" disabled />
+				<Slider value={30} type="single" disabled thumbLabels={['Volume']} />
 			</div>
 		</div>
 		<div class="grid gap-1">
 			<span class="text-sm text-muted-foreground">Two thumbs</span>
 			<div class="w-64">
-				<Slider value={[25, 75]} type="multiple" disabled />
+				<Slider value={[25, 75]} type="multiple" disabled thumbLabels={['Minimum', 'Maximum']} />
 			</div>
 		</div>
 	</div>
@@ -88,7 +88,7 @@
 	<div class="grid max-w-md gap-3">
 		{#each TONE_ROWS as tone (tone)}
 			<div class="w-64">
-				<Slider variant={tone} value={40} type="single" />
+				<Slider variant={tone} value={40} type="single" thumbLabels={['Volume']} />
 			</div>
 		{/each}
 	</div>
