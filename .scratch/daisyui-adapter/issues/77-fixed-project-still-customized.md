@@ -1,4 +1,5 @@
 # 77: Two atom sites read customized on a fixed project
+Session IDs: ses_e132abdd7fferm9owLLIYFCOSZ
 
 **What to build:** a project that `fix` just completed reports every site fixed, so a second `fix`
 writes nothing and `fix --strict` exits 0. Today two sites still read customized.
@@ -22,7 +23,7 @@ The states are read from the fixed file. A later site changes text inside these 
 strings, so `stateOf` finds neither the stock nor the fixed text. This is pre-existing: ticket 76
 changed when a state is read, not how the fixed text is recognised.
 
-- [ ] a fixed project reports `0 customized`
-- [ ] a second `fix` makes no write, and `fix --strict` exits 0
-- [ ] `pnpm test:adapter` gains a check that a fixed temp project has no customized site
-- [ ] the regenerated copies stay byte-identical
+- [x] a fixed project reports `0 customized`
+- [x] a second `fix` makes no write, and `fix --strict` exits 0
+- [x] `pnpm test:adapter` gains a check that a fixed temp project has no customized site
+- [x] the regenerated copies stay byte-identical

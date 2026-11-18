@@ -1,8 +1,10 @@
 // Runs from the repo root with no install step: it reads the pinned stock components that are
 // committed under `src/lib/components/ui`, so a dependency bump that rewrites a class fails here
 // before the manifest can drift past a user's machine.
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { cpSync, copyFileSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
 import { join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -11,6 +13,7 @@ import {
 	BINARY_COMPONENTS,
 	BINARY_SITES,
 	COMPONENTS,
+	CREATES,
 	CURSOR_COMPONENTS,
 	CURSOR_SITES,
 	FIELD_VARIANT_COMPONENTS,
@@ -31,7 +34,7 @@ import {
 	VARIANT_COMPONENTS,
 	VARIANT_ROWS
 } from '../targets.mjs';
-import { applySite, scan } from '../component-fix.mjs';
+import { applySite, fix, scan } from '../component-fix.mjs';
 import { shiftRungs } from '../targets/type-scale.mjs';
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url));
@@ -267,6 +270,48 @@ check(
 		cleanPin.counts.customized === 0,
 	`${cleanPin.counts.customized} customized, ${cleanPin.counts.stock} stock, ${cleanPin.counts.missing} missing: ${pinCustomized.map((site) => site.id).join(', ')}`
 );
+
+// A fixed project is the state one fix leaves behind, and a later site can rewrite an earlier site's
+// fixed text, so the states have to be read from the fixed file too. One fix on a temp copy of the pin
+// must leave nothing customized, and a second fix must write nothing.
+const tempRoot = mkdtempSync(join(tmpdir(), 'adapter-fixed-'));
+const tempUi = join(tempRoot, 'src', 'lib', 'components', 'ui');
+try {
+	cpSync(UI, tempUi, { recursive: true });
+	// The version guard reads the project manifest, so the temp project needs one to stand in for a
+	// real install. Copying the pin's also keeps the guard on instead of warning on every run.
+	copyFileSync(join(ROOT, 'package.json'), join(tempRoot, 'package.json'));
+	fix({ root: tempRoot });
+	const fixedPin = scan({ root: tempRoot });
+	const fixedCustomized = fixedPin.sites.filter((site) => site.state === 'customized');
+	check(
+		'a fixed temp project reports no customized site',
+		fixedPin.counts.customized === 0 &&
+			fixedPin.counts.stock === 0 &&
+			fixedPin.counts.missing === 0,
+		`${fixedPin.counts.customized} customized, ${fixedPin.counts.stock} stock, ${fixedPin.counts.missing} missing, ${fixedPin.counts.fixed} fixed: ${fixedCustomized.map((site) => site.id).join(', ')}`
+	);
+
+	const digest = () =>
+		[...new Set([...ALL_SITES.map((site) => site.file), ...CREATES.map((entry) => entry.file)])]
+			.map(
+				(file) =>
+					`${file}:${createHash('sha256')
+						.update(readFileSync(join(tempUi, ...file.split('/'))))
+						.digest('hex')}`
+			)
+			.join('\n');
+	const before = digest();
+	const secondFix = fix({ root: tempRoot });
+	const rewritten = secondFix.sites.filter((site) => site.written);
+	check(
+		'a second fix on the fixed temp project writes nothing',
+		secondFix.counts.stock === 0 && rewritten.length === 0 && digest() === before,
+		`${secondFix.counts.stock} stock, ${secondFix.counts.fixed} fixed, ${rewritten.length} written: ${rewritten.map((site) => site.id).join(', ')}`
+	);
+} finally {
+	rmSync(tempRoot, { recursive: true, force: true });
+}
 
 const RUNG = /text-(?:xs|sm|base|lg|xl|2xl)(?![a-z0-9-])/;
 const unnamedRungs = [];

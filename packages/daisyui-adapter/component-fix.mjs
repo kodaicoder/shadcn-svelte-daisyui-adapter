@@ -99,17 +99,20 @@ const guard = ({ root, scope, directory }) => {
 	}
 };
 
-const stateOf = (content, site) => {
+const stateOf = (content, site, survivingText) => {
 	if (site.position === 'insert') {
 		const at = content.indexOf(site.stock);
 		if (at < 0) return 'customized';
 		if (content.indexOf(site.stock, at + 1) >= 0) return 'customized';
-		const stockAt = site.fixed.indexOf(site.stock);
-		const before = stockAt < 0 ? '' : site.fixed.slice(0, stockAt);
-		const after = stockAt < 0 ? '' : site.fixed.slice(stockAt + site.stock.length);
-		const head = before === '' || content.slice(Math.max(0, at - before.length), at) === before;
-		const tail = after === '' || content.startsWith(after, at + site.stock.length);
-		if (head && tail) return 'fixed';
+		const surrounds = (text) => {
+			const stockAt = text.indexOf(site.stock);
+			const before = stockAt < 0 ? '' : text.slice(0, stockAt);
+			const after = stockAt < 0 ? '' : text.slice(stockAt + site.stock.length);
+			const head = before === '' || content.slice(Math.max(0, at - before.length), at) === before;
+			const tail = after === '' || content.startsWith(after, at + site.stock.length);
+			return head && tail;
+		};
+		if (surrounds(site.fixed) || surrounds(survivingText)) return 'fixed';
 		return 'stock';
 	}
 	if (site.position !== 'replace') {
@@ -117,7 +120,7 @@ const stateOf = (content, site) => {
 	}
 	if (site.stock === site.fixed) return content.includes(site.stock) ? 'fixed' : 'customized';
 	if (content.includes(site.stock)) return 'stock';
-	return content.includes(site.fixed) ? 'fixed' : 'customized';
+	return content.includes(site.fixed) || content.includes(survivingText) ? 'fixed' : 'customized';
 };
 
 export const applySite = (content, site) => {
@@ -128,6 +131,15 @@ export const applySite = (content, site) => {
 	if (at < 0 || content.indexOf(site.stock, at + 1) >= 0) return content;
 	return `${content.slice(0, at)}${site.fixed}${content.slice(at + site.stock.length)}`;
 };
+
+// A site's own fixed text only survives literally when no later site writes inside it. A later site
+// can: `skeleton-selector` turns the `animate-pulse",` tail of `skeleton-atom-surface` into
+// `animate-pulse rounded-sm",`. The text a full run leaves on disk is the site's fixed text with
+// every later site in the same file applied, so that is the second string `stateOf` looks for.
+const survivingFixed = (group) =>
+	group.map((site, index) =>
+		group.slice(index + 1).reduce((text, later) => applySite(text, later), site.fixed)
+	);
 
 const targetSites = (names) => {
 	if (names.length === 0) return ALL_SITES;
@@ -193,12 +205,13 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 		const onDisk = crlf ? raw.replace(/\r\n/g, '\n') : raw;
 		let content = onDisk;
 		let wrote = false;
+		const surviving = survivingFixed(group);
 
 		if (inScope) {
 			// A generated table may target text an earlier site writes, so each site is classified at
 			// its turn. The same walk runs without writing, so a dry run reports what one run applies.
-			for (const site of group) {
-				const state = stateOf(content, site);
+			for (const [index, site] of group.entries()) {
+				const state = stateOf(content, site, surviving[index]);
 				let written = false;
 				if (state === 'stock') {
 					const next = applySite(content, site);
@@ -215,7 +228,8 @@ const run = ({ root = process.cwd(), components, names = [], dryRun = false }, w
 
 		// A scan counts what is on disk; a fix counts what it wrote.
 		const counted = apply && inScope ? content : onDisk;
-		if (group.every((site) => stateOf(counted, site) === 'fixed')) fullyFixed += 1;
+		if (group.every((site, index) => stateOf(counted, site, surviving[index]) === 'fixed'))
+			fullyFixed += 1;
 	}
 
 	for (const entry of CREATES) {
