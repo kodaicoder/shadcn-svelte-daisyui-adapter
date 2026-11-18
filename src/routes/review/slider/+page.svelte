@@ -13,21 +13,39 @@
 			<div class="space-y-6">
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">single</span>
-					<Slider data-case="single" type="single" bind:value={single} />
+					<Slider data-case="single" type="single" bind:value={single} thumbLabels={['Volume']} />
 				</div>
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">range</span>
-					<Slider data-case="range" type="multiple" bind:value={range} />
+					<Slider
+						data-case="range"
+						type="multiple"
+						bind:value={range}
+						thumbLabels={['Minimum', 'Maximum']}
+					/>
 				</div>
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">disabled</span>
-					<Slider data-case="disabled" type="single" disabled bind:value={disabled} />
+					<Slider
+						data-case="disabled"
+						type="single"
+						disabled
+						bind:value={disabled}
+						thumbLabels={['Volume']}
+					/>
 				</div>
 				<div class="space-y-2">
 					<span class="text-sm text-muted-foreground">tones</span>
 					<div class="flex flex-wrap items-center gap-2">
 						{#each TONE_NAMES as tone (tone)}
-							<Slider data-tone={tone} variant={tone} type="single" value={40} class="w-40" />
+							<Slider
+								data-tone={tone}
+								variant={tone}
+								type="single"
+								value={40}
+								class="w-40"
+								thumbLabels={['Volume']}
+							/>
 						{/each}
 					</div>
 				</div>
