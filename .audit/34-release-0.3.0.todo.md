@@ -140,7 +140,8 @@ Skipped: steps 9 to 12 run only after the operator's publish succeeds. Steps 1 t
 - [ ] hand the operator the publish command and wait
 - [x] operator published 0.3.0
 - [x] registry read-back: `0.3.0`, `latest: 0.3.0`, shasum `497e32ef…` equal to the local pack
-- [ ] registry proof with `prove.mjs --registry` and the kept evidence (running)
-- [ ] operator visual verdict
+- [x] registry proof: `ok: true`, init and fix byte identical, `0 stock / 234 fixed / 0 customized / 0 missing`, build and render pass
+- [x] replace the template `Configure.mdx` with an adapter usage page, re-run `check:stories` (same line) and `check:docs-build` (`111 files`, `sha256:51f31a15…`)
+- [ ] operator visual verdict on the 111-file build
 - [ ] tag `v0.3.0`, push the tag, read it back
 - [ ] close the ticket with Lesson, Check and Closeout

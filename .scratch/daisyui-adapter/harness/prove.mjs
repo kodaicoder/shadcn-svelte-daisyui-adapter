@@ -28,6 +28,9 @@ const BIN = Object.keys(MANIFEST.bin)[0];
 // The same CLI version the harness installs, read from the repo's pin.
 const SHADCN = `shadcn-svelte@${JSON.parse(readFileSync(join(REPO, 'node_modules', 'shadcn-svelte', 'package.json'), 'utf8')).version}`;
 
+// The pinned 29-component app covers 234 sites. The manifest grew past the 82 this number first
+// recorded, so the anchor moves with the manifest, not with the harness.
+const SITES = 234;
 const report = { ok: false };
 
 const assert = (condition, message) => {
@@ -189,8 +192,8 @@ try {
 		`fix reported ${fixCounts.customized} customized site(s), so the stock drifted:\n${fix1.output.slice(-4000)}`
 	);
 	assert(
-		fixCounts.missing === 0 && fixCounts.stock + fixCounts.fixed === 82,
-		`fix covered ${fixCounts.stock + fixCounts.fixed} sites with ${fixCounts.missing} missing, expected 82:\n${fix1.output.slice(-4000)}`
+		fixCounts.missing === 0 && fixCounts.stock + fixCounts.fixed === SITES,
+		`fix covered ${fixCounts.stock + fixCounts.fixed} sites with ${fixCounts.missing} missing, expected ${SITES}:\n${fix1.output.slice(-4000)}`
 	);
 	assert(
 		fix1.output.includes('sheet sheet-close (sheet/sheet-content.svelte): stock -> fixed'),
@@ -220,10 +223,10 @@ try {
 	const checkCounts = counts(check.output);
 	assert(
 		checkCounts.stock === 0 &&
-			checkCounts.fixed === 82 &&
+			checkCounts.fixed === SITES &&
 			checkCounts.customized === 0 &&
 			checkCounts.missing === 0,
-		`fix --check reported ${JSON.stringify(checkCounts)}, expected 0 stock / 82 fixed / 0 customized / 0 missing`
+		`fix --check reported ${JSON.stringify(checkCounts)}, expected 0 stock / ${SITES} fixed / 0 customized / 0 missing`
 	);
 	report.fix.checkExit = check.code;
 	report.fix.checkCounts = checkCounts;

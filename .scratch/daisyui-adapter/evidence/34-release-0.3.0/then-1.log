@@ -1,0 +1,41 @@
+$ pnpm exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/harness/prove.mjs D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/evidence/34-release-0.3.0 --registry
+exit 0
+[prove] install spec @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 from the registry
+{
+  "ok": true,
+  "init": {
+    "runs": 2,
+    "identical": true,
+    "sha": "fc53ef9bf8e605ec61618eaff8e0cc483507d6c16c161140f0ec331423dd5aca",
+    "sheetMissing": true,
+    "header": "/* @kodaicoder/shadcn-svelte-daisyui-adapter 0.3.0 | components 97 fixed | re-run `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` after `shadcn-svelte init` */",
+    "counts": {
+      "stock": 207,
+      "fixed": 22,
+      "customized": 0,
+      "missing": 1
+    },
+    "installSpec": "@kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0"
+  },
+  "lateAdd": {
+    "component": "sheet",
+    "file": "src/lib/components/ui/sheet/sheet-content.svelte",
+    "stockBefore": true,
+    "fixedAfter": true
+  },
+  "fix": {
+    "runs": 2,
+    "identical": true,
+    "sha": "78d2a75cf4cc134ffe28cb24508250e859558a301f033db9cb95cb5903b336f8",
+    "checkExit": 0,
+    "checkCounts": {
+      "stock": 0,
+      "fixed": 234,
+      "customized": 0,
+      "missing": 0
+    }
+  }
+}
+
+(node:48544) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)

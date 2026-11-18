@@ -26,11 +26,18 @@ pnpm check:docs-build   # two builds, one digest, exit 0 when they match
 ```
 
 `check:docs-build` writes `.verify/docs-build/a` and `b`, both gitignored, and prints the digest of each
-build. Measured on `fix/nutchapon/ai/contrast-warning` after ticket 78, with `pnpm check:docs-build` from the
-repo root and the addon cache cleared before each build, 120 files per build and
-`sha256:65719d953b0918452ab58d951dc08db1466e36f9cb0d95e856bdea4ad1c737d2` on both. Record that digest in
-the release note. The earlier `sha256:cdb575b8…` on 120 files was measured before ticket 78 changed
-`slider-fixed/slider.stories.svelte`, so it no longer describes this tree.
+build. Measured on `fix/nutchapon/ai/contrast-warning` at `68cc4ff`, with `pnpm check:docs-build` from the repo
+root and the addon cache cleared before each build, 120 files per build and
+`sha256:65719d953b0918452ab58d951dc08db1466e36f9cb0d95e856bdea4ad1c737d2` on both, `result identical`.
+
+After the publish, `src/stories/Configure.mdx` was replaced by `src/stories/Adapter.mdx`, an adapter usage page,
+because the template page was Storybook marketing rather than this package's documentation. The replacement
+drops the nine template images that page imported, so the same command now prints 111 files per build and
+`sha256:51f31a15e9d6c833ff160df44031ad30a10abfefc233f3b2c4761dd57f7b944a` on both, `result identical`. That
+111-file build is the one served for the operator's verdict.
+
+The earlier `sha256:cdb575b89c70c90397916d25680a8c8e6f24dad2333c6edaf87a6d20f6abbedc` on 120 files predates
+ticket 78's story change, so it no longer describes any tree.
 
 The operator review opens build a, served by the gate itself.
 
@@ -75,9 +82,10 @@ Preflight on `fix/nutchapon/ai/contrast-warning` at `9a496b0`, tree clean, `0 0`
 - `npm whoami` still returns `npm error code E401`, the same 401 the 2026-11-05 note records, so the publish
   needs the operator's login.
 - `pnpm check:stories`: `19 story files, 83 stories, 3 rules, 13 fixtures`, then `no findings, fixtures match`,
-  exit 0.
+  exit 0. Re-run after the Configure page became the adapter page, with the same line.
 - `pnpm check:docs-build`: `build a 120 files`, `build b 120 files`, `digest a` and `digest b`
-  `sha256:65719d953b0918452ab58d951dc08db1466e36f9cb0d95e856bdea4ad1c737d2`, `result identical`, exit 0.
+  `sha256:65719d953b0918452ab58d951dc08db1466e36f9cb0d95e856bdea4ad1c737d2`, `result identical`, exit 0. The
+  later 111-file build with `sha256:51f31a15…` is recorded in the Docs gate section above.
 - `pnpm test:adapter`: `all drift checks passed`, exit 0, including `a fixed temp project reports no
   customized site :: 0 customized, 0 stock, 0 missing, 318 fixed`.
 
@@ -128,6 +136,26 @@ then ran the baseline `add button` through `execFileSync`, which blocks the even
 server, so the CLI's fetch timed out with `HeadersTimeoutError: Headers Timeout Error`. The baseline add now
 uses the async `runCapture`, the path the targets branch already used, and keeps `add-baseline.log`. This is
 the proof tool, not the published package, so the fix does not change the artifact.
+
+The second attempt reached prove and failed on prove's own anchor. It asserted `fix covered 82`, the site count
+when ticket 33 wrote that line, and the pinned 29-component app now holds 234 sites because the type scale and
+the atom tables grew since. The run reported `207 stock` sites with `22 fixed` and only the sheet missing at
+init, then `234` sites with `0 missing` and `0 customized` after the late add and `fix`. The anchor is now the
+named `SITES = 234` constant in `prove.mjs`.
+
+### Registry proof, passed
+
+`run.mjs --pin-registry --components "<the 29 pinned names>" --then "… prove.mjs <evidence> --registry"`
+returned `ok: true`. prove printed `install spec @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 from the
+registry`, so the literal `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` is what ran.
+
+- init, two runs byte identical, sha `fc53ef9bf8e605ec61618eaff8e0cc483507d6c16c161140f0ec331423dd5aca`,
+  header `components 97 fixed`, counts `207 stock, 22 fixed, 0 customized, 1 missing`.
+- late add of `sheet` was `stock` before and `fixed` after.
+- fix, two runs byte identical, sha `78d2a75cf4cc134ffe28cb24508250e859558a301f033db9cb95cb5903b336f8`,
+  and `fix --check` exit 0 with `0 stock, 234 fixed, 0 customized, 0 missing`.
+- build `true`; render status 200, `consoleErrors: []`, light background `oklch(1 0 0)`, dark background
+  `oklch(0.153 0.006 107.1)`.
 
 The operator's visual check is `pnpm check:docs-build --serve 6007`, read at `http://127.0.0.1:6007/` in light
 and dark, over the components and the four token pages. The same bytes are packaged for IIS at

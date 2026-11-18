@@ -12,3 +12,4 @@ when	step	decision	why	evidence	result
 2026-11-18	gates	run all three on the edited tree	the tagged commit must be the measured one	check:stories, check:docs-build, test:adapter	all exit 0
 2026-11-18	publish	operator runs npm publish	OTP never passes through this session	registry shasum 497e32ef…	0.3.0 is latest
 2026-11-18	proof	fix the harness before rerunning	the baseline add blocked the event loop that served the pin registry	HeadersTimeoutError in the first attempt	now awaits runCapture
+2026-11-18	proof	move prove's site anchor from 82 to 234	the manifest grew after ticket 33 wrote the constant	fix reported 234 sites, 0 missing	init 207 stock / 22 fixed / 1 missing

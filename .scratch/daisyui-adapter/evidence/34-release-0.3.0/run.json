@@ -1,0 +1,58 @@
+{
+  "stamp": "2026-11-18T06-27-15-864Z",
+  "app": "C:\\Users\\LENOVO\\AppData\\Local\\Temp\\adapter-harness\\run-2026-11-18T06-27-15-864Z\\app",
+  "evidence": "D:\\Workspace\\DesignSystem\\New_Project\\.scratch\\daisyui-adapter\\evidence\\34-release-0.3.0",
+  "steps": [
+    "scaffold",
+    "dependencies",
+    "step-4-state",
+    "pin-registry",
+    "baseline-add",
+    "then",
+    "build",
+    "render"
+  ],
+  "addUrl": null,
+  "layout": "app",
+  "cssPath": "src/app.css",
+  "registry": {
+    "source": "pin",
+    "url": "http://127.0.0.1:51994",
+    "items": 57
+  },
+  "addTargetsExitCode": 0,
+  "components": [
+    "dialog calendar range-calendar dropdown-menu context-menu menubar chart bubble button toggle input textarea native-select select input-group checkbox radio-group switch tooltip label card alert popover drawer navigation-menu command hover-card table badge"
+  ],
+  "then": [
+    {
+      "command": "exec node D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/harness/prove.mjs D:/Workspace/DesignSystem/New_Project/.scratch/daisyui-adapter/evidence/34-release-0.3.0 --registry",
+      "code": 0
+    }
+  ],
+  "build": true,
+  "render": {
+    "url": "http://127.0.0.1:5209/",
+    "status": 200,
+    "consoleErrors": [],
+    "light": {
+      "background": "oklch(1 0 0)",
+      "backgroundRgb": "rgb(255, 255, 255)",
+      "buttonBg": "oklch(0.508 0.118 165.612)",
+      "buttonCount": 3,
+      "props": {},
+      "propsRgb": {},
+      "elements": []
+    },
+    "dark": {
+      "background": "oklch(0.153 0.006 107.1)",
+      "backgroundRgb": "rgb(12, 12, 9)",
+      "buttonBg": "oklch(0.432 0.095 166.913)",
+      "buttonCount": 3,
+      "props": {},
+      "propsRgb": {},
+      "elements": []
+    }
+  },
+  "ok": true
+}
