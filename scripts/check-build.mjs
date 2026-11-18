@@ -4,8 +4,10 @@ import { existsSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { basename, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { serve } from './serve-static.mjs';
+
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
-const USAGE = 'usage: node scripts/check-build.mjs [--root <dir>]';
+const USAGE = 'usage: node scripts/check-build.mjs [--root <dir>] [--serve <port>]';
 
 const outputDir = (root, name) => {
 	const verify = resolve(root, '.verify');
@@ -136,8 +138,13 @@ const digest = (tree) => {
 	return `sha256:${createHash('sha256').update(lines.join('')).digest('hex')}`;
 };
 
+const addonCache = (root) => resolve(root, 'node_modules', '.cache', 'storybook');
+
+// Storybook caches prebuilt addon manager bundles here, and a cached bundle records the checkout
+// that built it, so a build that inherits a cache from another checkout differs from a clean one.
 const build = (root, dispatcher, dir) => {
 	rmSync(dir, { recursive: true, force: true });
+	rmSync(addonCache(root), { recursive: true, force: true });
 	const result = spawnSync(process.execPath, [dispatcher, 'build', '-o', dir], {
 		cwd: root,
 		encoding: 'utf8',
@@ -159,17 +166,26 @@ const build = (root, dispatcher, dir) => {
 const main = () => {
 	const argv = process.argv.slice(2);
 	let root = ROOT;
+	let servePort = null;
 	for (let index = 0; index < argv.length; index += 1) {
-		if (argv[index] !== '--root') {
-			console.error(`unknown argument: ${argv[index]}\n${USAGE}`);
+		const flag = argv[index];
+		if (flag !== '--root' && flag !== '--serve') {
+			console.error(`unknown argument: ${flag}\n${USAGE}`);
 			return 2;
 		}
 		const value = argv[index + 1];
 		if (!value) {
-			console.error(`--root needs a directory\n${USAGE}`);
+			console.error(`${flag} needs a value\n${USAGE}`);
 			return 2;
 		}
-		root = resolve(value);
+		if (flag === '--root') root = resolve(value);
+		else {
+			servePort = Number(value);
+			if (!Number.isInteger(servePort) || servePort < 1 || servePort > 65535) {
+				console.error(`--serve needs a port between 1 and 65535\n${USAGE}`);
+				return 2;
+			}
+		}
 		index += 1;
 	}
 
@@ -216,7 +232,12 @@ const main = () => {
 	const same = a.size === b.size && differences.length === 0 && digestA === digestB;
 	console.log(`result  ${same ? 'identical' : 'not deterministic'}`);
 	console.log(`open  ${dirs[0]}`);
-	return same ? 0 : 1;
+	if (!same) {
+		if (servePort !== null) console.log('serve  refused, the two builds differ');
+		return 1;
+	}
+	if (servePort !== null) serve(dirs[0], servePort);
+	return 0;
 };
 
 process.exitCode = main();

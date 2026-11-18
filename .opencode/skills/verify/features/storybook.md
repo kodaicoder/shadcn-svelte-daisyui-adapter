@@ -61,6 +61,18 @@ the id: fetch `http://127.0.0.1:6007/index.json` and read the real `id` values, 
 derives from the CSF `title` and story name (`Components/Badge` plus `Tones` becomes
 `components-badge--tones`).
 
+## The two gates (ticket 72)
+
+`pnpm check:stories` lints the 19 story files against `aschild-required`, `playground-shape` and
+`select-helper`, then runs the thirteen fixtures under `scripts/fixtures/stories/` with the same linter, so
+each rule is proven to fail on a tree that breaks it. A finding prints as `path:line  rule  message`, and
+the command exits 1 on any finding or fixture mismatch, 2 when it cannot read its input.
+
+`pnpm check:docs-build` builds twice into `.verify/docs-build/a` and `b`, clears
+`node_modules/.cache/storybook` before each build, drops `project.json`'s `generatedAt`, and compares every
+other byte. It prints one digest per build, exits 1 when they differ, and serves build a when passed
+`--serve <port>`. `scripts/serve-static.mjs` is that server and answers a router path from `index.html`.
+
 ## Driving it with Playwright
 
 No journey yet. When one is added, it belongs in `scripts/drive.mjs` as `storybook`, with its own
@@ -100,6 +112,12 @@ Storybook runs on port 6007 so it never collides with the app's 5199 or your own
   for every view mode (ticket 79), so the toolbar switches a docs page like a story. The token pages
   still paint their own surface from `var(--background)`, and `.verify/prove-71.mjs` sets the class
   itself so the proof never depends on the manager.
+- A cached addon manager bundle under `node_modules/.cache/storybook` embeds the absolute path of the
+  checkout that built it, and its minified identifier names differ between cache generations. A build that
+  inherits another checkout's cache differs from a clean build in six files under `sb-addons/**`, which is
+  why `check:docs-build` clears that cache before each build.
+- `.verify/prove-71.mjs` serves `.verify/build-71`, not the gate's output. Point a copy of its server at
+  `.verify/docs-build/a` only by changing that constant; the gate's own `--serve` is the supported path.
 - A docs page is reachable at `?path=/docs/<id>` and is not covered by the `storybook` vitest project,
   so the a11y gate that project provides does not see it. Open `iframe.html?id=<id>&viewMode=docs` for
   a docs-page proof.

@@ -1,0 +1,10 @@
+<!-- expect story-file at 3 -->
+<script module lang="ts">
+	const broken = ;
+</script>
+
+<Story name="Playground" args={{ text: 'Email' }}>
+	{#snippet template(args)}
+		<Label {...args} />
+	{/snippet}
+</Story>
