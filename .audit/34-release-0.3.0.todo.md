@@ -1,71 +1,145 @@
-Phase: feature
+Phase: release
 
 # Ticket 34: Release 0.3.0
 
-Branch: `fix/nutchapon/ai/contrast-warning`
-Base: `fccf1c1` (ticket 37 closeout, HEAD at claim)
 Ticket: `.scratch/daisyui-adapter/issues/34-release-0.3.0.md`
-Playbook: Feature. poteto-mode drives; the ticket is input. Not `sdlc`, not `implement`.
+Session: ses_e12edb773ffemAfWkemyMXneJn
+Branch: fix/nutchapon/ai/contrast-warning
+Base on entering: `9a496b0` (docs close of ticket 78), tag `daisyui-adapter-78` on `c1f27a9`, git status clean, `0 0` against `origin/fix/nutchapon/ai/contrast-warning`.
+Trail: `.audit/34-release-0.3.0.tsv`
 
-## Feature playbook (verbatim)
+## Phase A: the predicate
 
-1. `how` over the affected subsystem.
-2. `architect` for parallel design exploration.
-3. Write the throughput checkpoint as four todo items. A dimension that genuinely does not apply (single file, no fan-out) keeps its item with `n/a: <reason>` rather than being dropped:
-   - **Blocking first steps.** Gates run before fan-out.
-   - **Independent workstreams.** Disjoint files, services, or layers parallelize. Shared writes serialize.
-   - **Shared mutable state.** Default to splitting the target (the **separate-before-serializing-shared-state** principle skill). Serialize only for real invariants.
-   - **Smallest safe decomposition.** If one worker is best, name why.
-4. Delegate code-writing to a subagent using your configured feature model (default in poteto-mode's Models section) with a specific scope (file paths, named data shape and its organizing structure per **principle-model-the-domain**, a state machine over scattered booleans, a table/registry over branching, a typed model over repeated shape assumptions, chosen before the delegate writes logic, and success criteria). Pick each subagent's reasoning level for the job, per the Subagents section. When the implementation admits multiple valid shapes (error handling, abstraction layer, test structure), delegate via the **arena** skill instead so the runners surface the alternatives and the cross-judge guards the pick. Mandatory: no skip-with-reason escape, and Laziness Protocol does not override it (the gain is review separation, not lines saved). A subagent forbidden to spawn satisfies this by owning the diff directly with the same review separation. No "standing by" reply that waits on a nested agent. **Give every file-writing delegate its own worktree** (spawn it with `isolation: "worktree"`, or hand it an exclusive branch), and do not write files or run a suite in a worktree a delegate still holds. On Claude Code, `isolation: "worktree"` branches from the remote default branch unless the `worktree.baseRef` setting is `"head"`. When the delegate builds on commits the default branch lacks, commit them, create its worktree with `git worktree add <path> -b <delegate-branch> HEAD`, and name that base commit in the brief. Fencing a file in the brief's prose is not a lock (**principle-separate-before-serializing-shared-state**). Comments per **Comments**. Surgical edits, re-ground against the source for upstream-derived files. Port shared-primitive improvements to all consumers and verify each. Commit liberally.
-5. Verify on the matching surface. "Inconclusive" or wrong-surface is not a pass. Flag it.
-6. Rebase into small, ordered commits. Stack follow-ups.
-   Use the **sequence-verifiable-units** principle skill, building, verifying, and committing each small unit before the next.
-7. If the design is contested, `interrogate` before shipping.
-8. Run **Opening a PR**.
+0.3.0 is published and served as `latest`, the literal `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init` passes on a fresh scaffold with the map, fixer, build and render evidence kept, `v0.3.0` points at the release commit and is on origin, and the 0.3.0 changelog and the README name ticket 78's required `thumbLabels`. Each clause is a command with an expected output, listed in the ordered run.
 
-## Playbook decisions
+Rigor: high. Three one-way doors: the npm publish (unpublishable after 72 hours except by support), the `dist-tags.latest` move for every consumer, the pushed tag. Reversible: the two documentation edits and the ticket record. Gates are the two docs commands, the drift suite, the registry read-back, and the tag read-back.
 
-1. `how`: skip. The subsystem is the release surface, read in Discover: `packages/daisyui-adapter/package.json`, `CHANGELOG.md`, the packed file list, `harness/run.mjs` and `harness/prove.mjs`, and the ticket 37 evidence. The ticket names the same files.
-2. `architect`: skip. The only design question is how the harness reaches the published artifact, and the answer is one flag on `prove.mjs`. No competing architecture.
-3. Throughput checkpoint: written below.
-4. Delegate: the code change is one flag in `harness/prove.mjs`, about 20 lines, already read in full this session. A delegate would re-read the file to write what is already specified. The operator owns the publish, which is the only risky step, so the lead keeps the diff.
-5. Verify on the matching surface: the published artifact from the registry, in a fresh app, through `run.mjs --then prove.mjs --registry`, then build and render.
-6. Commits: one commit for the proof flag, one for the release record.
-7. `interrogate`: skip. Not a critical-path ticket on the pipeline's list (no auth, payments, migration, concurrency, shared state, DB schema). The published surface is a CLI plus three ESM modules.
-8. Opening a PR: skip. Delivery is a branch push, an npm publish and a tag, not a PR. Same call as tickets 17 and 22.
+## Phase B: rigour committed
+
+- No source change. The only edits are one sentence in the changelog and one in the README, plus the ticket record. Everything else is measurement and the operator's publish.
+- Gate order is a before/after bracket. The docs gates run on the exact commit that will be tagged, after the edits, so the digest the ticket quotes is the digest of the published tree.
+- No architect pass. The change has no shape to choose.
+- No fan-out. Two one-sentence edits and a serial publish gate; parallel workers would only add contention.
 
 ## Blast radius
 
-`graphify-out/graph.json` is absent, so the gate is `unbuilt`. Fallback: `rg` over the release surfaces. The version and name have one source, `packages/daisyui-adapter/package.json`, and the CLI, the header and the install spec read it there. `harness/prove.mjs` is the only consumer of the packed tarball. `registry-16/publish-test.mjs` also runs a registry `dlx` but pins the pre-fixer header shape; it is ticket 17's artifact and is not run by this ticket. The npm registry, the `v0.3.0` tag and the git remote are outside the repo graph and are checked directly.
+state: unbuilt (no `graphify-out/graph.json`; not building one for a release ticket that changes no source)
 
-## Throughput checkpoint
+seeds: n/a, graph unavailable
 
-- **Blocking first steps.** Nothing publishes until the operator's visual sign-off and his npm auth. The registry proof cannot start until the publish lands. Everything local runs before both gates.
-- **Independent workstreams.** None. Version, changelog, pack list, publish and proof are one ordered chain; the proof names the exact version, so it can only run after the registry serves it.
-- **Shared mutable state.** The published registry is the one shared, irreversible target. One writer, the lead, and only after the operator's explicit go.
-- **Smallest safe decomposition.** One worker. The release is a sequence of gates on one artifact; splitting would let one lane publish while another still edits the manifest or the proof.
+anchors:
+  `packages/daisyui-adapter/package.json` <- version 0.3.0, `files` ships `dist`, `cli`, `targets`, `component-fix.mjs`, `CHANGELOG.md`
+  `packages/daisyui-adapter/CHANGELOG.md` <- correction 3, and it is inside the published tarball
+  `packages/daisyui-adapter/README.md` <- correction 3, repo only, not in `files`
+  `packages/daisyui-adapter/dist/*.mjs` <- tracked and published as-is; no build step exists for them
 
-## Ticket steps
+unlisted:
+  npm registry `@kodaicoder/shadcn-svelte-daisyui-adapter` <- `latest` moves 0.2.0 -> 0.3.0 for every consumer
+  `.verify/docs-build/a` and `b` <- regenerated by the gate, gitignored, not hand-edited
+  `.scratch/daisyui-adapter/evidence/34-release-0.3.0/` <- new evidence from the harness and the registry proof
+  `.scratch/daisyui-adapter/issues/34-release-0.3.0.md` <- corrections, proof, closeout
+  `src/lib/components/*-fixed/**` <- untouched; the fixer and the copy check own those bytes
+  `src/routes/**`, `src/lib/components/ui/**` <- untouched
 
-1. Claim ticket 34; confirm HEAD, clean tree, `0.3.0` in the manifest, and the changelog section. Done: `fccf1c1`, clean, `0.3.0`, section present.
-2. Local pre-flight: `node packages/daisyui-adapter/test/drift.mjs` and `npm pack --dry-run --json`. Done: 9/9 drift checks pass, 11 files, `component-fix.mjs`, `targets.mjs` and `dist/contrast.mjs` all included.
-3. Add a registry mode to `harness/prove.mjs`, so the same assertions (idempotent init, late add, 82 sites, idempotent fix, `--check` 0) run against `pnpm dlx <pkg>@0.3.0 init` instead of the local tarball.
-4. Operator visual check: present `evidence/37-contrast-warning/light.png` and `dark.png` with `checklist.md`. Gate: the operator signs off, or names the defect.
-5. Publish 0.3.0 through the OTP gate. Gate: the operator's npm login and OTP.
-6. Registry proof: fresh app, `run.mjs --pin-registry` with `--then prove.mjs --registry`, build, render, contrast. Keep evidence under `.scratch/daisyui-adapter/evidence/34-release-0.3.0/`.
-7. Tag `v0.3.0` at the release commit; confirm the changelog and the manifest both read 0.3.0 and the registry's `latest` points at it.
-8. Closeout: ticket Answer with Lesson and Check, commit, report.
+fallback: `rg` over `.audit` and `.scratch/daisyui-adapter` for the gate commands and the earlier release proof; read ticket 78, then the harness and the gate scripts.
 
-## Open decisions
+Prior run: the 2026-11-05 session's todolist is kept at `.audit/34-release-0.3.0.2026-11-05.todo.md`. It settled three things this run inherits: no PR (delivery is a commit, a publish and a tag), `prove.mjs` grew its `--registry` mode there, and the harness reaches the pinned components with `--pin-registry`.
 
-- Target branch for the tag and the push. `develop` is 20 commits behind the fix-phase branches, and `main` is 65 behind. Ticket 22 merged its release branch before publishing; this ticket has no such line.
-- Who holds the OTP: the operator's login is absent (`npm whoami` 401), so the publish needs either his terminal or a secret card plus a race against the OTP's lifetime.
+## Playbook: figure-it-out, plus Shipping for the tag and the remote
 
-## Gate result, 2026-11-05
+No bundled playbook covers an npm publish behind an OTP gate. The steps below are figure-it-out's, verbatim.
 
-The operator ran the visual check on `evidence/37-contrast-warning/light.png` and `dark.png` and it failed. In dark, the four tone `outline-*` buttons sit flush with the page while the stock `outline` button carries a surface. The same rows on badge and bubble are flush too. Cause: the tone table wrote `bg-transparent` for the button, no fill for the badge and `bg-background` for the bubble, while the stock presentations carry `dark:bg-input/30`, `bg-input/20 dark:bg-input/30` and `bg-background`.
+### Start
 
-The operator's direction: an outline variant shows the tone at 15 to 20 percent as its surface. That is ticket 38, opened and fixed before this ticket resumes. Measured with the package math at 20 percent, the lowest text ratio is 6.06, so the AA promise holds.
+Open a todolist whose first item is to read the Principles section of the **poteto-mode** skill. Then add the phases below as todos.
 
-This ticket is paused at step 4. Steps 1, 2 and 3 are done; step 3's registry mode is unverified until the publish. Resume at the regenerated screenshots from `evidence/38-outline-surface/`, then step 5.
+### Phase A: Frame
 
+Ground first, then commit. Don't start the run until you can state:
+
+- The definition of done as a falsifiable predicate (the **prove-it-works** principle skill).
+- Scope, quantified: rough units and effort, plus the blockers grounding surfaced.
+- The rigor level, biased high. One-way doors and high blast radius get more. Reversible low-stakes steps get less. Rigor is gates and artifacts, not "try harder".
+
+Present the framing and tradeoffs before committing to a long run. Reversible work proceeds (the **never-block-on-the-human** principle skill), but a multi-hour run earns one checkpoint.
+
+### Phase B: Design the workflow
+
+Decompose into atomic, independently-landable units. Sequence riskiest-unknown-first. Scaffold and verification come before features (the **foundational-thinking** principle skill).
+
+- Build the verification harness before the work, with the baseline captured from the pre-change state, so the check reads as "old value vs new value".
+- For one-way-door design decisions, run the **architect** skill (it runs **arena**). Skip it for mechanical work whose shape is already concrete. A second arena over a settled design is over-engineering (the **laziness-protocol** principle skill).
+- Decide what fans out. Parallelize only across seams, and give each worker its own worktree or branch (the **separate-before-serializing-shared-state** principle skill). Don't over-fan. Pick each subagent's reasoning level for the job, per the Subagents section of the **poteto-mode** skill.
+- Write the designed phase list down. That list is what the human reviews.
+
+Then execute the design. Add its steps to the todolist as concrete items between the Phase C and Phase D entries. Run each under the Phase C loop discipline, and weave the Phase D log through them, a row as each step lands, rather than saving the whole trail for the end.
+
+### Phase C: Run the loop
+
+Each unit is an experiment. State the hypothesis, make the smallest change, measure against the predicate on the real artifact, keep it if it advanced, revert it if it didn't. Apply the **sequence-verifiable-units** principle skill, verifying each unit before starting the next instead of batching checks at the end.
+
+- Verify by inspecting the artifact, never a self-report. When something passes too easily, suspect the observation method before the system.
+- Pair delegated work with a judge. If a worker games the gate, reset and harden the contract. If the gate itself is wrong, fix the gate in its own change rather than routing around it.
+- A verdict is VERIFIED, NOT VERIFIED, or INCONCLUSIVE. Inconclusive is not a pass. Don't hide a negative.
+
+### Phase D: Keep the audit trail
+
+Log the run via the **show-me-your-work** skill. figure-it-out's work is usually ambitious enough to commit the trail so the reviewer can read it in the PR. The trail plus the diff is what lets the human come back and trust the work.
+
+### Phase E: Verify and hand back
+
+Check the whole against the Phase A predicate on the real product, not just the harness. Encode any recurring correction as a gate, a lint rule, a check, or a script (the **encode-lessons-in-structure** principle skill).
+
+### Shipping, the parts that apply
+
+No PR exists and nothing is merged, so Shipping steps 2, 4 and 5 do not apply. Adopted, verbatim:
+
+- "Resolve the forge, then verify each PR independently before it lands." (`gh` is installed and `origin` is the GitHub remote; the forge is GitHub, so `gh` and `git` both address the one destination.)
+- "Read the PR back for the result ... because a merge command can report success when a merge queue only queued the PR, and a requested auto-merge is not a merge." Applied to the tag: a push is not a pushed tag until `git ls-remote --tags origin v0.3.0` names the same commit the local tag does.
+- "Never change protection settings or use `--admin` to get there."
+
+## Ordered run
+
+0. Preflight. `npm whoami` names an account; `npm view @kodaicoder/shadcn-svelte-daisyui-adapter dist-tags.latest` is 0.2.0; working tree clean; HEAD is a commit on `fix/nutchapon/ai/contrast-warning`.
+1. Edit `packages/daisyui-adapter/CHANGELOG.md`, 0.3.0 section: one sentence for ticket 78's required `thumbLabels`.
+2. Edit `packages/daisyui-adapter/README.md`, `### Variants`: the same one sentence.
+3. Gate. `pnpm check:stories` and `pnpm check:docs-build` on the edited tree. Record the exit code, the file count and the digest each build prints.
+4. Gate. `pnpm test:adapter` on the edited tree.
+5. Correct the ticket record: replace the stale digest and file count with step 3's, add the review date, record `npm whoami`'s result, and write the publish handover.
+6. Commit the documentation edit and the ticket corrections on `fix/nutchapon/ai/contrast-warning`. No version change.
+7. Hand the operator the publish command. The OTP is entered by the operator in their own terminal. Nothing is published by this session.
+8. After publish, read the registry: `npm view ...@0.3.0 version` and `npm view ... dist-tags.latest`. Both must say 0.3.0.
+9. Registry proof: `node .scratch/daisyui-adapter/harness/run.mjs --pin-registry --then "exec node .scratch/daisyui-adapter/harness/prove.mjs .scratch/daisyui-adapter/evidence/34-release-0.3.0 --registry"`. `--pin-registry` makes the app's adds read the repo's pinned components, because the live shadcn registry has moved past the pin, and it reaches prove's own `add` through `COMPONENTS_REGISTRY_URL`. prove runs the literal `pnpm dlx @kodaicoder/shadcn-svelte-daisyui-adapter@0.3.0 init`, and the harness then builds and renders the app.
+10. Operator visual verdict on `pnpm check:docs-build --serve 6007`, light and dark, components and the four token pages.
+11. Tag `v0.3.0` on the release commit, push the tag only, and read it back with `git ls-remote --tags origin v0.3.0`.
+12. Close the ticket: acceptance boxes, Lesson, Check, Closeout.
+
+Skipped: steps 9 to 12 run only after the operator's publish succeeds. Steps 1 to 6 are reversible and run now.
+
+## Ticket corrections
+
+1. The docs-build digest and file count predate ticket 78's story change. Re-measured on the tagged tree; both numbers replaced and the command that produced them recorded.
+2. `pnpm check:stories` re-run; today's printed line quoted instead of the ticket's copy.
+3. One sentence added to the 0.3.0 changelog and one to the README for the required `thumbLabels`, which is a breaking prop for a slider copied from an earlier release.
+4. "State on resuming, 2026-11-05" records `npm whoami` at 401. Re-checked on entering 2026-11-18: still `E401 Unauthorized`. The operator must log in before step 7.
+
+## Todo
+
+- [x] read the ticket, ticket 78, the package metadata, the changelog, the README, the harness, the build gate and the CI workflow
+- [x] claim the ticket with `resume: true`
+- [x] preflight: blockers all `resolved`, version 0.3.0, registry latest 0.2.0, tree clean, branch in sync
+- [x] `npm whoami` re-checked: 401, so the publish is the operator's step
+- [x] write this todolist and the decision trail
+- [x] changelog sentence for `thumbLabels`
+- [x] README sentence for `thumbLabels`
+- [x] `pnpm check:stories` (`19 story files, 83 stories, 3 rules, 13 fixtures`, `no findings, fixtures match`) and `pnpm check:docs-build` (`120 files` per build, `sha256:65719d95…` on both, `result identical`), both exit 0
+- [x] `pnpm test:adapter`: `all drift checks passed`
+- [x] ticket corrections 1, 2 and 4 written into the ticket
+- [x] prior run's todolist preserved at `.audit/34-release-0.3.0.2026-11-05.todo.md`
+- [ ] commit the documentation edit and the ticket corrections
+- [ ] hand the operator the publish command and wait
+- [ ] registry read-back after publish
+- [ ] registry proof with `prove.mjs --registry` and the kept evidence
+- [ ] operator visual verdict
+- [ ] tag `v0.3.0`, push the tag, read it back
+- [ ] close the ticket with Lesson, Check and Closeout

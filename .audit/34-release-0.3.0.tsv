@@ -1,0 +1,12 @@
+when	step	decision	why	evidence	result
+2026-11-18	preflight	claim with resume	three Session IDs are history, not finished work	claim output names three sessions	claimed
+2026-11-18	preflight	re-verify every blocker on HEAD	rules say an earlier closeout is not a pass	reads of 10 ticket files	all resolved
+2026-11-18	preflight	treat publish as an operator step	OTP must never pass through this session	ticket line 61 and guardrails	handover only
+2026-11-18	preflight	design with figure-it-out	no bundled playbook covers an npm publish behind an OTP gate	figure-it-out matched	phase list written
+2026-11-18	preflight	take tag mechanics from Shipping	read-back rule is the only proven safeguard	shipping.md step 4 read	applied
+2026-11-18	preflight	keep the prior run's todolist	an overwrite destroys decisions the resumed ticket inherited	git show HEAD:.audit/34-release-0.3.0.todo.md	copied to .2026-11-05.todo.md
+2026-11-18	correction 1	re-measure instead of copying	the ticket's digest predates ticket 78's story change	pnpm check:docs-build	120 files, sha256:65719d95…, identical
+2026-11-18	correction 2	quote today's story line	the copy named 13 fixtures without the 3 rules	today's check:stories output	19 files, 83 stories, 3 rules, 13 fixtures
+2026-11-18	correction 3	one sentence in each surface	thumbLabels is a breaking prop for a copied slider	CHANGELOG 0.3.0 and README Variants	both written
+2026-11-18	correction 4	record 401 and stop	npm whoami still returns E401	whoami output	operator login is a gate
+2026-11-18	gates	run all three on the edited tree	the tagged commit must be the measured one	check:stories, check:docs-build, test:adapter	all exit 0
