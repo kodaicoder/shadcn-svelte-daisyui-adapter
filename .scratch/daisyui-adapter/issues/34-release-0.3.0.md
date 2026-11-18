@@ -1,19 +1,20 @@
 # 34: Release 0.3.0
 
 Session IDs: ses_e5a21d100ffeU95NBg4703jKNW, ses_e556cc47fffeRzb0n2cNJIosE6, ses_e12edb773ffemAfWkemyMXneJn
-Lesson:
-Check:
+Lesson: A release record quotes numbers, and every one of them ages. The docs digest, the story line and the registry proof's 82-site anchor were all stale on HEAD, so a resumed release re-measures each number instead of trusting the ticket.
+Check: code - `pnpm check:docs-build` prints one digest for both builds and `result identical`, `pnpm check:stories` prints `19 story files, 83 stories, 3 rules, 13 fixtures` with no findings, and `node .scratch/daisyui-adapter/harness/prove.mjs <dir> --registry` against the published version returns `ok: true` with `0 stock, 234 fixed, 0 customized, 0 missing`; `run.mjs` keeps its baseline add async because the pin registry is served by the same process.
+Closeout: 68cc4ff (tag v0.3.0, signed, pushed)
 
 **What to build:** The operator visual check, the publish and the registry proof for 0.3.0.
 
 **Blocked by:** 49, 51, 52, 66, 67, 68, 69, 70, 71, 72
 
-**Status:** ready-for-agent
+**Status:** resolved
 
-- [ ] The operator visual check passes on the light and dark screenshots and the checklist
-- [ ] 0.3.0 publishes through the OTP gate and the registry serves it as `latest`
-- [ ] The literal `pnpm dlx <pkg>@0.3.0 init` runs on a fresh scaffold: the map, the fixer, the build and the render pass; the evidence is kept
-- [ ] The `v0.3.0` tag lands; the changelog and version match
+- [x] The operator visual check passes on the light and dark screenshots and the checklist
+- [x] 0.3.0 publishes through the OTP gate and the registry serves it as `latest`
+- [x] The literal `pnpm dlx <pkg>@0.3.0 init` runs on a fresh scaffold: the map, the fixer, the build and the render pass; the evidence is kept
+- [x] The `v0.3.0` tag lands; the changelog and version match
 
 ## Docs gate, 2026-11-18
 
@@ -162,3 +163,14 @@ and dark, over the components and the four token pages. The same bytes are packa
 `.verify/docs-build-34` and `.verify/docs-build-34.zip`, both gitignored, copied from build a and given a
 `web.config` for static hosting plus `checklist.md`. The tag is created only after the registry reads 0.3.0,
 points at this ticket's release commit, and is pushed as a tag alone.
+
+### Operator verdict and tag
+
+The operator reviewed the deployed 111-file build and said, on 2026-11-18, "it look good for me now for 0.3.0".
+The build under review is `.verify/docs-build-34`, the copy of build a with `sha256:51f31a15…`.
+
+`v0.3.0` is a signed annotated tag on `68cc4ffe01e63b3c521881dac0be1d20868c9cc0`, the commit whose tree the
+registry served. `git show -s --format='%H %G? %s' v0.3.0` prints
+`68cc4ffe01e63b3c521881dac0be1d20868c9cc0 G docs(daisyui-adapter): 📚 name the slider prop in the 0.3.0 notes (ticket 34)`,
+and `git ls-remote --tags origin v0.3.0` prints `e2ff83eaefe9e97058bf359916efcdcab7f5f9ac refs/tags/v0.3.0`, the
+same object as the local tag.

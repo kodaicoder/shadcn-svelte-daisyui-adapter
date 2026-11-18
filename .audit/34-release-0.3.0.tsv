@@ -13,3 +13,6 @@ when	step	decision	why	evidence	result
 2026-11-18	publish	operator runs npm publish	OTP never passes through this session	registry shasum 497e32ef…	0.3.0 is latest
 2026-11-18	proof	fix the harness before rerunning	the baseline add blocked the event loop that served the pin registry	HeadersTimeoutError in the first attempt	now awaits runCapture
 2026-11-18	proof	move prove's site anchor from 82 to 234	the manifest grew after ticket 33 wrote the constant	fix reported 234 sites, 0 missing	init 207 stock / 22 fixed / 1 missing
+2026-11-18	verdict	record the operator's words, not a page list	only the operator saw the pages	"it look good for me now for 0.3.0"	accepted
+2026-11-18	tag	tag the published commit, not the tip	the tag must name the tree the registry served	shasum 497e32ef… equals the pack	v0.3.0 on 68cc4ff, G
+2026-11-18	tag	read the pushed tag back	shipping read-back rule	git ls-remote v0.3.0	e2ff83ea… matches local
